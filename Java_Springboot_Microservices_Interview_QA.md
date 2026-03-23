@@ -1,4 +1,4 @@
-﻿# 🏁 Senior Java Tech Lead — Ultimate Interview Master Blueprint
+# 🏁 Senior Java Tech Lead — Ultimate Interview Master Blueprint
 
 <div align="center">
 
@@ -27,22 +27,279 @@
 | 4 | [🏗️ Microservices](#-part-4-microservices--cloud-native) | Gateway, SAGA |
 | 5 | [💻 Coding Challenges](#-part-5-practical-coding-challenges) | LRU, LeetCode Patterns |
 | 6 | [🏢 Production Questions](#-part-6-real-world-production-questions) | Scale, Tuning, Monitoring |
-| 7 | [🐳 Docker & Kubernetes](#-docker--kubernetes-basics-to-advanced) | Basics, Advanced, Staging, Prod, CI/CD |
-| 8 | [🎓 Interview Cheat Sheet](#-part-7-interview-cheat-sheet) | Quick Reference Tables |
-| 9 | [👤 Resume-Based Q&A — Digamber Singh](#-resume-based-interview-qa--digamber-singh) | Intro, Projects, Skills, Leadership |
-| 10 | [Top 10 Questions to Master](#top-10-questions-to-master) | Priority topics |
-| 11 | [⭐ Senior Scenario-Based Questions (Deep Dive)](#-senior-scenario-based-questions-deep-dive) | Trade-offs, execution |
-| 12 | [Quick Reference: Design Decisions](#quick-reference-design-decisions) | Senior callouts |
-| 13 | [HTTP Status Codes Cheat Sheet](#http-status-codes-cheat-sheet) | API responses |
-| 14 | [🔥 Behavioral Question Cheat Sheet](#-behavioral-question-cheat-sheet) | STAR answers |
-| 15 | [🗄️ Part 8: Database Interview Questions](#-part-8-database-interview-questions--mysqlpostgresql--mongodb) | MySQL/PostgreSQL, MongoDB, Indexes, Transactions |
-| 16 | [📨 Part 9: Messaging — Kafka & RabbitMQ](#-part-9-messaging--kafka--rabbitmq-interview-questions) | Architecture, Consumers, Delivery Guarantees, Spring Boot |
-| 17 | [🗄️ Part 16: MySQL/PostgreSQL & MongoDB Mastery](#-part-16-mysqlpostgresql--mongodb-interview-mastery) | ACID, MVCC, Indexes, Sharding, Replication, Atlas Search |
-| 18 | [🏆 Tech Stack Summary](#-tech-stack-summary) | Stack mapping |
+| 7 | [🗄️ Part 8: Database Interview Questions](#-part-8-database-interview-questions--mysqlpostgresql--mongodb) | MySQL/PostgreSQL, MongoDB, Indexes, Transactions |
+| 8 | [📨 Part 9: Messaging — Kafka & RabbitMQ](#-part-9-messaging--kafka--rabbitmq-interview-questions) | Architecture, Consumers, Delivery Guarantees, Spring Boot |
+| 9 | [🔀 Part 10: Java Concurrency & Multithreading](#-part-10-java-concurrency--multithreading) | Threads, Locks, CompletableFuture, Virtual Threads |
+| 10 | [🔐 Part 11: Spring Security & OAuth2](#-part-11-spring-security--oauth2-deep-dive) | JWT, OAuth2, Method Security |
+| 11 | [🧪 Part 12: Testing Strategy](#-part-12-testing-strategy--best-practices) | JUnit 5, Mockito, TestContainers, Contract |
+| 12 | [🌐 Part 13: API Design Best Practices](#-part-13-api-design-best-practices) | REST, GraphQL, gRPC, Rate Limiting |
+| 13 | [⚡ Part 14: Redis Deep Dive](#-part-14-redis-deep-dive) | Data Structures, Patterns, Cluster, Locks |
+| 14 | [☁️ Part 15: Cloud & DevOps](#️-part-15-cloud--devops--aws-cicd-iac) | AWS, GitHub Actions, Terraform, Helm |
+| 15 | [🐳 Docker & Kubernetes](#-docker--kubernetes-basics-to-advanced) | Basics, Advanced, Staging, Prod, CI/CD |
+| 16 | [🎓 Interview Cheat Sheet](#-part-7-interview-cheat-sheet) | Quick Reference Tables |
+| 17 | [👤 Resume-Based Q&A — Digamber Singh](#-resume-based-interview-qa--digamber-singh) | Intro, Projects, Skills, Leadership |
+| 18 | [Top 10 Questions to Master](#top-10-questions-to-master) | Priority topics |
+| 19 | [⭐ Senior Scenario-Based Questions (Deep Dive)](#-senior-scenario-based-questions-deep-dive) | Trade-offs, execution |
+| 20 | [Quick Reference: Design Decisions](#quick-reference-design-decisions) | Senior callouts |
+| 21 | [HTTP Status Codes Cheat Sheet](#http-status-codes-cheat-sheet) | API responses |
+| 22 | [🔥 Behavioral Question Cheat Sheet](#-behavioral-question-cheat-sheet) | STAR answers |
+| 23 | [🗄️ Part 16: MySQL/PostgreSQL & MongoDB Mastery](#-part-16-mysqlpostgresql--mongodb-interview-mastery) | ACID, MVCC, Indexes, Sharding, Replication, Atlas Search |
+| 24 | [🏆 Tech Stack Summary](#-tech-stack-summary) | Stack mapping |
 
 ---
 
 # 🚀 Part 1: System Design — URL Shortener
+
+---
+
+## 🧠 System Design Basics — For Beginners (Read This First)
+
+> **What is System Design?** The process of defining the architecture, components, modules, interfaces, and data flow of a system to satisfy given requirements. In interviews you are asked to design large-scale systems (YouTube, WhatsApp, TinyURL) and explain your trade-off decisions.
+
+---
+
+### 🗺️ 7-Step Framework to Approach ANY System Design Interview
+
+```mermaid
+flowchart LR
+  S1["1. Clarify\nRequirements"] --> S2["2. Estimate\nScale"]
+  S2 --> S3["3. Define\nAPI"]
+  S3 --> S4["4. High-Level\nDesign"]
+  S4 --> S5["5. Data\nModel"]
+  S5 --> S6["6. Deep\nDive"]
+  S6 --> S7["7. Scale\nIt"]
+```
+
+| Step | What to do | URL Shortener example |
+|------|-----------|----------------------|
+| **1. Clarify** | Ask functional + non-functional requirements | "Do we need analytics? Custom aliases? Expiry?" |
+| **2. Estimate** | Calculate QPS, storage, bandwidth, cache | "5M req/day = 58 QPS average" |
+| **3. API** | List REST endpoints with contracts | `POST /shorten`, `GET /{code}` |
+| **4. High-Level** | Draw client → LB → service → DB → cache | Box diagram with arrows |
+| **5. Data Model** | Tables, indexes, relationships | `url_maps(short_code, original_url, user_id)` |
+| **6. Deep Dive** | Pick one component, explain internals | "How does Base62 encoding work?" |
+| **7. Scale** | Identify bottlenecks and fix them | "Add read replicas when DB is the bottleneck" |
+
+---
+
+### 📐 Core System Design Concepts — Simplified
+
+| Concept | Definition | URL Shortener example |
+|---------|-----------|----------------------|
+| **Latency** | Time for one request to complete | Redirect must complete in < 50ms |
+| **Throughput** | Requests handled per second (QPS) | 58 QPS average, 580 QPS peak |
+| **Availability** | % of time the system is up | 99.99% = max 52 min downtime per year |
+| **Scalability** | Can it handle 10x more load? | Add more pods behind the load balancer |
+| **Consistency** | All users see the same data | A new short URL is immediately resolvable |
+| **Durability** | Data survives crashes | PostgreSQL WAL + Redis persistence |
+| **Partition Tolerance** | Works despite network splits | Services keep running when network is flaky |
+
+---
+
+### ⚖️ CAP Theorem — Every Senior Must Know This
+
+```mermaid
+flowchart TB
+  CAP["CAP Theorem\nA distributed system can only\nguarantee 2 of these 3 at once"]
+  CAP --> C["Consistency\nEvery read returns\nthe latest write"]
+  CAP --> A["Availability\nEvery request gets\na response"]
+  CAP --> P["Partition Tolerance\nSystem works despite\nnetwork failures"]
+  C --- CP["CP — Choose consistency\nHBase, Zookeeper\nMay reject requests"]
+  A --- AP["AP — Choose availability\nDynamoDB, Cassandra\nEventual consistency"]
+  C --- CA["CA — No partition tolerance\nPostgreSQL, MySQL\nSingle datacenter only"]
+```
+
+> **For URL Shortener:** We choose **CP** — we cannot return a wrong URL (correctness > availability during a network split). Redis may serve slightly stale data, but PostgreSQL is always the source of truth.
+
+---
+
+### 🧱 Common Building Blocks — Memorise These
+
+| Block | Purpose | When to add it |
+|-------|---------|----------------|
+| **Load Balancer** | Spread traffic; no single point of failure | Always |
+| **CDN** | Serve static assets from edge locations | Images, JS, cacheable responses |
+| **Cache (Redis)** | Sub-ms reads for hot data | When DB latency > SLA |
+| **Message Queue** | Decouple slow/async work | Analytics, emails, notifications |
+| **Database** | Durable ACID storage | All transactional data |
+| **API Gateway** | Central auth, rate-limit, routing | Microservices |
+| **Sharding** | Split DB across servers | When DB is the bottleneck |
+
+---
+
+### 📏 Numbers Every Engineer Should Memorise
+
+| Operation | Latency | Notes |
+|-----------|---------|-------|
+| L1 cache read | 0.5 ns | Instant |
+| RAM read | 100 ns | 200x slower than L1 |
+| Redis GET | 0.5-1 ms | ~1,000,000x slower than L1 |
+| SSD read | 0.1 ms | Fast disk |
+| PostgreSQL query (indexed) | 1-10 ms | Network + disk |
+| Cross-region network round-trip | 150 ms | Very slow |
+
+| Conversion | Value |
+|-----------|-------|
+| 1 million req/day | = 12 req/sec |
+| 1 billion req/day | = 12,000 req/sec |
+| 86,400 seconds | = 1 day (memorise this!) |
+| 1 KB | = 1,000 bytes |
+| 1 GB | = 10^9 bytes |
+| 1 TB | = 10^12 bytes |
+
+---
+
+## 📊 Capacity Estimation — Detailed Step-by-Step Calculations
+
+> **Why this matters:** Capacity estimation shows the interviewer you can think at scale. Always show your working. Start from the given numbers and derive everything step by step.
+
+### Step 1 — Traffic (QPS)
+
+```
+Given:
+  Total requests/day  = 5,000,000
+  Read : Write ratio  = 90 : 10
+
+Writes/day = 5,000,000 x 10%  = 500,000 URL creations/day
+Reads/day  = 5,000,000 x 90%  = 4,500,000 redirects/day
+
+Seconds in a day = 24 x 60 x 60 = 86,400
+
+Average QPS:
+  Write QPS = 500,000 / 86,400 ≈ 6 writes/sec
+  Read  QPS = 4,500,000 / 86,400 ≈ 52 reads/sec
+
+Peak QPS (10x burst factor for business-hour spikes):
+  Write QPS peak = 6  x 10 = 60/sec
+  Read  QPS peak = 52 x 10 = 520/sec
+
+Verdict: Redis handles 100,000+ QPS — our 520 peak is trivial.
+         PostgreSQL handles 5,000+ QPS — single node is fine.
+```
+
+### Step 2 — Storage
+
+```
+One URL record in url_maps:
+  short_code    =  10 bytes  ("p5Kx2A")
+  original_url  = 200 bytes  (avg URL)
+  user_id       =  16 bytes  (UUID)
+  metadata      =  74 bytes  (timestamps, flags, counters)
+                 ----------
+  Total         = 300 bytes per record
+
+Daily storage:
+  500,000 x 300 bytes = 150,000,000 bytes = 150 MB/day
+
+Annual storage:
+  150 MB x 365 = 54,750 MB ≈ 55 GB/year
+
+5-year projection:
+  55 GB x 5 = 275 GB total
+
+Verdict: Single PostgreSQL instance (2 TB SSD) handles 10+ years.
+         Add range partitioning by created_at after ~100M rows.
+```
+
+### Step 3 — Bandwidth
+
+```
+Write (incoming):
+  Write QPS x avg request size = 6 x 500 bytes = 3 KB/sec   (negligible)
+
+Read (outgoing 302 redirect):
+  Read QPS x avg response size = 52 x 300 bytes = 15.6 KB/sec
+
+Peak read bandwidth:
+  520 x 300 bytes = 156 KB/sec = 1.25 Mbps
+
+Verdict: Standard 1 Gbps NIC handles this trivially.
+         CDN offloads most bandwidth by caching popular redirects.
+```
+
+### Step 4 — Cache Sizing (Redis)
+
+```
+Rule: top 20% of URLs receive 80% of traffic (Pareto / 80-20 rule)
+
+Active URLs (accessed in last 30 days):
+  500,000 URLs/day x 30 days = 15,000,000 active URLs
+
+Cache the hot 20%:
+  15,000,000 x 20% = 3,000,000 entries to cache
+
+Memory per Redis entry:
+  key ("url:p5Kx2A")   =  15 bytes
+  value (original URL)  = 200 bytes
+  Redis overhead        =  85 bytes
+                          ----------
+  Total                 = 300 bytes per entry
+
+Total Redis RAM:
+  3,000,000 x 300 bytes = 900 MB ≈ 1 GB
+
+Verdict: 4 GB Redis instance provides plenty of headroom.
+         Expected cache hit ratio > 90% (20% URLs = 80% of reads).
+```
+
+### Step 5 — Base62 Namespace Math
+
+```
+Alphabet: 0-9 (10) + a-z (26) + A-Z (26) = 62 characters
+
+6-character codes:
+  62^6 = 56,800,235,584 ≈ 56 BILLION unique short codes
+
+Time to exhaustion:
+  56,000,000,000 / 500,000 URLs/day = 112,000 days = 307 YEARS
+
+Example — encoding counter 125,000,000 to Base62:
+  125,000,000 / 62 = 2,016,129  r 2  → '2'
+  2,016,129   / 62 = 32,518     r 13 → 'd'
+  32,518      / 62 = 524        r 50 → 'O'
+  524         / 62 = 8          r 28 → 's'
+  8           / 62 = 0          r 8  → '8'
+  Result (reversed): "8sOd2"  (5-char code for this counter value)
+
+Verdict: 6-char codes last 307 years. No need to plan for 7-char migration.
+```
+
+### Step 6 — Database Rows at Scale
+
+```
+Total rows after 5 years:
+  500,000/day x 365 x 5 = 912,500,000 ≈ 1 Billion rows
+
+Raw data size:    1B x 300 bytes  = 300 GB
+Index overhead:   300 GB x 30%    =  90 GB
+                                   ---------
+Total DB size:                    = 390 GB
+
+Partition strategy:
+  - Partition url_maps by RANGE(created_at) — quarterly partitions
+  - Each partition ≈ 45M rows / 30 GB — fast queries
+  - Old partitions can be archived to cold storage after 2 years
+
+Read replica strategy:
+  1 primary (writes only) + 2 read replicas (redirect reads)
+  Our 52 QPS read load fits on a single replica
+```
+
+### Estimation Summary Table
+
+| Metric | Calculation | Result | Implication |
+|--------|------------|--------|-------------|
+| Write QPS avg | 500K / 86,400 | **6/sec** | Single pod handles this |
+| Read QPS avg | 4.5M / 86,400 | **52/sec** | Redis trivially handles this |
+| Write QPS peak | 6 x 10 | **60/sec** | Still fine for single pod |
+| Read QPS peak | 52 x 10 | **520/sec** | Redis @ 100K QPS capacity |
+| Storage/day | 500K x 300 bytes | **150 MB** | Single PostgreSQL node |
+| Storage 5 yrs | 150MB x 365 x 5 | **275 GB** | Partition after 100M rows |
+| Redis cache | 3M x 300 bytes | **~1 GB** | 4 GB instance with headroom |
+| Bandwidth peak | 520 x 300 bytes | **1.25 Mbps** | Not a bottleneck |
+| Code space | 62^6 | **56 Billion** | Lasts 307 years |
+
+
 
 ## 🎯 Problem Statement
 
@@ -58,39 +315,6 @@
 | **Non-Functional** | Availability | 99.99% uptime |
 | **Non-Functional** | Scalability | Auto-scale on demand |
 | **Non-Functional** | Durability | No data loss |
-
----
-
-## 📊 Capacity Estimation
-
-```mermaid
-flowchart TB
-    subgraph Capacity_Estimation["Capacity Breakdown"]
-        A["Traffic Split\nRead:Write = 90:10"]
-        B["Writes/day: 500K\n~6 writes/sec"]
-        C["Reads/day: 4.5M\n~52 reads/sec\nPeak ~520 r/s (10x)"]
-        D["Storage/day: 250 MB\n~90 GB/year"]
-        E["Cache: hot 20% URLs\n~450 MB Redis"]
-        F["Short code space\nBase62^6 = 56B"]
-    end
-    A --> B
-    A --> C
-    B --> D
-    C --> E
-    F -.validates.-> A
-```
-
-**Step-by-step**
-1. Start from total requests/day (5M) and apply the 90:10 read/write split.
-2. Convert daily volumes into average QPS and use a 10x burst factor for peak.
-3. Estimate storage per URL record and multiply by daily write volume.
-4. Apply the 80/20 hot-set assumption to size the Redis cache.
-5. Validate that Base62^6 supports the long-term ID space.
-
-**Architectural reasoning**
-- QPS drives load balancer sizing, thread pools, and DB connection pool limits.
-- Storage and cache sizing inform partitioning, retention, and eviction strategy.
-- Namespace math prevents premature migration to longer short codes.
 
 ---
 
@@ -7595,6 +7819,1790 @@ spec:
 ---
 
 *End of Part 9 — Messaging: Kafka & RabbitMQ Interview Questions*
+
+---
+
+# 🔀 Part 10: Java Concurrency & Multithreading
+
+> **Target Audience:** Senior Tech Lead interviews. Concurrency is a high-signal topic — interviewers use it to separate experienced engineers from those who've only worked on CRUD apps.
+
+---
+
+## 📋 Section Overview
+
+```mermaid
+mindmap
+  root((Java Concurrency))
+    Thread_Fundamentals
+      Thread States
+      synchronized keyword
+      volatile keyword
+      Atomic Operations
+    Thread_Pools
+      ExecutorService
+      ThreadPoolExecutor
+      ForkJoinPool
+      Virtual Threads Java21
+    High_Level_Abstractions
+      CompletableFuture
+      CountDownLatch
+      CyclicBarrier
+      Semaphore
+    Concurrent_Collections
+      ConcurrentHashMap
+      CopyOnWriteArrayList
+      BlockingQueue
+    Pitfalls
+      Deadlock
+      Race Condition
+      Livelock
+      Thread Starvation
+```
+
+---
+
+### Q1. Thread Lifecycle — States and Transitions
+
+```mermaid
+stateDiagram-v2
+  [*] --> NEW : new Thread()
+  NEW --> RUNNABLE : thread.start()
+  RUNNABLE --> BLOCKED : waiting for monitor lock
+  RUNNABLE --> WAITING : wait() / join() / park()
+  RUNNABLE --> TIMED_WAITING : sleep(n) / wait(n) / join(n)
+  BLOCKED --> RUNNABLE : lock acquired
+  WAITING --> RUNNABLE : notify() / notifyAll() / interrupt()
+  TIMED_WAITING --> RUNNABLE : timeout expired / interrupt()
+  RUNNABLE --> TERMINATED : run() completes
+```
+
+| State | When | How to exit |
+|-------|------|------------|
+| **NEW** | Created but not started | `.start()` |
+| **RUNNABLE** | Running or ready to run | Preemption, blocking, waiting |
+| **BLOCKED** | Waiting for intrinsic lock (synchronized) | Lock released by holder |
+| **WAITING** | `Object.wait()`, `Thread.join()`, `LockSupport.park()` | `notify()`, join completes, `unpark()` |
+| **TIMED_WAITING** | `Thread.sleep(n)`, `wait(n)`, `join(n)` | Timeout expires |
+| **TERMINATED** | `run()` completed or exception thrown | — |
+
+---
+
+### Q2. synchronized vs volatile vs Atomic
+
+```java
+public class ConcurrencyComparison {
+
+    // ── synchronized ─────────────────────────────────────────────
+    // Guarantees: mutual exclusion + visibility + atomicity for block
+    private int counter = 0;
+
+    public synchronized void increment() { counter++; }       // method-level
+    public void increment2() {
+        synchronized (this) { counter++; }                    // block-level (prefer smaller scope)
+    }
+
+    // ── volatile ─────────────────────────────────────────────────
+    // Guarantees: visibility ONLY — NOT atomicity
+    // Use for: flags, status fields read/written by single writer
+    private volatile boolean running = true;
+
+    public void stop()  { running = false; }                  // single writer ✅
+    public void loop()  { while (running) { /* ... */ } }    // multiple readers ✅
+
+    // WRONG: volatile does NOT make compound action atomic
+    private volatile int count = 0;
+    public void bad() { count++; }   // NOT thread-safe! read-modify-write is 3 ops
+
+    // ── Atomic ───────────────────────────────────────────────────
+    // Guarantees: lock-free atomic operations (CAS — Compare-And-Swap)
+    // Use for: single-variable counters, accumulators
+    private final AtomicInteger atomicCounter = new AtomicInteger(0);
+    private final AtomicLong atomicLong = new AtomicLong(0);
+    private final AtomicReference<String> atomicRef = new AtomicReference<>("init");
+
+    public void atomicIncrement() { atomicCounter.incrementAndGet(); }  // thread-safe ✅
+    public boolean casUpdate(String expected, String newVal) {
+        return atomicRef.compareAndSet(expected, newVal);               // CAS ✅
+    }
+
+    // LongAdder — better than AtomicLong for high-contention counters
+    private final LongAdder adder = new LongAdder();
+    public void adderIncrement() { adder.increment(); }      // splits into cells — less contention
+    public long adderSum() { return adder.sum(); }
+}
+```
+
+| Feature | `synchronized` | `volatile` | `AtomicXxx` |
+|---------|--------------|------------|------------|
+| Mutual exclusion | ✅ Yes | ❌ No | ❌ No (CAS only) |
+| Visibility | ✅ Yes | ✅ Yes | ✅ Yes |
+| Atomicity of compound ops | ✅ Yes | ❌ No | ✅ For single variable |
+| Performance | Moderate (lock overhead) | Very fast | Fast (CAS, no lock) |
+| Best for | Complex critical sections | Single-writer flags | Counters, references |
+
+---
+
+### Q3. ThreadPoolExecutor — The Engine Behind ExecutorService
+
+```java
+// Core Spring Boot / production pattern
+@Configuration
+public class ThreadPoolConfig {
+
+    @Bean("taskExecutor")
+    public Executor taskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(10);           // always-alive threads
+        executor.setMaxPoolSize(50);            // max threads under load
+        executor.setQueueCapacity(100);         // queue size before spawning max threads
+        executor.setKeepAliveSeconds(60);       // idle thread timeout above core
+        executor.setThreadNamePrefix("app-task-");
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        // CallerRunsPolicy: if pool+queue full, run task in caller's thread (back-pressure)
+        executor.initialize();
+        return executor;
+    }
+}
+
+// ThreadPoolExecutor flow:
+// Task submitted → if < corePoolSize: new thread
+//               → if = corePoolSize: add to queue
+//               → if queue full AND < maxPoolSize: new thread
+//               → if queue full AND = maxPoolSize: RejectedExecutionHandler
+
+// Common rejection policies:
+// AbortPolicy (default) — throw RejectedExecutionException
+// CallerRunsPolicy       — caller thread runs the task (natural back-pressure)
+// DiscardPolicy          — silently discard
+// DiscardOldestPolicy    — discard oldest queued task and retry
+
+// ⚠️  NEVER use Executors.newFixedThreadPool / newCachedThreadPool in production
+// newFixedThreadPool  → unbounded queue → OOM under sustained load
+// newCachedThreadPool → unbounded threads → thread explosion under burst
+```
+
+**Thread Pool Sizing Formula:**
+```
+CPU-bound tasks:   pool size = CPU cores + 1
+I/O-bound tasks:   pool size = CPU cores × (1 + wait_time / compute_time)
+
+Example: 8-core host, DB queries averaging 90ms I/O and 10ms compute
+  pool size = 8 × (1 + 90/10) = 8 × 10 = 80 threads
+  (with 100-item queue as buffer)
+```
+
+---
+
+### Q4. CompletableFuture — Non-Blocking Async
+
+```java
+@Service
+public class ProductService {
+
+    // ── Chain async operations ────────────────────────────────────
+    public CompletableFuture<ProductDto> getEnrichedProduct(String id) {
+        return CompletableFuture
+            .supplyAsync(() -> productRepository.findById(id).orElseThrow(), executor)
+            .thenApplyAsync(product -> enrichWithInventory(product), executor)
+            .thenApplyAsync(product -> enrichWithPricing(product), executor)
+            .exceptionally(ex -> {
+                log.error("Product enrichment failed for {}", id, ex);
+                return ProductDto.fallback(id);
+            });
+    }
+
+    // ── Parallel execution — run both, combine results ────────────
+    public CompletableFuture<OrderSummary> getOrderSummary(String orderId) {
+        CompletableFuture<Order> orderFuture =
+            CompletableFuture.supplyAsync(() -> orderRepo.findById(orderId), executor);
+        CompletableFuture<User> userFuture =
+            CompletableFuture.supplyAsync(() -> userRepo.findByOrderId(orderId), executor);
+        CompletableFuture<List<Item>> itemsFuture =
+            CompletableFuture.supplyAsync(() -> itemRepo.findByOrderId(orderId), executor);
+
+        return CompletableFuture.allOf(orderFuture, userFuture, itemsFuture)
+            .thenApply(v -> OrderSummary.of(
+                orderFuture.join(), userFuture.join(), itemsFuture.join()
+            ));
+    }
+
+    // ── Race — first result wins ──────────────────────────────────
+    public CompletableFuture<String> fastestCache(String key) {
+        return CompletableFuture.anyOf(
+            CompletableFuture.supplyAsync(() -> redisCache.get(key), executor),
+            CompletableFuture.supplyAsync(() -> localCache.get(key), executor)
+        ).thenApply(result -> (String) result);
+    }
+
+    // ── Timeout — fail fast ───────────────────────────────────────
+    public CompletableFuture<String> withTimeout(String key) {
+        return CompletableFuture
+            .supplyAsync(() -> externalService.call(key), executor)
+            .orTimeout(3, TimeUnit.SECONDS)           // Java 9+ — cancel on timeout
+            .exceptionally(ex -> "fallback-value");
+    }
+}
+```
+
+| Method | Description | Returns |
+|--------|-------------|---------|
+| `supplyAsync(Supplier)` | Run async, produce value | `CompletableFuture<T>` |
+| `runAsync(Runnable)` | Run async, no return | `CompletableFuture<Void>` |
+| `thenApply(fn)` | Transform result (same thread) | `CompletableFuture<U>` |
+| `thenApplyAsync(fn)` | Transform result (new thread) | `CompletableFuture<U>` |
+| `thenCompose(fn)` | Chain future-returning function | `CompletableFuture<U>` |
+| `thenCombine(other, fn)` | Combine two independent futures | `CompletableFuture<V>` |
+| `allOf(futures...)` | Wait for ALL to complete | `CompletableFuture<Void>` |
+| `anyOf(futures...)` | Return first to complete | `CompletableFuture<Object>` |
+| `exceptionally(fn)` | Handle exception, provide fallback | `CompletableFuture<T>` |
+| `orTimeout(n, unit)` | Throw TimeoutException after n units | `CompletableFuture<T>` |
+
+---
+
+### Q5. Virtual Threads — Java 21 Game Changer
+
+```java
+// ── Platform thread (classic) ─────────────────────────────────────
+// 1:1 mapping to OS thread — 1-2 MB stack per thread
+// 500–1000 threads = memory pressure + context-switch overhead
+Thread platformThread = new Thread(() -> doWork());
+
+// ── Virtual thread (Java 21) ─────────────────────────────────────
+// M:N mapping — JVM schedules millions of virtual threads on few carrier (OS) threads
+// ~1 KB memory per virtual thread — scale to millions
+Thread virtualThread = Thread.ofVirtual().start(() -> doWork());
+
+// Spring Boot 3.2+ — enable virtual threads globally
+// application.yml:
+// spring:
+//   threads:
+//     virtual:
+//       enabled: true
+
+// ExecutorService with virtual threads
+ExecutorService virtualExecutor = Executors.newVirtualThreadPerTaskExecutor();
+// Each task gets its own virtual thread — no pool sizing needed!
+
+// ── When virtual threads shine ────────────────────────────────────
+// Blocking I/O (DB queries, HTTP calls, file reads) — virtual thread yields and resumes
+// High-concurrency servers (handle 100K concurrent requests with near-zero overhead)
+
+// ── When virtual threads DON'T help ──────────────────────────────
+// CPU-bound tasks — no benefit (still bound by CPU cores)
+// Synchronized blocks holding a monitor — "pins" the carrier thread (use ReentrantLock instead)
+// Thread-local caches with large objects — memory overhead with millions of VTs
+
+@Configuration
+@ConditionalOnProperty("spring.threads.virtual.enabled", havingValue = "true")
+public class VirtualThreadConfig {
+    @Bean
+    public TomcatProtocolHandlerCustomizer<?> virtualThreadTomcatCustomizer() {
+        return handler -> handler.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
+    }
+}
+```
+
+**Virtual Threads vs Platform Threads:**
+
+| Aspect | Platform Thread | Virtual Thread (Java 21) |
+|--------|----------------|--------------------------|
+| Memory | ~1–2 MB/thread | ~1–2 KB/thread |
+| Creation cost | Expensive (OS call) | Cheap (JVM-managed) |
+| Max practical count | ~1,000–10,000 | Millions |
+| Best for | CPU-bound work | I/O-bound work |
+| Blocking I/O | Blocks OS thread | Yields carrier thread |
+| Spring Boot support | Classic default | 3.2+ `spring.threads.virtual.enabled` |
+
+---
+
+### Q6. Locks — ReentrantLock vs ReadWriteLock
+
+```java
+// ── ReentrantLock — explicit lock, more control than synchronized ─
+private final ReentrantLock lock = new ReentrantLock();
+
+public void criticalSection() {
+    lock.lock();
+    try {
+        // protected section
+    } finally {
+        lock.unlock();   // always unlock in finally!
+    }
+}
+
+// tryLock — non-blocking attempt
+public boolean tryUpdate() {
+    if (lock.tryLock(100, TimeUnit.MILLISECONDS)) {
+        try { /* work */ return true; }
+        finally { lock.unlock(); }
+    }
+    return false;  // could not acquire lock in time
+}
+
+// ── ReadWriteLock — many readers, exclusive writers ───────────────
+private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
+private final Lock readLock  = rwLock.readLock();
+private final Lock writeLock = rwLock.writeLock();
+private Map<String, String> cache = new HashMap<>();
+
+public String read(String key) {
+    readLock.lock();
+    try { return cache.get(key); }
+    finally { readLock.unlock(); }
+}
+
+public void write(String key, String value) {
+    writeLock.lock();
+    try { cache.put(key, value); }
+    finally { writeLock.unlock(); }
+}
+// Multiple threads can read simultaneously
+// Write acquires exclusive lock — all readers blocked until write completes
+
+// ── StampedLock — Java 8+, optimistic reads ───────────────────────
+private final StampedLock stampedLock = new StampedLock();
+
+public String optimisticRead(String key) {
+    long stamp = stampedLock.tryOptimisticRead();  // non-blocking!
+    String value = cache.get(key);
+    if (!stampedLock.validate(stamp)) {            // check for concurrent write
+        stamp = stampedLock.readLock();            // fall back to read lock
+        try { value = cache.get(key); }
+        finally { stampedLock.unlockRead(stamp); }
+    }
+    return value;
+}
+```
+
+---
+
+### Q7. Concurrent Collections — Internals
+
+| Collection | Thread-safe? | Key feature | Use case |
+|------------|-------------|-------------|---------|
+| `HashMap` | ❌ No | Fast single-threaded | Single thread only |
+| `Hashtable` | ✅ Yes (synchronized) | Whole-map lock | Legacy — avoid |
+| `ConcurrentHashMap` | ✅ Yes (segment/bin locking) | High concurrency reads | General-purpose |
+| `Collections.synchronizedMap` | ✅ Yes (synchronized wrapper) | Whole-map lock | Simple thread safety |
+| `CopyOnWriteArrayList` | ✅ Yes (copy on mutation) | Lock-free reads | Read-heavy, rare writes |
+| `BlockingQueue` (ArrayBlockingQueue) | ✅ Yes | Bounded + blocking | Producer-consumer |
+| `LinkedBlockingQueue` | ✅ Yes | Optionally bounded | Thread pool task queue |
+| `ConcurrentLinkedQueue` | ✅ Yes (CAS) | Non-blocking, unbounded | High-throughput queue |
+
+```java
+// ConcurrentHashMap atomic operations
+ConcurrentHashMap<String, AtomicInteger> counts = new ConcurrentHashMap<>();
+counts.computeIfAbsent("key", k -> new AtomicInteger(0)).incrementAndGet();
+counts.merge("key", 1, Integer::sum);   // atomically add 1 to existing value
+
+// Producer-consumer with BlockingQueue
+BlockingQueue<Order> queue = new ArrayBlockingQueue<>(1000);
+
+// Producer thread
+void produce(Order order) throws InterruptedException {
+    queue.put(order);   // blocks if queue full — back-pressure
+}
+
+// Consumer thread
+void consume() throws InterruptedException {
+    Order order = queue.take();  // blocks if queue empty
+    process(order);
+}
+```
+
+---
+
+### Q8. Concurrency Pitfalls — Deadlock, Race Condition, Livelock
+
+**Deadlock:**
+```java
+// Classic deadlock — A holds lock1, waits for lock2; B holds lock2, waits for lock1
+Object lock1 = new Object(), lock2 = new Object();
+
+Thread A = new Thread(() -> {
+    synchronized (lock1) {
+        sleep(10);
+        synchronized (lock2) { /* ... */ }  // waits for B to release lock2
+    }
+});
+Thread B = new Thread(() -> {
+    synchronized (lock2) {
+        sleep(10);
+        synchronized (lock1) { /* ... */ }  // waits for A to release lock1
+    }
+});
+
+// Prevention: always acquire locks in SAME order
+// Detection: ThreadMXBean.findDeadlockedThreads() or jstack
+// Fix: use tryLock with timeout; use one lock; use Lock Ordering
+```
+
+**Race Condition — check-then-act:**
+```java
+// WRONG — race between check and act
+if (!cache.containsKey("key")) {                // Thread A checks: not present
+    cache.put("key", computeExpensive());        // Thread B also checks: not present
+}                                               // Both compute! Duplicate work or corruption
+
+// CORRECT — atomic check-and-put
+cache.computeIfAbsent("key", k -> computeExpensive());  // atomic
+```
+
+**Common anti-patterns summary:**
+
+| Anti-Pattern | Problem | Fix |
+|---|---|---|
+| `new Thread()` in loop | Thread creation overhead | Use thread pool |
+| `synchronized` on `this` | Wide lock scope | Lock on private object |
+| `double-checked locking` without `volatile` | Partial object publication | Add `volatile` to field |
+| Thread pool with unbounded queue | OOM under load | Bound the queue |
+| `ThreadLocal` in thread pool | Value leaks between tasks | `remove()` in finally |
+| Catching `InterruptedException` and ignoring | Breaks thread interruption | Re-interrupt or propagate |
+
+---
+
+### 🎯 Part 10 — Concurrency Quick Reference
+
+| Topic | Key Interview Point |
+|-------|-------------------|
+| `volatile` | Visibility only, NOT atomicity — don't use for `i++` |
+| `synchronized` | Mutual exclusion + visibility — works on object monitor |
+| `AtomicInteger` | CAS-based, lock-free single-variable atomicity |
+| `LongAdder` | Better than `AtomicLong` under high contention (multiple cells) |
+| Virtual threads | Java 21 — millions of VTs on few OS threads — I/O-bound champion |
+| `CompletableFuture.allOf` | Parallel fan-out; `anyOf` for first-wins race |
+| `ConcurrentHashMap` | Segment-level locking (Java 7) → CAS + bin-level (Java 8+) |
+| Deadlock detection | `jstack`, `ThreadMXBean.findDeadlockedThreads()` |
+| Thread pool sizing | I/O-bound: `cores × (1 + wait/compute)` |
+| `ReadWriteLock` | Many readers simultaneously; exclusive single writer |
+
+---
+
+# 🔐 Part 11: Spring Security & OAuth2 Deep Dive
+
+> **Why this matters:** Security is non-negotiable in production. Expect deep questions on JWT internals, OAuth2 flows, CSRF, and how to secure microservices.
+
+---
+
+### Q1. Spring Security Architecture — How It Works
+
+```mermaid
+flowchart TB
+  Request["HTTP Request"] --> FilterChain["SecurityFilterChain\n(ordered filter list)"]
+  FilterChain --> |"UsernamePasswordAuthenticationFilter\nor JwtAuthenticationFilter"| AM["AuthenticationManager"]
+  AM --> AP["AuthenticationProvider\ne.g. DaoAuthenticationProvider\nor JwtAuthenticationProvider"]
+  AP --> |"load user"| UDS["UserDetailsService\nloadUserByUsername()"]
+  UDS --> |"UserDetails"| AP
+  AP --> |"Authentication object\nwith GrantedAuthorities"| SC["SecurityContextHolder\n(ThreadLocal)"]
+  SC --> |"proceed"| Controller["@Controller / @RestController"]
+```
+
+```java
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)   // enables @PreAuthorize
+public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtFilter;
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
+            .csrf(csrf -> csrf.disable())                        // stateless JWT — no CSRF needed
+            .sessionManagement(sm ->
+                sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/v1/auth/**").permitAll()  // public endpoints
+                .requestMatchers("/actuator/health").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/urls/**").authenticated()
+                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
+            )
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                .accessDeniedHandler(new AccessDeniedHandlerImpl())
+            )
+            .build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);  // strength 12 = ~250ms hash — adjust per hardware
+    }
+
+    @Bean
+    public AuthenticationManager authManager(UserDetailsService uds) {
+        var provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(uds);
+        provider.setPasswordEncoder(passwordEncoder());
+        return new ProviderManager(provider);
+    }
+}
+```
+
+---
+
+### Q2. JWT — Implementation from Scratch
+
+```java
+// JWT structure: Header.Payload.Signature  (Base64URL encoded)
+// Header: { "alg": "HS256", "typ": "JWT" }
+// Payload: { "sub": "userId", "iat": 1700000000, "exp": 1700086400, "roles": ["USER"] }
+// Signature: HMACSHA256(base64(header) + "." + base64(payload), secret)
+
+@Component
+public class JwtService {
+    @Value("${jwt.secret}")         // 256-bit minimum secret key
+    private String secret;
+    @Value("${jwt.expiration:86400}") // 24h default
+    private long expirationSeconds;
+
+    private SecretKey signingKey() {
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+    }
+
+    public String generateToken(UserDetails user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("roles", user.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority).toList());
+        return Jwts.builder()
+            .claims(claims)
+            .subject(user.getUsername())
+            .issuedAt(new Date())
+            .expiration(new Date(System.currentTimeMillis() + expirationSeconds * 1000))
+            .signWith(signingKey(), Jwts.SIG.HS256)
+            .compact();
+    }
+
+    public String extractUsername(String token) {
+        return parseClaims(token).getSubject();
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    }
+
+    private boolean isTokenExpired(String token) {
+        return parseClaims(token).getExpiration().before(new Date());
+    }
+
+    private Claims parseClaims(String token) {
+        return Jwts.parser().verifyWith(signingKey()).build()
+                   .parseSignedClaims(token).getPayload();
+    }
+}
+
+// JWT Filter — extract and validate token from Authorization header
+@Component
+@RequiredArgsConstructor
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest req,
+                                    HttpServletResponse res, FilterChain chain)
+            throws ServletException, IOException {
+        final String authHeader = req.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            chain.doFilter(req, res);
+            return;
+        }
+        final String jwt = authHeader.substring(7);
+        final String username = jwtService.extractUsername(jwt);
+
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            if (jwtService.isTokenValid(jwt, userDetails)) {
+                var authToken = new UsernamePasswordAuthenticationToken(
+                    userDetails, null, userDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+        chain.doFilter(req, res);
+    }
+}
+```
+
+---
+
+### Q3. OAuth2 Flows — Which to Use When
+
+```mermaid
+flowchart TB
+  subgraph Flows["OAuth2 Grant Types"]
+    AC["Authorization Code\n+ PKCE\nBest for web/mobile apps\nUser logs in via IdP"]
+    CC["Client Credentials\nService-to-service\nNo user involved\nM2M authentication"]
+    DEV["Device Code\nTV / CLI apps\nNo browser available"]
+    ROPC["Resource Owner Password\nLegacy — avoid\nApp handles user creds directly"]
+  end
+```
+
+**Authorization Code + PKCE (Most Common):**
+```mermaid
+sequenceDiagram
+  participant U as User Browser
+  participant App as Your App
+  participant IdP as Identity Provider (Keycloak/Auth0)
+  participant API as Resource Server (Your API)
+
+  U->>App: Click "Login"
+  App->>App: Generate code_verifier, code_challenge (PKCE)
+  App->>IdP: Redirect: /authorize?response_type=code&client_id=...&code_challenge=...
+  IdP->>U: Login page
+  U->>IdP: Credentials
+  IdP->>App: Redirect: /callback?code=AUTH_CODE
+  App->>IdP: POST /token (code + code_verifier)
+  IdP-->>App: access_token (JWT) + refresh_token
+  App->>API: GET /api/data (Bearer access_token)
+  API->>API: Validate JWT signature & claims
+  API-->>App: Protected resource
+```
+
+**Client Credentials (M2M):**
+```java
+// Spring Boot resource server — validates JWT from any OAuth2 IdP
+@Configuration
+public class ResourceServerConfig {
+    @Bean
+    public SecurityFilterChain resourceServer(HttpSecurity http) throws Exception {
+        return http
+            .oauth2ResourceServer(oauth2 ->
+                oauth2.jwt(jwt ->
+                    jwt.jwkSetUri("https://your-idp.com/.well-known/jwks.json")
+                ))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/internal/**").hasAuthority("SCOPE_internal")
+                .anyRequest().authenticated()
+            ).build();
+    }
+}
+
+// application.yml for OAuth2 resource server
+// spring:
+//   security:
+//     oauth2:
+//       resourceserver:
+//         jwt:
+//           jwk-set-uri: https://keycloak:8080/realms/myrealm/protocol/openid-connect/certs
+```
+
+---
+
+### Q4. Method-Level Security
+
+```java
+@Service
+@RequiredArgsConstructor
+public class OrderService {
+
+    // Allow only ORDER_READ scope or ADMIN role
+    @PreAuthorize("hasAuthority('SCOPE_order:read') or hasRole('ADMIN')")
+    public Order getOrder(String id) { /* ... */ }
+
+    // Only the order owner or admin can cancel
+    @PreAuthorize("#orderId == authentication.name or hasRole('ADMIN')")
+    public void cancelOrder(String orderId) { /* ... */ }
+
+    // Post-filter — remove items user isn't allowed to see
+    @PostFilter("filterObject.userId == authentication.name or hasRole('ADMIN')")
+    public List<Order> getUserOrders() { /* ... */ }
+
+    // Return value security
+    @PostAuthorize("returnObject.userId == authentication.name")
+    public Order getOrderSecure(String id) { /* ... */ }
+}
+```
+
+---
+
+### Q5. Common Security Vulnerabilities and Fixes
+
+| Vulnerability | Description | Fix |
+|---|---|---|
+| **Weak JWT secret** | Short/guessable secret → forge tokens | Min 256-bit random secret via Vault/env var |
+| **JWT without expiry** | Stolen token valid forever | Always set `exp` claim; short TTL (15 min) + refresh |
+| **Storing JWT in localStorage** | XSS can steal token | Use `HttpOnly` cookie for web apps |
+| **SQL injection via JPQL** | String concat in queries | Named parameters / `@Query` with `?1` |
+| **CSRF on REST** | Cross-site state change | Stateless JWT = no CSRF; for sessions use `CsrfTokenRequestAttributeHandler` |
+| **Broken object-level auth** | User A accesses User B's data | Always filter by `userId` from JWT, not request body |
+| **Verbose error messages** | Reveals internals to attacker | Generic messages in prod; detail in logs only |
+| **Insecure Direct Object Ref** | `/api/orders/123` — incremental IDs | Use UUIDs; check ownership in service |
+
+---
+
+### 🎯 Part 11 — Security Quick Reference
+
+| Topic | Key Interview Point |
+|-------|-------------------|
+| JWT signature | HS256 (shared secret) or RS256 (public/private key pair) |
+| Token storage | HttpOnly cookie for browsers; memory/secure storage for SPAs |
+| PKCE | Prevents auth-code interception — always use with public clients |
+| `@PreAuthorize` | Evaluated BEFORE method; `@PostAuthorize` AFTER (uses returnObject) |
+| Refresh token | Long-lived token to get new access token — store securely server-side |
+| Token revocation | JWT is stateless — can't revoke without blocklist (Redis) or short TTL |
+| Spring Security 6 | `SecurityFilterChain` bean replaces `WebSecurityConfigurerAdapter` |
+| BCrypt strength | `BCryptPasswordEncoder(12)` ≈ 250ms — tune to ~100–300ms on your hardware |
+
+---
+
+# 🧪 Part 12: Testing Strategy & Best Practices
+
+> **Why this matters:** A 10-year tech lead is expected to own testing strategy. Know the pyramid, write all three layers, and understand when to use each.
+
+---
+
+### Testing Pyramid
+
+```mermaid
+flowchart TB
+  subgraph Pyramid["Testing Pyramid — Cost vs Confidence"]
+    E2E["E2E Tests\n10% of tests\nSlowest, most brittle\nSelenium, Cypress, REST-assured full flow"]
+    INT["Integration Tests\n30% of tests\nMedium speed\nTestContainers, @SpringBootTest\nReal DB + real Spring context"]
+    UNIT["Unit Tests\n60% of tests\nFastest, most isolated\nJUnit 5 + Mockito\nBusiness logic only"]
+    UNIT --> INT --> E2E
+  end
+```
+
+---
+
+### Q1. Unit Testing with JUnit 5 + Mockito
+
+```java
+@ExtendWith(MockitoExtension.class)
+class UrlShortenerServiceTest {
+
+    @Mock
+    private UrlMapRepository urlMapRepository;
+    @Mock
+    private RedisTemplate<String, String> redisTemplate;
+    @Mock
+    private CodeGeneratorService codeGenerator;
+
+    @InjectMocks
+    private UrlShortenerService urlShortenerService;
+
+    @Test
+    @DisplayName("Should shorten URL and cache the result")
+    void shortenUrl_ShouldCacheAndPersist() {
+        // Given (Arrange)
+        String longUrl  = "https://example.com/very/long/path";
+        String shortCode = "abc123";
+        ShortenRequest request = new ShortenRequest(longUrl, null, null);
+
+        when(codeGenerator.generate()).thenReturn(shortCode);
+        when(urlMapRepository.save(any(UrlMap.class)))
+            .thenAnswer(inv -> inv.getArgument(0));   // return the saved entity
+
+        // When (Act)
+        ShortenResponse response = urlShortenerService.shorten(request);
+
+        // Then (Assert)
+        assertThat(response.shortCode()).isEqualTo(shortCode);
+        assertThat(response.shortUrl()).contains(shortCode);
+
+        verify(urlMapRepository).save(argThat(urlMap ->
+            urlMap.getOriginalUrl().equals(longUrl) &&
+            urlMap.getShortCode().equals(shortCode)
+        ));
+        verify(redisTemplate.opsForValue()).set(
+            eq("url:" + shortCode), eq(longUrl), any(Duration.class));
+    }
+
+    @Test
+    @DisplayName("Should throw NotFoundException when code not found")
+    void redirect_ShouldThrowWhenNotFound() {
+        // Given
+        String code = "notFound";
+        when(redisTemplate.opsForValue().get("url:" + code)).thenReturn(null);
+        when(urlMapRepository.findByShortCode(code)).thenReturn(Optional.empty());
+
+        // When/Then
+        assertThatThrownBy(() -> urlShortenerService.redirect(code))
+            .isInstanceOf(UrlNotFoundException.class)
+            .hasMessageContaining(code);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "not-a-url", "ftp://unsupported.com"})
+    @DisplayName("Should reject invalid URLs")
+    void shorten_ShouldRejectInvalidUrls(String invalidUrl) {
+        assertThatThrownBy(() ->
+            urlShortenerService.shorten(new ShortenRequest(invalidUrl, null, null)))
+            .isInstanceOf(InvalidUrlException.class);
+    }
+}
+```
+
+---
+
+### Q2. Integration Testing with TestContainers
+
+```java
+// TestContainers — real infrastructure in Docker during tests
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
+@ActiveProfiles("test")
+class UrlShortenerIntegrationTest {
+
+    @Container
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15")
+        .withDatabaseName("testdb")
+        .withUsername("test")
+        .withPassword("test");
+
+    @Container
+    static GenericContainer<?> redis = new GenericContainer<>("redis:7")
+        .withExposedPorts(6379);
+
+    @DynamicPropertySource
+    static void overrideProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url",     postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+        registry.add("spring.data.redis.host",    redis::getHost);
+        registry.add("spring.data.redis.port",    () -> redis.getMappedPort(6379));
+    }
+
+    @Autowired private TestRestTemplate restTemplate;
+
+    @Test
+    void shortenAndRedirect_FullFlow() {
+        // 1. Shorten
+        ShortenRequest req = new ShortenRequest("https://example.com/full-path", null, null);
+        ResponseEntity<ShortenResponse> createResp =
+            restTemplate.postForEntity("/api/v1/urls/shorten", req, ShortenResponse.class);
+
+        assertThat(createResp.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        String code = createResp.getBody().shortCode();
+
+        // 2. Redirect (follow=false to capture the 302 response)
+        ResponseEntity<Void> redirectResp =
+            restTemplate.exchange("/" + code, HttpMethod.GET, null, Void.class);
+        assertThat(redirectResp.getStatusCode()).isEqualTo(HttpStatus.FOUND);
+        assertThat(redirectResp.getHeaders().getLocation().toString())
+            .isEqualTo("https://example.com/full-path");
+    }
+}
+```
+
+---
+
+### Q3. Spring Test Slices — Fast Focused Tests
+
+```java
+// @WebMvcTest — Spring MVC only (no DB, no service beans)
+// Fast! Loads only controller layer
+@WebMvcTest(UrlController.class)
+class UrlControllerTest {
+    @Autowired MockMvc mockMvc;
+    @MockBean UrlShortenerService service;  // Mock the service
+
+    @Test
+    void shorten_Returns201WithShortUrl() throws Exception {
+        when(service.shorten(any())).thenReturn(new ShortenResponse("abc123", "https://sho.rt/abc123"));
+
+        mockMvc.perform(post("/api/v1/urls/shorten")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""{"longUrl":"https://example.com"}"""))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.shortCode").value("abc123"))
+            .andExpect(jsonPath("$.shortUrl").value("https://sho.rt/abc123"));
+    }
+}
+
+// @DataJpaTest — JPA layer only (no web, uses H2 by default)
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)  // use real DB
+@Testcontainers
+class UrlMapRepositoryTest {
+    @Container
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15");
+
+    @Autowired UrlMapRepository repository;
+
+    @Test
+    void findByShortCode_ReturnsCorrectMapping() {
+        UrlMap saved = repository.save(new UrlMap("abc123", "https://example.com", null));
+        assertThat(repository.findByShortCode("abc123")).isPresent()
+            .map(UrlMap::getOriginalUrl).hasValue("https://example.com");
+    }
+}
+```
+
+---
+
+### Q4. Test Doubles — Stubs vs Mocks vs Spies
+
+```java
+// STUB — provides canned answers (use when: just need a value returned)
+when(codeGenerator.generate()).thenReturn("fixed-code");   // stub
+
+// MOCK — verifies interactions (use when: behavior matters, not just output)
+verify(urlMapRepository, times(1)).save(any(UrlMap.class)); // mock verification
+verify(kafkaTemplate, never()).send(anyString(), any());     // verify NOT called
+
+// SPY — real object with selective overriding (use when: mostly real, one part mocked)
+@Spy
+private CodeGeneratorService realCodeGenerator;
+doReturn("fixed").when(realCodeGenerator).generate();  // override one method
+
+// CAPTOR — capture argument for detailed assertion
+@Captor ArgumentCaptor<UrlMap> urlMapCaptor;
+
+verify(urlMapRepository).save(urlMapCaptor.capture());
+UrlMap saved = urlMapCaptor.getValue();
+assertThat(saved.getShortCode()).hasSize(6);
+assertThat(saved.getCreatedAt()).isNotNull();
+```
+
+---
+
+### Q5. Testing Async Code and Kafka Consumers
+
+```java
+// Testing async code with CompletableFuture
+@Test
+void asyncEnrichment_CompletesWithinTimeout() {
+    CompletableFuture<ProductDto> future = productService.getEnrichedProduct("p-123");
+    assertThat(future)
+        .succeedsWithin(Duration.ofSeconds(2))
+        .satisfies(dto -> assertThat(dto.getName()).isEqualTo("Laptop"));
+}
+
+// Testing Kafka consumer with @EmbeddedKafka
+@SpringBootTest
+@EmbeddedKafka(partitions = 1, topics = {"url-events"})
+class ClickEventConsumerTest {
+    @Autowired KafkaTemplate<String, ClickEvent> kafkaTemplate;
+    @Autowired ClickEventRepository repository;
+
+    @Test
+    void consumeClickEvent_PersistsToDatabase() throws Exception {
+        ClickEvent event = new ClickEvent("abc123", "192.168.1.1", Instant.now());
+        kafkaTemplate.send("url-events", event).get();
+
+        await().atMost(5, TimeUnit.SECONDS)
+               .untilAsserted(() ->
+                   assertThat(repository.findByShortCode("abc123")).isNotEmpty()
+               );
+    }
+}
+```
+
+---
+
+### 🎯 Part 12 — Testing Quick Reference
+
+| Type | Annotation | Speed | What it tests |
+|------|-----------|-------|---------------|
+| Unit | `@ExtendWith(MockitoExtension.class)` | Fastest | Pure business logic, no Spring |
+| Controller Slice | `@WebMvcTest` | Fast | HTTP, validation, serialisation |
+| JPA Slice | `@DataJpaTest` | Medium | SQL, mappings, custom queries |
+| Full Integration | `@SpringBootTest` + TestContainers | Slowest | Full stack with real DB/Redis/Kafka |
+| Embedded Kafka | `@EmbeddedKafka` | Medium | Kafka producer/consumer |
+
+| Anti-Pattern | Better approach |
+|---|---|
+| Mock everything including `String`, `List` | Only mock infrastructure (DB, HTTP, cache) |
+| Test implementation details | Test observable behaviour (inputs and outputs) |
+| Share mutable state between tests | Each test creates its own data |
+| Ignore flaky tests | Fix them immediately — they erode trust |
+| Skip testing error paths | Test exception scenarios and edge cases |
+
+---
+
+# 🌐 Part 13: API Design Best Practices
+
+> **For Senior engineers:** API design decisions have long-term consequences. Expect questions on versioning, idempotency, pagination, and REST vs GraphQL trade-offs.
+
+---
+
+### Q1. REST API Design Principles
+
+```
+Resource naming:
+  ✅ GET    /api/v1/orders/{id}          — get order
+  ✅ POST   /api/v1/orders               — create order
+  ✅ PUT    /api/v1/orders/{id}          — full replace
+  ✅ PATCH  /api/v1/orders/{id}          — partial update
+  ✅ DELETE /api/v1/orders/{id}          — delete
+
+  ❌ GET    /api/getOrder?id=1           — verb in URL
+  ❌ POST   /api/v1/order/create         — action in URL
+  ❌ GET    /api/v1/delete_order/{id}    — wrong method
+
+Nested resources (max 2 levels deep):
+  ✅ GET /api/v1/orders/{orderId}/items
+  ❌ GET /api/v1/users/{id}/orders/{orderId}/items/{itemId}/reviews — too deep
+
+Status codes:
+  200 OK             — successful GET/PUT/PATCH
+  201 Created        — successful POST (include Location header)
+  204 No Content     — successful DELETE
+  400 Bad Request    — invalid input / validation failure
+  401 Unauthorized   — not authenticated
+  403 Forbidden      — authenticated but not authorized
+  404 Not Found      — resource doesn't exist
+  409 Conflict       — duplicate / state conflict
+  422 Unprocessable  — semantic validation failure
+  429 Too Many Req   — rate limit exceeded
+  500 Internal Error — unexpected server error
+```
+
+---
+
+### Q2. API Versioning Strategies
+
+| Strategy | Example | Pros | Cons |
+|----------|---------|------|------|
+| **URI versioning** | `/api/v1/orders` | Simple, visible, easy cache | URL changes on version bump |
+| **Header versioning** | `Accept: application/vnd.api.v2+json` | Clean URLs | Less discoverable |
+| **Query parameter** | `/api/orders?version=2` | Easy for testing | Pollutes query string |
+| **Subdomain** | `v2.api.example.com` | Full isolation | More infrastructure |
+
+```java
+// Spring Boot — URI versioning (recommended for REST APIs)
+@RestController
+@RequestMapping("/api/v1/orders")
+public class OrderControllerV1 {
+    @GetMapping("/{id}")
+    public OrderResponseV1 getOrder(@PathVariable String id) { /* ... */ }
+}
+
+@RestController
+@RequestMapping("/api/v2/orders")
+public class OrderControllerV2 {
+    @GetMapping("/{id}")
+    public OrderResponseV2 getOrder(@PathVariable String id) { /* ... */ }
+}
+
+// Best practice: support N and N-1 versions simultaneously
+// Deprecation notice: add header "Sunset: Sat, 31 Dec 2026 00:00:00 GMT"
+// Communicate deprecation 6 months in advance
+```
+
+---
+
+### Q3. Pagination — Cursor vs Offset
+
+```java
+// ── OFFSET pagination (simple, has problems) ─────────────────────
+// Problem: OFFSET 10000 scans and discards 10000 rows — O(n) cost
+// Problem: items can shift between pages if new data is inserted
+@GetMapping
+public Page<OrderResponse> getOrders(
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "20") int size) {
+    return orderService.findAll(PageRequest.of(page, size, Sort.by("id")));
+}
+// Response: { content: [...], page: 0, size: 20, totalElements: 50000, totalPages: 2500 }
+
+// ── CURSOR pagination (production-grade) ─────────────────────────
+// Based on last-seen ID — O(1) regardless of page depth
+// Cursor = opaque token (base64 encoded last ID + timestamp)
+@GetMapping("/cursor")
+public CursorPage<OrderResponse> getOrdersCursor(
+    @RequestParam(required = false) String cursor,  // null = first page
+    @RequestParam(defaultValue = "20") int limit) {
+
+    UUID lastId = cursor != null ? decodeCursor(cursor) : null;
+    List<Order> orders = orderRepository.findAfterCursor(lastId, limit + 1);
+    boolean hasNext = orders.size() > limit;
+    if (hasNext) orders = orders.subList(0, limit);
+
+    String nextCursor = hasNext ? encodeCursor(orders.get(orders.size()-1).getId()) : null;
+    return new CursorPage<>(orders.stream().map(OrderResponse::from).toList(), nextCursor);
+}
+
+// SQL for cursor pagination (indexed — O(log n))
+// SELECT * FROM orders WHERE id > :lastId ORDER BY id LIMIT :limit
+```
+
+---
+
+### Q4. Idempotency — Critical for Payment APIs
+
+```java
+// Idempotency-Key header: client generates UUID per request
+// If same key seen again, return cached response (don't process twice)
+@PostMapping("/payments")
+public ResponseEntity<PaymentResponse> createPayment(
+    @RequestHeader("Idempotency-Key") String idempotencyKey,
+    @RequestBody @Valid PaymentRequest request) {
+
+    // Check cache first
+    Optional<PaymentResponse> cached = idempotencyStore.get(idempotencyKey);
+    if (cached.isPresent()) {
+        return ResponseEntity.ok(cached.get());   // return stored result
+    }
+
+    PaymentResponse response = paymentService.process(request);
+    idempotencyStore.put(idempotencyKey, response, Duration.ofHours(24));
+    return ResponseEntity.status(HttpStatus.CREATED).body(response);
+}
+
+// Idempotent HTTP methods by default:
+// GET, PUT, DELETE — safe to retry
+// POST — NOT idempotent by default → add Idempotency-Key for safety
+// PATCH — depends on implementation (increment vs set)
+```
+
+---
+
+### Q5. REST vs GraphQL vs gRPC
+
+| Feature | REST | GraphQL | gRPC |
+|---------|------|---------|------|
+| Protocol | HTTP/1.1 | HTTP/1.1 (POST) | HTTP/2 |
+| Data format | JSON | JSON | Protocol Buffers (binary) |
+| Contract | OpenAPI (optional) | Schema (SDL) | `.proto` file (required) |
+| Fetching | Fixed response shape | Client specifies fields | Fixed per RPC method |
+| Over/under-fetch | Common problem | Solved by design | No over-fetch |
+| Real-time | SSE / WebSocket | Subscriptions | Bidirectional streaming |
+| Browser friendly | ✅ Native | ✅ Yes | ⚠️ Needs grpc-web |
+| Best for | Public APIs, CRUD | Complex data graphs (BFF) | Internal microservices |
+| Caching | HTTP caching (GET) | Hard (all POST) | No HTTP caching |
+
+```java
+// gRPC Spring Boot example
+// 1. Define .proto
+// service OrderService {
+//   rpc GetOrder (OrderRequest) returns (OrderResponse);
+//   rpc StreamOrders (StreamRequest) returns (stream OrderResponse);
+// }
+
+// 2. Server
+@GrpcService
+public class OrderGrpcService extends OrderServiceGrpc.OrderServiceImplBase {
+    @Override
+    public void getOrder(OrderRequest request, StreamObserver<OrderResponse> observer) {
+        Order order = orderService.findById(request.getId());
+        observer.onNext(OrderResponse.newBuilder()
+            .setId(order.getId())
+            .setStatus(order.getStatus())
+            .build());
+        observer.onCompleted();
+    }
+}
+
+// 3. Client
+@Component
+public class OrderGrpcClient {
+    private final OrderServiceBlockingStub stub;
+    public OrderGrpcClient(Channel channel) {
+        this.stub = OrderServiceGrpc.newBlockingStub(channel);
+    }
+    public OrderResponse getOrder(String id) {
+        return stub.getOrder(OrderRequest.newBuilder().setId(id).build());
+    }
+}
+```
+
+---
+
+### Q6. Rate Limiting in Spring Boot
+
+```java
+// Token bucket rate limiter with Redis (production-grade)
+@Component
+@RequiredArgsConstructor
+public class RateLimitFilter extends OncePerRequestFilter {
+
+    private final RedisTemplate<String, String> redisTemplate;
+    private static final int MAX_REQUESTS = 100;
+    private static final int WINDOW_SECONDS = 60;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest req,
+                                    HttpServletResponse res, FilterChain chain)
+            throws ServletException, IOException {
+        String clientIp = req.getRemoteAddr();
+        String key = "rate_limit:" + clientIp;
+
+        Long count = redisTemplate.opsForValue().increment(key);
+        if (count == 1) {
+            redisTemplate.expire(key, Duration.ofSeconds(WINDOW_SECONDS));
+        }
+
+        res.setHeader("X-Rate-Limit-Limit", String.valueOf(MAX_REQUESTS));
+        res.setHeader("X-Rate-Limit-Remaining", String.valueOf(Math.max(0, MAX_REQUESTS - count)));
+
+        if (count > MAX_REQUESTS) {
+            res.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
+            res.getWriter().write("{\"error\":\"Rate limit exceeded\"}");
+            return;
+        }
+        chain.doFilter(req, res);
+    }
+}
+```
+
+---
+
+### 🎯 Part 13 — API Design Quick Reference
+
+| Topic | Key Interview Point |
+|-------|-------------------|
+| REST vs RPC | REST = resource-oriented; gRPC = action-oriented; use gRPC for internal microservices |
+| Versioning | URI versioning (`/v1/`, `/v2/`) — most common, simplest to understand |
+| Idempotency | `PUT` and `DELETE` are naturally idempotent; `POST` needs Idempotency-Key header |
+| Pagination | Cursor pagination for deep pages (O(1)); offset for simple needs (O(n)) |
+| HATEOAS | Links in response show available actions — rarely required, but good to know |
+| 429 Too Many Requests | Always include `Retry-After` header with rate limit response |
+| API Gateway responsibilities | Auth, rate limiting, routing, SSL termination, request/response transformation |
+| GraphQL N+1 | Use DataLoader (batching) to avoid N+1 queries in GraphQL resolvers |
+
+---
+
+# ⚡ Part 14: Redis Deep Dive
+
+> **Why this matters:** Redis is in almost every production Java stack. Senior engineers are expected to know data structures, patterns, clustering, and failure modes.
+
+---
+
+### Q1. Redis Data Structures and When to Use Each
+
+```mermaid
+flowchart TB
+  subgraph Structures["Redis Data Structures"]
+    String["String\nSimplest KV\ncounters, cache, sessions, flags"]
+    Hash["Hash\nField-value pairs\nUser profile, product attributes"]
+    List["List\nOrdered linked list\nJob queues, activity feeds"]
+    Set["Set\nUnordered unique members\nTags, unique visitors"]
+    SortedSet["Sorted Set (ZSet)\nMembers with scores\nLeaderboards, rate limiting"]
+    Stream["Stream\nAppend-only log\nEvent sourcing, message queue"]
+    HyperLogLog["HyperLogLog\nProbabilistic unique count\n~0.81% error, 12KB max"]
+    Bitmap["Bitmap\nBit operations on strings\nUser activity, feature flags"]
+  end
+```
+
+```java
+// ── String — cache-aside, counters ───────────────────────────────
+redisTemplate.opsForValue().set("url:abc123", "https://example.com", Duration.ofHours(24));
+redisTemplate.opsForValue().increment("visit_count:abc123");  // atomic INCR
+
+// ── Hash — entity attributes (partial update, no full object deserialise) ──
+redisTemplate.opsForHash().putAll("user:123", Map.of(
+    "name", "Alice", "email", "alice@example.com", "tier", "gold"
+));
+redisTemplate.opsForHash().get("user:123", "email");  // get single field
+
+// ── List — recent activity feed, simple queue ─────────────────────
+redisTemplate.opsForList().leftPush("feed:user:123", eventJson);   // LPUSH
+redisTemplate.opsForList().range("feed:user:123", 0, 19);           // latest 20 items
+redisTemplate.opsForList().rightPop("job-queue");                   // RPOP — FIFO queue
+
+// ── Sorted Set — leaderboard, rate limiter window ─────────────────
+redisTemplate.opsForZSet().add("leaderboard", "player:alice", 9850.0);  // ZADD score
+redisTemplate.opsForZSet().reverseRangeWithScores("leaderboard", 0, 9); // top 10
+
+// Sliding window rate limiter
+String windowKey = "rate:" + userId + ":" + (System.currentTimeMillis() / 60_000);
+redisTemplate.opsForZSet().add(windowKey, UUID.randomUUID().toString(),
+    System.currentTimeMillis());
+redisTemplate.expire(windowKey, Duration.ofMinutes(2));
+long count = redisTemplate.opsForZSet()
+    .count(windowKey, System.currentTimeMillis() - 60_000, System.currentTimeMillis());
+if (count > 100) throw new RateLimitException();
+
+// ── HyperLogLog — unique URL visitors (approx, 12KB per counter) ──
+redisTemplate.opsForHyperLogLog().add("unique_visitors:abc123", userId);
+long approxUniqueCount = redisTemplate.opsForHyperLogLog().size("unique_visitors:abc123");
+```
+
+---
+
+### Q2. Cache Patterns
+
+```mermaid
+flowchart TB
+  subgraph CacheAside["Cache-Aside (Lazy Loading) — Most Common"]
+    CA1["Read: check cache"]
+    CA2{Cache hit?}
+    CA3["Return cached value"]
+    CA4["Read from DB"]
+    CA5["Write to cache (TTL)"]
+    CA6["Return DB value"]
+    CA1 --> CA2
+    CA2 -->|Yes| CA3
+    CA2 -->|No| CA4 --> CA5 --> CA6
+  end
+
+  subgraph WriteThrough["Write-Through"]
+    WT1["Write to cache AND DB\nsynchronously on every write"]
+  end
+
+  subgraph WriteBehind["Write-Behind (Write-Back)"]
+    WB1["Write to cache immediately\nAsync flush to DB"]
+    WB2["Risk: data loss if cache fails\nbefore flush"]
+  end
+```
+
+| Pattern | Read latency | Write latency | Data freshness | Risk |
+|---------|-------------|--------------|----------------|------|
+| **Cache-Aside** | Fast (cache hit) / Slow (miss) | DB only — normal | May be stale until TTL | Cache miss stampede |
+| **Write-Through** | Fast (always cached) | Slow (DB + cache) | Always fresh | Write overhead |
+| **Write-Behind** | Fast (always cached) | Fast (cache only) | May be stale briefly | Data loss on crash |
+| **Read-Through** | Fast (cache handles miss) | DB only | May be stale | Cache library complexity |
+
+---
+
+### Q3. Cache Stampede and Solutions
+
+```java
+// Problem: 1000 threads all miss cache at same time → DB overwhelmed
+// Solution 1: Mutex lock (only one thread fetches, rest wait)
+@Cacheable(value = "urls", key = "#code")  // Spring Cache auto-handles this
+public String getOriginalUrl(String code) {
+    return urlMapRepository.findByShortCode(code)
+        .map(UrlMap::getOriginalUrl)
+        .orElseThrow(() -> new UrlNotFoundException(code));
+}
+
+// Solution 2: Probabilistic early expiration (PER)
+// Re-cache before TTL expires — avoids mass expiration
+public String getWithEarlyExpiry(String key) {
+    RedisCachedValue cached = getCachedWithTtl(key);
+    double recomputeTime = 0.1;  // seconds to recompute
+    double ttlRemaining = cached.getTtlSeconds();
+    double delta = -recomputeTime * Math.log(Math.random());
+    if (ttlRemaining - delta <= 0) {
+        // Probabilistically recompute before expiry
+        String fresh = fetchFromDb(key);
+        cache(key, fresh, TTL);
+        return fresh;
+    }
+    return cached.getValue();
+}
+
+// Solution 3: TTL jitter — stagger expirations
+long jitter = (long)(Math.random() * 300);  // 0-300 seconds random
+redisTemplate.opsForValue().set(key, value, Duration.ofSeconds(BASE_TTL + jitter));
+// Prevents thundering herd from simultaneous TTL expiry
+```
+
+---
+
+### Q4. Distributed Lock with Redis
+
+```java
+// Redisson (recommended for production distributed locks)
+@Component
+@RequiredArgsConstructor
+public class DistributedLockService {
+    private final RedissonClient redisson;
+
+    public <T> T executeWithLock(String lockKey, long waitSec, long leaseSec,
+                                  Callable<T> task) throws Exception {
+        RLock lock = redisson.getLock(lockKey);
+        boolean acquired = lock.tryLock(waitSec, leaseSec, TimeUnit.SECONDS);
+        if (!acquired) {
+            throw new LockAcquisitionException("Could not acquire lock: " + lockKey);
+        }
+        try {
+            return task.call();
+        } finally {
+            if (lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
+        }
+    }
+}
+
+// Use case: prevent duplicate URL shortening of same long URL
+public ShortenResponse shorten(ShortenRequest req) {
+    String lockKey = "shorten_lock:" + DigestUtils.md5Hex(req.longUrl());
+    return lockService.executeWithLock(lockKey, 1, 5, () -> {
+        // Check duplicate inside lock
+        return urlMapRepository.findByOriginalUrl(req.longUrl())
+            .map(ShortenResponse::from)
+            .orElseGet(() -> createNew(req));
+    });
+}
+
+// Why Redisson vs raw SET NX EX:
+// Redisson: automatic lease renewal for long tasks, fair lock option, watchdog
+// Raw: simple but prone to expiry during lock held — another thread can steal it
+```
+
+---
+
+### Q5. Redis Cluster vs Sentinel
+
+| Feature | Redis Standalone | Redis Sentinel | Redis Cluster |
+|---------|-----------------|---------------|--------------|
+| High availability | ❌ Single point of failure | ✅ Auto-failover | ✅ Auto-failover |
+| Horizontal scaling | ❌ No | ❌ No (read replicas only) | ✅ Sharding across nodes |
+| Data distribution | All on one node | All on one primary | 16384 hash slots across shards |
+| Multi-key operations | ✅ All keys | ✅ All keys | ⚠️ Same slot only (use `{tag}`) |
+| Minimum nodes | 1 | 3 (1P + 1R + 1 sentinel) | 6 (3P + 3R minimum) |
+| Use case | Dev, small apps | Production HA | Large scale, multi-GB data |
+
+```yaml
+# Spring Boot — Redis Cluster config
+spring:
+  data:
+    redis:
+      cluster:
+        nodes:
+          - redis-node-1:6379
+          - redis-node-2:6379
+          - redis-node-3:6379
+        max-redirects: 3
+      lettuce:
+        cluster:
+          refresh:
+            adaptive: true     # auto-refresh topology on slot errors
+            period: 30s
+```
+
+---
+
+### Q6. Redis Persistence — RDB vs AOF
+
+| Feature | RDB (Snapshot) | AOF (Append-Only File) |
+|---------|---------------|----------------------|
+| Mechanism | Point-in-time snapshot via `BGSAVE` | Append every write command to log |
+| Recovery speed | Fast (load snapshot) | Slow (replay log) |
+| Data loss on crash | Up to last snapshot (minutes) | At most 1 second (with `fsync=everysec`) |
+| File size | Compact (binary) | Larger (grows over time, rewrite with `BGREWRITEAOF`) |
+| Performance impact | Fork + snapshot = memory spike | `fsync` overhead |
+| Use case | Cache (some data loss OK) | Session store, rate limits (no data loss) |
+
+```
+# redis.conf
+save 900 1        # RDB: snapshot if 1 key changed in 900s
+save 300 10       # RDB: snapshot if 10 keys changed in 300s
+appendonly yes    # Enable AOF
+appendfsync everysec  # fsync every second (good balance)
+```
+
+---
+
+### 🎯 Part 14 — Redis Quick Reference
+
+| Topic | Key Interview Point |
+|-------|-------------------|
+| Cache stampede | TTL jitter + probabilistic early refresh + mutex per key |
+| Distributed lock | Use Redisson (watchdog, auto-renewal); SET NX EX for simple cases |
+| Sorted Set rate limiter | Sliding window: ZADD timestamp as score, ZCOUNT for window |
+| Redis Cluster sharding | 16384 hash slots; use `{tag}` in key for cross-slot operations |
+| AOF vs RDB | AOF = less data loss; RDB = faster restart; use both in production |
+| HyperLogLog | Count unique visitors with 12 KB regardless of cardinality |
+| Key naming | `entity:id:field` — e.g., `url:abc123`, `rate:user:123:2024010110` |
+| Eviction policy | `allkeys-lru` for cache; `noeviction` for session/rate-limit data |
+
+---
+
+# ☁️ Part 15: Cloud & DevOps — AWS, CI/CD, IaC
+
+> **Why this matters:** Senior tech leads are expected to own deployments, cloud costs, and infrastructure. Know AWS services, CI/CD pipelines, and IaC tools.
+
+---
+
+### Q1. Core AWS Services — Mapped to Our Stack
+
+```mermaid
+flowchart TB
+  subgraph Compute["Compute"]
+    ECS["ECS Fargate\nServerless containers\nNo EC2 management"]
+    EKS["EKS\nManaged Kubernetes\nMax control"]
+    EC2["EC2 + ASG\nFull VM control\nCustom setups"]
+    Lambda["Lambda\nEvent-driven\nShort functions"]
+  end
+  subgraph Data["Data"]
+    RDS["RDS PostgreSQL\nManaged PostgreSQL\nMulti-AZ, read replicas"]
+    Elasticache["ElastiCache Redis\nManaged Redis\nCluster mode"]
+    MSK["MSK\nManaged Kafka\nAuto-scaling brokers"]
+    S3["S3\nObject storage\nStatic assets, backups"]
+    DDB["DynamoDB\nServerless NoSQL\nSingle-digit ms at any scale"]
+  end
+  subgraph Network["Network & Edge"]
+    ALB["ALB\nLayer 7 LB\nPath/host routing"]
+    CF["CloudFront\nGlobal CDN\nEdge caching"]
+    R53["Route 53\nDNS + Health checks\nFailover routing"]
+    ACM["ACM\nFree TLS certs\nAuto-renew"]
+  end
+  subgraph Ops["Operations"]
+    CW["CloudWatch\nMetrics + Logs + Alarms"]
+    SM["Secrets Manager\nRotating secrets\nDB passwords, API keys"]
+    IAM["IAM\nFine-grained permissions\nIRSA for pods"]
+    ECR["ECR\nPrivate Docker registry\nVulnerability scanning"]
+  end
+```
+
+| Our Component | AWS Service | Why |
+|---|---|---|
+| Spring Boot pods | EKS or ECS Fargate | Managed K8s or serverless containers |
+| PostgreSQL | RDS PostgreSQL Multi-AZ | Automated backups, failover, patching |
+| Redis | ElastiCache (Cluster mode) | Managed sharding, automatic failover |
+| Kafka | MSK | Managed brokers, auto-scaling storage |
+| Docker images | ECR | Private, secure, vulnerability scanning |
+| Secrets | Secrets Manager | Auto-rotation, audit logs |
+| Logs | CloudWatch Logs | Centralised, queryable with Insights |
+| Metrics | CloudWatch + Managed Prometheus | Native AWS + K8s metrics |
+
+---
+
+### Q2. CI/CD Pipeline — GitHub Actions
+
+```yaml
+# .github/workflows/deploy.yml
+name: Build, Test, Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env: { POSTGRES_DB: testdb, POSTGRES_USER: test, POSTGRES_PASSWORD: test }
+        ports: ["5432:5432"]
+      redis:
+        image: redis:7
+        ports: ["6379:6379"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { java-version: '17', distribution: 'temurin' }
+      - uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+      - name: Run Tests
+        run: ./mvnw test
+      - name: Upload Test Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with: { name: test-results, path: target/surefire-reports/ }
+
+  build-and-push:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    permissions: { id-token: write, contents: read }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure AWS Credentials (OIDC — no long-lived secrets)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::123456789:role/github-actions-role
+          aws-region: ap-south-1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Build and Push Docker Image
+        env: { IMAGE_TAG: ${{ github.sha }} }
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+  deploy-staging:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Deploy to EKS Staging
+        run: |
+          aws eks update-kubeconfig --name staging-cluster --region ap-south-1
+          helm upgrade --install url-service ./helm/url-service \
+            --namespace staging \
+            --set image.tag=${{ github.sha }} \
+            --set replicaCount=2 \
+            --wait --timeout=5m
+
+  deploy-production:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://api.myapp.com
+    steps:
+      - name: Deploy to EKS Production (Blue-Green)
+        run: |
+          aws eks update-kubeconfig --name prod-cluster --region ap-south-1
+          helm upgrade --install url-service ./helm/url-service \
+            --namespace production \
+            --set image.tag=${{ github.sha }} \
+            --set replicaCount=5 \
+            --wait --timeout=10m
+      - name: Run Smoke Tests
+        run: ./scripts/smoke_test.sh https://api.myapp.com
+```
+
+---
+
+### Q3. Infrastructure as Code — Terraform
+
+```hcl
+# terraform/rds.tf — PostgreSQL RDS instance
+resource "aws_db_instance" "postgres" {
+  identifier           = "url-service-db"
+  engine               = "postgres"
+  engine_version       = "15.4"
+  instance_class       = "db.t3.medium"
+  allocated_storage    = 100
+  storage_type         = "gp3"
+  storage_encrypted    = true
+  kms_key_id           = aws_kms_key.rds.arn
+
+  db_name  = "urldb"
+  username = "dbadmin"
+  password = data.aws_secretsmanager_secret_version.db_password.secret_string
+
+  vpc_security_group_ids = [aws_security_group.rds.id]
+  db_subnet_group_name   = aws_db_subnet_group.main.name
+  publicly_accessible    = false
+
+  backup_retention_period = 7
+  backup_window           = "03:00-04:00"
+  maintenance_window      = "sun:04:00-sun:05:00"
+  deletion_protection     = true          # prevent accidental delete
+
+  multi_az               = true           # automatic standby in second AZ
+
+  performance_insights_enabled = true
+  monitoring_interval          = 60       # Enhanced Monitoring
+  monitoring_role_arn          = aws_iam_role.rds_monitoring.arn
+
+  tags = { Name = "url-service-postgres", Environment = "production" }
+}
+
+# terraform/eks.tf — EKS node group with auto-scaling
+resource "aws_eks_node_group" "app" {
+  cluster_name    = aws_eks_cluster.main.name
+  node_group_name = "app-nodes"
+  node_role_arn   = aws_iam_role.eks_node.arn
+  subnet_ids      = aws_subnet.private[*].id
+  instance_types  = ["t3.medium"]
+
+  scaling_config {
+    desired_size = 3
+    min_size     = 2
+    max_size     = 10
+  }
+
+  update_config {
+    max_unavailable = 1   # rolling update — only 1 node down at a time
+  }
+}
+```
+
+---
+
+### Q4. Helm Chart — Kubernetes Deployment Template
+
+```yaml
+# helm/url-service/values.yaml
+replicaCount: 3
+image:
+  repository: 123456789.dkr.ecr.ap-south-1.amazonaws.com/url-service
+  tag: latest
+  pullPolicy: Always
+
+resources:
+  requests: { cpu: 250m, memory: 512Mi }
+  limits:   { cpu: 1000m, memory: 1Gi }
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 20
+  targetCPUUtilizationPercentage: 70
+
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: "prod"
+  - name: DB_URL
+    valueFrom:
+      secretKeyRef: { name: db-credentials, key: url }
+  - name: REDIS_HOST
+    valueFrom:
+      configMapKeyRef: { name: app-config, key: redis-host }
+
+probes:
+  liveness:  { path: /actuator/health/liveness,  initialDelaySeconds: 30 }
+  readiness: { path: /actuator/health/readiness, initialDelaySeconds: 10 }
+```
+
+---
+
+### Q5. Cost Optimisation Strategies
+
+| Strategy | Savings | When to apply |
+|----------|---------|--------------|
+| **Reserved Instances** (1-3yr) | 40-60% vs On-Demand | Steady-state baseline workloads |
+| **Spot Instances** | 70-90% vs On-Demand | Stateless, fault-tolerant workers |
+| **Graviton3 (ARM)** | 20-40% better price-perf | Any containerised Java workload |
+| **S3 Intelligent Tiering** | Auto-moves cold data | Infrequently accessed object storage |
+| **RDS gp3 storage** | 20% cheaper than gp2 | Always migrate to gp3 |
+| **Fargate Spot** | Up to 70% off | Batch jobs, non-critical services |
+| **Right-sizing** | 30-50% | Review CloudWatch metrics monthly |
+| **NAT Gateway → VPC Endpoint** | $32/mo/AZ → $7/mo | S3, ECR, Secrets Manager traffic |
+
+```
+Cost optimisation mindset for interviews:
+1. Measure first — use AWS Cost Explorer + CloudWatch to find waste
+2. Right-size before reserving — a smaller instance costs less even with On-Demand
+3. Auto-scaling > over-provisioning — HPA shrinks at night
+4. Spot for stateless pods — app is already stateless with Redis/RDS
+5. Graviton for Java — excellent price-performance, Spring Boot runs fine on ARM
+```
+
+---
+
+### Q6. Observability on AWS
+
+```yaml
+# CloudWatch Container Insights for EKS
+# application.yml — ship logs in JSON to CloudWatch
+logging:
+  config: classpath:logback-spring.xml
+
+# logback-spring.xml
+# <appender name="CLOUDWATCH" class="ca.pjer.logback.AwsLogsAppender">
+#   <logGroupName>/url-service/production</logGroupName>
+#   <logRegion>ap-south-1</logRegion>
+# </appender>
+
+# AWS Distro for OpenTelemetry (ADOT) — traces to X-Ray or Jaeger
+management:
+  tracing:
+    sampling:
+      probability: 0.1    # sample 10% of traces in prod (adjust per volume)
+  otlp:
+    tracing:
+      endpoint: http://adot-collector:4318/v1/traces
+```
+
+---
+
+### 🎯 Part 15 — Cloud & DevOps Quick Reference
+
+| Topic | Key Interview Point |
+|-------|-------------------|
+| EKS vs ECS | EKS = full K8s power, more complex; ECS = simpler, AWS-native, less portable |
+| RDS Multi-AZ | Synchronous standby replica in another AZ — automatic failover < 60s |
+| IAM for pods | IRSA (IAM Roles for Service Accounts) — pods get temp credentials, no static keys |
+| OIDC in GitHub Actions | Keyless auth — GitHub pod gets temp AWS creds via OIDC, no stored secrets |
+| Terraform state | Store in S3 with DynamoDB locking — never commit state to git |
+| Helm vs raw YAML | Helm = templated, versioned, parameterised K8s manifests |
+| GitOps | ArgoCD watches Git for desired state, auto-syncs cluster to match |
+| Cost monitoring | AWS Cost Explorer + Budget alerts + Trusted Advisor recommendations |
+| Spot instances | 70-90% cheaper, interruption in 2 min — handle gracefully with SIGTERM |
+| Graviton3 | ARM-based EC2, 20-40% better price-performance for Java workloads |
 
 ---
 
