@@ -1,0 +1,735 @@
+
+---
+
+## 🟢 LEVEL 1 — Basic System Design Concepts
+
+> **How to read this:** Every concept has a real-world analogy first, then the technical definition, then an interview Q&A. Read top to bottom — each concept builds on the previous one.
+
+---
+
+### 1.1 — Scalability: Vertical vs Horizontal
+
+> **Real-world analogy:** Your restaurant is getting crowded.
+> - **Vertical scaling** = buy a bigger kitchen (upgrade your single server — more CPU, more RAM).
+> - **Horizontal scaling** = open more branches (add more servers behind a load balancer).
+
+| Dimension | Vertical (Scale Up) | Horizontal (Scale Out) |
+|-----------|--------------------|-----------------------|
+| How | Upgrade one machine's CPU/RAM/SSD | Add more machines behind a load balancer |
+| Limit | Hardware ceiling (~128-core max) | Theoretically unlimited |
+| Cost | Exponential (high-end hardware costly) | Linear (commodity servers) |
+| Downtime to scale | Yes — usually requires reboot | No — add pods at runtime |
+| Single point of failure | Yes | No |
+| App requirement | None | App must be **stateless** |
+| Best for | Databases (initial), quick wins | Web servers, API services, caches |
+
+> 💡 **Interview Tip:** Always mention BOTH, then say: *"We start vertical for the DB (easy), then add read replicas (horizontal read scaling), then shard (horizontal write scaling) as DB becomes the bottleneck."*
+
+**❓ Interview Questions:**
+
+**Q: "What is the difference between vertical and horizontal scaling?"**
+> A: Vertical = add more power to one machine (more CPU/RAM). Simple but has a hardware ceiling and leaves a SPOF. Horizontal = add more machines behind a load balancer. No ceiling, but the app must be stateless so any server can handle any request. Move state to external stores first (Redis for sessions, S3 for files), then scale horizontally.
+
+**Q: "When would you NOT use horizontal scaling?"**
+> A: When the app has heavy shared mutable state (in-memory sessions, local file writes). Such apps need sticky sessions. Externalise state to Redis/S3 first, then horizontal scaling becomes trivial.
+
+---
+
+### 1.2 — Latency vs Throughput
+
+> **Real-world analogy:** A highway. **Latency** = how long ONE car takes to travel A → B. **Throughput** = how many cars per hour cross the entire highway.
+
+```
+Latency    = time for ONE request to complete (milliseconds)
+Throughput = requests completed per second (QPS)
+
+Little's Law: Throughput = Concurrency / Latency
+  Example: 100 concurrent requests, each taking 200ms
+  Throughput = 100 / 0.2s = 500 requests/sec
+```
+
+| Term | Unit | Meaning | Goal |
+|------|------|---------|------|
+| **Latency** | ms | Speed of a single request | Lower |
+| **P50 Latency** | ms | Median — 50% of requests faster | Typical experience |
+| **P99 Latency** | ms | 99% of requests finish within this | Tail — your slowest users |
+| **Throughput** | req/sec (QPS) | Volume handled per second | Higher |
+
+> 💡 **Interview Tip:** Always say **P99 latency**, not average. If P99 = 8s, 1% of users wait 8 seconds. At 1M users, 10,000 people are miserable. Average hides the tail completely.
+
+**❓ Interview Questions:**
+
+**Q: "What is tail latency amplification?"**
+> A: In a microservices chain with 10 services each at P99=50ms, combined P99 = 10 × 50ms = 500ms — it adds multiplicatively. Fix: hedged requests (send to 2 servers, take the fastest response), aggressive timeouts per hop, and monitor P99 per service independently.
+
+---
+
+### 1.3 — Availability & Reliability
+
+> **Real-world analogy:** A bank ATM. **Availability** = what % of time it works. **Reliability** = when it works, does it give the right amount every time?
+
+```
+Availability % = (Total time - Downtime) / Total time x 100
+
+The "Nines" — memorise these:
+  99%     = 3.65 days  downtime/year  (unacceptable)
+  99.9%   = 8.7 hours  downtime/year  (internal tools OK)
+  99.99%  = 52 minutes downtime/year  (consumer apps)
+  99.999% = 5.26 min   downtime/year  (finance, healthcare)
+
+Compound availability in serial call chains:
+  Service A: 99.9%
+  Service B: 99.9%
+  Combined:  99.9% x 99.9% = 99.8%  (gets WORSE!)
+  10 services at 99.9% = 99.9%^10 = 99.0% = 87 hours downtime/year
+```
+
+**Techniques to improve availability:**
+
+| Technique | What it does |
+|-----------|-------------|
+| **Redundancy** | No SPOF — 2+ instances of every component |
+| **Health checks + auto-restart** | Kubernetes replaces failed pods in seconds |
+| **Circuit Breaker** | Failing dependency can't cascade and crash your whole service |
+| **Graceful degradation** | Return cached/partial data when one component is down |
+| **Multi-AZ deployment** | One datacenter fire doesn't take you down |
+| **Chaos Engineering** | Netflix Chaos Monkey — deliberately kill things to find weaknesses |
+
+> 💡 **Interview Tip:** Memorise the nines. For 99.99%: *"We eliminate all single points of failure — multiple app pods with HPA, primary + replica DB, multi-AZ deployment, circuit breakers on all external calls."*
+
+**❓ Interview Questions:**
+
+**Q: "How do you achieve 99.99% availability?"**
+> A: Layer by layer: (1) No SPOF — minimum 2 instances of every component. (2) Multi-AZ — spread across availability zones. (3) Health checks + auto-restart — Kubernetes replaces failed pods automatically. (4) Circuit breakers — failing dependencies don't cascade. (5) Graceful degradation — show popular items if recommendation engine is down. (6) Zero-downtime rolling deployments. (7) Regular DR drills — practice failover so it works when real.
+
+---
+
+### 1.4 — Load Balancing
+
+> **Real-world analogy:** A supermarket checkout lane manager — directs customers to the least-busy lane so no single lane is overwhelmed.
+
+**Load Balancing Algorithms:**
+
+| Algorithm | How | Best for |
+|-----------|-----|---------|
+| **Round Robin** | Each server takes turns: 1, 2, 3, 1, 2... | Equal-capacity servers |
+| **Weighted Round Robin** | Server A gets 3× more than B | Different-capacity servers |
+| **Least Connections** | Route to server with fewest active connections | Long-lived connections (WebSocket) |
+| **IP Hash** | Same client IP → always same server | Sessions that can't be externalised |
+
+**Layer 4 vs Layer 7:**
+
+| | Layer 4 (Transport) | Layer 7 (Application) |
+|---|---|---|
+| Reads | TCP/UDP — IPs and ports only | Full HTTP — headers, URL, cookies |
+| Routing rules | IP:Port only | Path, header, cookie, query param |
+| SSL termination | No | Yes |
+| Example | AWS NLB | AWS ALB, Nginx, Spring Cloud Gateway |
+
+> 💡 **Interview Tip:** For REST APIs always say Layer 7 (ALB/Nginx). Enables path routing (`/api/v1/*` → Service A, `/api/v2/*` → Service B), SSL termination, and health check-based routing.
+
+**❓ Interview Questions:**
+
+**Q: "What happens if the load balancer itself goes down?"**
+> A: The LB is a SPOF too. Solutions: (1) Active-Passive LB pair with floating IP via VRRP — failover in < 1s. (2) DNS round-robin with multiple LB IPs. (3) Cloud-managed LB (AWS ALB) — AWS runs it as a fully managed service with built-in redundancy. In Kubernetes: multiple Ingress controller replicas handle this automatically.
+
+---
+
+### 1.5 — Caching
+
+> **Real-world analogy:** A chef's mise en place. Instead of fetching from the fridge (DB) for every request, pre-prepare the most-used ingredients on the counter (cache) for instant access.
+
+**Cache Hit vs Miss:**
+```
+Cache HIT  = data found in cache → return immediately (0.5ms)
+Cache MISS = not in cache → fetch from DB (5ms), store in cache, return
+
+Cache Hit Ratio = Hits / (Hits + Misses)
+Good ratio: > 90% — meaning < 10% of requests hit the DB
+```
+
+**Cache hierarchy:**
+
+| Layer | Location | Latency | Example |
+|-------|----------|---------|---------|
+| **In-process** | JVM heap (Caffeine, Guava) | Microseconds | Single-server hot data |
+| **Distributed** | Redis, Memcached | 0.5–1 ms | Shared across all pods |
+| **CDN edge** | CloudFront, Fastly | 5–20 ms | Static files, cacheable API responses |
+| **Browser** | User's browser | 0 ms | JS, CSS, images |
+
+**Cache eviction policies:**
+
+| Policy | Evicts | Best for |
+|--------|--------|---------|
+| **LRU** (Least Recently Used) | Not accessed for longest time | General purpose — most common |
+| **LFU** (Least Frequently Used) | Accessed fewest times | Frequency matters more than recency |
+| **TTL** (Time To Live) | After fixed time period | Data with known freshness window |
+
+> 💡 **Interview Tip:** Cache invalidation is the hardest CS problem. Always discuss: TTL-based expiry, event-driven invalidation (Kafka event → evict Redis key), and stampede prevention (TTL jitter + mutex).
+
+**❓ Interview Questions:**
+
+**Q: "What is cache stampede and how do you prevent it?"**
+> A: When a popular cache key expires, thousands of concurrent requests all miss simultaneously and hammer the DB. Prevention strategies: (1) TTL jitter — add random offset `TTL = base + random(0,30s)` to stagger expirations. (2) Mutex per key — only one thread fetches from DB on miss, others wait for the cached result. (3) Background refresh — proactively refresh popular keys before TTL expires so the cache never actually misses in production.
+
+**Q: "How do you decide what to cache?"**
+> A: Cache data that is: frequently read (high QPS), expensive to compute/fetch (DB JOIN, external API call), and changes infrequently (stale data acceptable within TTL). Don't cache: user-specific sensitive data (security risk), data that changes every request (useless), or data too large to fit in memory (causes thrashing). Rule of thumb: cache anything with read:write ratio > 10:1.
+
+---
+
+### 1.6 — SQL vs NoSQL Databases
+
+> **Real-world analogy:** SQL = a filing cabinet with strict labelled folders and cross-references. NoSQL = a shoebox where you throw anything in any shape.
+
+| Dimension | SQL (Relational) | NoSQL |
+|-----------|-----------------|-------|
+| Schema | Fixed — define columns upfront | Flexible — each document can differ |
+| Transactions | Full ACID | Varies (MongoDB ACID; Cassandra eventual) |
+| Joins | Native, powerful | Embed in document or application-level |
+| Scaling | Vertical primary, horizontal via replicas | Horizontal by design (sharding built-in) |
+| Best for | Financial systems, complex analytics | Catalogs, feeds, logs, time-series, IoT |
+
+**NoSQL types:**
+
+| Type | Examples | Best for |
+|------|---------|---------|
+| **Document** | MongoDB, Firestore | Product catalogs, user profiles |
+| **Key-Value** | Redis, DynamoDB | Sessions, cache, leaderboards |
+| **Wide-Column** | Cassandra, HBase | Time-series, logs, write-heavy analytics |
+| **Graph** | Neo4j, Neptune | Social networks, fraud detection |
+| **Search** | Elasticsearch | Full-text search, log analysis |
+
+> 💡 **Interview Tip:** Never say "I'd use MongoDB because SQL is slow." Properly indexed PostgreSQL handles 10,000+ QPS. Choose NoSQL for specific reasons: schema flexibility, massive write throughput, natural document model, or horizontal scaling at petabyte scale.
+
+**❓ Interview Questions:**
+
+**Q: "When would you use NoSQL over SQL?"**
+> A: Four specific scenarios: (1) Massive write throughput — Cassandra scales to millions writes/sec for time-series/IoT. (2) Flexible/polymorphic schema — e-commerce where "laptop" has CPU/RAM but "shirt" has size/colour; MongoDB documents vary per type. (3) Horizontal scaling at massive scale — DynamoDB scales without DB admin work. (4) Document-centric access — if you always read order + all its items together, embedding in MongoDB is faster than a 3-table SQL JOIN. But for complex analytics, multi-table joins, strong ACID — PostgreSQL wins every time.
+
+---
+
+## 🟡 LEVEL 2 — Intermediate System Design Concepts
+
+---
+
+### 2.1 — Database Replication
+
+> **Real-world analogy:** A book with multiple printed copies. One original (primary) that can be written to; copies (replicas) that can be read from. Copies are slightly behind the original.
+
+**Replication types:**
+
+| Type | Primary waits for replica? | Lag | Use case |
+|------|--------------------------|-----|---------|
+| **Synchronous** | Yes — for replica confirm | Zero | Financial — never lose a write |
+| **Asynchronous** | No — replica catches up | ms to seconds | Most web apps — performance |
+| **Semi-synchronous** | For at least 1 replica | Near-zero | Balance of safety + performance |
+
+**Replication lag problem:**
+```
+User writes a post → confirmed on primary
+User immediately reads → routed to replica
+Replica is 200ms behind → post not visible yet!
+User thinks: "My post disappeared!"
+
+Fix (Read-your-own-writes consistency):
+  Option 1: Route that user's reads to primary for 1s after their write
+  Option 2: Cache the written item in Redis for 5s and serve from cache
+  Option 3: Always route authenticated user reads to primary
+  Best production: Option 2 — fast, cheap, no primary overload
+```
+
+> 💡 **Interview Tip:** Replication solves READ scaling only. All writes still go to one primary. For write scaling you need sharding.
+
+**❓ Interview Questions:**
+
+**Q: "How does PostgreSQL replication work?"**
+> A: PostgreSQL uses streaming replication via WAL (Write-Ahead Log). Every change on primary is first written to WAL (sequential append — very fast). WAL is streamed to replica servers which replay the changes. In Spring Boot, use `AbstractRoutingDataSource` to route `@Transactional(readOnly=true)` to replicas and write transactions to primary. Monitor lag with `pg_stat_replication` on primary.
+
+---
+
+### 2.2 — Database Sharding
+
+> **Real-world analogy:** A phone book split into multiple volumes. Volume 1: A–F. Volume 2: G–M. Each is smaller and faster to search — but you must know which volume to look in first.
+
+**Sharding strategies:**
+
+| Strategy | How | Pros | Cons |
+|----------|-----|------|------|
+| **Hash** | `shard = hash(id) % N` | Even distribution | Range queries hit all shards |
+| **Range** | IDs 0–1M → Shard 1 | Range queries easy | Hot shards if new IDs cluster |
+| **Directory** | Lookup table: id → shard | Flexible | Lookup table is a bottleneck |
+| **Geo** | US users → US shard | GDPR compliance, latency | Uneven shard sizes |
+
+**Try these BEFORE sharding (in order):**
+```
+1. Add indexes + optimise queries   — often fixes "slow DB" immediately
+2. Add read replicas               — solves read bottleneck
+3. Cache hot reads in Redis        — cuts DB load by 80%+
+4. Vertical scale the DB           — upgrade instance type
+5. Table partitioning              — split within one DB by range
+6. Shard                           — last resort; massive operational complexity
+```
+
+> 💡 **Interview Tip:** Mention the problems with sharding — cross-shard JOIN is hard, re-sharding requires data movement, ACID across shards is complex. Saying "shard first" is a junior mistake. Show you've exhausted cheaper solutions first.
+
+---
+
+### 2.3 — Consistent Hashing
+
+> **Real-world analogy:** A circular clock. Servers sit at positions on the clock face. A key hashes to a clock position and belongs to the next server clockwise. Adding/removing a server only shifts keys between that server and its nearest neighbour — not ALL keys.
+
+```
+Simple modulo: shard = hash(key) % N
+  Add 1 server (3 → 4): 75% of ALL keys move to different server!
+  Cache invalidation storm, DB overload.
+
+Consistent hashing: only ~1/N keys move on topology change.
+  Add server D between C and E:
+  Only keys between C and D (that were on C) move to D.
+  ~25% of keys move, not 75%.
+
+Used by: Redis Cluster, Cassandra, DynamoDB, Memcached, Kafka partition assignment
+```
+
+> 💡 **Interview Tip:** Mention **virtual nodes (vnodes)** — each physical server gets multiple positions on the ring to ensure even distribution. Without vnodes, servers may cluster and one gets most of the load.
+
+---
+
+### 2.4 — Message Queues & Async Processing
+
+> **Real-world analogy:** A restaurant order ticket system. The waiter (producer) writes an order ticket on the queue. The chef (consumer) picks up tickets and cooks at their own pace. The waiter doesn't wait — they go serve other customers.
+
+**When to use a queue:**
+
+| Scenario | Without Queue | With Queue |
+|----------|-------------|-----------|
+| Send welcome email on signup | API waits 500ms for email | API returns 200ms instantly; email sent async |
+| Payment → inventory → notify | One big transaction, one failure rolls all back | Decoupled steps, each retries independently |
+| 1,000 image uploads/sec | API server overwhelmed | Queue absorbs spikes; resizer works at its own pace |
+| Multiple teams need order events | Each adds code to order service | Publish once; each team subscribes independently |
+
+**Kafka vs RabbitMQ:**
+
+| Feature | Kafka | RabbitMQ |
+|---------|-------|---------|
+| Message retention | Days/weeks — replayable | Deleted after consumer acks |
+| Throughput | Millions/sec | Thousands to hundreds of thousands/sec |
+| Consumer model | Pull-based — consumers control pace | Push-based — broker pushes |
+| Use case | Event streaming, analytics, replay | Task queues, complex per-user routing |
+
+> 💡 **Interview Tip:** Key decision — "Do you need message replay?" If yes → Kafka. For complex routing per-user (email OR SMS based on preference) → RabbitMQ.
+
+**❓ Interview Questions:**
+
+**Q: "How do you handle exactly-once delivery in Kafka?"**
+> A: Three delivery guarantees: At-most-once (commit offset before processing — can lose messages), At-least-once (process then commit — can duplicate), Exactly-once (Kafka transactions). Practical approach for most systems: at-least-once + idempotent consumers. Store a `processed_event_id` table in DB — check before acting. If already processed, skip. True exactly-once across Kafka + external DB requires the Transactional Outbox Pattern.
+
+---
+
+### 2.5 — CDN (Content Delivery Network)
+
+> **Real-world analogy:** A chain of convenience stores. Instead of everyone driving to the central warehouse in Singapore, thousands of small stores (CDN edge nodes) are spread worldwide. Mumbai users shop at the Mumbai store — < 10ms instead of 150ms.
+
+**What a CDN does beyond caching:**
+
+| Feature | Benefit |
+|---------|---------|
+| TLS termination | Handles HTTPS at edge — origin pays zero SSL overhead |
+| DDoS absorption | Absorbs volumetric attacks at edge before reaching servers |
+| WAF | Blocks SQLi, XSS, bad bots at edge |
+| Gzip/Brotli | Compresses responses — reduces bandwidth 70%+ |
+| Geo-blocking | Block requests from specific countries/IPs |
+
+> 💡 **Interview Tip:** Always mention CDN early for public-facing systems. Cheapest way to reduce global latency (< 20ms from edge vs 150ms cross-region) and offload origin by 90%+. For URL shortener: cache the 302 redirect at CDN edge — popular short URLs never reach your servers.
+
+---
+
+### 2.6 — API Gateway
+
+> **Real-world analogy:** A hotel concierge — verifies identity (auth), checks access level (authorisation), limits room service calls (rate limiting), directs to right department (routing).
+
+| Responsibility | Without Gateway | With Gateway |
+|---------------|----------------|-------------|
+| Authentication | Every service implements its own | One place — gateway validates JWT |
+| Rate limiting | Every service implements its own | One place — per client/endpoint |
+| SSL termination | Every service handles TLS | Gateway handles TLS; internal HTTP |
+| Routing | Client knows all service URLs | Client knows only one gateway URL |
+| Observability | Separate logs per service | Centralised logs and distributed traces |
+
+> 💡 **Interview Tip:** Distinguish API Gateway from Load Balancer. LB distributes traffic to the SAME service. API Gateway ROUTES to DIFFERENT services based on path/header. In K8s: LB is L4 (TCP), Ingress/API Gateway is L7 (HTTP path routing).
+
+---
+
+## 🔴 LEVEL 3 — Advanced System Design Concepts
+
+---
+
+### 3.1 — PACELC Theorem (CAP Is Not Enough)
+
+> CAP only describes behaviour during a network partition. But partitions are rare! PACELC covers the normal case too: even when the network is fine, there is a trade-off between **Latency and Consistency**.
+
+```
+PACELC:
+  P → A or C?   During a Partition: Availability vs Consistency
+  E → L or C?   Else (normal ops): Low Latency vs Strong Consistency
+
+System ratings:
+  DynamoDB / Cassandra : PA/EL  (available in partition; low latency normally)
+  MongoDB              : PC/EL  (consistent in partition; low latency normally)
+  PostgreSQL           : PC/EC  (consistent in partition; strong consistency normally)
+  HBase                : PC/EC  (consistent in both cases)
+```
+
+> 💡 **Interview Tip:** Mentioning PACELC shows senior-level depth. Say: *"CAP only covers partition scenarios. PACELC is more complete — DynamoDB is PA/EL, meaning it sacrifices consistency for availability during partitions AND for low latency during normal operation. That's why it's eventually consistent by default."*
+
+---
+
+### 3.2 — Consistency Models Spectrum
+
+| Model | Guarantee | Latency | Example |
+|-------|-----------|---------|---------|
+| **Linearisable (Strong)** | Every read returns the most recent committed write | Highest | PostgreSQL sync replication, ZooKeeper, etcd |
+| **Causal** | If A caused B, everyone sees A before B | Medium | MongoDB causal sessions |
+| **Read-your-own-writes** | You always see your own writes | Low | Social media — you see your own post |
+| **Monotonic reads** | Never read an older version after reading a newer one | Low | Session-based DB routing |
+| **Eventual** | All nodes will agree — eventually, no time guarantee | Lowest | DNS, Cassandra, DynamoDB, CDN |
+
+**❓ Interview Questions:**
+
+**Q: "A user posts and doesn't see their post on refresh. Why? How do you fix it?"**
+> A: Eventual consistency problem. Write hit the primary, but read was routed to a replica 200ms behind. Fix options: (1) Read-your-own-writes: route that user's reads to primary for 1s after their write. (2) Write-and-cache: after write, immediately store the post in Redis for 10s TTL — read path checks Redis first. Best production approach: option 2 — fast, cheap, doesn't overload primary.
+
+---
+
+### 3.3 — SAGA Pattern — Distributed Transactions
+
+> **The Problem:** In microservices, one business action (place order) touches multiple services (Order, Payment, Inventory). If Payment succeeds but Inventory fails — traditional DB rollback can't span service boundaries.
+
+```
+Solution: SAGA — a sequence of local transactions,
+each publishing events for the next step.
+If any step fails, run COMPENSATING transactions to undo previous steps.
+
+Two types:
+
+1. Choreography (event-driven, decentralised):
+   OrderCreated → Payment charges → PaymentProcessed →
+   Inventory reserves → ItemReserved → Notification sends
+   PROS: No coordinator, loosely coupled
+   CONS: Hard to track overall state; hard to debug
+
+2. Orchestration (central coordinator):
+   SagaOrchestrator tells each service what to do step by step.
+   Handles compensation on failure centrally.
+   PROS: Easy to track state, easy to monitor
+   CONS: Orchestrator adds complexity (not a SPOF — it's stateless+replicated)
+```
+
+> 💡 **Key vocabulary for interviews:** compensating transactions (undo action), idempotency (retry won't double-charge), saga state machine (tracks current step), Outbox Pattern (atomic business write + event publish in same DB transaction).
+
+---
+
+### 3.4 — CQRS (Command Query Responsibility Segregation)
+
+> **Real-world analogy:** A bookstore with separate systems for checkout (commands/writes) and browsing the catalog (queries/reads). The checkout system doesn't slow down when 10,000 people are browsing.
+
+```mermaid
+flowchart LR
+  Client -->|"placeOrder Write"| Write["Write Side\nPostgreSQL Primary\nStrong consistency\nOptimised for writes"]
+  Client -->|"getOrderHistory Read"| Read["Read Side\nDenormalised DB\nor Elasticsearch\nEventually consistent\nOptimised for reads"]
+  Write -->|"Publish OrderPlaced event"| Kafka["Kafka"]
+  Kafka -->|"Update read model"| Read
+```
+
+| Scenario | Without CQRS | With CQRS |
+|----------|-------------|----------|
+| Complex dashboard queries | Slow JOINs on transactional DB | Pre-materialised read model — instant |
+| Different scaling needs | Both reads+writes scale together | Read side scales independently |
+| Audit trail | Hard to reconstruct | Every command = immutable event (Event Sourcing) |
+
+> 💡 **Interview Tip:** Pair CQRS with Event Sourcing. Instead of storing state (balance = $500), store every event (Deposited $1000, Withdrew $500). State = replay events. Gives perfect audit trail and ability to build new read models from event history.
+
+---
+
+### 3.5 — Circuit Breaker Pattern
+
+> **Real-world analogy:** Your home's electrical breaker. Too much current → trips — cuts power to protect the house. You fix the problem, reset the breaker. You don't wait for the house to burn down.
+
+```
+WITHOUT circuit breaker:
+  Payment service slow (5s timeout each call)
+  Order service: 1,000 calls/sec x 5s wait = 5,000 threads waiting
+  Thread pool exhausted → Order service crashes too
+  → CASCADING FAILURE — entire system down
+
+WITH circuit breaker (OPEN state):
+  Payment service: 50%+ failures in 10s window
+  Circuit OPENS — Order service returns fallback immediately (no wait!)
+  Zero threads wasted. After 30s probe: if recovered → CLOSE
+  → Only Payment service was down. Order service kept running.
+
+Circuit states:
+  CLOSED → normal, all calls pass through
+  OPEN   → fast-fail, return fallback immediately
+  HALF-OPEN → allow 5 probe requests to test if service recovered
+```
+
+> 💡 **Interview Tip:** Always mention the **fallback**. Circuit breaker without fallback is incomplete — you've stopped the cascade but users still get errors. Return cached response, default value, or a graceful degraded response.
+
+---
+
+### 3.6 — Rate Limiting Algorithms
+
+> **Real-world analogy:** A nightclub bouncer. Max 500 people inside. New arrivals wait or get turned away. Regulars get 10 entries per month (token bucket). Entry window resets at midnight (fixed window).
+
+```
+1. TOKEN BUCKET (most common — allows bursts)
+   Bucket: max N tokens. Refilled at rate R/sec.
+   Request consumes 1 token. No tokens → reject 429.
+   Allows bursting: use all tokens at once.
+   Used by: AWS API Gateway
+
+2. LEAKY BUCKET (strict smooth output)
+   Requests fill bucket; bucket leaks at fixed rate.
+   Full bucket → reject. No bursts allowed.
+
+3. FIXED WINDOW COUNTER (simple, has a flaw)
+   Count requests per window. Reset at :00, :01, :02...
+   FLAW: 100 requests at :59 + 100 at :01 = 200 in 2 seconds!
+
+4. SLIDING WINDOW COUNTER (best in practice)
+   Hybrid: current + previous window with weighted estimate.
+   estimate = current_count + prev_count x (1 - elapsed/window)
+   No boundary problem. Memory efficient.
+   Used by: Cloudflare, nginx rate limiting
+
+Redis implementation (sliding window):
+  Key: "rate:{userId}:{current_minute}"
+  INCR key → if count == 1: EXPIRE 60s → if count > limit: 429
+```
+
+---
+
+### 3.7 — Database Indexes Deep Dive
+
+> **Real-world analogy:** A book's back index. Instead of reading all 500 pages to find "PostgreSQL", look it up alphabetically → "see pages 42, 87, 203". A DB index works the same way.
+
+```
+Without index: 10M row table, query by user_id
+  → Full table scan: reads all 10M rows → 10 seconds
+
+With B-Tree index on user_id:
+  → 3 tree comparisons → leaf node → row pointer → 1ms
+
+B-Tree supports: =  <  >  BETWEEN  LIKE 'prefix%'  ORDER BY
+Does NOT support: LIKE '%wildcard%'  OR across different columns efficiently
+```
+
+**Composite index left-prefix rule:**
+```
+Index on (A, B, C):
+  WHERE A = ?                    uses index ✅
+  WHERE A = ? AND B = ?          uses index ✅
+  WHERE A = ? AND B = ? AND C = ? uses index fully ✅
+  WHERE B = ?                    skips A — CANNOT use index ❌
+  WHERE C = ?                    skips A and B — CANNOT use index ❌
+  WHERE A = ? AND C = ?          uses index on A only, range scan on rest ⚠️
+```
+
+**Index types:**
+
+| Index | Best for | Example |
+|-------|---------|---------|
+| **B-Tree** (default) | Equality + ranges + ORDER BY | `INDEX ON orders(user_id)` |
+| **Composite** | Multi-column queries | `INDEX ON orders(user_id, status)` |
+| **Partial** | Subset of rows | `INDEX ON orders(status) WHERE status='ACTIVE'` |
+| **Covering** | All query columns in index — no table access | `INDEX ON orders(user_id) INCLUDE (status, amount)` |
+| **GIN** | Full-text search, JSONB | `INDEX ON articles USING GIN(to_tsvector(body))` |
+
+> 💡 **Interview Tip:** Every index speeds reads but slows writes (INSERT/UPDATE/DELETE updates all indexes). Monthly: `SELECT * FROM pg_stat_user_indexes WHERE idx_scan = 0` — find unused indexes and DROP them.
+
+**❓ Interview Questions:**
+
+**Q: "A query was fast last month but is now slow. What do you do?"**
+> A: Systematic approach: (1) `EXPLAIN ANALYZE` — look for `Seq Scan` on large table (missing/unused index), high actual vs estimated rows (stale stats). (2) `ANALYZE table_name` — refresh query planner statistics. (3) Check if a new index covers the WHERE/JOIN columns. (4) Check data volume grew 10×? (5) Check table bloat — `n_dead_tup` high → `VACUUM ANALYZE`. (6) Check locking: `pg_stat_activity` — long transaction blocking reads?
+
+---
+
+### 3.8 — Microservices vs Monolith
+
+> **Real-world analogy:** Monolith = one big Swiss Army knife (easy to carry, lose one = lose all). Microservices = a full toolbox with specialised tools (more powerful, but need a bag to carry them all).
+
+| Dimension | Monolith | Microservices |
+|-----------|---------|--------------|
+| Deployment | One unit | Independent per service |
+| Scaling | Scale everything together | Scale each independently |
+| Failures | One bug can crash everything | Failure isolated to one service |
+| Data | One shared DB (simple) | Each service owns its data (complex) |
+| Overhead | Low | High — K8s, service mesh, distributed tracing |
+| Best when | Team < 20, early stage | Large teams, different scaling/deployment needs |
+
+**The Modular Monolith — The Real Sweet Spot:**
+```
+Start: Single deployable unit BUT with strong internal module boundaries.
+  - Modules communicate via interfaces (not direct internal calls)
+  - Each module owns its own DB schema (logical separation)
+  - Deploy as one unit until boundaries prove themselves
+
+Split into microservices only when:
+  - A module needs to scale independently (auth vs ML recommendations)
+  - A module deploys 10x more often than others
+  - Different teams need autonomous ownership
+  - A module needs a different tech stack (Python for ML, Java for rest)
+
+DON'T split just because microservices are popular.
+```
+
+> 💡 **Interview Tip:** Say: *"I'd start with a well-structured modular monolith, identify modules that need to scale or deploy independently, and extract those as microservices. Premature microservices create distributed system complexity without the benefits."* This shows maturity over following hype.
+
+---
+
+### 3.9 — Transactional Outbox Pattern
+
+> **The Problem:** You cannot atomically write to a DB and publish to Kafka. If the app crashes between the two, one side is missing. Classic dual-write problem.
+
+```
+WRONG approach (dual-write, NOT atomic):
+  db.save(order);                     // Step 1: DB ✅
+  kafka.publish("OrderPlaced", order); // Step 2: Kafka ← CRASH HERE?
+  // DB has order. Kafka has nothing. Inventory never notified.
+
+CORRECT approach (Transactional Outbox):
+  BEGIN TRANSACTION;
+    INSERT INTO orders (...);
+    INSERT INTO outbox (event_type='OrderPlaced', payload=...);
+  COMMIT;  ← both writes are atomic in ONE transaction
+
+  Separate poller process:
+    SELECT * FROM outbox WHERE processed_at IS NULL;
+    kafka.publish(event);
+    UPDATE outbox SET processed_at = NOW();
+```
+
+> 💡 **Interview Tip:** Use this phrase: *"We use the Transactional Outbox Pattern — write the event to an outbox table in the same DB transaction as the business write. A separate poller reliably publishes to Kafka. Guaranteed delivery, no dual-write problem."*
+
+---
+
+### 3.10 — Leader Election & Distributed Locks
+
+> **Real-world analogy:** A committee that must elect exactly one chairperson — not zero, not two — even if some members don't show up (network failures).
+
+```
+Why you need it:
+  5 replicas of a scheduled job. All 5 try to run the midnight cron.
+  Result: same email sent 5 times, same payment processed 5 times.
+  Solution: elect exactly one "leader" at any time.
+
+Raft consensus algorithm (simplified — used by etcd, Kafka KRaft):
+  1. All nodes start as FOLLOWERS
+  2. No heartbeat in 150–300ms random timeout → become CANDIDATE
+  3. Request votes from other nodes
+  4. Majority votes → become LEADER, send heartbeats
+  5. Split vote? Random timeout → retry → never permanently stuck
+
+Distributed lock with Redisson (Java):
+  RLock lock = redisson.getLock("midnight-job-lock");
+  if (lock.tryLock(0, 55, TimeUnit.MINUTES)) {
+    try { runMidnightJob(); }   // Only ONE pod runs this
+    finally { lock.unlock(); }
+  }
+  // Other pods: tryLock returns false → skip this run
+```
+
+---
+
+### 3.11 — Trade-Off Framework for Every Design Decision
+
+> Every system design interview question is really: *"What trade-offs would you make and WHY?"* There is never one right answer — only justified decisions.
+
+**The trade-off vocabulary every senior engineer uses:**
+
+| Trade-off | Option A | Option B |
+|-----------|---------|---------|
+| Consistency vs Availability | Reject during partition | Serve stale data |
+| Latency vs Durability | Async write (fast, risk loss) | Sync write (slow, guaranteed) |
+| Read speed vs Write speed | Heavy indexes (fast reads, slow writes) | Few indexes (fast writes, slower reads) |
+| Flexibility vs Performance | NoSQL (flexible) | SQL (rigid, powerful queries) |
+| Simple vs Scalable | Monolith | Microservices |
+
+**How to frame every trade-off:**
+```
+Formula: "We chose X over Y because [specific requirement].
+          The trade-off is [what we gave up].
+          We mitigate that by [how we handle the downside]."
+
+Example:
+  "We chose cache-aside over write-through because our read:write ratio
+   is 95:5 — most data is never read again after being written, so
+   write-through would waste memory. The trade-off is cache misses on
+   first read — we mitigate by warming the cache on startup with the
+   1,000 most popular URLs."
+```
+
+---
+
+### 3.12 — System Design Anti-Patterns (What NOT to Design)
+
+| Anti-Pattern | Why It's Bad | Fix |
+|---|---|---|
+| **Distributed monolith** | Microservices with shared DB — worst of both worlds | Each service owns its data (shared-nothing) |
+| **Synchronous chain** | ServiceA → B → C → D all sync — one slow step kills all | Async events for non-critical path steps |
+| **God service** | One service does auth + orders + payments + inventory | Single responsibility per bounded context |
+| **Chatty services** | Service A makes 100 calls to B per user request | Batch API, aggregator service, GraphQL |
+| **Premature sharding** | Sharding a 10K-row DB | Exhaust indexing → replicas → partitioning → shard |
+| **No circuit breaker** | Slow dependency takes down your whole system | Wrap every external call with Resilience4j |
+| **No idempotency on payments** | Retry causes double charge | Idempotency key on all payment APIs |
+| **Polling instead of events** | Service polls DB every 1s for changes | Use Change Data Capture (CDC) or Kafka events |
+
+---
+
+### 3.13 — System Design Interview Master Checklist
+
+```
+ALWAYS DO:
+  1. Clarify requirements first (2-3 min) — never skip this
+  2. State your assumptions out loud: "I'll assume 90:10 read:write ratio"
+  3. Show capacity math — write numbers, interviewers watch your reasoning
+  4. Justify every technology choice: "I chose Kafka because we need replay"
+  5. Proactively identify bottlenecks: "DB will be bottleneck at 10M users"
+  6. Discuss failure modes: "What if Redis goes down?"
+  7. Ask for feedback: "I'm planning to deep-dive DB schema — any preference?"
+
+NEVER DO:
+  1. Start drawing immediately before clarifying requirements
+  2. Pick technology without explaining WHY ("I'll use MongoDB" — why??)
+  3. Design only the happy path — what happens when things fail?
+  4. Over-design from the start — start simple, evolve to complex
+  5. Stay silent — think out loud, narrate your reasoning at every step
+  6. Ignore interviewer hints — "what about scale?" means go deeper!
+
+TRICKS:
+  When stuck: "Let me start with a simple design and evolve it"
+  Scale progression: single server to read replicas to cache to shard
+  Every component: say WHY you chose it AND what you gave up
+  Magic numbers: 86,400 sec/day, Redis 100K QPS, P99 latency matters
+  Monitoring: mention alert metrics for every component you add
+  End with: "Given more time I would add X, Y, Z" — shows breadth
+```
+
+---
+
+### 3.14 — Common System Design Questions with Model Answers
+
+**Q: "Design a Rate Limiter"**
+> Token bucket in Redis. `INCR user:123:minute_window` with 1-min TTL. Count > 100 → 429. Headers: `X-Rate-Limit-Remaining`, `Retry-After`. Multiple pods share Redis state. Use Redis server time to avoid clock skew between pods.
+
+**Q: "Design a Notification System"**
+> API → Kafka `notifications` topic → consumer routes by channel (email/SMS/push) → sends via SendGrid/Twilio/FCM. Separate Kafka partitions per channel — email failures don't delay SMS. Store user preferences in MongoDB `{email: true, sms: false}`. Retry with exponential backoff. Store history in Cassandra (write-heavy, append-only, TTL-based cleanup).
+
+**Q: "Design a News Feed (Twitter/Instagram)"**
+> Two models: Push (fan-out on write) = copy post to all followers' feed tables on write — fast reads, expensive for celebrities. Pull (fan-out on read) = merge followed users' posts on load — no fan-out but slow reads. Hybrid (Twitter's approach): push for users with < 1,000 followers; pull for celebrities. Store feeds in Redis sorted sets (score = timestamp). Cache miss → pull from Cassandra timeline store.
+
+**Q: "Design a Distributed Cache"**
+> Consistent hashing to distribute keys across N Redis nodes. LRU eviction. TTL per key. Cache-aside pattern. HA: Redis Sentinel (auto-failover) or Redis Cluster (sharding + HA). Stampede prevention: TTL jitter + per-key mutex. Monitoring: hit ratio (alert < 80%), memory usage, eviction rate.
+
+

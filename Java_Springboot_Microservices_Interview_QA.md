@@ -1,4 +1,4 @@
-# 🏁 Senior Java Tech Lead — Ultimate Interview Master Blueprint
+﻿# 🏁 Senior Java Tech Lead — Ultimate Interview Master Blueprint
 
 <div align="center">
 
@@ -19,32 +19,34 @@
 
 ## 📋 Table of Contents
 
-| # | Section | Topics |
-|---|---------|--------|
-| 1 | [🚀 System Design — URL Shortener](#-part-1-system-design--url-shortener) | Architecture, Diagrams, Code |
-| 2 | [☕ Core Java Mastery](#-part-2-core-java-mastery) | Q1–Q22 Deep Dive |
-| 3 | [🍃 Spring Boot & Data](#-part-3-spring-boot--data-architecture) | Boot, JPA, Security |
-| 4 | [🏗️ Microservices](#-part-4-microservices--cloud-native) | Gateway, SAGA |
-| 5 | [💻 Coding Challenges](#-part-5-practical-coding-challenges) | LRU, LeetCode Patterns |
-| 6 | [🏢 Production Questions](#-part-6-real-world-production-questions) | Scale, Tuning, Monitoring |
-| 7 | [🗄️ Part 8: Database Interview Questions](#-part-8-database-interview-questions--mysqlpostgresql--mongodb) | MySQL/PostgreSQL, MongoDB, Indexes, Transactions |
-| 8 | [📨 Part 9: Messaging — Kafka & RabbitMQ](#-part-9-messaging--kafka--rabbitmq-interview-questions) | Architecture, Consumers, Delivery Guarantees, Spring Boot |
-| 9 | [🔀 Part 10: Java Concurrency & Multithreading](#-part-10-java-concurrency--multithreading) | Threads, Locks, CompletableFuture, Virtual Threads |
-| 10 | [🔐 Part 11: Spring Security & OAuth2](#-part-11-spring-security--oauth2-deep-dive) | JWT, OAuth2, Method Security |
-| 11 | [🧪 Part 12: Testing Strategy](#-part-12-testing-strategy--best-practices) | JUnit 5, Mockito, TestContainers, Contract |
-| 12 | [🌐 Part 13: API Design Best Practices](#-part-13-api-design-best-practices) | REST, GraphQL, gRPC, Rate Limiting |
-| 13 | [⚡ Part 14: Redis Deep Dive](#-part-14-redis-deep-dive) | Data Structures, Patterns, Cluster, Locks |
-| 14 | [☁️ Part 15: Cloud & DevOps](#️-part-15-cloud--devops--aws-cicd-iac) | AWS, GitHub Actions, Terraform, Helm |
-| 15 | [🐳 Docker & Kubernetes](#-docker--kubernetes-basics-to-advanced) | Basics, Advanced, Staging, Prod, CI/CD |
-| 16 | [🎓 Interview Cheat Sheet](#-part-7-interview-cheat-sheet) | Quick Reference Tables |
-| 17 | [👤 Resume-Based Q&A — Digamber Singh](#-resume-based-interview-qa--digamber-singh) | Intro, Projects, Skills, Leadership |
-| 18 | [Top 10 Questions to Master](#top-10-questions-to-master) | Priority topics |
-| 19 | [⭐ Senior Scenario-Based Questions (Deep Dive)](#-senior-scenario-based-questions-deep-dive) | Trade-offs, execution |
-| 20 | [Quick Reference: Design Decisions](#quick-reference-design-decisions) | Senior callouts |
-| 21 | [HTTP Status Codes Cheat Sheet](#http-status-codes-cheat-sheet) | API responses |
-| 22 | [🔥 Behavioral Question Cheat Sheet](#-behavioral-question-cheat-sheet) | STAR answers |
-| 23 | [🗄️ Part 16: MySQL/PostgreSQL & MongoDB Mastery](#-part-16-mysqlpostgresql--mongodb-interview-mastery) | ACID, MVCC, Indexes, Sharding, Replication, Atlas Search |
-| 24 | [🏆 Tech Stack Summary](#-tech-stack-summary) | Stack mapping |
+| # | Section | Topics                                                                   |
+|---|---------|--------------------------------------------------------------------------|
+| 1 | [🚀 System Design — URL Shortener](#-part-1-system-design--url-shortener) | Architecture, Diagrams, Code                                             |
+| 2 | [☕ Core Java Mastery](#-part-2-core-java-mastery) | Q1–Q29 Deep Dive                                                         |
+| 2a | [🏗️ Low Level Design (LLD)](#️-low-level-design-lld--for-beginners-read-this-first) | SOLID, 15 Design Patterns, Parking Lot, Vending Machine, Interview Guide |
+| 3 | [🍃 Spring Boot & Data](#-part-3-spring-boot--data-architecture) | Boot, JPA, Security                                                      |
+| 4 | [🏗️ Microservices](#-part-4-microservices--cloud-native) | Gateway, SAGA                                                            |
+| 5 | [🧩 DSA & Problem Solving](#-dsa--problem-solving--complete-interview-guide) | Big-O, Patterns 1–20, 60-Day Plan                                        |
+| 6 | [💻 Coding Challenges](#-part-5-practical-coding-challenges) | LRU, LeetCode Patterns                                                   |
+| 7 | [🏢 Production Questions](#-part-6-real-world-production-questions) | Scale, Tuning, Monitoring                                                |
+| 8 | [🗄️ Part 8: Database Interview Questions](#-part-8-database-interview-questions--mysqlpostgresql--mongodb) | MySQL/PostgreSQL, MongoDB, Indexes, Transactions                         |
+| 9 | [📨 Part 9: Messaging — Kafka & RabbitMQ](#-part-9-messaging--kafka--rabbitmq-interview-questions) | Architecture, Consumers, Delivery Guarantees, Spring Boot                |
+| 10 | [🔀 Part 10: Java Concurrency & Multithreading](#-part-10-java-concurrency--multithreading) | Threads, Locks, CompletableFuture, Virtual Threads                       |
+| 11 | [🔐 Part 11: Spring Security & OAuth2](#-part-11-spring-security--oauth2-deep-dive) | JWT, OAuth2, Method Security                                             |
+| 12 | [🧪 Part 12: Testing Strategy](#-part-12-testing-strategy--best-practices) | JUnit 5, Mockito, TestContainers, Contract                               |
+| 13 | [🌐 Part 13: API Design Best Practices](#-part-13-api-design-best-practices) | REST, GraphQL, gRPC, Rate Limiting                                       |
+| 13 | [⚡ Part 14: Redis Deep Dive](#-part-14-redis-deep-dive) | Data Structures, Patterns, Cluster, Locks                                |
+| 14 | [☁️ Part 15: Cloud & DevOps](#️-part-15-cloud--devops--aws-cicd-iac) | AWS, GitHub Actions, Terraform, Helm                                     |
+| 15 | [🐳 Docker & Kubernetes](#-docker--kubernetes-basics-to-advanced) | Basics, Advanced, Staging, Prod, CI/CD                                   |
+| 16 | [🎓 Interview Cheat Sheet](#-part-7-interview-cheat-sheet) | Quick Reference Tables                                                   |
+| 17 | [👤 Resume-Based Q&A — Digamber Singh](#-resume-based-interview-qa--digamber-singh) | Intro, Projects, Skills, Leadership                                      |
+| 18 | [Top 10 Questions to Master](#top-10-questions-to-master) | Priority topics                                                          |
+| 19 | [⭐ Senior Scenario-Based Questions (Deep Dive)](#-senior-scenario-based-questions-deep-dive) | Trade-offs, execution                                                    |
+| 20 | [Quick Reference: Design Decisions](#quick-reference-design-decisions) | Senior callouts                                                          |
+| 21 | [HTTP Status Codes Cheat Sheet](#http-status-codes-cheat-sheet) | API responses                                                            |
+| 22 | [🔥 Behavioral Question Cheat Sheet](#-behavioral-question-cheat-sheet) | STAR answers                                                             |
+| 23 | [🗄️ Part 16: MySQL/PostgreSQL & MongoDB Mastery](#-part-16-mysqlpostgresql--mongodb-interview-mastery) | ACID, MVCC, Indexes, Sharding, Replication, Atlas Search                 |
+| 24 | [🏆 Tech Stack Summary](#-tech-stack-summary) | Stack mapping                                                            |
 
 ---
 
@@ -149,6 +151,744 @@ flowchart TB
 
 ---
 
+
+---
+
+## 🟢 LEVEL 1 — Basic System Design Concepts
+
+> **How to read this:** Every concept has a real-world analogy first, then the technical definition, then an interview Q&A. Read top to bottom — each concept builds on the previous one.
+
+---
+
+### 1.1 — Scalability: Vertical vs Horizontal
+
+> **Real-world analogy:** Your restaurant is getting crowded.
+> - **Vertical scaling** = buy a bigger kitchen (upgrade your single server — more CPU, more RAM).
+> - **Horizontal scaling** = open more branches (add more servers behind a load balancer).
+
+| Dimension | Vertical (Scale Up) | Horizontal (Scale Out) |
+|-----------|--------------------|-----------------------|
+| How | Upgrade one machine's CPU/RAM/SSD | Add more machines behind a load balancer |
+| Limit | Hardware ceiling (~128-core max) | Theoretically unlimited |
+| Cost | Exponential (high-end hardware costly) | Linear (commodity servers) |
+| Downtime to scale | Yes — usually requires reboot | No — add pods at runtime |
+| Single point of failure | Yes | No |
+| App requirement | None | App must be **stateless** |
+| Best for | Databases (initial), quick wins | Web servers, API services, caches |
+
+> 💡 **Interview Tip:** Always mention BOTH, then say: *"We start vertical for the DB (easy), then add read replicas (horizontal read scaling), then shard (horizontal write scaling) as DB becomes the bottleneck."*
+
+**❓ Interview Questions:**
+
+**Q: "What is the difference between vertical and horizontal scaling?"**
+> A: Vertical = add more power to one machine (more CPU/RAM). Simple but has a hardware ceiling and leaves a SPOF. Horizontal = add more machines behind a load balancer. No ceiling, but the app must be stateless so any server can handle any request. Move state to external stores first (Redis for sessions, S3 for files), then scale horizontally.
+
+**Q: "When would you NOT use horizontal scaling?"**
+> A: When the app has heavy shared mutable state (in-memory sessions, local file writes). Such apps need sticky sessions. Externalise state to Redis/S3 first, then horizontal scaling becomes trivial.
+
+---
+
+### 1.2 — Latency vs Throughput
+
+> **Real-world analogy:** A highway. **Latency** = how long ONE car takes to travel A → B. **Throughput** = how many cars per hour cross the entire highway.
+
+```
+Latency    = time for ONE request to complete (milliseconds)
+Throughput = requests completed per second (QPS)
+
+Little's Law: Throughput = Concurrency / Latency
+  Example: 100 concurrent requests, each taking 200ms
+  Throughput = 100 / 0.2s = 500 requests/sec
+```
+
+| Term | Unit | Meaning | Goal |
+|------|------|---------|------|
+| **Latency** | ms | Speed of a single request | Lower |
+| **P50 Latency** | ms | Median — 50% of requests faster | Typical experience |
+| **P99 Latency** | ms | 99% of requests finish within this | Tail — your slowest users |
+| **Throughput** | req/sec (QPS) | Volume handled per second | Higher |
+
+> 💡 **Interview Tip:** Always say **P99 latency**, not average. If P99 = 8s, 1% of users wait 8 seconds. At 1M users, 10,000 people are miserable. Average hides the tail completely.
+
+**❓ Interview Questions:**
+
+**Q: "What is tail latency amplification?"**
+> A: In a microservices chain with 10 services each at P99=50ms, combined P99 = 10 × 50ms = 500ms — it adds multiplicatively. Fix: hedged requests (send to 2 servers, take the fastest response), aggressive timeouts per hop, and monitor P99 per service independently.
+
+---
+
+### 1.3 — Availability & Reliability
+
+> **Real-world analogy:** A bank ATM. **Availability** = what % of time it works. **Reliability** = when it works, does it give the right amount every time?
+
+```
+Availability % = (Total time - Downtime) / Total time x 100
+
+The "Nines" — memorise these:
+  99%     = 3.65 days  downtime/year  (unacceptable)
+  99.9%   = 8.7 hours  downtime/year  (internal tools OK)
+  99.99%  = 52 minutes downtime/year  (consumer apps)
+  99.999% = 5.26 min   downtime/year  (finance, healthcare)
+
+Compound availability in serial call chains:
+  Service A: 99.9%
+  Service B: 99.9%
+  Combined:  99.9% x 99.9% = 99.8%  (gets WORSE!)
+  10 services at 99.9% = 99.9%^10 = 99.0% = 87 hours downtime/year
+```
+
+**Techniques to improve availability:**
+
+| Technique | What it does |
+|-----------|-------------|
+| **Redundancy** | No SPOF — 2+ instances of every component |
+| **Health checks + auto-restart** | Kubernetes replaces failed pods in seconds |
+| **Circuit Breaker** | Failing dependency can't cascade and crash your whole service |
+| **Graceful degradation** | Return cached/partial data when one component is down |
+| **Multi-AZ deployment** | One datacenter fire doesn't take you down |
+| **Chaos Engineering** | Netflix Chaos Monkey — deliberately kill things to find weaknesses |
+
+> 💡 **Interview Tip:** Memorise the nines. For 99.99%: *"We eliminate all single points of failure — multiple app pods with HPA, primary + replica DB, multi-AZ deployment, circuit breakers on all external calls."*
+
+**❓ Interview Questions:**
+
+**Q: "How do you achieve 99.99% availability?"**
+> A: Layer by layer: (1) No SPOF — minimum 2 instances of every component. (2) Multi-AZ — spread across availability zones. (3) Health checks + auto-restart — Kubernetes replaces failed pods automatically. (4) Circuit breakers — failing dependencies don't cascade. (5) Graceful degradation — show popular items if recommendation engine is down. (6) Zero-downtime rolling deployments. (7) Regular DR drills — practice failover so it works when real.
+
+---
+
+### 1.4 — Load Balancing
+
+> **Real-world analogy:** A supermarket checkout lane manager — directs customers to the least-busy lane so no single lane is overwhelmed.
+
+**Load Balancing Algorithms:**
+
+| Algorithm | How | Best for |
+|-----------|-----|---------|
+| **Round Robin** | Each server takes turns: 1, 2, 3, 1, 2... | Equal-capacity servers |
+| **Weighted Round Robin** | Server A gets 3× more than B | Different-capacity servers |
+| **Least Connections** | Route to server with fewest active connections | Long-lived connections (WebSocket) |
+| **IP Hash** | Same client IP → always same server | Sessions that can't be externalised |
+
+**Layer 4 vs Layer 7:**
+
+| | Layer 4 (Transport) | Layer 7 (Application) |
+|---|---|---|
+| Reads | TCP/UDP — IPs and ports only | Full HTTP — headers, URL, cookies |
+| Routing rules | IP:Port only | Path, header, cookie, query param |
+| SSL termination | No | Yes |
+| Example | AWS NLB | AWS ALB, Nginx, Spring Cloud Gateway |
+
+> 💡 **Interview Tip:** For REST APIs always say Layer 7 (ALB/Nginx). Enables path routing (`/api/v1/*` → Service A, `/api/v2/*` → Service B), SSL termination, and health check-based routing.
+
+**❓ Interview Questions:**
+
+**Q: "What happens if the load balancer itself goes down?"**
+> A: The LB is a SPOF too. Solutions: (1) Active-Passive LB pair with floating IP via VRRP — failover in < 1s. (2) DNS round-robin with multiple LB IPs. (3) Cloud-managed LB (AWS ALB) — AWS runs it as a fully managed service with built-in redundancy. In Kubernetes: multiple Ingress controller replicas handle this automatically.
+
+---
+
+### 1.5 — Caching
+
+> **Real-world analogy:** A chef's mise en place. Instead of fetching from the fridge (DB) for every request, pre-prepare the most-used ingredients on the counter (cache) for instant access.
+
+**Cache Hit vs Miss:**
+```
+Cache HIT  = data found in cache → return immediately (0.5ms)
+Cache MISS = not in cache → fetch from DB (5ms), store in cache, return
+
+Cache Hit Ratio = Hits / (Hits + Misses)
+Good ratio: > 90% — meaning < 10% of requests hit the DB
+```
+
+**Cache hierarchy:**
+
+| Layer | Location | Latency | Example |
+|-------|----------|---------|---------|
+| **In-process** | JVM heap (Caffeine, Guava) | Microseconds | Single-server hot data |
+| **Distributed** | Redis, Memcached | 0.5–1 ms | Shared across all pods |
+| **CDN edge** | CloudFront, Fastly | 5–20 ms | Static files, cacheable API responses |
+| **Browser** | User's browser | 0 ms | JS, CSS, images |
+
+**Cache eviction policies:**
+
+| Policy | Evicts | Best for |
+|--------|--------|---------|
+| **LRU** (Least Recently Used) | Not accessed for longest time | General purpose — most common |
+| **LFU** (Least Frequently Used) | Accessed fewest times | Frequency matters more than recency |
+| **TTL** (Time To Live) | After fixed time period | Data with known freshness window |
+
+> 💡 **Interview Tip:** Cache invalidation is the hardest CS problem. Always discuss: TTL-based expiry, event-driven invalidation (Kafka event → evict Redis key), and stampede prevention (TTL jitter + mutex).
+
+**❓ Interview Questions:**
+
+**Q: "What is cache stampede and how do you prevent it?"**
+> A: When a popular cache key expires, thousands of concurrent requests all miss simultaneously and hammer the DB. Prevention strategies: (1) TTL jitter — add random offset `TTL = base + random(0,30s)` to stagger expirations. (2) Mutex per key — only one thread fetches from DB on miss, others wait for the cached result. (3) Background refresh — proactively refresh popular keys before TTL expires so the cache never actually misses in production.
+
+**Q: "How do you decide what to cache?"**
+> A: Cache data that is: frequently read (high QPS), expensive to compute/fetch (DB JOIN, external API call), and changes infrequently (stale data acceptable within TTL). Don't cache: user-specific sensitive data (security risk), data that changes every request (useless), or data too large to fit in memory (causes thrashing). Rule of thumb: cache anything with read:write ratio > 10:1.
+
+---
+
+### 1.6 — SQL vs NoSQL Databases
+
+> **Real-world analogy:** SQL = a filing cabinet with strict labelled folders and cross-references. NoSQL = a shoebox where you throw anything in any shape.
+
+| Dimension | SQL (Relational) | NoSQL |
+|-----------|-----------------|-------|
+| Schema | Fixed — define columns upfront | Flexible — each document can differ |
+| Transactions | Full ACID | Varies (MongoDB ACID; Cassandra eventual) |
+| Joins | Native, powerful | Embed in document or application-level |
+| Scaling | Vertical primary, horizontal via replicas | Horizontal by design (sharding built-in) |
+| Best for | Financial systems, complex analytics | Catalogs, feeds, logs, time-series, IoT |
+
+**NoSQL types:**
+
+| Type | Examples | Best for |
+|------|---------|---------|
+| **Document** | MongoDB, Firestore | Product catalogs, user profiles |
+| **Key-Value** | Redis, DynamoDB | Sessions, cache, leaderboards |
+| **Wide-Column** | Cassandra, HBase | Time-series, logs, write-heavy analytics |
+| **Graph** | Neo4j, Neptune | Social networks, fraud detection |
+| **Search** | Elasticsearch | Full-text search, log analysis |
+
+> 💡 **Interview Tip:** Never say "I'd use MongoDB because SQL is slow." Properly indexed PostgreSQL handles 10,000+ QPS. Choose NoSQL for specific reasons: schema flexibility, massive write throughput, natural document model, or horizontal scaling at petabyte scale.
+
+**❓ Interview Questions:**
+
+**Q: "When would you use NoSQL over SQL?"**
+> A: Four specific scenarios: (1) Massive write throughput — Cassandra scales to millions writes/sec for time-series/IoT. (2) Flexible/polymorphic schema — e-commerce where "laptop" has CPU/RAM but "shirt" has size/colour; MongoDB documents vary per type. (3) Horizontal scaling at massive scale — DynamoDB scales without DB admin work. (4) Document-centric access — if you always read order + all its items together, embedding in MongoDB is faster than a 3-table SQL JOIN. But for complex analytics, multi-table joins, strong ACID — PostgreSQL wins every time.
+
+---
+
+## 🟡 LEVEL 2 — Intermediate System Design Concepts
+
+---
+
+### 2.1 — Database Replication
+
+> **Real-world analogy:** A book with multiple printed copies. One original (primary) that can be written to; copies (replicas) that can be read from. Copies are slightly behind the original.
+
+**Replication types:**
+
+| Type | Primary waits for replica? | Lag | Use case |
+|------|--------------------------|-----|---------|
+| **Synchronous** | Yes — for replica confirm | Zero | Financial — never lose a write |
+| **Asynchronous** | No — replica catches up | ms to seconds | Most web apps — performance |
+| **Semi-synchronous** | For at least 1 replica | Near-zero | Balance of safety + performance |
+
+**Replication lag problem:**
+```
+User writes a post → confirmed on primary
+User immediately reads → routed to replica
+Replica is 200ms behind → post not visible yet!
+User thinks: "My post disappeared!"
+
+Fix (Read-your-own-writes consistency):
+  Option 1: Route that user's reads to primary for 1s after their write
+  Option 2: Cache the written item in Redis for 5s and serve from cache
+  Option 3: Always route authenticated user reads to primary
+  Best production: Option 2 — fast, cheap, no primary overload
+```
+
+> 💡 **Interview Tip:** Replication solves READ scaling only. All writes still go to one primary. For write scaling you need sharding.
+
+**❓ Interview Questions:**
+
+**Q: "How does PostgreSQL replication work?"**
+> A: PostgreSQL uses streaming replication via WAL (Write-Ahead Log). Every change on primary is first written to WAL (sequential append — very fast). WAL is streamed to replica servers which replay the changes. In Spring Boot, use `AbstractRoutingDataSource` to route `@Transactional(readOnly=true)` to replicas and write transactions to primary. Monitor lag with `pg_stat_replication` on primary.
+
+---
+
+### 2.2 — Database Sharding
+
+> **Real-world analogy:** A phone book split into multiple volumes. Volume 1: A–F. Volume 2: G–M. Each is smaller and faster to search — but you must know which volume to look in first.
+
+**Sharding strategies:**
+
+| Strategy | How | Pros | Cons |
+|----------|-----|------|------|
+| **Hash** | `shard = hash(id) % N` | Even distribution | Range queries hit all shards |
+| **Range** | IDs 0–1M → Shard 1 | Range queries easy | Hot shards if new IDs cluster |
+| **Directory** | Lookup table: id → shard | Flexible | Lookup table is a bottleneck |
+| **Geo** | US users → US shard | GDPR compliance, latency | Uneven shard sizes |
+
+**Try these BEFORE sharding (in order):**
+```
+1. Add indexes + optimise queries   — often fixes "slow DB" immediately
+2. Add read replicas               — solves read bottleneck
+3. Cache hot reads in Redis        — cuts DB load by 80%+
+4. Vertical scale the DB           — upgrade instance type
+5. Table partitioning              — split within one DB by range
+6. Shard                           — last resort; massive operational complexity
+```
+
+> 💡 **Interview Tip:** Mention the problems with sharding — cross-shard JOIN is hard, re-sharding requires data movement, ACID across shards is complex. Saying "shard first" is a junior mistake. Show you've exhausted cheaper solutions first.
+
+---
+
+### 2.3 — Consistent Hashing
+
+> **Real-world analogy:** A circular clock. Servers sit at positions on the clock face. A key hashes to a clock position and belongs to the next server clockwise. Adding/removing a server only shifts keys between that server and its nearest neighbour — not ALL keys.
+
+```
+Simple modulo: shard = hash(key) % N
+  Add 1 server (3 → 4): 75% of ALL keys move to different server!
+  Cache invalidation storm, DB overload.
+
+Consistent hashing: only ~1/N keys move on topology change.
+  Add server D between C and E:
+  Only keys between C and D (that were on C) move to D.
+  ~25% of keys move, not 75%.
+
+Used by: Redis Cluster, Cassandra, DynamoDB, Memcached, Kafka partition assignment
+```
+
+> 💡 **Interview Tip:** Mention **virtual nodes (vnodes)** — each physical server gets multiple positions on the ring to ensure even distribution. Without vnodes, servers may cluster and one gets most of the load.
+
+---
+
+### 2.4 — Message Queues & Async Processing
+
+> **Real-world analogy:** A restaurant order ticket system. The waiter (producer) writes an order ticket on the queue. The chef (consumer) picks up tickets and cooks at their own pace. The waiter doesn't wait — they go serve other customers.
+
+**When to use a queue:**
+
+| Scenario | Without Queue | With Queue |
+|----------|-------------|-----------|
+| Send welcome email on signup | API waits 500ms for email | API returns 200ms instantly; email sent async |
+| Payment → inventory → notify | One big transaction, one failure rolls all back | Decoupled steps, each retries independently |
+| 1,000 image uploads/sec | API server overwhelmed | Queue absorbs spikes; resizer works at its own pace |
+| Multiple teams need order events | Each adds code to order service | Publish once; each team subscribes independently |
+
+**Kafka vs RabbitMQ:**
+
+| Feature | Kafka | RabbitMQ |
+|---------|-------|---------|
+| Message retention | Days/weeks — replayable | Deleted after consumer acks |
+| Throughput | Millions/sec | Thousands to hundreds of thousands/sec |
+| Consumer model | Pull-based — consumers control pace | Push-based — broker pushes |
+| Use case | Event streaming, analytics, replay | Task queues, complex per-user routing |
+
+> 💡 **Interview Tip:** Key decision — "Do you need message replay?" If yes → Kafka. For complex routing per-user (email OR SMS based on preference) → RabbitMQ.
+
+**❓ Interview Questions:**
+
+**Q: "How do you handle exactly-once delivery in Kafka?"**
+> A: Three delivery guarantees: At-most-once (commit offset before processing — can lose messages), At-least-once (process then commit — can duplicate), Exactly-once (Kafka transactions). Practical approach for most systems: at-least-once + idempotent consumers. Store a `processed_event_id` table in DB — check before acting. If already processed, skip. True exactly-once across Kafka + external DB requires the Transactional Outbox Pattern.
+
+---
+
+### 2.5 — CDN (Content Delivery Network)
+
+> **Real-world analogy:** A chain of convenience stores. Instead of everyone driving to the central warehouse in Singapore, thousands of small stores (CDN edge nodes) are spread worldwide. Mumbai users shop at the Mumbai store — < 10ms instead of 150ms.
+
+**What a CDN does beyond caching:**
+
+| Feature | Benefit |
+|---------|---------|
+| TLS termination | Handles HTTPS at edge — origin pays zero SSL overhead |
+| DDoS absorption | Absorbs volumetric attacks at edge before reaching servers |
+| WAF | Blocks SQLi, XSS, bad bots at edge |
+| Gzip/Brotli | Compresses responses — reduces bandwidth 70%+ |
+| Geo-blocking | Block requests from specific countries/IPs |
+
+> 💡 **Interview Tip:** Always mention CDN early for public-facing systems. Cheapest way to reduce global latency (< 20ms from edge vs 150ms cross-region) and offload origin by 90%+. For URL shortener: cache the 302 redirect at CDN edge — popular short URLs never reach your servers.
+
+---
+
+### 2.6 — API Gateway
+
+> **Real-world analogy:** A hotel concierge — verifies identity (auth), checks access level (authorisation), limits room service calls (rate limiting), directs to right department (routing).
+
+| Responsibility | Without Gateway | With Gateway |
+|---------------|----------------|-------------|
+| Authentication | Every service implements its own | One place — gateway validates JWT |
+| Rate limiting | Every service implements its own | One place — per client/endpoint |
+| SSL termination | Every service handles TLS | Gateway handles TLS; internal HTTP |
+| Routing | Client knows all service URLs | Client knows only one gateway URL |
+| Observability | Separate logs per service | Centralised logs and distributed traces |
+
+> 💡 **Interview Tip:** Distinguish API Gateway from Load Balancer. LB distributes traffic to the SAME service. API Gateway ROUTES to DIFFERENT services based on path/header. In K8s: LB is L4 (TCP), Ingress/API Gateway is L7 (HTTP path routing).
+
+---
+
+## 🔴 LEVEL 3 — Advanced System Design Concepts
+
+---
+
+### 3.1 — PACELC Theorem (CAP Is Not Enough)
+
+> CAP only describes behaviour during a network partition. But partitions are rare! PACELC covers the normal case too: even when the network is fine, there is a trade-off between **Latency and Consistency**.
+
+```
+PACELC:
+  P → A or C?   During a Partition: Availability vs Consistency
+  E → L or C?   Else (normal ops): Low Latency vs Strong Consistency
+
+System ratings:
+  DynamoDB / Cassandra : PA/EL  (available in partition; low latency normally)
+  MongoDB              : PC/EL  (consistent in partition; low latency normally)
+  PostgreSQL           : PC/EC  (consistent in partition; strong consistency normally)
+  HBase                : PC/EC  (consistent in both cases)
+```
+
+> 💡 **Interview Tip:** Mentioning PACELC shows senior-level depth. Say: *"CAP only covers partition scenarios. PACELC is more complete — DynamoDB is PA/EL, meaning it sacrifices consistency for availability during partitions AND for low latency during normal operation. That's why it's eventually consistent by default."*
+
+---
+
+### 3.2 — Consistency Models Spectrum
+
+| Model | Guarantee | Latency | Example |
+|-------|-----------|---------|---------|
+| **Linearisable (Strong)** | Every read returns the most recent committed write | Highest | PostgreSQL sync replication, ZooKeeper, etcd |
+| **Causal** | If A caused B, everyone sees A before B | Medium | MongoDB causal sessions |
+| **Read-your-own-writes** | You always see your own writes | Low | Social media — you see your own post |
+| **Monotonic reads** | Never read an older version after reading a newer one | Low | Session-based DB routing |
+| **Eventual** | All nodes will agree — eventually, no time guarantee | Lowest | DNS, Cassandra, DynamoDB, CDN |
+
+**❓ Interview Questions:**
+
+**Q: "A user posts and doesn't see their post on refresh. Why? How do you fix it?"**
+> A: Eventual consistency problem. Write hit the primary, but read was routed to a replica 200ms behind. Fix options: (1) Read-your-own-writes: route that user's reads to primary for 1s after their write. (2) Write-and-cache: after write, immediately store the post in Redis for 10s TTL — read path checks Redis first. Best production approach: option 2 — fast, cheap, doesn't overload primary.
+
+---
+
+### 3.3 — SAGA Pattern — Distributed Transactions
+
+> **The Problem:** In microservices, one business action (place order) touches multiple services (Order, Payment, Inventory). If Payment succeeds but Inventory fails — traditional DB rollback can't span service boundaries.
+
+```
+Solution: SAGA — a sequence of local transactions,
+each publishing events for the next step.
+If any step fails, run COMPENSATING transactions to undo previous steps.
+
+Two types:
+
+1. Choreography (event-driven, decentralised):
+   OrderCreated → Payment charges → PaymentProcessed →
+   Inventory reserves → ItemReserved → Notification sends
+   PROS: No coordinator, loosely coupled
+   CONS: Hard to track overall state; hard to debug
+
+2. Orchestration (central coordinator):
+   SagaOrchestrator tells each service what to do step by step.
+   Handles compensation on failure centrally.
+   PROS: Easy to track state, easy to monitor
+   CONS: Orchestrator adds complexity (not a SPOF — it's stateless+replicated)
+```
+
+> 💡 **Key vocabulary for interviews:** compensating transactions (undo action), idempotency (retry won't double-charge), saga state machine (tracks current step), Outbox Pattern (atomic business write + event publish in same DB transaction).
+
+---
+
+### 3.4 — CQRS (Command Query Responsibility Segregation)
+
+> **Real-world analogy:** A bookstore with separate systems for checkout (commands/writes) and browsing the catalog (queries/reads). The checkout system doesn't slow down when 10,000 people are browsing.
+
+```mermaid
+flowchart LR
+  Client -->|"placeOrder Write"| Write["Write Side\nPostgreSQL Primary\nStrong consistency\nOptimised for writes"]
+  Client -->|"getOrderHistory Read"| Read["Read Side\nDenormalised DB\nor Elasticsearch\nEventually consistent\nOptimised for reads"]
+  Write -->|"Publish OrderPlaced event"| Kafka["Kafka"]
+  Kafka -->|"Update read model"| Read
+```
+
+| Scenario | Without CQRS | With CQRS |
+|----------|-------------|----------|
+| Complex dashboard queries | Slow JOINs on transactional DB | Pre-materialised read model — instant |
+| Different scaling needs | Both reads+writes scale together | Read side scales independently |
+| Audit trail | Hard to reconstruct | Every command = immutable event (Event Sourcing) |
+
+> 💡 **Interview Tip:** Pair CQRS with Event Sourcing. Instead of storing state (balance = $500), store every event (Deposited $1000, Withdrew $500). State = replay events. Gives perfect audit trail and ability to build new read models from event history.
+
+---
+
+### 3.5 — Circuit Breaker Pattern
+
+> **Real-world analogy:** Your home's electrical breaker. Too much current → trips — cuts power to protect the house. You fix the problem, reset the breaker. You don't wait for the house to burn down.
+
+```
+WITHOUT circuit breaker:
+  Payment service slow (5s timeout each call)
+  Order service: 1,000 calls/sec x 5s wait = 5,000 threads waiting
+  Thread pool exhausted → Order service crashes too
+  → CASCADING FAILURE — entire system down
+
+WITH circuit breaker (OPEN state):
+  Payment service: 50%+ failures in 10s window
+  Circuit OPENS — Order service returns fallback immediately (no wait!)
+  Zero threads wasted. After 30s probe: if recovered → CLOSE
+  → Only Payment service was down. Order service kept running.
+
+Circuit states:
+  CLOSED → normal, all calls pass through
+  OPEN   → fast-fail, return fallback immediately
+  HALF-OPEN → allow 5 probe requests to test if service recovered
+```
+
+> 💡 **Interview Tip:** Always mention the **fallback**. Circuit breaker without fallback is incomplete — you've stopped the cascade but users still get errors. Return cached response, default value, or a graceful degraded response.
+
+---
+
+### 3.6 — Rate Limiting Algorithms
+
+> **Real-world analogy:** A nightclub bouncer. Max 500 people inside. New arrivals wait or get turned away. Regulars get 10 entries per month (token bucket). Entry window resets at midnight (fixed window).
+
+```
+1. TOKEN BUCKET (most common — allows bursts)
+   Bucket: max N tokens. Refilled at rate R/sec.
+   Request consumes 1 token. No tokens → reject 429.
+   Allows bursting: use all tokens at once.
+   Used by: AWS API Gateway
+
+2. LEAKY BUCKET (strict smooth output)
+   Requests fill bucket; bucket leaks at fixed rate.
+   Full bucket → reject. No bursts allowed.
+
+3. FIXED WINDOW COUNTER (simple, has a flaw)
+   Count requests per window. Reset at :00, :01, :02...
+   FLAW: 100 requests at :59 + 100 at :01 = 200 in 2 seconds!
+
+4. SLIDING WINDOW COUNTER (best in practice)
+   Hybrid: current + previous window with weighted estimate.
+   estimate = current_count + prev_count x (1 - elapsed/window)
+   No boundary problem. Memory efficient.
+   Used by: Cloudflare, nginx rate limiting
+
+Redis implementation (sliding window):
+  Key: "rate:{userId}:{current_minute}"
+  INCR key → if count == 1: EXPIRE 60s → if count > limit: 429
+```
+
+---
+
+### 3.7 — Database Indexes Deep Dive
+
+> **Real-world analogy:** A book's back index. Instead of reading all 500 pages to find "PostgreSQL", look it up alphabetically → "see pages 42, 87, 203". A DB index works the same way.
+
+```
+Without index: 10M row table, query by user_id
+  → Full table scan: reads all 10M rows → 10 seconds
+
+With B-Tree index on user_id:
+  → 3 tree comparisons → leaf node → row pointer → 1ms
+
+B-Tree supports: =  <  >  BETWEEN  LIKE 'prefix%'  ORDER BY
+Does NOT support: LIKE '%wildcard%'  OR across different columns efficiently
+```
+
+**Composite index left-prefix rule:**
+```
+Index on (A, B, C):
+  WHERE A = ?                    uses index ✅
+  WHERE A = ? AND B = ?          uses index ✅
+  WHERE A = ? AND B = ? AND C = ? uses index fully ✅
+  WHERE B = ?                    skips A — CANNOT use index ❌
+  WHERE C = ?                    skips A and B — CANNOT use index ❌
+  WHERE A = ? AND C = ?          uses index on A only, range scan on rest ⚠️
+```
+
+**Index types:**
+
+| Index | Best for | Example |
+|-------|---------|---------|
+| **B-Tree** (default) | Equality + ranges + ORDER BY | `INDEX ON orders(user_id)` |
+| **Composite** | Multi-column queries | `INDEX ON orders(user_id, status)` |
+| **Partial** | Subset of rows | `INDEX ON orders(status) WHERE status='ACTIVE'` |
+| **Covering** | All query columns in index — no table access | `INDEX ON orders(user_id) INCLUDE (status, amount)` |
+| **GIN** | Full-text search, JSONB | `INDEX ON articles USING GIN(to_tsvector(body))` |
+
+> 💡 **Interview Tip:** Every index speeds reads but slows writes (INSERT/UPDATE/DELETE updates all indexes). Monthly: `SELECT * FROM pg_stat_user_indexes WHERE idx_scan = 0` — find unused indexes and DROP them.
+
+**❓ Interview Questions:**
+
+**Q: "A query was fast last month but is now slow. What do you do?"**
+> A: Systematic approach: (1) `EXPLAIN ANALYZE` — look for `Seq Scan` on large table (missing/unused index), high actual vs estimated rows (stale stats). (2) `ANALYZE table_name` — refresh query planner statistics. (3) Check if a new index covers the WHERE/JOIN columns. (4) Check data volume grew 10×? (5) Check table bloat — `n_dead_tup` high → `VACUUM ANALYZE`. (6) Check locking: `pg_stat_activity` — long transaction blocking reads?
+
+---
+
+### 3.8 — Microservices vs Monolith
+
+> **Real-world analogy:** Monolith = one big Swiss Army knife (easy to carry, lose one = lose all). Microservices = a full toolbox with specialised tools (more powerful, but need a bag to carry them all).
+
+| Dimension | Monolith | Microservices |
+|-----------|---------|--------------|
+| Deployment | One unit | Independent per service |
+| Scaling | Scale everything together | Scale each independently |
+| Failures | One bug can crash everything | Failure isolated to one service |
+| Data | One shared DB (simple) | Each service owns its data (complex) |
+| Overhead | Low | High — K8s, service mesh, distributed tracing |
+| Best when | Team < 20, early stage | Large teams, different scaling/deployment needs |
+
+**The Modular Monolith — The Real Sweet Spot:**
+```
+Start: Single deployable unit BUT with strong internal module boundaries.
+  - Modules communicate via interfaces (not direct internal calls)
+  - Each module owns its own DB schema (logical separation)
+  - Deploy as one unit until boundaries prove themselves
+
+Split into microservices only when:
+  - A module needs to scale independently (auth vs ML recommendations)
+  - A module deploys 10x more often than others
+  - Different teams need autonomous ownership
+  - A module needs a different tech stack (Python for ML, Java for rest)
+
+DON'T split just because microservices are popular.
+```
+
+> 💡 **Interview Tip:** Say: *"I'd start with a well-structured modular monolith, identify modules that need to scale or deploy independently, and extract those as microservices. Premature microservices create distributed system complexity without the benefits."* This shows maturity over following hype.
+
+---
+
+### 3.9 — Transactional Outbox Pattern
+
+> **The Problem:** You cannot atomically write to a DB and publish to Kafka. If the app crashes between the two, one side is missing. Classic dual-write problem.
+
+```
+WRONG approach (dual-write, NOT atomic):
+  db.save(order);                     // Step 1: DB ✅
+  kafka.publish("OrderPlaced", order); // Step 2: Kafka ← CRASH HERE?
+  // DB has order. Kafka has nothing. Inventory never notified.
+
+CORRECT approach (Transactional Outbox):
+  BEGIN TRANSACTION;
+    INSERT INTO orders (...);
+    INSERT INTO outbox (event_type='OrderPlaced', payload=...);
+  COMMIT;  ← both writes are atomic in ONE transaction
+
+  Separate poller process:
+    SELECT * FROM outbox WHERE processed_at IS NULL;
+    kafka.publish(event);
+    UPDATE outbox SET processed_at = NOW();
+```
+
+> 💡 **Interview Tip:** Use this phrase: *"We use the Transactional Outbox Pattern — write the event to an outbox table in the same DB transaction as the business write. A separate poller reliably publishes to Kafka. Guaranteed delivery, no dual-write problem."*
+
+---
+
+### 3.10 — Leader Election & Distributed Locks
+
+> **Real-world analogy:** A committee that must elect exactly one chairperson — not zero, not two — even if some members don't show up (network failures).
+
+```
+Why you need it:
+  5 replicas of a scheduled job. All 5 try to run the midnight cron.
+  Result: same email sent 5 times, same payment processed 5 times.
+  Solution: elect exactly one "leader" at any time.
+
+Raft consensus algorithm (simplified — used by etcd, Kafka KRaft):
+  1. All nodes start as FOLLOWERS
+  2. No heartbeat in 150–300ms random timeout → become CANDIDATE
+  3. Request votes from other nodes
+  4. Majority votes → become LEADER, send heartbeats
+  5. Split vote? Random timeout → retry → never permanently stuck
+
+Distributed lock with Redisson (Java):
+  RLock lock = redisson.getLock("midnight-job-lock");
+  if (lock.tryLock(0, 55, TimeUnit.MINUTES)) {
+    try { runMidnightJob(); }   // Only ONE pod runs this
+    finally { lock.unlock(); }
+  }
+  // Other pods: tryLock returns false → skip this run
+```
+
+---
+
+### 3.11 — Trade-Off Framework for Every Design Decision
+
+> Every system design interview question is really: *"What trade-offs would you make and WHY?"* There is never one right answer — only justified decisions.
+
+**The trade-off vocabulary every senior engineer uses:**
+
+| Trade-off | Option A | Option B |
+|-----------|---------|---------|
+| Consistency vs Availability | Reject during partition | Serve stale data |
+| Latency vs Durability | Async write (fast, risk loss) | Sync write (slow, guaranteed) |
+| Read speed vs Write speed | Heavy indexes (fast reads, slow writes) | Few indexes (fast writes, slower reads) |
+| Flexibility vs Performance | NoSQL (flexible) | SQL (rigid, powerful queries) |
+| Simple vs Scalable | Monolith | Microservices |
+
+**How to frame every trade-off:**
+```
+Formula: "We chose X over Y because [specific requirement].
+          The trade-off is [what we gave up].
+          We mitigate that by [how we handle the downside]."
+
+Example:
+  "We chose cache-aside over write-through because our read:write ratio
+   is 95:5 — most data is never read again after being written, so
+   write-through would waste memory. The trade-off is cache misses on
+   first read — we mitigate by warming the cache on startup with the
+   1,000 most popular URLs."
+```
+
+---
+
+### 3.12 — System Design Anti-Patterns (What NOT to Design)
+
+| Anti-Pattern | Why It's Bad | Fix |
+|---|---|---|
+| **Distributed monolith** | Microservices with shared DB — worst of both worlds | Each service owns its data (shared-nothing) |
+| **Synchronous chain** | ServiceA → B → C → D all sync — one slow step kills all | Async events for non-critical path steps |
+| **God service** | One service does auth + orders + payments + inventory | Single responsibility per bounded context |
+| **Chatty services** | Service A makes 100 calls to B per user request | Batch API, aggregator service, GraphQL |
+| **Premature sharding** | Sharding a 10K-row DB | Exhaust indexing → replicas → partitioning → shard |
+| **No circuit breaker** | Slow dependency takes down your whole system | Wrap every external call with Resilience4j |
+| **No idempotency on payments** | Retry causes double charge | Idempotency key on all payment APIs |
+| **Polling instead of events** | Service polls DB every 1s for changes | Use Change Data Capture (CDC) or Kafka events |
+
+---
+
+### 3.13 — System Design Interview Master Checklist
+
+```
+ALWAYS DO:
+  1. Clarify requirements first (2-3 min) — never skip this
+  2. State your assumptions out loud: "I'll assume 90:10 read:write ratio"
+  3. Show capacity math — write numbers, interviewers watch your reasoning
+  4. Justify every technology choice: "I chose Kafka because we need replay"
+  5. Proactively identify bottlenecks: "DB will be bottleneck at 10M users"
+  6. Discuss failure modes: "What if Redis goes down?"
+  7. Ask for feedback: "I'm planning to deep-dive DB schema — any preference?"
+
+NEVER DO:
+  1. Start drawing immediately before clarifying requirements
+  2. Pick technology without explaining WHY ("I'll use MongoDB" — why??)
+  3. Design only the happy path — what happens when things fail?
+  4. Over-design from the start — start simple, evolve to complex
+  5. Stay silent — think out loud, narrate your reasoning at every step
+  6. Ignore interviewer hints — "what about scale?" means go deeper!
+
+TRICKS:
+  When stuck: "Let me start with a simple design and evolve it"
+  Scale progression: single server to read replicas to cache to shard
+  Every component: say WHY you chose it AND what you gave up
+  Magic numbers: 86,400 sec/day, Redis 100K QPS, P99 latency matters
+  Monitoring: mention alert metrics for every component you add
+  End with: "Given more time I would add X, Y, Z" — shows breadth
+```
+
+---
+
+### 3.14 — Common System Design Questions with Model Answers
+
+**Q: "Design a Rate Limiter"**
+> Token bucket in Redis. `INCR user:123:minute_window` with 1-min TTL. Count > 100 → 429. Headers: `X-Rate-Limit-Remaining`, `Retry-After`. Multiple pods share Redis state. Use Redis server time to avoid clock skew between pods.
+
+**Q: "Design a Notification System"**
+> API → Kafka `notifications` topic → consumer routes by channel (email/SMS/push) → sends via SendGrid/Twilio/FCM. Separate Kafka partitions per channel — email failures don't delay SMS. Store user preferences in MongoDB `{email: true, sms: false}`. Retry with exponential backoff. Store history in Cassandra (write-heavy, append-only, TTL-based cleanup).
+
+**Q: "Design a News Feed (Twitter/Instagram)"**
+> Two models: Push (fan-out on write) = copy post to all followers' feed tables on write — fast reads, expensive for celebrities. Pull (fan-out on read) = merge followed users' posts on load — no fan-out but slow reads. Hybrid (Twitter's approach): push for users with < 1,000 followers; pull for celebrities. Store feeds in Redis sorted sets (score = timestamp). Cache miss → pull from Cassandra timeline store.
+
+**Q: "Design a Distributed Cache"**
+> Consistent hashing to distribute keys across N Redis nodes. LRU eviction. TTL per key. Cache-aside pattern. HA: Redis Sentinel (auto-failover) or Redis Cluster (sharding + HA). Stampede prevention: TTL jitter + per-key mutex. Monitoring: hit ratio (alert < 80%), memory usage, eviction rate.
+
+
+
+---
+
 ## 📊 Capacity Estimation — Detailed Step-by-Step Calculations
 
 > **Why this matters:** Capacity estimation shows the interviewer you can think at scale. Always show your working. Start from the given numbers and derive everything step by step.
@@ -176,6 +916,28 @@ Peak QPS (10x burst factor for business-hour spikes):
 Verdict: Redis handles 100,000+ QPS — our 520 peak is trivial.
          PostgreSQL handles 5,000+ QPS — single node is fine.
 ```
+> **u{1F9EE} How each number was derived:**
+>
+> **5,000,000 x 10% = 500,000 writes/day**
+> The 90:10 ratio means 10 out of every 100 requests are writes (URL creations).
+> `5,000,000 x 0.10 = 500,000`
+>
+> **5,000,000 x 90% = 4,500,000 reads/day**
+> `5,000,000 x 0.90 = 4,500,000`
+>
+> **86,400 seconds in a day**
+> `24 hours x 60 minutes x 60 seconds = 24 x 3,600 = 86,400`
+>
+> **500,000 / 86,400 = 6 writes/sec**
+> `500,000 / 86,400 = 5.787 rounded up to 6` (safe estimate)
+>
+> **4,500,000 / 86,400 = 52 reads/sec**
+> `4,500,000 / 86,400 = 52.08 rounded to 52`
+>
+> **Peak = average x 10**
+> Traffic spikes during business hours. 10x burst factor is the standard safe multiplier.
+> `6 x 10 = 60 peak writes/sec`  and  `52 x 10 = 520 peak reads/sec`
+
 
 ### Step 2 — Storage
 
@@ -200,6 +962,26 @@ Annual storage:
 Verdict: Single PostgreSQL instance (2 TB SSD) handles 10+ years.
          Add range partitioning by created_at after ~100M rows.
 ```
+> **u{1F9EE} How each number was derived:**
+>
+> **Field sizes:**
+>
+> | Field | Size | Reasoning |
+> |-------|------|-----------|
+> | `short_code` | 10 bytes | 6-char code + 4 bytes column overhead |
+> | `original_url` | 200 bytes | Average URL is 70-200 chars; use 200 as safe upper bound |
+> | `user_id` | 16 bytes | UUID = 128 bits = 16 bytes |
+> | `metadata` | 74 bytes | created_at(8) + expires_at(8) + click_count(8) + is_active(1) + padding = 74 |
+>
+> **500,000 x 300 = 150,000,000 bytes = 150 MB/day**
+> `150,000,000 / 1,000,000 = 150 MB` (1 MB = 10^6 bytes)
+>
+> **150 MB x 365 = 54,750 MB = 55 GB/year**
+> `54,750 / 1,000 = 54.75 GB rounded to 55 GB`
+>
+> **55 GB x 5 = 275 GB over 5 years**
+> Constant rate assumption. Add 2x safety buffer in practice for 550 GB provisioned.
+
 
 ### Step 3 — Bandwidth
 
@@ -216,6 +998,21 @@ Peak read bandwidth:
 Verdict: Standard 1 Gbps NIC handles this trivially.
          CDN offloads most bandwidth by caching popular redirects.
 ```
+> **u{1F9EE} How each number was derived:**
+>
+> **6 x 500 bytes = 3,000 bytes/sec = 3 KB/sec**
+> Each incoming shorten request = 500 bytes (JSON payload + HTTP headers). Essentially zero.
+>
+> **52 x 300 bytes = 15,600 bytes/sec = 15 KB/sec**
+> A 302 redirect response is tiny: just an HTTP Location header = ~300 bytes.
+>
+> **156 KB/sec to 1.25 Mbps conversion:**
+> `520 x 300 = 156,000 bytes/sec`
+> `156,000 x 8 bits/byte = 1,248,000 bits/sec / 1,000,000 = 1.248 Mbps = 1.25 Mbps`
+>
+> **Why trivial?** A standard server NIC = 1 Gbps = 1,000 Mbps.
+> Our peak of 1.25 Mbps is only 0.125% of NIC capacity.
+
 
 ### Step 4 — Cache Sizing (Redis)
 
@@ -241,6 +1038,32 @@ Total Redis RAM:
 Verdict: 4 GB Redis instance provides plenty of headroom.
          Expected cache hit ratio > 90% (20% URLs = 80% of reads).
 ```
+> **u{1F9EE} How each number was derived:**
+>
+> **The 80-20 Rule (Pareto Principle)**
+> A small minority of URLs get the vast majority of clicks. Cache only the hot minority.
+>
+> **500,000 x 30 = 15,000,000 active URLs**
+> A URL is active if accessed within the last 30 days.
+> `500,000 new URLs/day x 30 days = 15,000,000 active URLs`
+>
+> **15,000,000 x 20% = 3,000,000 entries to cache**
+> `15,000,000 x 0.20 = 3,000,000` hot URLs that serve 80% of reads.
+>
+> **Redis memory per entry:**
+>
+> | Component | Size | Reasoning |
+> |-----------|------|-----------|
+> | Key (url:abc123) | 15 bytes | Prefix url: (4) + 6-char code (6) + Redis string header (5) |
+> | Value (original URL) | 200 bytes | Same as DB field estimate |
+> | Redis per-key overhead | 85 bytes | Dictionary entry, encoding, TTL metadata, pointer |
+>
+> **3,000,000 x 300 = 900,000,000 bytes = 900 MB = 1 GB**
+> `900,000,000 / 1,000,000,000 = 0.9 GB rounded to 1 GB`
+>
+> **Why 4 GB instance?** Provision 4x the calculated minimum.
+> `1 GB x 4 = 4 GB` -- headroom for expiry lag, Redis metadata, future growth, LRU buffer.
+
 
 ### Step 5 — Base62 Namespace Math
 
@@ -256,10 +1079,10 @@ Time to exhaustion:
 Example — encoding counter 125,000,000 to Base62:
   125,000,000 / 62 = 2,016,129  r 2  → '2'
   2,016,129   / 62 = 32,518     r 13 → 'd'
-  32,518      / 62 = 524        r 50 → 'O'
+  32,518      / 62 = 524        r 30 → 'u'
   524         / 62 = 8          r 28 → 's'
   8           / 62 = 0          r 8  → '8'
-  Result (reversed): "8sOd2"  (5-char code for this counter value)
+  Result (reversed): "8sud2"  (5-char code for this counter value)
 
 Verdict: 6-char codes last 307 years. No need to plan for 7-char migration.
 ```
@@ -284,6 +1107,30 @@ Read replica strategy:
   1 primary (writes only) + 2 read replicas (redirect reads)
   Our 52 QPS read load fits on a single replica
 ```
+> **u{1F9EE} How each number was derived:**
+>
+> **500,000 x 365 x 5 = 912,500,000 rows**
+> `500,000/day x 365 days = 182,500,000 rows/year`
+> `182,500,000 x 5 years = 912,500,000 rounded to 1 Billion`
+>
+> **1B x 300 bytes = 300 GB raw data**
+> `1,000,000,000 x 300 = 300,000,000,000 bytes / 1,000,000,000 = 300 GB`
+>
+> **Index overhead = 300 GB x 30% = 90 GB**
+> Every B-Tree index has its own pages on disk.
+> Typical overhead = 20-40% of raw data. 30% is the safe midpoint.
+> Sources: index on short_code (primary lookup) + user_id + created_at + expires_at.
+>
+> **Total = 300 + 90 = 390 GB**
+>
+> **Quarterly partition size: 45M rows / 30 GB**
+> `912.5M rows / 5yr / 4 quarters = 45.6M rows/quarter`
+> `300 GB / 20 quarters = 15 GB raw + 15 GB index = 30 GB/quarter`
+>
+> **Why 2 read replicas handle 52 QPS easily?**
+> PostgreSQL handles 5,000-10,000 simple SELECT QPS per node.
+> Our 52 QPS is less than 1% of one replica's capacity.
+> Two replicas provide redundancy during maintenance.
 
 ### Estimation Summary Table
 
@@ -2347,8 +3194,6 @@ public class OrderService {
 }
 ```
 
----
-
 ## Q27. Deadlock — Detection & Prevention
 
 ```mermaid
@@ -2519,6 +3364,1499 @@ public String describe(PaymentResult result) {
 **When to use**
 - **Record** → DTOs, value objects, event payloads, API request/response models.
 - **Sealed class** → domain result types, error hierarchies, exhaustive type modeling.
+
+---
+
+## 🏗️ Low Level Design (LLD) — For Beginners (Read This First)
+
+> **What is LLD?** Low Level Design is the art of translating a real-world problem into **classes, interfaces, relationships, and method signatures** before writing a single line of business logic. Think of HLD (High Level Design) as the city map and LLD as the building blueprint — HLD says *"we need a database here"*, LLD says *"here is the exact `UserRepository` interface with these 6 methods, each with these parameter types and return values"*.
+
+> **Why does it matter in interviews?** LLD rounds test whether you can write maintainable, extensible code. Interviewers are checking: (1) do you know SOLID? (2) can you identify the right design pattern? (3) can you draw class diagrams? (4) can you handle change requests gracefully?
+
+---
+
+### 🆚 HLD vs LLD — Know the Difference
+
+| Dimension | High Level Design (HLD) | Low Level Design (LLD) |
+|---|---|---|
+| **Focus** | System components & data flow | Classes, interfaces, methods |
+| **Output** | Architecture diagram, tech choices | Class diagram, sequence diagram |
+| **Audience** | Architects, product managers | Senior developers, tech leads |
+| **Question trigger** | "Design YouTube / WhatsApp" | "Design a Parking Lot / Vending Machine" |
+| **Tools** | Load balancers, DBs, queues | SOLID, Design Patterns, OOP |
+
+```mermaid
+flowchart LR
+  Req["Requirement\n'Build a notification system'"]
+  HLD["HLD\nKafka + microservices\n+ push gateway"]
+  LLD["LLD\nNotificationService interface\nEmailSender, SmsSender classes\nFactory pattern\nObserver for async"]
+  Code["Code\nActual Java classes"]
+  Req --> HLD --> LLD --> Code
+```
+
+---
+
+### 🧱 SOLID Principles — The Foundation of Every LLD Interview
+
+> **One-line memory trick:** **S**top **O**ver-**L**oading **I**nterfaces, **D**ecouple everything.
+
+```mermaid
+mindmap
+  root((SOLID))
+    S[Single Responsibility\nOne class, one job]
+    O[Open/Closed\nOpen for extension\nClosed for modification]
+    L[Liskov Substitution\nSubclass must honour\nparent contract]
+    I[Interface Segregation\nNo fat interfaces\nMany small ones]
+    D[Dependency Inversion\nDepend on abstractions\nnot concretions]
+```
+
+---
+
+#### S — Single Responsibility Principle (SRP)
+
+> **Definition:** A class should have **one, and only one, reason to change**.
+
+> **Intuition:** Imagine a Swiss Army knife — great for camping but terrible as a kitchen knife. A class that does email sending, PDF generation, AND database saving is that Swiss Army knife. Change the PDF library → you touch the same class that handles email. That is risky.
+
+**❌ Bad (violates SRP — 3 reasons to change):**
+```java
+public class OrderService {
+    public void createOrder(Order o)   { /* business logic */ }
+    public void saveToDb(Order o)      { /* DB logic */       }  // reason 1
+    public void sendEmail(Order o)     { /* email logic */    }  // reason 2
+    public String generatePdf(Order o) { /* PDF logic */      }  // reason 3
+}
+```
+
+**✅ Good (SRP applied — each class has one reason to change):**
+```java
+public class OrderService    { /* reason to change: business rules only */ }
+public class OrderRepository { /* reason to change: DB structure         */ }
+public class EmailService    { /* reason to change: email templates       */ }
+public class PdfService      { /* reason to change: PDF library           */ }
+```
+
+```mermaid
+classDiagram
+  class OrderService {
+    +createOrder(req) Order
+  }
+  class OrderRepository {
+    +save(order)
+    +findById(id) Order
+  }
+  class EmailService {
+    +sendConfirmation(order)
+  }
+  class PdfService {
+    +generateInvoice(order) String
+  }
+  OrderService --> OrderRepository
+  OrderService --> EmailService
+  OrderService --> PdfService
+```
+
+**❓ Interview Questions:**
+
+**Q: "How do you know when a class has more than one responsibility?"**
+> **A:** Two tests: (1) **"And" test** — if you describe the class using "and" ("it sends emails AND saves to DB"), it has multiple responsibilities. (2) **Change test** — if two different kinds of changes (business rule change vs DB schema change) both require editing the same class, SRP is violated.
+
+**Q: "Doesn't SRP lead to too many tiny classes?"**
+> **A:** Yes, and that is intentional. Many focused classes are easier to test, understand, and change than a few god-classes. The trade-off is more files but lower coupling. In practice, group related SRP classes in the same package to keep the codebase navigable.
+
+---
+
+#### O — Open/Closed Principle (OCP)
+
+> **Definition:** Software entities should be **open for extension, closed for modification**. Add new behaviour by adding new code, not editing existing code.
+
+> **Intuition:** A power strip — you never open up the strip and rewire it to add a new device; you just plug in. OCP says your classes should be "plug-in ready".
+
+**❌ Bad — add a new discount type = edit existing class (risky):**
+```java
+public class DiscountService {
+    public double calculate(String type, double price) {
+        if (type.equals("SUMMER"))    return price * 0.9;
+        if (type.equals("EMPLOYEE"))  return price * 0.7;
+        // Adding BLACK_FRIDAY means editing this class — risky!
+        return price;
+    }
+}
+```
+
+**✅ Good — add new discount = add new class, zero edits elsewhere:**
+```java
+public interface DiscountStrategy {
+    double apply(double price);
+}
+
+public class SummerDiscount      implements DiscountStrategy { public double apply(double p) { return p * 0.90; } }
+public class EmployeeDiscount    implements DiscountStrategy { public double apply(double p) { return p * 0.70; } }
+public class BlackFridayDiscount implements DiscountStrategy { public double apply(double p) { return p * 0.50; } }
+// New tier = new class. Zero edits to existing code.
+
+public class DiscountService {
+    private final DiscountStrategy strategy;
+    public DiscountService(DiscountStrategy s) { this.strategy = s; }
+    public double calculate(double price) { return strategy.apply(price); }
+}
+```
+
+**❓ Interview Questions:**
+
+**Q: "How is OCP different from just using polymorphism?"**
+> **A:** OCP is the *goal* (never modify existing code for new variants). Polymorphism is the *mechanism* to achieve it. OCP also applies to configuration — using properties files instead of hardcoded values so you change behaviour without touching code.
+
+**Q: "Is 100% OCP achievable?"**
+> **A:** No, and that is fine. You cannot predict every future change. Apply OCP where change is anticipated (new payment types, new discount rules). Do not over-engineer every class.
+
+---
+
+#### L — Liskov Substitution Principle (LSP)
+
+> **Definition:** Objects of a subclass must be substitutable for objects of the parent class **without breaking correctness**.
+
+> **Intuition:** If your code works with `Bird bird = new Bird()` and you swap `Bird bird = new Penguin()` (a subclass), it must still work. If `bird.fly()` throws an exception for Penguin, you have broken LSP.
+
+**❌ Bad — classic rectangle-square LSP violation:**
+```java
+public class Rectangle {
+    protected int width, height;
+    public void setWidth(int w)  { this.width = w; }
+    public void setHeight(int h) { this.height = h; }
+    public int area()            { return width * height; }
+}
+
+public class Square extends Rectangle {
+    @Override public void setWidth(int w)  { this.width = w; this.height = w; }  // breaks contract!
+    @Override public void setHeight(int h) { this.width = h; this.height = h; }  // breaks contract!
+}
+
+void resize(Rectangle r) {
+    r.setWidth(4);
+    r.setHeight(5);
+    assert r.area() == 20;  // FAILS if r is a Square → area is 25
+}
+```
+
+**✅ Good — separate abstractions, no violated contract:**
+```java
+public interface Shape { int area(); }
+public class Rectangle implements Shape { /* width * height */ }
+public class Square    implements Shape { /* side * side    */ }
+// No substitution problem — both implement Shape independently
+```
+
+**LSP Checklist before making a subclass:**
+```
+✅ Does the subclass honour all preconditions of the parent?
+✅ Does the subclass honour all postconditions of the parent?
+✅ Does the subclass avoid throwing NEW exceptions not declared by the parent?
+If any answer is NO → use composition over inheritance
+```
+
+**❓ Interview Questions:**
+
+**Q: "What is the real-world sign you are violating LSP?"**
+> **A:** You will see `instanceof` checks in calling code — `if (bird instanceof Penguin) { skip flying }`. The moment client code needs to special-case a subtype, LSP is broken. Also, overriding a method to throw `UnsupportedOperationException` is a guaranteed LSP violation (common in unmodifiable collection wrappers).
+
+---
+
+#### I — Interface Segregation Principle (ISP)
+
+> **Definition:** No client should be forced to depend on methods it does not use. Prefer **many small, specific interfaces** over one large general-purpose interface.
+
+> **Intuition:** A printer that also scans and faxes — a simple printer class must implement `scan()` and `fax()` even though it cannot do them. That is ISP violation.
+
+**❌ Bad — fat interface forces unused methods:**
+```java
+public interface Worker {
+    void work();
+    void eat();    // Robots do not eat!
+    void sleep();  // Robots do not sleep!
+}
+
+public class Robot implements Worker {
+    public void work()  { /* OK */ }
+    public void eat()   { throw new UnsupportedOperationException(); }  // ISP violation
+    public void sleep() { throw new UnsupportedOperationException(); }  // ISP violation
+}
+```
+
+**✅ Good — segregated interfaces:**
+```java
+public interface Workable  { void work();  }
+public interface Eatable   { void eat();   }
+public interface Sleepable { void sleep(); }
+
+public class HumanWorker implements Workable, Eatable, Sleepable { /* all make sense    */ }
+public class Robot         implements Workable                    { /* only what it needs */ }
+```
+
+**❓ Interview Questions:**
+
+**Q: "How is ISP applied in Spring Boot repositories?"**
+> **A:** Instead of injecting the full `JpaRepository<User,Long>` (which exposes `deleteAll()`, `flush()`, etc.) into every service, define a narrow interface: `interface UserQueryPort { Optional<User> findByEmail(String email); }`. Your service depends only on what it needs — this makes testing trivial because you mock only the actually-used methods.
+
+---
+
+#### D — Dependency Inversion Principle (DIP)
+
+> **Definition:** (1) High-level modules must not depend on low-level modules — both should depend on **abstractions**. (2) Abstractions must not depend on details — details depend on abstractions.
+
+> **Intuition:** Your TV remote does not depend on a specific battery brand — it depends on the *concept* of a battery (abstraction). You can swap AA Duracell for AA Energizer without changing the remote.
+
+**❌ Bad — high-level depends on low-level concrete class:**
+```java
+public class OrderService {
+    private MySQLOrderRepo repo = new MySQLOrderRepo();  // hard-coded low-level!
+    // Switching to PostgreSQL = must change OrderService
+}
+```
+
+**✅ Good — both depend on the abstraction:**
+```java
+public interface OrderRepository {           // The abstraction
+    void save(Order order);
+    Optional<Order> findById(String id);
+}
+
+public class MySQLOrderRepo    implements OrderRepository { /* MySQL  */ }
+public class MongoOrderRepo    implements OrderRepository { /* Mongo  */ }
+public class InMemoryOrderRepo implements OrderRepository { /* Tests  */ }
+
+public class OrderService {
+    private final OrderRepository repo;   // depends on abstraction, not concretion
+    public OrderService(OrderRepository repo) { this.repo = repo; }  // injected
+}
+```
+
+```mermaid
+flowchart TB
+  OS["OrderService\nhigh-level"]
+  IA["interface OrderRepository\nabstraction"]
+  SQL["MySQLOrderRepo"]
+  MNG["MongoOrderRepo"]
+  TST["InMemoryOrderRepo"]
+  OS -->|depends on| IA
+  SQL -->|implements| IA
+  MNG -->|implements| IA
+  TST -->|implements| IA
+```
+
+**❓ Interview Questions:**
+
+**Q: "How does Spring Boot implement DIP?"**
+> **A:** Spring's IoC container IS the DIP mechanism. You declare `@Autowired OrderRepository repo` — Spring decides at runtime which concrete class to inject. You never call `new MySQLOrderRepo()`. The `@Qualifier` and `@Primary` annotations let you control which implementation is injected when multiple exist.
+
+**Q: "What is the difference between DIP and Dependency Injection?"**
+> **A:** DIP is the **principle** (depend on abstractions). Dependency Injection is the **pattern** for implementing DIP (pass dependencies from outside). IoC containers (Spring) are the **framework** that automate DI. DIP → DI pattern → Spring IoC container.
+
+---
+
+### 🎨 Design Patterns — Complete Visual Guide
+
+> **What are Design Patterns?** Reusable solutions to commonly-occurring design problems. The Gang of Four (GoF) catalogued 23 patterns in 3 categories. Think of them as *recipes* — you do not always need to invent a dish from scratch.
+
+```mermaid
+mindmap
+  root((Design Patterns))
+    Creational["🏭 Creational\nHow objects are CREATED"]
+      Singleton
+      Factory Method
+      Abstract Factory
+      Builder
+      Prototype
+    Structural["🔗 Structural\nHow objects are COMPOSED"]
+      Adapter
+      Decorator
+      Facade
+      Proxy
+      Composite
+    Behavioral["🎭 Behavioral\nHow objects COMMUNICATE"]
+      Strategy
+      Observer
+      Command
+      State
+      Template Method
+      Chain of Responsibility
+```
+
+> **Interview tip:** For each pattern memorise: (1) one-line definition, (2) real-world analogy, (3) trigger phrase, (4) Java code skeleton, (5) one production example.
+
+---
+
+## 🏭 CREATIONAL PATTERNS — How Objects Are Created
+
+---
+
+### Pattern: Singleton
+
+> **Definition:** Ensure only **one instance** of a class exists globally and provide a single access point to it.
+
+> **Analogy:** The government of a country — there is only one, everyone refers to the same one, and you cannot create a second government.
+
+> **Trigger words:** *"There should be only one…", "shared config", "connection pool", "registry", "logger"*
+
+```mermaid
+classDiagram
+  class Singleton {
+    -static instance: Singleton
+    -Singleton()
+    +static getInstance() Singleton
+    +operation()
+  }
+  note for Singleton "Private constructor\nprevents new Singleton()"
+```
+
+**Three implementation variants — know all three:**
+
+```java
+// ── VARIANT 1: Bill Pugh (Best for most cases) ────────────────────────────
+public class AppConfig {
+    private AppConfig() { }
+
+    private static class Holder {
+        static final AppConfig INSTANCE = new AppConfig(); // JVM guarantees thread-safe init
+    }
+
+    public static AppConfig getInstance() { return Holder.INSTANCE; }
+}
+
+// ── VARIANT 2: Enum Singleton (Best for serialization + reflection safety) ─
+public enum DatabasePool {
+    INSTANCE;
+    public Connection getConnection() throws SQLException { return ds.getConnection(); }
+}
+// Usage: DatabasePool.INSTANCE.getConnection()
+
+// ── VARIANT 3: Double-Checked Locking (still asked in interviews) ──────────
+public class CacheManager {
+    private static volatile CacheManager instance; // volatile is MANDATORY
+
+    private CacheManager() { }
+
+    public static CacheManager getInstance() {
+        if (instance == null) {                      // first check — no lock
+            synchronized (CacheManager.class) {
+                if (instance == null) {              // second check — with lock
+                    instance = new CacheManager();
+                }
+            }
+        }
+        return instance;
+    }
+}
+// Why volatile? Without it the JVM can reorder instructions — another thread might
+// see a partially constructed object due to CPU instruction reordering.
+```
+
+**When to use / when NOT to use:**
+```
+✅ Connection pools (HikariCP)
+✅ Configuration holder (read once, share everywhere)
+✅ Logger instances
+✅ Thread pools / ExecutorService
+❌ Per-user or per-request state (use request scope)
+❌ When testability matters — prefer Spring beans (@Bean is singleton by default)
+❌ Overusing it — "Singleton is the new global variable"
+```
+
+**❓ Interview Questions:**
+
+**Q: "Why is the enum singleton considered best by Effective Java?"**
+> **A:** Three reasons: (1) **Serialization-safe** — Java guarantees enum instances are not re-created during deserialization; a normal Singleton needs `readResolve()` to prevent this. (2) **Reflection-safe** — reflection cannot call a private constructor of an enum but CAN bypass it for regular classes. (3) **Thread-safe by JVM** — enum constants are initialized by the class loader which is inherently thread-safe.
+
+**Q: "How do you break a Singleton? How do you prevent it?"**
+> **A:** Three ways to break it: (1) **Reflection** — `getDeclaredConstructors()[0].setAccessible(true)` bypasses the private constructor; fix by throwing an exception in the constructor if instance already exists. (2) **Serialization/Deserialization** — creates a new instance; fix by implementing `readResolve()` returning the existing `INSTANCE`. (3) **Cloning** — `clone()` creates a copy; fix by overriding `clone()` to throw `CloneNotSupportedException`. Enum Singleton is immune to all three.
+
+**Q: "Is Spring's @Bean a Singleton?"**
+> **A:** Yes — Spring beans are singleton-scoped by default (one instance per ApplicationContext, not per JVM). It differs from GoF Singleton: GoF = one per JVM; Spring = one per container. Override with `@Scope("prototype")` for a new instance per injection point.
+
+---
+
+### Pattern: Factory Method
+
+> **Definition:** Define an interface for creating an object but let **subclasses or a factory class decide** which class to instantiate.
+
+> **Analogy:** A logistics company has `createTransport()`. Road-logistics creates a Truck; Sea-logistics creates a Ship. The client calls `createTransport()` without knowing which it gets.
+
+> **Trigger words:** *"Create objects without specifying the exact class", "object creation varies by context"*
+
+```mermaid
+classDiagram
+  class NotificationSender {
+    <<interface>>
+    +send(to, msg)
+  }
+  class EmailSender  { +send(to, msg) }
+  class SmsSender    { +send(to, msg) }
+  class PushSender   { +send(to, msg) }
+  class NotificationFactory {
+    +create(channel) NotificationSender
+  }
+  NotificationSender <|.. EmailSender
+  NotificationSender <|.. SmsSender
+  NotificationSender <|.. PushSender
+  NotificationFactory ..> NotificationSender : creates
+```
+
+```java
+public interface NotificationSender {
+    void send(String recipient, String message);
+}
+
+public class EmailSender implements NotificationSender {
+    public void send(String to, String msg) { System.out.println("Email → " + to); }
+}
+public class SmsSender implements NotificationSender {
+    public void send(String to, String msg) { System.out.println("SMS → " + to); }
+}
+public class PushSender implements NotificationSender {
+    public void send(String to, String msg) { System.out.println("Push → " + to); }
+}
+
+public class NotificationFactory {
+    public static NotificationSender create(String channel) {
+        return switch (channel.toLowerCase()) {
+            case "email" -> new EmailSender();
+            case "sms"   -> new SmsSender();
+            case "push"  -> new PushSender();
+            default      -> throw new IllegalArgumentException("Unknown channel: " + channel);
+        };
+    }
+}
+// Adding WhatsApp = add WhatsAppSender + one case in factory. ZERO changes elsewhere.
+```
+
+**Factory vs Abstract Factory vs Builder — cheat sheet:**
+```
+Factory Method   → one product, factory decides the concrete type
+Abstract Factory → family of related products (Button + Checkbox for Windows/Mac)
+Builder          → one complex product assembled step by step
+```
+
+**❓ Interview Questions:**
+
+**Q: "How does Spring ApplicationContext relate to Factory pattern?"**
+> **A:** Spring's `ApplicationContext` is an Abstract Factory. `context.getBean(UserService.class)` is a factory method call. `@Configuration` classes with `@Bean` methods are concrete factories. This is why Spring is called an IoC container — it inverts who is responsible for object creation.
+
+---
+
+### Pattern: Abstract Factory
+
+> **Definition:** Provide an interface for creating **families of related objects** without specifying their concrete classes.
+
+> **Analogy:** IKEA furniture series — you choose "Hemnes" and get a matching bed, wardrobe, and desk. You do not mix Hemnes bed with Kallax wardrobe.
+
+```java
+// Abstract Factory
+public interface PaymentFactory {
+    PaymentProcessor  createProcessor();
+    FraudDetector     createFraudDetector();
+    ReceiptGenerator  createReceiptGenerator();
+}
+
+// Concrete Factory: Online payments
+public class OnlinePaymentFactory implements PaymentFactory {
+    public PaymentProcessor  createProcessor()        { return new StripeProcessor();       }
+    public FraudDetector     createFraudDetector()    { return new MLFraudDetector();       }
+    public ReceiptGenerator  createReceiptGenerator() { return new EmailReceiptGenerator(); }
+}
+
+// Concrete Factory: POS / Offline payments
+public class PosPaymentFactory implements PaymentFactory {
+    public PaymentProcessor  createProcessor()        { return new CardTerminalProcessor();    }
+    public FraudDetector     createFraudDetector()    { return new RuleFraudDetector();        }
+    public ReceiptGenerator  createReceiptGenerator() { return new PrintedReceiptGenerator(); }
+}
+
+// Client: uses only the factory interface — never knows which family
+public class CheckoutService {
+    private final PaymentProcessor  processor;
+    private final FraudDetector     fraud;
+    private final ReceiptGenerator  receipt;
+
+    public CheckoutService(PaymentFactory factory) {  // inject the factory
+        this.processor = factory.createProcessor();
+        this.fraud     = factory.createFraudDetector();
+        this.receipt   = factory.createReceiptGenerator();
+    }
+}
+// Switch from Online to POS = swap one factory injection. Zero changes to CheckoutService.
+```
+
+---
+
+### Pattern: Builder
+
+> **Definition:** Separate the construction of a complex object from its representation, allowing step-by-step assembly with a fluent API.
+
+> **Analogy:** Subway sandwich — you tell the worker step-by-step: bread, protein, vegetables, sauce. You do not assemble the sandwich yourself.
+
+> **Trigger words:** *"Complex object with many optional fields", "telescoping constructor problem", "immutable object", "fluent API"*
+
+```mermaid
+classDiagram
+  class OrderRequest {
+    -customerId: String
+    -items: List
+    -currency: String
+    -promoCode: String
+    -priority: boolean
+    +builder(customerId) Builder
+  }
+  class Builder {
+    +item(i) Builder
+    +currency(c) Builder
+    +promoCode(p) Builder
+    +priority(b) Builder
+    +build() OrderRequest
+  }
+  OrderRequest -- Builder
+```
+
+```java
+public final class OrderRequest {
+    private final String       customerId;    // required
+    private final List<Item>   items;         // required
+    private final String       currency;      // optional, default "INR"
+    private final String       promoCode;     // optional
+    private final boolean      priority;      // optional, default false
+
+    private OrderRequest(Builder b) {
+        this.customerId = Objects.requireNonNull(b.customerId, "customerId required");
+        this.items      = List.copyOf(Objects.requireNonNull(b.items));
+        this.currency   = b.currency;
+        this.promoCode  = b.promoCode;
+        this.priority   = b.priority;
+    }
+
+    public static Builder builder(String customerId) { return new Builder(customerId); }
+
+    public static class Builder {
+        private final String customerId;
+        private List<Item>   items    = new ArrayList<>();
+        private String       currency = "INR";
+        private String       promoCode;
+        private boolean      priority = false;
+
+        private Builder(String cid) { this.customerId = cid; }
+        public Builder item(Item i)             { items.add(i); return this; }
+        public Builder currency(String c)       { this.currency = c; return this; }
+        public Builder promoCode(String p)      { this.promoCode = p; return this; }
+        public Builder priority(boolean p)      { this.priority = p; return this; }
+        public OrderRequest build() {
+            if (items.isEmpty()) throw new IllegalStateException("Order must have items");
+            return new OrderRequest(this);
+        }
+    }
+}
+
+// Self-documenting usage:
+OrderRequest order = OrderRequest
+    .builder("customer-123")
+    .item(new Item("SKU-001", 2))
+    .currency("USD")
+    .promoCode("SUMMER20")
+    .priority(true)
+    .build();
+```
+
+**❓ Interview Questions:**
+
+**Q: "What problem does Builder solve that setters cannot?"**
+> **A:** Three things: (1) **Immutability** — once `build()` is called the object cannot change; setters make objects mutable. (2) **Validation at build time** — validate required fields in `build()` and throw early. (3) **Readability** — `.currency("USD").priority(true)` is self-documenting; a list of setter calls is not.
+
+**Q: "How does Lombok's @Builder differ from a hand-written Builder?"**
+> **A:** `@Builder` generates the Builder inner class at compile time. The difference is control — Lombok's default does not enforce required fields (everything is optional). Use `@NonNull` for required fields. For complex cross-field validation, a hand-written Builder gives more control.
+
+---
+
+### Pattern: Prototype
+
+> **Definition:** Create new objects by **cloning an existing object** rather than constructing from scratch.
+
+> **Analogy:** Cell division — a cell does not create a new cell from scratch; it copies itself.
+
+> **Trigger words:** *"Expensive to create", "copy from template", "clone"*
+
+```java
+// Deep copy via copy constructor (preferred over Cloneable)
+public class ReportTemplate {
+    private String         title;
+    private List<Section>  sections;
+    private Map<String, String> metadata;
+
+    // Copy constructor — deep copy
+    public ReportTemplate(ReportTemplate other) {
+        this.title    = other.title;
+        this.sections = other.sections.stream().map(Section::new).collect(toList());
+        this.metadata = new HashMap<>(other.metadata);
+    }
+
+    public ReportTemplate copy() { return new ReportTemplate(this); }
+}
+
+// Usage: template is expensive to build (DB query), copies are cheap
+ReportTemplate base    = loadFromDB();       // expensive — once
+ReportTemplate monthly = base.copy();        // cheap — O(n) fields
+monthly.setTitle("Monthly Sales — March 2026");
+```
+
+---
+
+## 🔗 STRUCTURAL PATTERNS — How Objects Are Composed
+
+---
+
+### Pattern: Adapter
+
+> **Definition:** Convert the interface of a class into another interface that clients expect. Lets incompatible interfaces work together.
+
+> **Analogy:** A power adapter — your Indian charger has round pins, the UK socket has square holes. The adapter converts one to the other without changing either side.
+
+> **Trigger words:** *"Incompatible interfaces", "wrap third-party library", "legacy code integration"*
+
+```mermaid
+classDiagram
+  class NotificationPort {
+    <<interface>>
+    +send(NotificationRequest)
+  }
+  class ThirdPartyEmailLib {
+    +postMessage(to, subject, body)
+  }
+  class EmailLibAdapter {
+    -lib: ThirdPartyEmailLib
+    +send(NotificationRequest)
+  }
+  NotificationPort <|.. EmailLibAdapter
+  EmailLibAdapter --> ThirdPartyEmailLib : wraps
+```
+
+```java
+public interface NotificationPort {          // what YOUR code expects
+    void send(NotificationRequest req);
+}
+
+public class ThirdPartyEmailLib {            // third-party JAR — cannot change
+    public void postMessage(String toAddress, String subject, String htmlBody) { /* ... */ }
+}
+
+public class EmailLibAdapter implements NotificationPort {    // the Adapter
+    private final ThirdPartyEmailLib lib;
+    public EmailLibAdapter(ThirdPartyEmailLib lib) { this.lib = lib; }
+
+    @Override
+    public void send(NotificationRequest req) {
+        lib.postMessage(req.getRecipient(), req.getSubject(), req.buildHtmlBody());
+    }
+}
+
+// Your service depends on the interface — never on the third-party JAR
+@Service
+public class NotificationService {
+    private final NotificationPort port;
+    public void notifyUser(User user, String message) {
+        port.send(new NotificationRequest(user.getEmail(), "Update", message));
+    }
+}
+// Switching email providers = swap the adapter bean. Zero changes to NotificationService.
+```
+
+**❓ Interview Questions:**
+
+**Q: "What is the difference between Adapter and Facade?"**
+> **A:** Adapter changes the **interface** to match an expected contract — it translates call-by-call. Facade **simplifies** a complex subsystem by aggregating multiple calls into one simple interface. Adapter is about compatibility; Facade is about simplicity.
+
+---
+
+### Pattern: Decorator
+
+> **Definition:** Attach additional responsibilities to an object **dynamically** by wrapping it. Flexible alternative to subclassing for extending functionality.
+
+> **Analogy:** Building a coffee — start with espresso, add milk (Milk Decorator), add sugar (Sugar Decorator). Each wrapper adds something without changing the original.
+
+> **Trigger words:** *"Add features at runtime", "avoid class explosion", "layers of functionality", "wrap with extra behaviour"*
+
+```mermaid
+classDiagram
+  class DataSource {
+    <<interface>>
+    +write(data)
+    +read() String
+  }
+  class FileDataSource      { +write(data)  +read() String }
+  class DataSourceDecorator { #wrapped +write(data) +read() String }
+  class EncryptionDecorator { +write(data)  +read() String }
+  class CompressionDecorator{ +write(data)  +read() String }
+  DataSource <|.. FileDataSource
+  DataSource <|.. DataSourceDecorator
+  DataSourceDecorator <|-- EncryptionDecorator
+  DataSourceDecorator <|-- CompressionDecorator
+  DataSourceDecorator o--> DataSource : wraps
+```
+
+```java
+public interface DataSource { void write(String data); String read(); }
+
+public class FileDataSource implements DataSource {
+    public void write(String data) { Files.writeString(Path.of(path), data); }
+    public String read()           { return Files.readString(Path.of(path)); }
+}
+
+public abstract class DataSourceDecorator implements DataSource {
+    protected final DataSource wrapped;
+    protected DataSourceDecorator(DataSource w) { this.wrapped = w; }
+    public void write(String data) { wrapped.write(data); }
+    public String read()           { return wrapped.read(); }
+}
+
+public class EncryptionDecorator extends DataSourceDecorator {
+    public EncryptionDecorator(DataSource w) { super(w); }
+    @Override public void write(String data) { super.write(encrypt(data)); }
+    @Override public String read()           { return decrypt(super.read()); }
+    private String encrypt(String d) { return Base64.getEncoder().encodeToString(d.getBytes()); }
+    private String decrypt(String d) { return new String(Base64.getDecoder().decode(d)); }
+}
+
+public class CompressionDecorator extends DataSourceDecorator {
+    public CompressionDecorator(DataSource w) { super(w); }
+    @Override public void write(String data) { super.write(compress(data)); }
+    @Override public String read()           { return decompress(super.read()); }
+}
+
+// Compose at runtime — any combination, any order
+DataSource source = new CompressionDecorator(
+                      new EncryptionDecorator(
+                        new FileDataSource("/data/report.txt")));
+source.write("sensitive data");  // writes: compress(encrypt(data))
+// Java itself uses Decorator: BufferedReader(new FileReader(f)), GZIPOutputStream(new FileOutputStream(f))
+```
+
+**❓ Interview Questions:**
+
+**Q: "How is Decorator different from Inheritance for adding behaviour?"**
+> **A:** (1) **Runtime vs compile-time** — Decorator adds behaviour at runtime by wrapping; inheritance is fixed at compile time. (2) **Combinatorial explosion** — 4 features = 4 decorators vs 16 subclasses. (3) **OCP** — adding a Decorator never touches existing code.
+
+**Q: "Where is Decorator used in Spring?"**
+> **A:** `TransactionAwareDataSourceProxy` wraps a `DataSource` and adds transaction awareness. Spring AOP uses proxy-based wrapping to add cross-cutting concerns (transactions, logging, security) without modifying target classes. `HttpServletRequestWrapper` decorates a request.
+
+---
+
+### Pattern: Facade
+
+> **Definition:** Provide a **simplified interface** to a complex subsystem. Hides the complexity behind a single entry point.
+
+> **Analogy:** A hotel concierge — you tell them "I need dinner and a pickup at 8pm", and they orchestrate the restaurant booking, taxi call, and laundry. You make one request; they call five services.
+
+> **Trigger words:** *"Simplify a complex API", "hide subsystem complexity", "one method that does many things"*
+
+```java
+@Service
+public class OrderFacade {
+    private final InventoryService  inventory;
+    private final PaymentGateway    payment;
+    private final ShippingService   shipping;
+    private final NotificationSvc   notification;
+    private final LoyaltyService    loyalty;
+
+    @Transactional
+    public OrderConfirmation placeOrder(PlaceOrderCommand cmd) {
+        if (!inventory.reserveItem(cmd.getSku(), cmd.getQty()))
+            throw new OutOfStockException();
+
+        String txnId  = payment.charge(cmd.getCardToken(), cmd.getAmount());
+        String shipId = shipping.scheduleDelivery(cmd.getDeliveryAddress());
+        notification.sendOrderConfirmation(cmd.getEmail(), txnId);
+        loyalty.awardPoints(cmd.getUserId(), cmd.getAmount());
+
+        return new OrderConfirmation(txnId, shipId);
+    }
+}
+
+// Controller calls one clean facade method — zero knowledge of subsystems
+@RestController
+public class OrderController {
+    @PostMapping("/orders")
+    public ResponseEntity<OrderConfirmation> place(@RequestBody PlaceOrderCommand cmd) {
+        return ResponseEntity.ok(orderFacade.placeOrder(cmd));
+    }
+}
+```
+
+---
+
+### Pattern: Proxy
+
+> **Definition:** Provide a surrogate or placeholder for another object to **control access** to it.
+
+> **Analogy:** A credit card is a proxy for your bank account — it controls access (credit limit), adds logging (transaction history), and defers actual fund transfer.
+
+> **Trigger words:** *"Control access", "lazy load", "logging before delegation", "caching", "security check"*
+
+**Five types of Proxy:**
+```
+Virtual Proxy    → lazy-load expensive resource (load only when first accessed)
+Protection Proxy → access control (check permissions before delegating)
+Remote Proxy     → represents object in another JVM (RMI, gRPC stub)
+Caching Proxy    → cache results to avoid repeated expensive calls
+Logging Proxy    → log calls transparently
+```
+
+```java
+// Protection Proxy — adds security check
+public class SecureUserRepositoryProxy implements UserRepository {
+    private final UserRepository delegate;
+    private final SecurityContext ctx;
+
+    public void deleteById(long id) {
+        if (!ctx.hasRole("ADMIN")) throw new AccessDeniedException("ADMIN only");
+        delegate.deleteById(id);  // passes check → delegate
+    }
+    public User findById(long id) { return delegate.findById(id); }
+}
+
+// Caching Proxy — avoids repeated DB hits
+public class CachingProductProxy implements ProductRepository {
+    private final ProductRepository db;
+    private final Map<Long, Product> cache = new ConcurrentHashMap<>();
+
+    public Product findById(long id) {
+        return cache.computeIfAbsent(id, db::findById);  // hit cache or load DB
+    }
+}
+
+// Spring AOP IS a proxy — transparent to the caller
+@Transactional              // Spring wraps your bean in TransactionProxy at runtime
+@PreAuthorize("hasRole('ADMIN')")  // Spring wraps in SecurityProxy
+public void deleteUser(long id) { repo.deleteById(id); }
+```
+
+**❓ Interview Questions:**
+
+**Q: "What is the difference between Proxy and Decorator?"**
+> **A:** Structurally identical (both wrap same interface) but differ in **intent**: Proxy **controls access** — the caller may not even know the proxy exists (transparent). Decorator **adds behaviour** — the client intentionally stacks decorators. In Spring: `@Transactional` = Proxy (transparent); `BufferedReader(new FileReader())` = Decorator (intentional wrapping).
+
+---
+
+### Pattern: Composite
+
+> **Definition:** Compose objects into **tree structures** for part-whole hierarchies. Clients treat individual objects and compositions uniformly.
+
+> **Analogy:** A file system — a Folder can contain Files or other Folders. Both support `getSize()` and `list()`. Calling `getSize()` on a Folder recursively sums all children.
+
+```java
+public interface FileSystemItem { String getName(); long getSize(); void print(String indent); }
+
+public class File implements FileSystemItem {
+    private final String name; private final long size;
+    public long   getSize()             { return size; }
+    public void   print(String indent)  { System.out.println(indent + name + " (" + size + "B)"); }
+    public String getName()             { return name; }
+}
+
+public class Folder implements FileSystemItem {
+    private final String name;
+    private final List<FileSystemItem> children = new ArrayList<>();
+    public void add(FileSystemItem item)   { children.add(item); }
+    public long   getSize()                { return children.stream().mapToLong(FileSystemItem::getSize).sum(); }
+    public void   print(String indent)     {
+        System.out.println(indent + "[" + name + "]");
+        children.forEach(c -> c.print(indent + "  ")); // recursive
+    }
+    public String getName() { return name; }
+}
+
+// Usage — treat file and folder identically
+Folder root = new Folder("root");
+Folder src  = new Folder("src");
+src.add(new File("Main.java", 1024));
+src.add(new File("Config.java", 512));
+root.add(src);
+root.add(new File("README.md", 256));
+root.print("");     // prints entire tree recursively
+root.getSize();     // 1024 + 512 + 256 = 1792
+```
+
+---
+
+## 🎭 BEHAVIORAL PATTERNS — How Objects Communicate
+
+---
+
+### Pattern: Strategy
+
+> **Definition:** Define a **family of algorithms**, encapsulate each one, and make them interchangeable at runtime.
+
+> **Analogy:** GPS navigation — you choose the routing strategy: fastest, shortest, avoid-tolls. The app does not change; only the algorithm changes.
+
+> **Trigger words:** *"Multiple ways to do something", "switch algorithm at runtime", "replace if-else chains"*
+
+```mermaid
+classDiagram
+  class PricingService { +getPrice(base, tier) BigDecimal }
+  class PricingStrategy { <<interface>> +calculate(price, ctx) BigDecimal }
+  class StandardPricing  { +calculate(price, ctx) BigDecimal }
+  class PremiumPricing   { +calculate(price, ctx) BigDecimal }
+  class FlashSalePricing { +calculate(price, ctx) BigDecimal }
+  PricingService --> PricingStrategy
+  PricingStrategy <|.. StandardPricing
+  PricingStrategy <|.. PremiumPricing
+  PricingStrategy <|.. FlashSalePricing
+```
+
+```java
+public interface PricingStrategy {
+    BigDecimal calculate(BigDecimal basePrice, OrderContext ctx);
+}
+
+@Component("STANDARD") public class StandardPricing  implements PricingStrategy {
+    public BigDecimal calculate(BigDecimal p, OrderContext c) { return p; }
+}
+@Component("PREMIUM")  public class PremiumPricing   implements PricingStrategy {
+    public BigDecimal calculate(BigDecimal p, OrderContext c) { return p.multiply(new BigDecimal("0.80")); }
+}
+@Component("FLASH")    public class FlashSalePricing implements PricingStrategy {
+    public BigDecimal calculate(BigDecimal p, OrderContext c) { return p.multiply(new BigDecimal("0.50")); }
+}
+
+@Service
+public class PricingService {
+    private final Map<String, PricingStrategy> strategies; // Spring injects all beans by name
+    public BigDecimal getPrice(BigDecimal base, String tier) {
+        return strategies.getOrDefault(tier, strategies.get("STANDARD"))
+                         .calculate(base, OrderContext.current());
+    }
+}
+// Add new tier = add one @Component. ZERO changes to PricingService.
+```
+
+---
+
+### Pattern: Observer
+
+> **Definition:** When one object (Subject) changes state, all registered dependents (Observers) are notified automatically.
+
+> **Analogy:** YouTube subscriptions — you subscribe to a channel (register). When a new video is published (state change), all subscribers get notified. You can unsubscribe any time.
+
+> **Trigger words:** *"Event-driven", "notify when state changes", "publish-subscribe"*
+
+```java
+public record OrderPlacedEvent(String orderId, String userId, BigDecimal amount) {}
+
+@Service
+public class OrderService {
+    private final ApplicationEventPublisher eventBus;
+
+    @Transactional
+    public Order placeOrder(PlaceOrderRequest req) {
+        Order order = createAndSaveOrder(req);
+        eventBus.publishEvent(new OrderPlacedEvent(order.getId(), req.getUserId(), order.getTotal()));
+        return order; // returns fast; observers run independently
+    }
+}
+
+@Component public class EmailNotifier {
+    @EventListener
+    public void handle(OrderPlacedEvent e) { emailService.sendConfirmation(e.userId(), e.orderId()); }
+}
+
+@Component public class InventoryUpdater {
+    @EventListener @Async
+    public void handle(OrderPlacedEvent e) { inventory.decrement(e.orderId()); }
+}
+
+@Component public class AnalyticsTracker {
+    @EventListener @Async
+    public void handle(OrderPlacedEvent e) { analytics.track("ORDER_PLACED", Map.of("amount", e.amount())); }
+}
+// Adding new action on order = add new @EventListener. Zero changes to OrderService.
+```
+
+**Observer vs Pub/Sub:**
+```
+Observer  → subject holds direct reference to observers — same JVM, synchronous by default
+             Example: Spring ApplicationEventPublisher
+Pub/Sub   → publisher and subscriber do not know each other (broker decouples them)
+             async, cross-service
+             Example: Kafka, RabbitMQ, SNS/SQS
+```
+
+---
+
+### Pattern: Command
+
+> **Definition:** Encapsulate a request as an object, allowing you to queue requests, log them, and support **undo/redo**.
+
+> **Analogy:** A restaurant order slip — the waiter writes your order (command object) and gives it to the kitchen (invoker). The kitchen executes it. The slip can be queued, re-executed, or cancelled.
+
+> **Trigger words:** *"Undo/redo", "queue operations", "transaction log", "delayed execution"*
+
+```java
+public interface Command { void execute(); void undo(); }
+
+public class TransferMoneyCommand implements Command {
+    private final Account from, to;
+    private final BigDecimal amount;
+    public void execute() { from.debit(amount);  to.credit(amount); }
+    public void undo()    { to.debit(amount);  from.credit(amount); }
+}
+
+@Service
+public class BankingCommandExecutor {
+    private final Deque<Command> history = new ArrayDeque<>();
+
+    public void execute(Command cmd) { cmd.execute(); history.push(cmd); }
+    public void undo()               { if (!history.isEmpty()) history.pop().undo(); }
+}
+// Use cases: DB migrations (execute=migrate, undo=rollback)
+//            text editors (apply change / revert), order management (place / cancel)
+```
+
+---
+
+### Pattern: State
+
+> **Definition:** Allow an object to alter its **behaviour when its internal state changes**. The object appears to change its class.
+
+> **Analogy:** Traffic light — same `signal()` method behaves differently in each state: Green=Go, Yellow=Slow, Red=Stop.
+
+> **Trigger words:** *"Behaviour changes based on state", "state machine", "eliminate complex if-else", "order lifecycle"*
+
+```mermaid
+stateDiagram-v2
+  [*] --> PENDING
+  PENDING --> CONFIRMED : confirm()
+  PENDING --> CANCELLED : cancel()
+  CONFIRMED --> SHIPPED : ship()
+  CONFIRMED --> CANCELLED : cancel()
+  SHIPPED --> DELIVERED : deliver()
+  DELIVERED --> [*]
+  CANCELLED --> [*]
+```
+
+```java
+public interface OrderState {
+    void confirm(Order o);
+    void ship(Order o);
+    void deliver(Order o);
+    void cancel(Order o);
+    String getStatus();
+}
+
+public class PendingState implements OrderState {
+    public void confirm(Order o) { o.setState(new ConfirmedState()); o.notifyUser("Confirmed"); }
+    public void ship(Order o)    { throw new IllegalStateException("Cannot ship pending order"); }
+    public void deliver(Order o) { throw new IllegalStateException("Cannot deliver pending order"); }
+    public void cancel(Order o)  { o.setState(new CancelledState()); }
+    public String getStatus()    { return "PENDING"; }
+}
+
+public class ConfirmedState implements OrderState {
+    public void confirm(Order o) { /* already confirmed */ }
+    public void ship(Order o)    { o.setState(new ShippedState()); o.scheduleDelivery(); }
+    public void deliver(Order o) { throw new IllegalStateException("Not shipped yet"); }
+    public void cancel(Order o)  { o.refund(); o.setState(new CancelledState()); }
+    public String getStatus()    { return "CONFIRMED"; }
+}
+
+@Entity
+public class Order {
+    @Transient private OrderState state = new PendingState();
+    public void confirm()  { state.confirm(this); }
+    public void ship()     { state.ship(this); }
+    public void deliver()  { state.deliver(this); }
+    public void cancel()   { state.cancel(this); }
+    void setState(OrderState s) { this.state = s; }
+}
+// No if-else chains. Adding a new state = add new class. Existing states unchanged.
+```
+
+---
+
+### Pattern: Template Method
+
+> **Definition:** Define the **skeleton of an algorithm** in a base class, deferring specific steps to subclasses.
+
+> **Analogy:** A recipe is a template — boil water, add ingredients, cook, serve. The template is fixed; "add ingredients" varies per recipe.
+
+> **Trigger words:** *"Algorithm skeleton with variable steps", "hook methods", "code reuse with customisable parts"*
+
+```java
+public abstract class ReportGenerator {
+
+    // TEMPLATE METHOD — final so subclasses cannot break the sequence
+    public final String generate(ReportRequest req) {
+        String raw       = fetchData(req);        // varies per report type
+        String processed = processData(raw);      // varies per report type
+        String formatted = formatReport(processed);// varies per report type
+        return addHeader(req) + formatted + addFooter();
+    }
+
+    protected abstract String fetchData(ReportRequest req);
+    protected abstract String processData(String raw);
+    protected abstract String formatReport(String data);
+
+    // HOOK — subclasses MAY override (has a sensible default)
+    protected String addHeader(ReportRequest req) { return "=== " + req.getTitle() + " ===\n"; }
+    protected String addFooter()                  { return "\n=== Generated at " + LocalDateTime.now() + " ==="; }
+}
+
+public class SalesReportGenerator extends ReportGenerator {
+    protected String fetchData(ReportRequest r)   { return salesRepo.findByDateRange(r.getFrom(), r.getTo()).toString(); }
+    protected String processData(String raw)       { return calculateTotals(raw); }
+    protected String formatReport(String data)     { return toCSV(data); }
+}
+// Adding a new report type = add a new subclass. The generate() flow never changes.
+```
+
+---
+
+### Pattern: Chain of Responsibility
+
+> **Definition:** Pass a request along a **chain of handlers**. Each handler either handles the request or passes it to the next handler.
+
+> **Analogy:** Customer support escalation — Level 1 handles simple issues, escalates to Level 2 for harder ones, escalates to Level 3 (engineer) for critical ones.
+
+> **Trigger words:** *"Multiple handlers for a request", "middleware pipeline", "filter chain", "escalation"*
+
+```mermaid
+flowchart LR
+  Req["HTTP Request"] --> A["AuthFilter\ncheck token"]
+  A -->|pass| B["RateLimitFilter\ncheck rate"]
+  B -->|pass| C["LoggingFilter\nlog request"]
+  C -->|pass| D["Controller\nhandle"]
+  A -->|reject| R1["401 Unauthorized"]
+  B -->|reject| R2["429 Too Many Requests"]
+```
+
+```java
+public abstract class RequestHandler {
+    private RequestHandler next;
+    public RequestHandler setNext(RequestHandler n) { this.next = n; return n; }
+    protected void passToNext(HttpRequest req, HttpResponse resp) { if (next != null) next.handle(req, resp); }
+    public abstract void handle(HttpRequest req, HttpResponse resp);
+}
+
+public class AuthHandler extends RequestHandler {
+    public void handle(HttpRequest req, HttpResponse resp) {
+        if (!isValidToken(req.getHeader("Authorization"))) { resp.setStatus(401); return; }
+        passToNext(req, resp);
+    }
+}
+
+public class RateLimitHandler extends RequestHandler {
+    public void handle(HttpRequest req, HttpResponse resp) {
+        if (!limiter.tryAcquire(req.getClientIp())) { resp.setStatus(429); return; }
+        passToNext(req, resp);
+    }
+}
+
+public class LoggingHandler extends RequestHandler {
+    public void handle(HttpRequest req, HttpResponse resp) {
+        log.info("Incoming: {} {}", req.getMethod(), req.getPath());
+        passToNext(req, resp);
+        log.info("Response: {}", resp.getStatus());
+    }
+}
+
+// Build and run the chain
+RequestHandler auth = new AuthHandler();
+auth.setNext(new RateLimitHandler()).setNext(new LoggingHandler());
+auth.handle(request, response);
+
+// Spring Security FilterChain, Servlet FilterChain, and MVC HandlerInterceptors are
+// all Chain of Responsibility implementations.
+```
+
+**❓ Interview Questions:**
+
+**Q: "Where is Chain of Responsibility used in Spring Boot?"**
+> **A:** Three places: (1) **Spring Security FilterChain** — each filter (JWT, CORS, CSRF) is a handler. (2) **Servlet Filter chain** — `FilterChain.doFilter()` passes to the next filter. (3) **Spring MVC HandlerInterceptors** — `preHandle`, `postHandle`, `afterCompletion` form a chain around controller execution.
+
+---
+
+## 🎯 LLD Interview Approach — Step by Step
+
+> **"I have 45 minutes to design a Parking Lot. Where do I start?"**
+
+```mermaid
+flowchart TB
+  S1["Step 1 — Clarify requirements 5 min\nAsk functional and non-functional questions"]
+  S2["Step 2 — Identify entities 5 min\nNouns become classes, verbs become methods"]
+  S3["Step 3 — Define relationships 5 min\nIS-A vs HAS-A vs USES-A"]
+  S4["Step 4 — Choose patterns 5 min\nWhich pattern solves which problem"]
+  S5["Step 5 — Draw class diagram 10 min\nInterfaces, classes, relationships"]
+  S6["Step 6 — Write core code 15 min\nCritical classes and methods"]
+  S1 --> S2 --> S3 --> S4 --> S5 --> S6
+```
+
+**Questions to always clarify in every LLD interview:**
+```
+1. What types of objects does the system deal with?  (vehicles, users, products?)
+2. What are the constraints?  (single-floor vs multi-floor, free vs paid?)
+3. Concurrency — can multiple actors operate simultaneously?
+4. Scale — rough number of entities?
+5. What are the edge cases?  (full lot, invalid ticket, insufficient funds?)
+```
+
+---
+
+## 🏢 Common LLD Interview Problems
+
+---
+
+### LLD Problem 1: Design a Parking Lot
+
+```mermaid
+classDiagram
+  class ParkingLot {
+    +park(vehicle) Ticket
+    +unpark(ticketId) Receipt
+    +availableSpots(type) int
+  }
+  class Floor {
+    +findAndOccupy(vehicle) Optional~ParkingSpot~
+  }
+  class ParkingSpot {
+    -type: SpotType
+    -occupied: boolean
+    +occupy(vehicle) boolean
+    +vacate()
+  }
+  class Vehicle {
+    -licensePlate: String
+    -type: VehicleType
+  }
+  class Ticket {
+    -id: String
+    -spot: ParkingSpot
+    -entryTime: Instant
+  }
+  class PricingStrategy {
+    <<interface>>
+    +calculate(ticket) BigDecimal
+  }
+  ParkingLot "1" *-- "many" Floor
+  Floor "1" *-- "many" ParkingSpot
+  Ticket --> ParkingSpot
+  Ticket --> Vehicle
+  ParkingLot --> PricingStrategy
+```
+
+```java
+public enum SpotType    { COMPACT, REGULAR, LARGE }
+public enum VehicleType { BIKE,    CAR,     TRUCK }
+
+@Data public class ParkingSpot {
+    private final String    id;
+    private final SpotType  type;
+    private volatile boolean occupied = false;
+
+    public synchronized boolean occupy()  { if (occupied) return false; occupied = true; return true; }
+    public synchronized void    vacate()  { occupied = false; }
+    public             boolean  isAvailable() { return !occupied; }
+}
+
+@Data public class Ticket {
+    private final String      id;
+    private final ParkingSpot spot;
+    private final Vehicle     vehicle;
+    private final Instant     entryTime = Instant.now();
+}
+
+public class Floor {
+    private final Map<SpotType, List<ParkingSpot>> spots;
+
+    public Optional<ParkingSpot> findAndOccupy(Vehicle v) {
+        SpotType required = switch (v.getType()) {
+            case BIKE  -> SpotType.COMPACT;
+            case CAR   -> SpotType.REGULAR;
+            case TRUCK -> SpotType.LARGE;
+        };
+        return spots.getOrDefault(required, List.of())
+                    .stream()
+                    .filter(ParkingSpot::isAvailable)
+                    .findFirst()
+                    .filter(s -> s.occupy());
+    }
+}
+
+public class ParkingLot {
+    private final List<Floor>        floors;
+    private final PricingStrategy    pricing;
+    private final AtomicLong         seq           = new AtomicLong();
+    private final Map<String,Ticket> activeTickets = new ConcurrentHashMap<>();
+
+    public Ticket park(Vehicle vehicle) {
+        ParkingSpot spot = floors.stream()
+            .map(f -> f.findAndOccupy(vehicle))
+            .filter(Optional::isPresent).findFirst()
+            .flatMap(o -> o)
+            .orElseThrow(() -> new ParkingLotFullException("No spot for " + vehicle.getType()));
+
+        Ticket ticket = new Ticket("T-" + seq.incrementAndGet(), spot, vehicle);
+        activeTickets.put(ticket.getId(), ticket);
+        return ticket;
+    }
+
+    public Receipt unpark(String ticketId) {
+        Ticket t = Optional.ofNullable(activeTickets.remove(ticketId))
+                           .orElseThrow(() -> new InvalidTicketException(ticketId));
+        t.getSpot().vacate();
+        return new Receipt(t, pricing.calculate(t), Instant.now());
+    }
+}
+```
+
+**Patterns applied:**
+```
+Strategy  → PricingStrategy (swap hourly / flat / free at runtime)
+Singleton → ParkingLot instance per physical lot
+Observer  → fire SpotOccupiedEvent for dashboard monitoring
+Factory   → createParkingLot() assembles floors and spots
+```
+
+---
+
+### LLD Problem 2: Design a Vending Machine
+
+```mermaid
+stateDiagram-v2
+  [*] --> IDLE
+  IDLE --> HAS_MONEY : insertCoin()
+  HAS_MONEY --> HAS_MONEY : insertCoin()
+  HAS_MONEY --> IDLE : refund()
+  HAS_MONEY --> DISPENSING : selectItem()
+  DISPENSING --> IDLE : dispense()
+```
+
+```java
+public class VendingMachine {
+    public enum State { IDLE, HAS_MONEY, DISPENSING }
+
+    private State      state          = State.IDLE;
+    private BigDecimal insertedAmount = BigDecimal.ZERO;
+    private final Map<String, Item> inventory = new HashMap<>();
+
+    public void insertCoin(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) throw new IllegalArgumentException("Positive amount required");
+        insertedAmount = insertedAmount.add(amount);
+        state = State.HAS_MONEY;
+    }
+
+    public void selectItem(String code) {
+        if (state != State.HAS_MONEY) throw new IllegalStateException("Insert money first");
+        Item item = Optional.ofNullable(inventory.get(code))
+                            .filter(i -> i.getQuantity() > 0)
+                            .orElseThrow(() -> new ItemUnavailableException(code));
+        if (insertedAmount.compareTo(item.getPrice()) < 0)
+            throw new InsufficientFundsException(item.getPrice(), insertedAmount);
+
+        state = State.DISPENSING;
+        item.decrementQuantity();
+        BigDecimal change = insertedAmount.subtract(item.getPrice());
+        System.out.println("Dispensing: " + item.getName() + "  Change: " + change);
+        insertedAmount = BigDecimal.ZERO;
+        state = State.IDLE;
+    }
+
+    public BigDecimal refund() {
+        if (state == State.IDLE) return BigDecimal.ZERO;
+        BigDecimal refund = insertedAmount;
+        insertedAmount = BigDecimal.ZERO;
+        state = State.IDLE;
+        return refund;
+    }
+}
+```
+
+---
+
+### LLD Problem 3: Design a Notification System
+
+```mermaid
+classDiagram
+  class NotificationService { +send(NotificationRequest) }
+  class NotificationRequest {
+    -channel: String
+    -recipient: String
+    -template: String
+    -variables: Map
+    -priority: Priority
+    +builder() Builder
+  }
+  class NotificationSender { <<interface>> +send(NotificationRequest) }
+  class EmailSender    { +send() }
+  class SmsSender      { +send() }
+  class PushSender     { +send() }
+  class WhatsAppSender { +send() }
+  class SenderFactory  { +create(channel) NotificationSender }
+  class TemplateEngine { +render(template, vars) String }
+  NotificationService --> SenderFactory
+  NotificationService --> TemplateEngine
+  SenderFactory ..> NotificationSender
+  NotificationSender <|.. EmailSender
+  NotificationSender <|.. SmsSender
+  NotificationSender <|.. PushSender
+  NotificationSender <|.. WhatsAppSender
+```
+
+```java
+// Builder for complex request
+NotificationRequest req = NotificationRequest.builder()
+    .channel("EMAIL")
+    .recipient("user@example.com")
+    .template("ORDER_CONFIRMED")
+    .variable("orderId", "ORD-123")
+    .variable("amount", "INR 1,299")
+    .priority(Priority.HIGH)
+    .build();
+
+notificationService.send(req);
+// Internally: SenderFactory.create("EMAIL") → EmailSender.send(req)
+// Patterns used: Factory (SenderFactory), Builder (NotificationRequest),
+//                Strategy (different senders), Observer (@EventListener triggers send)
+```
+
+---
+
+## 💡 LLD Tips & Tricks for Interviews
+
+**Quick pattern selection guide:**
+
+| Situation you hear | Pattern to reach for |
+|---|---|
+| "Only one instance allowed" | Singleton |
+| "Create object without specifying exact class" | Factory Method |
+| "Create families of related objects" | Abstract Factory |
+| "Complex object with many optional fields" | Builder |
+| "Add features at runtime, avoid class explosion" | Decorator |
+| "Simplify complex subsystem into one call" | Facade |
+| "Incompatible interface needs bridging" | Adapter |
+| "Transparent access control / caching / logging" | Proxy |
+| "Tree structure, leaf and composite treated the same" | Composite |
+| "Multiple algorithms, switch at runtime" | Strategy |
+| "Notify many when one thing changes" | Observer |
+| "Encapsulate request, support undo" | Command |
+| "Behaviour changes with internal state" | State |
+| "Algorithm skeleton with variable steps" | Template Method |
+| "Pipeline of handlers, any can stop or pass" | Chain of Responsibility |
+
+**Common interview mistakes to avoid:**
+```
+❌ Using inheritance when composition works better (default to HAS-A, not IS-A)
+❌ Singleton everywhere — Spring beans are already singletons
+❌ Skipping the interface — always define an interface before the class
+❌ Ignoring concurrency — mention volatile, synchronized, AtomicLong, ConcurrentHashMap
+❌ Not asking clarifying questions — always clarify scope before drawing
+❌ Over-engineering — a simple class beats a complex pattern when no extension is needed
+```
+
+**The sentence that impresses interviewers:**
+> *"I will define an interface first so the implementation is swappable, then apply [Pattern Name] to solve [specific problem] — this keeps [component] open for extension without modifying existing code."*
 
 ---
 
@@ -3820,6 +6158,2387 @@ public class FeatureFlagController {
 ```
 
 ---
+---
+
+# 🧩 DSA & Problem Solving — Complete Interview Guide
+
+> **What is DSA?** Data Structures and Algorithms — the foundation of every coding interview. A data structure organises data; an algorithm is a step-by-step process to solve a problem efficiently. Think of a library: the **bookshelves = data structure**, and **how the librarian finds a book = algorithm**.
+
+> **Reading tip:** Read LEVEL 1 top to bottom before moving to LEVEL 2. Every pattern builds on the previous. After each pattern, you should be able to: (1) recognise the trigger in an interview problem, (2) write the template from memory, (3) state the time/space complexity.
+
+---
+
+## 📏 Big-O Notation — The Foundation of Everything
+
+> **Why it matters:** Every interview problem requires you to state time and space complexity. Big-O is the language interviewers use. If you can't analyse complexity, no answer is complete.
+
+### What is Big-O?
+
+Big-O describes how runtime (or memory) grows as input size `n` grows. It measures the **worst case** and **ignores constants**.
+
+```
+f(n) = 3n² + 5n + 100
+Big-O = O(n²)   ← only the fastest-growing term matters
+         ↑ constant 3 is ignored
+```
+
+### Complexity Chart — From Best to Worst
+
+```
+O(1)        Constant    — does NOT grow with n
+O(log n)    Logarithmic — halves the problem each step (binary search)
+O(n)        Linear      — one pass through the input
+O(n log n)  Linearithmic— sort algorithms (merge sort, heap sort)
+O(n²)       Quadratic   — nested loops
+O(2^n)      Exponential — generate all subsets
+O(n!)       Factorial   — generate all permutations
+```
+
+```mermaid
+graph LR
+  O1["O(1)\nArray index access\nHash map get/put"] --> OlogN["O(log n)\nBinary search\nBalanced BST lookup"]
+  OlogN --> ON["O(n)\nLinear scan\nArray traversal"]
+  ON --> ONlogN["O(n log n)\nMerge sort\nHeap sort"]
+  ONlogN --> ON2["O(n²)\nBubble sort\nNested loops"]
+  ON2 --> O2N["O(2^n)\nAll subsets\nRecursion trees"]
+  O2N --> ONfact["O(n!)\nAll permutations\nTravelling salesman"]
+```
+
+### How to Analyse Complexity
+
+```java
+// O(1) — constant time regardless of n
+int first = arr[0];
+map.put("key", "value");
+
+// O(n) — one loop over n elements
+for (int i = 0; i < n; i++) { ... }
+
+// O(n²) — nested loops
+for (int i = 0; i < n; i++)
+    for (int j = 0; j < n; j++) { ... }
+
+// O(log n) — problem halves each iteration
+int lo = 0, hi = n - 1;
+while (lo <= hi) {
+    int mid = lo + (hi - lo) / 2;
+    if (arr[mid] == target) return mid;
+    else if (arr[mid] < target) lo = mid + 1;
+    else hi = mid - 1;
+}
+
+// O(n log n) — sort then O(n) work
+Arrays.sort(arr);            // O(n log n)
+for (int x : arr) { ... }   // O(n)
+// Total: O(n log n) — larger term dominates
+```
+
+### Space Complexity — Common Cases
+
+| Space | When | Example |
+|-------|------|---------|
+| **O(1)** | Fixed extra variables | Two pointers, counters |
+| **O(n)** | Copy of input, hash map | Storing all elements |
+| **O(n²)** | 2D matrix, DP table | Grid DP, adjacency matrix |
+| **O(log n)** | Recursion stack depth (balanced tree) | Binary search recursive |
+| **O(n)** | Recursion stack depth (linear) | DFS on a line |
+
+> 💡 **Interview Tip:** Always state time AND space complexity unprompted. Say: *"This solution is O(n) time and O(n) space because I use a hash map that can store up to n elements."*
+
+**❓ Interview Questions:**
+
+**Q: "What is the time complexity of looking up an element in a HashMap?"**
+> A: O(1) average case — Java's HashMap uses hashing to compute the bucket index directly. Worst case is O(n) if all keys hash to the same bucket (hash collision, degenerate chain), but with a good hash function this is extremely rare. Java 8+ converts long chains to Red-Black Trees, making worst case O(log n).
+
+---
+
+## 🟢 LEVEL 1 — Core Patterns (Start Here)
+
+---
+
+### Pattern 1 — Two Pointers
+
+```mermaid
+flowchart TB
+  subgraph OppEnds["Opposite-End (sorted array, find pair sum)"]
+    A1["Array: 1  3  5  8  14  15   target = 17"]
+    A2["L=0 val=1   R=5 val=15   sum=16 too small → L++"]
+    A3["L=1 val=3   R=5 val=15   sum=18 too big  → R--"]
+    A4["L=1 val=3   R=4 val=14   sum=17 FOUND!"]
+    A1 --> A2 --> A3 --> A4
+  end
+  subgraph SameDir["Same-Direction (fast+slow, remove duplicates)"]
+    S1["slow = write position for unique values"]
+    S2["fast = read scanner moving through all elements"]
+    S3["When fast finds a new value → slow++ then copy it"]
+    S1 --> S2 --> S3
+  end
+```
+
+**Step-by-step logic:**
+1. Sort the array (if not already sorted)
+2. Place `L=0` and `R=last` pointers
+3. Compute `sum = arr[L] + arr[R]`
+4. If `sum < target` → increment `L` (need a larger left value)
+5. If `sum > target` → decrement `R` (need a smaller right value)
+6. If `sum == target` → answer found
+7. Loop ends when `L >= R` (no pair found)
+
+> **What is it?** Use two index variables that move through the array, usually from opposite ends (left pointer and right pointer) or both from the same side at different speeds.
+
+> **Real-world analogy:** Two people searching a sorted bookshelf from both ends. If the combined price of books at both ends is too high, move the right pointer left (cheaper book). Too low — move left pointer right (more expensive book).
+
+**When to use Two Pointers — TRIGGER WORDS:**
+```
+✅ Sorted array + find pair with target sum
+✅ "Is it a palindrome?"
+✅ "Container / trap water between elements"
+✅ Remove duplicates in-place
+✅ Merge two sorted arrays
+✅ Partitioning (like quicksort pivot)
+✅ String matching problems (with two strings)
+```
+
+**Template:**
+```java
+// Opposite-end two pointers (sorted array)
+public int[] twoSum(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    while (left < right) {
+        int sum = nums[left] + nums[right];
+        if (sum == target)      return new int[]{left, right};
+        else if (sum < target)  left++;   // need bigger sum
+        else                    right--;  // need smaller sum
+    }
+    return new int[]{};
+}
+
+// Same-direction two pointers (remove duplicates)
+public int removeDuplicates(int[] nums) {
+    int slow = 0;  // slow = position to write next unique element
+    for (int fast = 1; fast < nums.length; fast++) {
+        if (nums[fast] != nums[slow]) {
+            slow++;
+            nums[slow] = nums[fast];
+        }
+    }
+    return slow + 1;
+}
+```
+
+**Classic Problems:**
+
+| Problem | Two-pointer approach | Complexity |
+|---------|---------------------|-----------|
+| Two Sum II (sorted) | Left + right, move based on sum | O(n) time, O(1) space |
+| Valid Palindrome | Left + right, compare chars | O(n) time, O(1) space |
+| Container With Most Water | Left + right, move shorter line | O(n) time, O(1) space |
+| 3Sum | Fix one, two-pointer on rest | O(n²) time, O(1) space |
+| Trapping Rain Water | Track left_max and right_max | O(n) time, O(1) space |
+| Remove Duplicates from Sorted Array | Slow + fast pointer | O(n) time, O(1) space |
+
+**Trapping Rain Water — Intuition Build:**
+```
+Array: [0,1,0,2,1,0,1,3,2,1,2,1]
+Water trapped: 6
+
+Key insight: water at position i = min(max_left, max_right) - height[i]
+Two-pointer: maintain left_max and right_max as you converge
+
+left=0, right=11
+If height[left] < height[right]: process left side
+  water += left_max - height[left] (if left_max > height[left])
+  left++
+Else: process right side
+  water += right_max - height[right]
+  right--
+```
+
+```java
+public int trap(int[] height) {
+    int left = 0, right = height.length - 1;
+    int leftMax = 0, rightMax = 0, water = 0;
+    while (left < right) {
+        if (height[left] < height[right]) {
+            if (height[left] >= leftMax) leftMax = height[left];
+            else water += leftMax - height[left];
+            left++;
+        } else {
+            if (height[right] >= rightMax) rightMax = height[right];
+            else water += rightMax - height[right];
+            right--;
+        }
+    }
+    return water;
+}
+// Time: O(n)  Space: O(1)
+```
+
+> 💡 **Tip:** If the array is NOT sorted and you need pairs, use a **hash map** instead (O(n) with O(n) space). Two pointers require sorted input for opposite-end approach.
+
+**❓ Interview Q: "Can you solve 3Sum without a hash map in O(n²)?"**
+> A: Yes — sort the array O(n log n), then for each element `nums[i]`, use two pointers on the remaining right portion `[i+1, n-1]` to find pairs summing to `-nums[i]`. Skip duplicates by advancing pointers when `nums[i] == nums[i-1]`. Total: O(n²) time, O(1) extra space.
+
+---
+
+### Pattern 2 — Sliding Window
+
+```mermaid
+flowchart TB
+  subgraph Fixed["Fixed Window Size k=3"]
+    F1["Pass 1: window covers index 0-1-2  sum=6"]
+    F2["Pass 2: remove index 0 add index 3  sum=9"]
+    F3["Pass 3: remove index 1 add index 4  sum=12"]
+    F1 --> F2 --> F3
+  end
+  subgraph Variable["Variable Window (expand then shrink)"]
+    V1["Expand: right++ adds new element to window"]
+    V2["Check: does window satisfy the condition?"]
+    V3["Record: if yes, save current answer"]
+    V4["Shrink: if no, left++ removes left element"]
+    V1 --> V2 --> V3 --> V1
+    V2 --> V4 --> V2
+  end
+```
+
+**Step-by-step logic:**
+1. For **fixed window**: init first window sum, then slide by adding `arr[right]` and subtracting `arr[right - k]`
+2. For **variable window**: expand `right` unconditionally; shrink `left` when window violates constraint
+3. Update the answer inside the valid-window check (max length, min length, etc.)
+4. Window size at any time = `right - left + 1`
+5. **Ask yourself**: "When is the window invalid?" → that condition drives `left++`
+
+> **What is it?** Maintain a "window" (contiguous subarray or substring) that slides through the data. Instead of recalculating from scratch, add the new element entering the window and remove the element leaving it.
+
+> **Real-world analogy:** Watching a movie through a small frame (window) that slides right. You see new scenes entering from the right and old scenes leaving from the left — you don't rewatch everything from the start each time.
+
+**When to use — TRIGGER WORDS:**
+```
+✅ "Contiguous subarray/substring with condition..."
+✅ "Longest/shortest subarray where..."
+✅ "Maximum sum of exactly k elements"
+✅ "All anagrams in a string"
+✅ "Minimum window containing all characters"
+✅ "Subarray with given sum" (positive numbers)
+```
+
+**Two types:**
+
+| Type | When | What changes |
+|------|------|-------------|
+| **Fixed-size window** | "Window of exactly k elements" | Window moves rigidly, size constant |
+| **Variable-size window** | "Longest/shortest window satisfying condition" | Window expands on right, shrinks on left |
+
+**Templates:**
+```java
+// FIXED window — Maximum sum of k consecutive elements
+public int maxSumFixed(int[] nums, int k) {
+    int windowSum = 0;
+    // Build first window
+    for (int i = 0; i < k; i++) windowSum += nums[i];
+    int maxSum = windowSum;
+    // Slide: add right element, remove left element
+    for (int i = k; i < nums.length; i++) {
+        windowSum += nums[i] - nums[i - k];  // slide right
+        maxSum = Math.max(maxSum, windowSum);
+    }
+    return maxSum;
+}
+
+// VARIABLE window — Longest substring without repeating characters
+public int lengthOfLongestSubstring(String s) {
+    Map<Character, Integer> lastSeen = new HashMap<>();
+    int maxLen = 0;
+    int left = 0;
+    for (int right = 0; right < s.length(); right++) {
+        char c = s.charAt(right);
+        // Shrink window if duplicate found — move left past the last occurrence
+        if (lastSeen.containsKey(c) && lastSeen.get(c) >= left) {
+            left = lastSeen.get(c) + 1;
+        }
+        lastSeen.put(c, right);
+        maxLen = Math.max(maxLen, right - left + 1);
+    }
+    return maxLen;
+}
+// Time: O(n)  Space: O(min(n, alphabet_size))
+```
+
+**Minimum Window Substring — The King of Sliding Window:**
+```
+Problem: Given s="ADOBECODEBANC", t="ABC"
+         Find minimum window in s containing all chars of t.
+Answer: "BANC"
+
+Intuition:
+  1. Count chars needed from t → need = {A:1, B:1, C:1}
+  2. Expand right until window contains all needed chars (formed == required)
+  3. Record window size, then shrink from left to find minimum
+  4. If shrinking breaks a needed char, expand right again
+```
+
+```java
+public String minWindow(String s, String t) {
+    if (s.isEmpty() || t.isEmpty()) return "";
+    Map<Character, Integer> need = new HashMap<>();
+    for (char c : t.toCharArray()) need.merge(c, 1, Integer::sum);
+    int required = need.size();  // distinct chars needed
+    int formed = 0;              // distinct chars currently satisfied
+    Map<Character, Integer> window = new HashMap<>();
+    int left = 0, minLen = Integer.MAX_VALUE, minLeft = 0;
+    for (int right = 0; right < s.length(); right++) {
+        char c = s.charAt(right);
+        window.merge(c, 1, Integer::sum);
+        if (need.containsKey(c) && window.get(c).equals(need.get(c))) formed++;
+        // Shrink window while all chars satisfied
+        while (formed == required) {
+            if (right - left + 1 < minLen) {
+                minLen = right - left + 1;
+                minLeft = left;
+            }
+            char lc = s.charAt(left++);
+            window.merge(lc, -1, Integer::sum);
+            if (need.containsKey(lc) && window.get(lc) < need.get(lc)) formed--;
+        }
+    }
+    return minLen == Integer.MAX_VALUE ? "" : s.substring(minLeft, minLeft + minLen);
+}
+// Time: O(|s| + |t|)  Space: O(|s| + |t|)
+```
+
+> 💡 **Tip:** For variable window, the pattern is always: `right` pointer expands the window, `left` pointer shrinks it. Ask: "When should I shrink?" — shrink when the window violates the condition.
+
+**❓ Interview Q: "How is sliding window different from two pointers?"**
+> A: Sliding window is a special case of two pointers where both pointers move in the **same direction** (left and right both go right). The "window" between them is what we care about. Two pointers (opposite ends) work on sorted arrays for pair problems. Sliding window works on contiguous subarray/substring problems regardless of sorting.
+
+---
+
+### Pattern 3 — Prefix Sum
+
+```mermaid
+flowchart LR
+  subgraph BuildPhase["Build Phase O(n)"]
+    B1["arr     =  3   1   4   1   5"]
+    B2["prefix  =  0   3   4   8   9  14"]
+    B1 -->|cumulative sum| B2
+  end
+  subgraph QueryPhase["Query Phase O(1)"]
+    Q1["Want sum of arr index 1 to 3"]
+    Q2["prefix[4] - prefix[1]  =  9 - 3  =  6"]
+    Q1 --> Q2
+  end
+  subgraph SubarrayK["Subarray Sum = k trick"]
+    K1["As we scan, maintain running sum"]
+    K2["For each position: look up sum-k in map"]
+    K3["If found: those many subarrays end here with sum k"]
+    K1 --> K2 --> K3
+  end
+```
+
+**Step-by-step logic:**
+1. Build `prefix[0] = 0`, `prefix[i+1] = prefix[i] + arr[i]`
+2. Range sum `[l, r]` = `prefix[r+1] - prefix[l]` — O(1) per query
+3. For "subarrays summing to k": as you walk the array, for each `sum` check if `sum - k` is in the map
+4. Initialise map with `{0: 1}` to handle subarrays starting at index 0
+5. After checking, store `sum → count` in the map
+
+> **What is it?** Precompute a `prefix[i]` array where `prefix[i]` = sum of all elements from index 0 to i-1. Any range sum `[l, r]` is then answered in **O(1)** using `prefix[r+1] - prefix[l]`.
+
+> **Real-world analogy:** A running odometer in a car. To find how far you drove between mile marker 30 and mile marker 80, you just compute 80 - 30 = 50 miles. You don't re-drive the whole route.
+
+**When to use — TRIGGER WORDS:**
+```
+✅ "Sum of subarray from index l to r" (multiple queries)
+✅ "Number of subarrays with sum equal to k"
+✅ "Count subarrays with sum divisible by k"
+✅ "Find pivot index where left sum = right sum"
+✅ "2D grid — sum of rectangle"
+```
+
+**Template:**
+```java
+// Build prefix sum
+int[] prefix = new int[nums.length + 1];
+prefix[0] = 0;
+for (int i = 0; i < nums.length; i++) {
+    prefix[i + 1] = prefix[i] + nums[i];
+}
+// Range sum query [l, r] in O(1)
+int rangeSum = prefix[r + 1] - prefix[l];
+```
+
+**Subarray Sum Equals K — The Classic:**
+```
+Problem: Count subarrays with sum = k
+Brute force: O(n²) — try all pairs
+Optimal: O(n) using prefix sum + hash map
+
+Key insight: If prefix[j] - prefix[i] = k,
+            then subarray [i..j-1] sums to k.
+            Rearrange: prefix[i] = prefix[j] - k
+            So: for each j, count how many previous i's have prefix[i] = prefix[j] - k
+```
+
+```java
+public int subarraySum(int[] nums, int k) {
+    Map<Integer, Integer> prefixCount = new HashMap<>();
+    prefixCount.put(0, 1);  // empty prefix has sum 0 — crucial!
+    int count = 0, sum = 0;
+    for (int num : nums) {
+        sum += num;
+        // How many previous prefixes have value (sum - k)?
+        count += prefixCount.getOrDefault(sum - k, 0);
+        prefixCount.merge(sum, 1, Integer::sum);
+    }
+    return count;
+}
+// Time: O(n)  Space: O(n)
+```
+
+```
+Trace with nums=[1,2,3], k=3:
+
+Step | num | sum | sum-k | prefixCount before add | count
+  0  |     |  0  |       | {0:1}                   |  0
+  1  |  1  |  1  |  -2   | {0:1}                   |  0  → {0:1, 1:1}
+  2  |  2  |  3  |   0   | {0:1, 1:1}       → +1   |  1  → {0:1,1:1,3:1}
+  3  |  3  |  6  |   3   | {0:1,1:1,3:1}    → +1   |  2  → {0:1,1:1,3:1,6:1}
+Answer: 2 (subarrays [1,2] and [3])
+```
+
+> 💡 **Critical trick:** Always initialise `prefixCount.put(0, 1)`. This handles the case where the entire prefix from index 0 sums to k.
+
+**❓ Interview Q: "Why do we store prefix sums in a map instead of an array?"**
+> A: Because prefix sums can be negative (if the array has negative numbers) or very large, making an array index infeasible. A hash map stores only the prefix sums that actually appear, giving O(1) lookup. The key is the prefix sum value; the value is how many times that prefix sum was seen.
+
+---
+
+### Pattern 4 — Binary Search
+
+```mermaid
+flowchart TB
+  BS1["lo=0   hi=n-1"]
+  BS2["mid = lo + hi-lo divided by 2"]
+  BS3{"compare arr-mid with target"}
+  BS4["arr-mid < target: lo = mid+1  (discard left half)"]
+  BS5["arr-mid > target: hi = mid-1  (discard right half)"]
+  BS6["arr-mid == target: return mid"]
+  BS7["lo > hi: return -1 not found"]
+  BS1 --> BS2 --> BS3
+  BS3 -->|smaller| BS4 --> BS2
+  BS3 -->|larger| BS5 --> BS2
+  BS3 -->|equal| BS6
+  BS2 -->|lo greater than hi| BS7
+```
+
+**Step-by-step logic:**
+1. Define search space with `lo` and `hi`
+2. Compute `mid` without overflow: `lo + (hi - lo) / 2`
+3. Compare `arr[mid]` with target — eliminate the half that cannot contain the answer
+4. Repeat until `lo > hi` (not found) or `arr[mid] == target`
+5. **For answer-space binary search**: define a `predicate(mid)` function; binary search the boundary where predicate changes from false to true
+
+> **What is it?** On a sorted (or monotonic) search space, eliminate half the possibilities each step by comparing the middle element with the target.
+
+> **Real-world analogy:** Guessing a number 1-100. Instead of guessing 1, 2, 3... you guess 50. Too high → guess 25. Too low → guess 37. You find the answer in at most 7 guesses (log₂ 100 ≈ 7).
+
+**When to use — TRIGGER WORDS:**
+```
+✅ "Sorted array — find target / leftmost / rightmost"
+✅ "Find minimum value satisfying a condition" (binary search on answer)
+✅ "Rotated sorted array"
+✅ "Mountain array / peak element"
+✅ "Koko eating bananas / capacity ship" — monotonic condition
+✅ "Minimum maximum / Maximum minimum" — binary search on answer
+```
+
+**Three Templates:**
+```java
+// Template 1: Classic — find exact target
+public int binarySearch(int[] nums, int target) {
+    int lo = 0, hi = nums.length - 1;
+    while (lo <= hi) {
+        int mid = lo + (hi - lo) / 2;  // avoid integer overflow
+        if (nums[mid] == target) return mid;
+        if (nums[mid] < target)  lo = mid + 1;
+        else                     hi = mid - 1;
+    }
+    return -1;  // not found
+}
+
+// Template 2: Find leftmost position (lower bound)
+public int lowerBound(int[] nums, int target) {
+    int lo = 0, hi = nums.length;
+    while (lo < hi) {          // Note: hi = nums.length (exclusive)
+        int mid = lo + (hi - lo) / 2;
+        if (nums[mid] < target) lo = mid + 1;
+        else                    hi = mid;     // could be the answer, don't exclude
+    }
+    return lo;  // first index >= target
+}
+
+// Template 3: Binary search on ANSWER (monotonic predicate)
+// "Minimum days to make m bouquets"
+public int minDays(int[] bloomDay, int m, int k) {
+    int lo = 1, hi = 1_000_000_000;
+    while (lo < hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (canMake(bloomDay, mid, m, k)) hi = mid;
+        else                              lo = mid + 1;
+    }
+    return canMake(bloomDay, lo, m, k) ? lo : -1;
+}
+private boolean canMake(int[] days, int day, int m, int k) {
+    int bouquets = 0, flowers = 0;
+    for (int d : days) {
+        if (d <= day) { flowers++; if (flowers == k) { bouquets++; flowers = 0; } }
+        else          flowers = 0;
+    }
+    return bouquets >= m;
+}
+```
+
+**Binary Search on Answer — The Advanced Trick:**
+```
+Pattern: "Find MINIMUM X such that condition(X) is TRUE"
+         "Find MAXIMUM X such that condition(X) is FALSE"
+
+Key insight: if condition(X) is true for all X >= answer,
+             the valid/invalid values form two contiguous blocks:
+             [invalid, invalid, ..., ANSWER, valid, valid, ...]
+             Binary search on this range!
+
+Examples:
+  "Minimum speed to arrive on time"   → binary search on speed
+  "Minimum capacity to ship packages" → binary search on capacity
+  "Koko eating bananas in h hours"    → binary search on eating speed
+  "Split array largest sum"           → binary search on max subarray sum
+```
+
+> 💡 **Common bug:** Use `mid = lo + (hi - lo) / 2` NOT `mid = (lo + hi) / 2`. The second form overflows for large lo and hi values (e.g. when lo=hi=1_500_000_000, `lo+hi` overflows int).
+
+**❓ Interview Q: "How do you binary search on a rotated sorted array?"**
+> A: A rotated sorted array like `[4,5,6,7,0,1,2]` has a pivot. At any mid, one half is always sorted. Check which half is sorted: if `nums[lo] <= nums[mid]`, the left half is sorted — check if target is in `[nums[lo], nums[mid]]`, otherwise search right. Else the right half is sorted — check if target is in `[nums[mid], nums[hi]]`, otherwise search left. Time O(log n).
+
+---
+
+### Pattern 5 — Hash Map & Hash Set
+
+```mermaid
+flowchart LR
+  subgraph TwoSum["Two Sum O(n) with Map"]
+    T1["Scan array left to right"]
+    T2["At each element x: check if target-x is in map"]
+    T3["Found in map → return both indices"]
+    T4["Not found → store x with its index in map"]
+    T1 --> T2 --> T3
+    T2 --> T4 --> T1
+  end
+  subgraph GroupAnagram["Group Anagrams with Sorted Key"]
+    G1["For each word: sort its characters"]
+    G2["Sorted string becomes the map key"]
+    G3["All anagrams share the same sorted key"]
+    G1 --> G2 --> G3
+  end
+```
+
+**Step-by-step logic:**
+1. HashMap converts O(n) search to O(1) lookup — eliminates inner loops
+2. For pair problems: store `what you have seen`, look up `what you need`
+3. For grouping: derive a canonical key (sorted string, frequency array) that all group members share
+4. For frequency counting: use `map.merge(key, 1, Integer::sum)`
+5. **Trade-off**: O(n) extra space for O(1) lookup time
+
+> **What is it?** Use a hash map (key → value) or hash set (unique values) to achieve O(1) average lookup, insertion, and deletion — eliminating the need for nested loops.
+
+> **Real-world analogy:** A phone book. To find Alice's number with a phone book, you don't scan every name — you look up 'A' and go straight to Alice. Hash map = the phone book index.
+
+**When to use — TRIGGER WORDS:**
+```
+✅ "Check if element exists" — use HashSet O(1) vs contains in list O(n)
+✅ "Count frequency of elements" — Map<T, Integer>
+✅ "Find pair/group with property" — store seen elements
+✅ "Two Sum (unsorted)" — store complement
+✅ "Group anagrams" — sorted string as key
+✅ "Longest consecutive sequence" — HashSet for O(1) lookup
+✅ "First non-repeating character" — LinkedHashMap preserves insertion order
+```
+
+**Templates:**
+```java
+// Two Sum — O(n) using hash map
+public int[] twoSum(int[] nums, int target) {
+    Map<Integer, Integer> seen = new HashMap<>(); // value → index
+    for (int i = 0; i < nums.length; i++) {
+        int complement = target - nums[i];
+        if (seen.containsKey(complement))
+            return new int[]{seen.get(complement), i};
+        seen.put(nums[i], i);
+    }
+    return new int[]{};
+}
+
+// Group Anagrams — sort word as key
+public List<List<String>> groupAnagrams(String[] strs) {
+    Map<String, List<String>> map = new HashMap<>();
+    for (String s : strs) {
+        char[] chars = s.toCharArray();
+        Arrays.sort(chars);
+        String key = new String(chars);  // sorted string = canonical form
+        map.computeIfAbsent(key, k -> new ArrayList<>()).add(s);
+    }
+    return new ArrayList<>(map.values());
+}
+
+// Longest Consecutive Sequence — O(n) with HashSet
+public int longestConsecutive(int[] nums) {
+    Set<Integer> set = new HashSet<>();
+    for (int n : nums) set.add(n);
+    int best = 0;
+    for (int n : set) {
+        if (!set.contains(n - 1)) {  // only start from sequence beginning
+            int cur = n, streak = 1;
+            while (set.contains(++cur)) streak++;
+            best = Math.max(best, streak);
+        }
+    }
+    return best;
+}
+// Time: O(n)  Space: O(n)
+```
+
+> 💡 **Tip:** When the problem asks for a pair/triplet satisfying a condition, your first thought should be: "Can I use a hash map to reduce from O(n²) to O(n)?" Almost always yes — store what you've seen, look up what you need.
+
+---
+
+## 🟡 LEVEL 2 — Intermediate Patterns
+
+---
+
+### Pattern 6 — Fast & Slow Pointers (Floyd's Cycle Detection)
+
+```mermaid
+flowchart LR
+  subgraph NoCycle["No Cycle — fast reaches null"]
+    N1["1"] --> N2["2"] --> N3["3"] --> N4["4"] --> N5["null"]
+    N1 -.slow.-> N2
+    N1 -.fast.-> N3
+  end
+  subgraph CycleDetect["Cycle — fast catches slow"]
+    C1["1"] --> C2["2"] --> C3["3"] --> C4["4"] --> C5["5"]
+    C5 --> C3
+    C1 -.slow 1 step.-> C2
+    C1 -.fast 2 steps.-> C3
+  end
+```
+
+**Step-by-step logic:**
+1. Both start at `head`
+2. Each iteration: `slow = slow.next`, `fast = fast.next.next`
+3. If `fast == null` or `fast.next == null` → no cycle (reached end)
+4. If `slow == fast` → cycle detected
+5. **Find middle**: when fast reaches null, slow is at the middle
+6. **Find cycle start**: after meeting point, reset slow to head, move both 1 step — they meet at cycle start
+
+> **What is it?** Two pointers that move at different speeds through a linked list or sequence — slow moves 1 step, fast moves 2 steps. If there's a cycle, fast catches slow. If no cycle, fast reaches the end.
+
+> **Real-world analogy:** Two runners on a circular track. If the track loops, the faster runner will eventually lap and meet the slower one. If the track is straight, the faster runner finishes first without meeting.
+
+**When to use — TRIGGER WORDS:**
+```
+✅ "Detect cycle in linked list"
+✅ "Find middle of linked list"
+✅ "Find start of cycle in linked list"
+✅ "Happy number" (number theory cycle detection)
+✅ "Palindrome linked list" (find middle, reverse second half)
+```
+
+```java
+// Detect cycle
+public boolean hasCycle(ListNode head) {
+    ListNode slow = head, fast = head;
+    while (fast != null && fast.next != null) {
+        slow = slow.next;        // 1 step
+        fast = fast.next.next;   // 2 steps
+        if (slow == fast) return true;   // cycle detected!
+    }
+    return false;  // fast reached end — no cycle
+}
+
+// Find middle of linked list
+public ListNode findMiddle(ListNode head) {
+    ListNode slow = head, fast = head;
+    while (fast != null && fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    return slow;  // slow is at middle when fast reaches end
+}
+// For even-length list [1,2,3,4]: slow stops at 3 (second middle)
+// For odd-length  list [1,2,3]:   slow stops at 2 (exact middle)
+
+// Find start of cycle (Floyd's algorithm phase 2)
+public ListNode detectCycleStart(ListNode head) {
+    ListNode slow = head, fast = head;
+    // Phase 1: find meeting point
+    while (fast != null && fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+        if (slow == fast) break;
+    }
+    if (fast == null || fast.next == null) return null;
+    // Phase 2: move one pointer to head; both at 1 step — they meet at cycle start
+    slow = head;
+    while (slow != fast) {
+        slow = slow.next;
+        fast = fast.next;
+    }
+    return slow;  // start of cycle
+}
+```
+
+```
+Why Floyd's phase 2 works:
+  Let: F = distance head → cycle start
+       C = cycle length
+       h = distance meeting point → cycle start
+
+  At meeting point:
+    slow traveled: F + h
+    fast traveled: F + h + C  (fast did one full extra loop)
+    fast = 2 × slow:  F + h + C = 2(F + h)  → C = F + h  → F = C - h
+
+  So: reset slow to head. Move both 1 step.
+  slow needs F steps to reach cycle start.
+  fast needs (C - h) = F steps to reach cycle start (from meeting point).
+  They meet exactly at the cycle start!
+```
+
+---
+
+### Pattern 7 — Stack & Monotonic Stack
+
+```mermaid
+flowchart TB
+  subgraph MonoStack["Next Greater Element for array 2 1 5 6 2 3"]
+    MS1["i=0 val=2: stack empty → push index 0. Stack=[0]"]
+    MS2["i=1 val=1: 1 less than 2 → push index 1. Stack=[0,1]"]
+    MS3["i=2 val=5: 5 greater than 1 → pop 1, result-1=5. 5 greater than 2 → pop 0, result-0=5. push 2."]
+    MS4["i=3 val=6: 6 greater than 5 → pop 2, result-2=6. push 3. Stack: [3]"]
+    MS5["i=4 val=2: 2 less than 6 → push 4. Stack: [3,4]"]
+    MS6["i=5 val=3: 3 greater than 2 → pop 4, result-4=3. 3 less than 6 → push 5. Stack: [3,5]"]
+    MS7["End: indices 3 and 5 still in stack → result=-1"]
+    MS8["Final result: 5 5 6 -1 3 -1"]
+    MS1 --> MS2 --> MS3 --> MS4 --> MS5 --> MS6 --> MS7 --> MS8
+  end
+```
+
+**Step-by-step logic:**
+1. Use a stack that stores **indices** (not values)
+2. For each element at `i`: while stack top's value < current value → pop and record `result[popped] = nums[i]`
+3. Push current index
+4. After the loop, remaining indices in stack have no next greater element → `-1`
+5. Each element is pushed and popped **at most once** → O(n) total
+
+> **What is it?** A stack follows LIFO (Last-In, First-Out). A monotonic stack maintains elements in increasing or decreasing order — elements are popped when a "greater" or "smaller" element is found.
+
+**When to use stack — TRIGGER WORDS:**
+```
+✅ "Valid parentheses / balanced brackets"
+✅ "Next greater element / next smaller element"
+✅ "Daily temperatures" (days until warmer)
+✅ "Largest rectangle in histogram"
+✅ "Evaluate expression"
+✅ "Decode string" (nested brackets)
+✅ Any problem with "previous/next larger/smaller element"
+```
+
+```java
+// Valid Parentheses
+public boolean isValid(String s) {
+    Deque<Character> stack = new ArrayDeque<>();
+    for (char c : s.toCharArray()) {
+        if (c == '(' || c == '[' || c == '{') {
+            stack.push(c);
+        } else {
+            if (stack.isEmpty()) return false;
+            char top = stack.pop();
+            if (c == ')' && top != '(') return false;
+            if (c == ']' && top != '[') return false;
+            if (c == '}' && top != '{') return false;
+        }
+    }
+    return stack.isEmpty();
+}
+
+// Next Greater Element — Monotonic Stack O(n)
+public int[] nextGreaterElement(int[] nums) {
+    int n = nums.length;
+    int[] result = new int[n];
+    Arrays.fill(result, -1);
+    Deque<Integer> stack = new ArrayDeque<>(); // stores INDICES of elements
+    for (int i = 0; i < n; i++) {
+        // Pop all elements SMALLER than current — current is their "next greater"
+        while (!stack.isEmpty() && nums[stack.peek()] < nums[i]) {
+            result[stack.pop()] = nums[i];
+        }
+        stack.push(i);  // push current index (no greater element found yet)
+    }
+    return result;
+}
+// Time: O(n) — each element pushed and popped at most once
+```
+
+```
+Monotonic stack intuition for [2, 1, 5, 6, 2, 3]:
+
+i=0: push 0 (val 2).  Stack: [0]
+i=1: push 1 (val 1).  Stack: [0,1]  (1 < 2, keep both)
+i=2: val=5 > 1 → pop 1, result[1]=5. val=5 > 2 → pop 0, result[0]=5. push 2.
+     Stack: [2]
+i=3: val=6 > 5 → pop 2, result[2]=6. push 3. Stack: [3]
+i=4: val=2 < 6, push 4. Stack: [3,4]
+i=5: val=3 > 2 → pop 4, result[4]=3. 3 < 6, push 5. Stack: [3,5]
+End: remaining in stack have no next greater → result=-1
+Result: [5, 5, 6, -1, 3, -1]
+```
+
+---
+
+### Pattern 8 — BFS (Breadth-First Search)
+
+```mermaid
+flowchart TB
+  subgraph BFSTree["BFS explores level by level"]
+    L0["START  level-0"]
+    L1a["level-1 A"]
+    L1b["level-1 B"]
+    L2a["level-2 C"]
+    L2b["level-2 D"]
+    L2c["level-2 E  END"]
+    L0 --> L1a
+    L0 --> L1b
+    L1a --> L2a
+    L1a --> L2b
+    L1b --> L2c
+  end
+  subgraph BFSAlgo["Algorithm"]
+    A1["Enqueue start, mark visited, steps=0"]
+    A2["For each level: process ALL nodes in queue"]
+    A3["Enqueue unvisited neighbours, mark visited"]
+    A4["steps++ after entire level is processed"]
+    A5["Return steps when target found"]
+    A1 --> A2 --> A3 --> A4 --> A2
+    A3 --> A5
+  end
+```
+
+**Step-by-step logic:**
+1. Add start node to queue and mark visited
+2. While queue not empty: record current queue `size` (= nodes in this level)
+3. Process exactly `size` nodes, enqueue their unvisited neighbours
+4. After processing the level, increment `steps`
+5. BFS **guarantees shortest path** because nodes are visited in order of increasing distance
+
+> **What is it?** Explore nodes level by level using a queue. All nodes at distance 1 are processed before distance 2, etc. Guarantees shortest path in unweighted graphs.
+
+> **Real-world analogy:** Spreading a rumour. Everyone you tell directly (level 1) tells their friends (level 2) who tell their friends (level 3). The rumour spreads outward uniformly layer by layer.
+
+**When to use — TRIGGER WORDS:**
+```
+✅ "Shortest path" in unweighted graph/grid
+✅ "Level-order traversal" of a tree
+✅ "Minimum number of steps/moves"
+✅ "Nearest cell satisfying condition" in a matrix
+✅ "Number of connected components" (can also use DFS/Union Find)
+✅ "Word Ladder" (shortest transformation)
+```
+
+```java
+// BFS Template — shortest path in grid
+public int bfs(int[][] grid, int startR, int startC, int endR, int endC) {
+    int rows = grid.length, cols = grid[0].length;
+    boolean[][] visited = new boolean[rows][cols];
+    Queue<int[]> queue = new LinkedList<>();
+    queue.offer(new int[]{startR, startC});
+    visited[startR][startC] = true;
+    int steps = 0;
+    int[][] dirs = {{0,1},{0,-1},{1,0},{-1,0}};  // 4 directions
+    while (!queue.isEmpty()) {
+        int size = queue.size();  // process level by level
+        for (int i = 0; i < size; i++) {
+            int[] cell = queue.poll();
+            if (cell[0] == endR && cell[1] == endC) return steps;
+            for (int[] d : dirs) {
+                int nr = cell[0] + d[0], nc = cell[1] + d[1];
+                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols
+                    && !visited[nr][nc] && grid[nr][nc] == 0) {
+                    visited[nr][nc] = true;
+                    queue.offer(new int[]{nr, nc});
+                }
+            }
+        }
+        steps++;
+    }
+    return -1;  // not reachable
+}
+// Time: O(rows × cols)  Space: O(rows × cols)
+```
+
+---
+
+### Pattern 9 — DFS (Depth-First Search)
+
+```mermaid
+flowchart TB
+  subgraph DFSGrid["DFS on 2D Grid (Number of Islands)"]
+    G1["Find unvisited land cell grid=1"]
+    G2["Call DFS: mark it as visited grid=0"]
+    G3["Recurse in 4 directions: up down left right"]
+    G4["Each direction: if in bounds and grid=1 recurse"]
+    G5["When all directions exhausted: backtrack"]
+    G6["Return to outer loop and increment island count"]
+    G1 --> G2 --> G3 --> G4 --> G5 --> G6
+  end
+  subgraph DFSOrder["DFS Tree Orders"]
+    O1["Preorder:  root → left → right  (serialize tree)"]
+    O2["Inorder:   left → root → right  (BST sorted order)"]
+    O3["Postorder: left → right → root  (compute from leaves up)"]
+    O1 --> O2 --> O3
+  end
+```
+
+**Step-by-step logic:**
+1. Mark current node/cell as visited **before** recursing (prevents infinite loop)
+2. For each valid unvisited neighbour, recurse
+3. When you return from recursion, you are "backtracking" — you can undo state if needed
+4. **Preorder**: process root before children — good for copying/printing trees
+5. **Postorder**: process children first — good for computing height, deleting trees, bottom-up DP on trees
+
+> **What is it?** Explore as deep as possible before backtracking. Implemented recursively (call stack) or iteratively (explicit stack).
+
+**When to use — TRIGGER WORDS:**
+```
+✅ "Path between two nodes"
+✅ "All paths in a graph"
+✅ "Topological sort" (DFS-based)
+✅ "Connected components" (count islands)
+✅ "Tree problems" (max depth, paths, diameter)
+✅ "Detect cycle in directed graph"
+✅ "Backtracking" (subsets, permutations)
+```
+
+```java
+// DFS on a graph
+public void dfs(int node, Map<Integer, List<Integer>> graph,
+                boolean[] visited) {
+    visited[node] = true;
+    // process node here
+    for (int neighbour : graph.getOrDefault(node, List.of())) {
+        if (!visited[neighbour]) {
+            dfs(neighbour, graph, visited);
+        }
+    }
+}
+
+// Number of Islands — DFS on 2D grid
+public int numIslands(char[][] grid) {
+    int count = 0;
+    for (int r = 0; r < grid.length; r++) {
+        for (int c = 0; c < grid[0].length; c++) {
+            if (grid[r][c] == '1') {
+                count++;
+                dfsIsland(grid, r, c);  // sink the entire island
+            }
+        }
+    }
+    return count;
+}
+private void dfsIsland(char[][] grid, int r, int c) {
+    if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length
+        || grid[r][c] == '0') return;
+    grid[r][c] = '0';  // mark visited by sinking
+    dfsIsland(grid, r+1, c);
+    dfsIsland(grid, r-1, c);
+    dfsIsland(grid, r, c+1);
+    dfsIsland(grid, r, c-1);
+}
+```
+
+---
+
+### Pattern 10 — Merge Intervals
+
+```mermaid
+flowchart TB
+  subgraph Sort["Step 1: Sort intervals by start time"]
+    S1["Input:  1-3  2-6  8-10  15-18"]
+    S2["Sorted: 1-3  2-6  8-10  15-18  already sorted"]
+    S1 --> S2
+  end
+  subgraph Merge["Step 2: Scan and merge"]
+    M1["Take 1-3: result = 1-3"]
+    M2["Next 2-6: 2 less-equal 3 overlap → extend end to 6. result = 1-6"]
+    M3["Next 8-10: 8 greater than 6 no overlap → add. result = 1-6  8-10"]
+    M4["Next 15-18: no overlap → add. result = 1-6  8-10  15-18"]
+    M1 --> M2 --> M3 --> M4
+  end
+```
+
+**Step-by-step logic:**
+1. Sort intervals by their `start` value
+2. Initialize result with first interval
+3. For each next interval: if `start <= result.last.end` → merge by extending end to `max(end, next.end)`
+4. Otherwise: no overlap, append as new interval
+5. **Meeting rooms**: sort by start; use min-heap of end times to track active rooms
+
+> **What is it?** Sort intervals by start time, then merge overlapping ones by comparing the end of the current merged interval with the start of the next interval.
+
+**When to use — TRIGGER WORDS:**
+```
+✅ "Merge overlapping intervals"
+✅ "Insert interval into list"
+✅ "Meeting rooms — can attend all?" (no overlaps needed)
+✅ "Minimum meeting rooms required" (max overlapping at any time)
+✅ "Employee free time"
+```
+
+```java
+// Merge Intervals
+public int[][] merge(int[][] intervals) {
+    Arrays.sort(intervals, (a, b) -> a[0] - b[0]);  // sort by start
+    List<int[]> merged = new ArrayList<>();
+    for (int[] interval : intervals) {
+        if (merged.isEmpty() || merged.get(merged.size()-1)[1] < interval[0]) {
+            merged.add(interval);         // no overlap — add as new interval
+        } else {
+            // Overlap — extend the end of the last interval
+            merged.get(merged.size()-1)[1] =
+                Math.max(merged.get(merged.size()-1)[1], interval[1]);
+        }
+    }
+    return merged.toArray(new int[0][]);
+}
+// Time: O(n log n) for sort  Space: O(n) for output
+
+// Meeting Rooms II — minimum rooms needed (= max overlapping intervals at any time)
+public int minMeetingRooms(int[][] intervals) {
+    int n = intervals.length;
+    int[] starts = new int[n], ends = new int[n];
+    for (int i = 0; i < n; i++) { starts[i] = intervals[i][0]; ends[i] = intervals[i][1]; }
+    Arrays.sort(starts); Arrays.sort(ends);
+    int rooms = 0, endPtr = 0;
+    for (int i = 0; i < n; i++) {
+        if (starts[i] < ends[endPtr]) rooms++;  // new meeting starts before one ends
+        else                          endPtr++;  // one meeting ended — reuse room
+    }
+    return rooms;
+}
+```
+
+---
+
+### Pattern 11 — Backtracking
+
+```mermaid
+flowchart TB
+  subgraph SubsetsTree["Subsets of 1 2 3 — backtracking tree"]
+    Root["start: empty set"]
+    Root --> A["choose 1 → 1"]
+    Root --> B["skip 1 → empty"]
+    A --> C["choose 2 → 1-2"]
+    A --> D["skip 2 → 1"]
+    C --> E["choose 3 → 1-2-3 ADD"]
+    C --> F["skip 3 → 1-2 ADD"]
+    D --> G["choose 3 → 1-3 ADD"]
+    D --> H["skip 3 → 1 ADD"]
+    B --> I["choose 2 → 2"]
+    B --> J["skip 2 → empty"]
+    I --> K["choose 3 → 2-3 ADD"]
+    I --> L["skip 3 → 2 ADD"]
+    J --> M["choose 3 → 3 ADD"]
+    J --> N["skip 3 → empty ADD"]
+  end
+```
+
+**Step-by-step logic:**
+1. **Choose**: add an element to the current path
+2. **Explore**: recurse deeper with the updated path
+3. **Unchoose**: remove the element (backtrack) — restore state for the next choice
+4. **Pruning**: add `if (condition) break/continue` to skip branches that can never produce a valid answer
+5. Every node in the tree represents a partial solution; leaf nodes are complete solutions
+
+> **What is it?** Explore all possible solutions by building candidates incrementally and abandoning (backtrack) a candidate as soon as it cannot lead to a valid solution.
+
+> **Real-world analogy:** Solving a maze. You try a path; if you hit a dead end, you backtrack to the last junction and try a different path. You explore all paths systematically.
+
+**When to use — TRIGGER WORDS:**
+```
+✅ "All subsets / power set"
+✅ "All permutations"
+✅ "All combinations summing to target"
+✅ "N-Queens, Sudoku solver"
+✅ "Word search in grid"
+✅ "Generate all valid parentheses"
+```
+
+**Template — The Universal Backtracking Framework:**
+```java
+public void backtrack(State state, List<Result> results) {
+    if (isGoal(state)) {        // BASE CASE: found a valid solution
+        results.add(new Result(state));
+        return;
+    }
+    for (Choice choice : getChoices(state)) {
+        if (isValid(state, choice)) {
+            makeChoice(state, choice);     // CHOOSE
+            backtrack(state, results);     // EXPLORE
+            undoChoice(state, choice);     // UNCHOOSE (backtrack)
+        }
+    }
+}
+
+// Subsets — O(2^n)
+public List<List<Integer>> subsets(int[] nums) {
+    List<List<Integer>> result = new ArrayList<>();
+    backtrack(nums, 0, new ArrayList<>(), result);
+    return result;
+}
+private void backtrack(int[] nums, int start,
+                       List<Integer> current, List<List<Integer>> result) {
+    result.add(new ArrayList<>(current));  // every state is a valid subset
+    for (int i = start; i < nums.length; i++) {
+        current.add(nums[i]);               // CHOOSE
+        backtrack(nums, i + 1, current, result);  // EXPLORE
+        current.remove(current.size() - 1); // UNCHOOSE
+    }
+}
+
+// Combination Sum — reuse elements allowed
+public List<List<Integer>> combinationSum(int[] candidates, int target) {
+    List<List<Integer>> result = new ArrayList<>();
+    Arrays.sort(candidates);
+    backtrack(candidates, 0, target, new ArrayList<>(), result);
+    return result;
+}
+private void backtrack(int[] nums, int start, int remaining,
+                       List<Integer> current, List<List<Integer>> result) {
+    if (remaining == 0) { result.add(new ArrayList<>(current)); return; }
+    for (int i = start; i < nums.length; i++) {
+        if (nums[i] > remaining) break;  // pruning — no point continuing
+        current.add(nums[i]);
+        backtrack(nums, i, remaining - nums[i], current, result); // i not i+1 (reuse)
+        current.remove(current.size() - 1);
+    }
+}
+```
+
+> 💡 **Tip:** Always add **pruning** to backtracking. Pruning = early `break` or `continue` that avoids exploring obviously invalid branches. In combination sum: `if (nums[i] > remaining) break`. This can reduce O(2^n) to much less in practice.
+
+---
+
+## 🔴 LEVEL 3 — Advanced Patterns
+
+---
+
+### Pattern 12 — Dynamic Programming (DP)
+
+```mermaid
+flowchart TB
+  subgraph CoinDP["Coin Change dp-table for coins 1-2-5 amount=6"]
+    D0["dp-0 = 0  base case zero amount needs zero coins"]
+    D1["dp-1 = 1  use coin-1"]
+    D2["dp-2 = 1  use coin-2"]
+    D3["dp-3 = 2  use coin-1 plus coin-2"]
+    D4["dp-4 = 2  use coin-2 plus coin-2"]
+    D5["dp-5 = 1  use coin-5"]
+    D6["dp-6 = 2  use coin-1 plus coin-5"]
+    D0 --> D1 --> D2 --> D3 --> D4 --> D5 --> D6
+  end
+  subgraph Approaches["Top-down vs Bottom-up"]
+    TD["Top-down memoisation: recurse from target, cache subproblems"]
+    BU["Bottom-up tabulation: fill dp from base case upward"]
+    TD -.same complexity.-> BU
+  end
+```
+
+**Step-by-step logic:**
+1. Define state: `dp[i]` = minimum coins to make amount `i`
+2. Base case: `dp[0] = 0`
+3. Transition: `dp[i] = min(dp[i], dp[i - coin] + 1)` for each coin ≤ i
+4. Answer: `dp[amount]`
+5. **Ask yourself**: what is the smallest subproblem? What does `dp[i]` represent? How do I build `dp[i]` from smaller values?
+
+> **What is it?** Break a problem into overlapping subproblems. Solve each subproblem once, store the result, reuse it. Eliminates redundant computation in exponential-time recursive solutions.
+
+> **Real-world analogy:** Fibonacci — computing F(10) the naive way recalculates F(5), F(4), F(3)... thousands of times. With DP (memoisation), each value is computed once and stored. It's like writing answers on a notepad instead of recalculating from scratch every time.
+
+**How to identify a DP problem:**
+```
+1. Problem asks for OPTIMAL value (max/min/count)
+2. Current choice affects future choices
+3. Overlapping subproblems exist (same inputs recur)
+
+If these 3 are true → DP. Otherwise try greedy/two pointers.
+
+TRIGGER WORDS:
+✅ "Minimum/Maximum number of ways/steps/coins"
+✅ "Number of ways to..."
+✅ "Longest increasing/common subsequence"
+✅ "Can you reach the end?"
+✅ "Partition into subsets with equal sum"
+✅ "Edit distance between two strings"
+```
+
+**The 5 DP Patterns — Memorise These:**
+
+#### DP Pattern 1: Fibonacci / 1D DP
+```java
+// Climbing stairs — O(n) time, O(1) space
+public int climbStairs(int n) {
+    if (n <= 2) return n;
+    int prev2 = 1, prev1 = 2;
+    for (int i = 3; i <= n; i++) {
+        int curr = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = curr;
+    }
+    return prev1;
+}
+// dp[i] = dp[i-1] + dp[i-2]  (1 step from i-1, or 2 steps from i-2)
+```
+
+#### DP Pattern 2: 0/1 Knapsack
+```
+Problem: N items, each with weight[i] and value[i].
+         Knapsack capacity W. Maximise value without exceeding W.
+         Each item can be included AT MOST once (0/1 choice).
+
+State: dp[i][w] = max value using first i items with capacity w
+Transition:
+  Skip item i:  dp[i][w] = dp[i-1][w]
+  Take item i:  dp[i][w] = dp[i-1][w - weight[i]] + value[i]
+  Choose max:   dp[i][w] = max(skip, take)
+```
+```java
+public int knapsack(int[] weights, int[] values, int W) {
+    int n = weights.length;
+    int[] dp = new int[W + 1];  // space-optimised: 1D array
+    for (int i = 0; i < n; i++) {
+        for (int w = W; w >= weights[i]; w--) {  // iterate BACKWARDS for 0/1
+            dp[w] = Math.max(dp[w], dp[w - weights[i]] + values[i]);
+        }
+    }
+    return dp[W];
+}
+// Time: O(n×W)  Space: O(W)
+```
+
+#### DP Pattern 3: Unbounded Knapsack
+```java
+// Coin Change — minimum coins (each coin can be used unlimited times)
+public int coinChange(int[] coins, int amount) {
+    int[] dp = new int[amount + 1];
+    Arrays.fill(dp, amount + 1);  // initialise to "impossible" value
+    dp[0] = 0;
+    for (int i = 1; i <= amount; i++) {
+        for (int coin : coins) {
+            if (coin <= i) {
+                dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+            }
+        }
+    }
+    return dp[amount] > amount ? -1 : dp[amount];
+}
+// dp[i] = min coins to make amount i
+// Transition: dp[i] = min(dp[i], dp[i - coin] + 1) for each coin
+```
+
+#### DP Pattern 4: LCS / 2D DP on Strings
+```java
+// Longest Common Subsequence
+public int longestCommonSubsequence(String text1, String text2) {
+    int m = text1.length(), n = text2.length();
+    int[][] dp = new int[m + 1][n + 1];  // dp[i][j] = LCS of text1[0..i-1] and text2[0..j-1]
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (text1.charAt(i-1) == text2.charAt(j-1))
+                dp[i][j] = dp[i-1][j-1] + 1;   // chars match — extend LCS
+            else
+                dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);  // take best without one char
+        }
+    }
+    return dp[m][n];
+}
+```
+
+#### DP Pattern 5: Interval DP
+```java
+// Longest Palindromic Subsequence
+public int longestPalindromeSubseq(String s) {
+    int n = s.length();
+    int[][] dp = new int[n][n];
+    for (int i = 0; i < n; i++) dp[i][i] = 1;  // single char is palindrome of length 1
+    for (int len = 2; len <= n; len++) {
+        for (int i = 0; i <= n - len; i++) {
+            int j = i + len - 1;
+            if (s.charAt(i) == s.charAt(j))
+                dp[i][j] = dp[i+1][j-1] + 2;
+            else
+                dp[i][j] = Math.max(dp[i+1][j], dp[i][j-1]);
+        }
+    }
+    return dp[0][n-1];
+}
+```
+
+**DP Decision Tree:**
+```mermaid
+graph TD
+  Q["Is it a DP problem?\n(optimal value + overlapping subproblems)"]
+  Q --> F["Is it on a 1D sequence?"]
+  Q --> G["Is it on 2 sequences?"]
+  Q --> H["Is it on a grid?"]
+  F --> F1["1D DP\nClimbing stairs\nHouse robber\nCoin change"]
+  G --> G1["2D DP on strings\nLCS, Edit distance\nWildcard matching"]
+  H --> H1["Grid DP\nUnique paths\nMinimum path sum"]
+  F --> F2["Knapsack variant?\nEach item used once → 0/1\nEach item unlimited → unbounded"]
+```
+
+> 💡 **DP Tip:** Start with recursive solution (top-down). Add memoisation. Then convert to bottom-up iterative if needed. Always think: *"What is my subproblem? What state do I need? What is the transition?"*
+
+**❓ Interview Q: "What is the difference between DP and recursion with memoisation?"**
+> A: Memoisation is top-down DP — start from the original problem, recurse down, cache results. Bottom-up DP builds from base cases up to the answer, typically using a table. Both have the same time complexity. Bottom-up avoids recursion stack overflow for large inputs and is usually slightly faster (no function call overhead). Choose based on which direction is easier to think about — top-down is often more intuitive for tree/graph DP.
+
+---
+
+### Pattern 13 — Graphs (BFS/DFS/Topological Sort)
+
+```mermaid
+flowchart TB
+  subgraph Graph["Course prerequisites: 0→1 0→2 1→3 2→3"]
+    C0["Course 0  in-degree=0"]
+    C1["Course 1  in-degree=1"]
+    C2["Course 2  in-degree=1"]
+    C3["Course 3  in-degree=2"]
+    C0 --> C1
+    C0 --> C2
+    C1 --> C3
+    C2 --> C3
+  end
+  subgraph Kahn["Kahn's BFS-based Topological Sort"]
+    K1["Start: queue = nodes with in-degree 0 = Course 0"]
+    K2["Process 0: reduce in-degree of 1 and 2 by 1"]
+    K3["Both reach in-degree 0: add 1 and 2 to queue"]
+    K4["Process 1: reduce in-degree of 3 by 1  now in-degree=1"]
+    K5["Process 2: reduce in-degree of 3 by 1  now in-degree=0"]
+    K6["Process 3: done. Order = 0 1 2 3 or 0 2 1 3"]
+    K1 --> K2 --> K3 --> K4 --> K5 --> K6
+  end
+```
+
+**Step-by-step logic:**
+1. Compute in-degree for every node
+2. Enqueue all nodes with in-degree = 0 (no prerequisites)
+3. Poll a node, add to result, decrement each neighbour's in-degree
+4. If a neighbour's in-degree becomes 0, enqueue it
+5. If result size = total nodes: valid order exists; else: **cycle detected** (not all nodes were reachable)
+
+**Graph representations:**
+```java
+// Adjacency list — most common
+Map<Integer, List<Integer>> graph = new HashMap<>();
+// or for dense graphs
+List<List<Integer>> adj = new ArrayList<>();
+
+// Build undirected graph from edge list
+for (int[] edge : edges) {
+    adj.get(edge[0]).add(edge[1]);
+    adj.get(edge[1]).add(edge[0]);
+}
+```
+
+**Topological Sort — When order matters:**
+```
+Used for: Course Schedule, Build Order, Task Dependency
+"A must come before B" = directed edge A → B
+
+Method 1: Kahn's Algorithm (BFS-based)
+  1. Compute in-degree of every node
+  2. Add all nodes with in-degree=0 to queue
+  3. Process queue: add to result, decrement neighbours' in-degree
+  4. If neighbour's in-degree becomes 0, add to queue
+  5. If result size == num nodes: valid. Else: cycle exists.
+```
+
+```java
+public int[] topologicalSort(int numCourses, int[][] prerequisites) {
+    int[] inDegree = new int[numCourses];
+    List<List<Integer>> adj = new ArrayList<>();
+    for (int i = 0; i < numCourses; i++) adj.add(new ArrayList<>());
+    for (int[] pre : prerequisites) {
+        adj.get(pre[1]).add(pre[0]);
+        inDegree[pre[0]]++;
+    }
+    Queue<Integer> queue = new LinkedList<>();
+    for (int i = 0; i < numCourses; i++)
+        if (inDegree[i] == 0) queue.offer(i);
+    int[] order = new int[numCourses];
+    int idx = 0;
+    while (!queue.isEmpty()) {
+        int course = queue.poll();
+        order[idx++] = course;
+        for (int next : adj.get(course)) {
+            if (--inDegree[next] == 0) queue.offer(next);
+        }
+    }
+    return idx == numCourses ? order : new int[]{};  // empty = cycle detected
+}
+```
+
+**Dijkstra's Shortest Path:**
+```java
+public int[] dijkstra(int n, int[][] edges, int src) {
+    List<int[]>[] graph = new List[n];
+    for (int i = 0; i < n; i++) graph[i] = new ArrayList<>();
+    for (int[] e : edges) {
+        graph[e[0]].add(new int[]{e[1], e[2]});
+        graph[e[1]].add(new int[]{e[0], e[2]});
+    }
+    int[] dist = new int[n];
+    Arrays.fill(dist, Integer.MAX_VALUE);
+    dist[src] = 0;
+    PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> a[1]-b[1]); // min-heap by distance
+    pq.offer(new int[]{src, 0});
+    while (!pq.isEmpty()) {
+        int[] curr = pq.poll();
+        int node = curr[0], d = curr[1];
+        if (d > dist[node]) continue;  // stale entry
+        for (int[] nb : graph[node]) {
+            int newDist = dist[node] + nb[1];
+            if (newDist < dist[nb[0]]) {
+                dist[nb[0]] = newDist;
+                pq.offer(new int[]{nb[0], newDist});
+            }
+        }
+    }
+    return dist;
+}
+// Time: O((V + E) log V)  Space: O(V + E)
+```
+
+---
+
+### Pattern 14 — Heap / Priority Queue
+
+```mermaid
+flowchart TB
+  subgraph MinHeap["Min-Heap: smallest value is always at root"]
+    H0["1  (root = minimum)"]
+    H0 --> H1["3"]
+    H0 --> H2["5"]
+    H1 --> H3["7"]
+    H1 --> H4["9"]
+    H2 --> H5["8"]
+  end
+  subgraph KthLargest["K-th Largest trick with min-heap of size k"]
+    L1["Add element to min-heap"]
+    L2["If heap size exceeds k: remove the minimum"]
+    L3["After all elements: heap root = k-th largest"]
+    L1 --> L2 --> L3
+  end
+```
+
+**Step-by-step logic:**
+1. Java `PriorityQueue` is a **min-heap** by default
+2. `offer(x)` → O(log n) bubbles up to maintain heap property
+3. `poll()` → O(log n) removes root (minimum), bubbles down
+4. `peek()` → O(1) reads minimum without removing
+5. **Kth largest**: maintain min-heap of exactly k elements — the root (minimum of heap) = kth largest overall
+
+> **What is it?** A priority queue that always gives you the min (min-heap) or max (max-heap) element in O(log n). Perfect for "find the K-th largest/smallest" problems.
+
+**When to use — TRIGGER WORDS:**
+```
+✅ "K largest / K smallest elements"
+✅ "Kth largest element in a stream"
+✅ "Top K frequent elements"
+✅ "Merge K sorted lists/arrays"
+✅ "Median from data stream"
+✅ "Task scheduler"
+✅ "Dijkstra / Prim's algorithm"
+```
+
+```java
+// Kth Largest Element — min-heap of size k
+public int findKthLargest(int[] nums, int k) {
+    PriorityQueue<Integer> minHeap = new PriorityQueue<>();  // min-heap
+    for (int num : nums) {
+        minHeap.offer(num);
+        if (minHeap.size() > k) minHeap.poll();  // keep only k largest
+    }
+    return minHeap.peek();  // kth largest = min of k largest
+}
+// Time: O(n log k)  Space: O(k)
+
+// Top K Frequent Elements
+public int[] topKFrequent(int[] nums, int k) {
+    Map<Integer, Integer> freq = new HashMap<>();
+    for (int n : nums) freq.merge(n, 1, Integer::sum);
+    PriorityQueue<Integer> minHeap = new PriorityQueue<>((a,b) -> freq.get(a) - freq.get(b));
+    for (int num : freq.keySet()) {
+        minHeap.offer(num);
+        if (minHeap.size() > k) minHeap.poll();
+    }
+    return minHeap.stream().mapToInt(Integer::intValue).toArray();
+}
+
+// Merge K Sorted Lists
+public ListNode mergeKLists(ListNode[] lists) {
+    PriorityQueue<ListNode> pq = new PriorityQueue<>((a,b) -> a.val - b.val);
+    for (ListNode node : lists) if (node != null) pq.offer(node);
+    ListNode dummy = new ListNode(0), curr = dummy;
+    while (!pq.isEmpty()) {
+        ListNode min = pq.poll();
+        curr.next = min;
+        curr = curr.next;
+        if (min.next != null) pq.offer(min.next);
+    }
+    return dummy.next;
+}
+// Time: O(N log k) where N = total nodes, k = number of lists
+```
+
+---
+
+### Pattern 15 — Union Find (Disjoint Set)
+
+```mermaid
+flowchart TB
+  subgraph Initial["Initial: each node is its own component"]
+    N1["parent-1=1"]
+    N2["parent-2=2"]
+    N3["parent-3=3"]
+    N4["parent-4=4"]
+    N5["parent-5=5"]
+  end
+  subgraph AfterUnions["After union(1-2) union(3-4) union(2-3)"]
+    R1["1 is root of 1-2-3-4 component"]
+    R1 --> C2["2"]
+    R1 --> C3["3"]
+    C3 --> C4["4"]
+    N5b["5 still its own component"]
+  end
+  subgraph CycleCheck["Cycle detection"]
+    CY1["Add edge between A and B"]
+    CY2{"find(A) == find(B)?"}
+    CY3["YES → adding this edge creates a cycle"]
+    CY4["NO → safe to union them"]
+    CY1 --> CY2 --> CY3
+    CY2 --> CY4
+  end
+```
+
+**Step-by-step logic:**
+1. Initialise: `parent[i] = i` for all nodes
+2. `find(x)`: follow parent pointers to root; apply path compression on the way back
+3. `union(x, y)`: find roots; attach smaller-rank root under larger-rank root
+4. If `find(x) == find(y)`: already same component — adding an edge = cycle
+5. **Path compression + union by rank** → effectively O(1) per operation
+
+> **What is it?** Tracks which elements belong to the same connected component. Two operations: `find` (which component?) and `union` (merge two components). Both run in near-O(1) with path compression + union by rank.
+
+**When to use — TRIGGER WORDS:**
+```
+✅ "Connected components"
+✅ "Detect cycle in undirected graph"
+✅ "Number of provinces / friend circles"
+✅ "Redundant connection"
+✅ "Minimum spanning tree" (Kruskal's algorithm)
+✅ "Accounts merge"
+```
+
+```java
+class UnionFind {
+    int[] parent, rank;
+
+    UnionFind(int n) {
+        parent = new int[n];
+        rank   = new int[n];
+        for (int i = 0; i < n; i++) parent[i] = i;  // each node is its own parent
+    }
+
+    public int find(int x) {
+        if (parent[x] != x)
+            parent[x] = find(parent[x]);  // path compression: flatten tree
+        return parent[x];
+    }
+
+    public boolean union(int x, int y) {
+        int px = find(x), py = find(y);
+        if (px == py) return false;  // already connected — adding this edge creates cycle
+        if (rank[px] < rank[py]) { int tmp = px; px = py; py = tmp; }
+        parent[py] = px;  // union by rank: attach smaller tree under larger
+        if (rank[px] == rank[py]) rank[px]++;
+        return true;
+    }
+
+    public boolean connected(int x, int y) { return find(x) == find(y); }
+}
+
+// Redundant Connection — find the edge that creates a cycle
+public int[] findRedundantConnection(int[][] edges) {
+    UnionFind uf = new UnionFind(edges.length + 1);
+    for (int[] edge : edges) {
+        if (!uf.union(edge[0], edge[1])) return edge;  // union returns false = cycle!
+    }
+    return new int[]{};
+}
+```
+
+---
+
+### Pattern 16 — Trie (Prefix Tree)
+
+```mermaid
+flowchart TB
+  subgraph TrieStructure["Trie storing: car  cat  dog"]
+    ROOT["root"] --> RC["c"]
+    ROOT --> RD["d"]
+    RC --> RCA["a"]
+    RCA --> RCAR["r  isEnd=true"]
+    RCA --> RCAT["t  isEnd=true"]
+    RD --> RDO["o"]
+    RDO --> RDOG["g  isEnd=true"]
+  end
+  subgraph Operations["Trie Operations O(L) each"]
+    I1["insert: walk/create nodes char by char, mark last as isEnd"]
+    S1["search: walk nodes char by char, check isEnd at last node"]
+    P1["startsWith: walk nodes, just check path exists (no isEnd check)"]
+    I1 --> S1 --> P1
+  end
+```
+
+**Step-by-step logic:**
+1. Each node has `children[26]` (26 letters) and `isEnd` boolean
+2. **Insert** "car": root → c (create if missing) → a → r, set `r.isEnd = true`
+3. **Insert** "cat": root → c (already exists) → a (already exists) → t (create), set `t.isEnd = true`
+4. **Search** "car": follow c → a → r, return `r.isEnd` (true)
+5. **startsWith** "ca": follow c → a, return `true` (path exists, don't check isEnd)
+
+> **What is it?** A tree where each path from root to a node represents a string prefix. Children are indexed by character. Enables O(L) insert, search, and prefix-check where L = word length.
+
+**When to use — TRIGGER WORDS:**
+```
+✅ "Autocomplete / search suggestions"
+✅ "Word search — does prefix exist?"
+✅ "Longest common prefix"
+✅ "Design Add and Search Words with wildcards"
+✅ "Word Search II in a grid"
+✅ "Maximum XOR of two numbers"
+```
+
+```java
+class Trie {
+    private TrieNode root = new TrieNode();
+
+    static class TrieNode {
+        TrieNode[] children = new TrieNode[26];
+        boolean isEnd = false;
+    }
+
+    public void insert(String word) {
+        TrieNode node = root;
+        for (char c : word.toCharArray()) {
+            int idx = c - 'a';
+            if (node.children[idx] == null)
+                node.children[idx] = new TrieNode();
+            node = node.children[idx];
+        }
+        node.isEnd = true;
+    }
+
+    public boolean search(String word) {
+        TrieNode node = root;
+        for (char c : word.toCharArray()) {
+            int idx = c - 'a';
+            if (node.children[idx] == null) return false;
+            node = node.children[idx];
+        }
+        return node.isEnd;
+    }
+
+    public boolean startsWith(String prefix) {
+        TrieNode node = root;
+        for (char c : prefix.toCharArray()) {
+            int idx = c - 'a';
+            if (node.children[idx] == null) return false;
+            node = node.children[idx];
+        }
+        return true;  // prefix exists whether or not it's a full word
+    }
+}
+// insert/search/startsWith: O(L) time where L = word length
+// Space: O(ALPHABET_SIZE x L x N) where N = number of words
+```
+
+---
+
+## 🟣 LEVEL 4 — Expert Patterns
+
+---
+
+### Pattern 17 — Greedy Algorithms
+
+> **What is it?** At each step make the locally best choice without reconsidering past choices. Greedy works when making the best local choice always leads to the globally best outcome.
+
+> **Real-world analogy:** Choosing a checkout queue at a supermarket. You always join the shortest queue visible right now. You don't simulate all possible queue movements. This local-best strategy typically gets you through quickly.
+
+**Greedy vs DP — how to decide:**
+
+```mermaid
+flowchart LR
+  Q{"Does local best always lead to global best?"}
+  Q -->|Yes| G["Greedy\nO(n log n) or O(n)"]
+  Q -->|No| D["Dynamic Programming\nO(n^2) or O(nW)"]
+  G --> GEx["Activity selection\nJump Game\nCoin change standard coins\nHuffman coding"]
+  D --> DEx["0-1 Knapsack\nLongest Increasing Subsequence\nEdit distance\nCoin change arbitrary coins"]
+```
+
+**Classic Greedy Problems:**
+
+```java
+// GREEDY 1: Maximum non-overlapping intervals (Activity Selection)
+// Key insight: always pick the activity that ENDS EARLIEST
+public int maxActivities(int[][] intervals) {
+    Arrays.sort(intervals, (a, b) -> a[1] - b[1]);  // sort by END time
+    int count = 1, lastEnd = intervals[0][1];
+    for (int i = 1; i < intervals.length; i++) {
+        if (intervals[i][0] >= lastEnd) {   // starts after last one ends
+            count++;
+            lastEnd = intervals[i][1];
+        }
+    }
+    return count;
+}
+// WHY GREEDY WORKS: Ending earliest leaves maximum room for future activities.
+// Exchange argument: if any optimal solution picks activity A over greedy's B
+// (where B ends earlier), swapping A→B never reduces future choices.
+
+// GREEDY 2: Jump Game — can you reach the end?
+public boolean canJump(int[] nums) {
+    int maxReach = 0;
+    for (int i = 0; i < nums.length; i++) {
+        if (i > maxReach) return false;          // can't reach position i
+        maxReach = Math.max(maxReach, i + nums[i]);
+    }
+    return true;
+}
+// Greedy: at each position, track the MAXIMUM index reachable so far.
+
+// GREEDY 3: Jump Game II — minimum jumps to reach end
+public int jump(int[] nums) {
+    int jumps = 0, curEnd = 0, farthest = 0;
+    for (int i = 0; i < nums.length - 1; i++) {
+        farthest = Math.max(farthest, i + nums[i]);
+        if (i == curEnd) {           // reached the boundary of current jump range
+            jumps++;
+            curEnd = farthest;       // extend to the farthest we could reach
+        }
+    }
+    return jumps;
+}
+
+// GREEDY 4: Gas Station — find valid circular tour start
+public int canCompleteCircuit(int[] gas, int[] cost) {
+    int totalGas = 0, currentGas = 0, startStation = 0;
+    for (int i = 0; i < gas.length; i++) {
+        totalGas   += gas[i] - cost[i];
+        currentGas += gas[i] - cost[i];
+        if (currentGas < 0) {        // cannot reach next from startStation
+            startStation = i + 1;    // try starting from next station
+            currentGas = 0;
+        }
+    }
+    return totalGas >= 0 ? startStation : -1;
+}
+```
+
+**Step-by-step greedy logic:**
+
+```mermaid
+flowchart TB
+  G1["Define the greedy choice: what is locally best at each step?"]
+  G2["Sort if needed (greedy often requires a specific ordering)"]
+  G3["Make greedy choice at each step without looking back"]
+  G4["Prove correctness: exchange argument or induction"]
+  G5["If proof fails → switch to Dynamic Programming"]
+  G1 --> G2 --> G3 --> G4 --> G5
+```
+
+**❓ Interview Q: "When does greedy fail? Give an example."**
+> **A:** Greedy fails when a locally optimal choice blocks a globally better one. Classic example: Coin change with coins `[1, 3, 4]`, amount = 6. Greedy picks `4+1+1 = 3 coins`. Optimal is `3+3 = 2 coins`. Greedy fails because choosing 4 (locally best) blocks the better 3+3 solution. This is why coin change requires DP for arbitrary coin denominations but greedy works for standard denominations (1, 5, 10, 25 cents).
+
+---
+
+### Pattern 18 — Bit Manipulation
+
+> **What is it?** Operate on individual bits using `&`, `|`, `^`, `~`, `<<`, `>>`. Gives O(1) or O(n) solutions for problems that would otherwise need more time or space.
+
+**Core Bit Operations:**
+
+```
+x & 1           → 1 if x is odd, 0 if even
+x >> 1          → integer divide by 2
+x << 1          → multiply by 2
+x & (x-1)       → REMOVE the lowest set bit (magic trick!)
+x & (-x)        → ISOLATE the lowest set bit
+x ^ x = 0       → XOR same numbers cancel
+x ^ 0 = x       → XOR with 0 leaves unchanged
+```
+
+```mermaid
+flowchart LR
+  subgraph BitTricks["Core Bit Tricks"]
+    B1["x AND 1: check odd or even"]
+    B2["x AND x-1: remove lowest set bit"]
+    B3["x XOR x = 0: pairs cancel each other"]
+    B4["x XOR 0 = x: lone value survives XOR"]
+    B1 --> B2 --> B3 --> B4
+  end
+  subgraph UseCases["When to use bit manipulation"]
+    U1["Find single non-duplicate in pairs: XOR all elements"]
+    U2["Count set bits: loop n = n AND n-1 until zero"]
+    U3["Check power of 2: n > 0 AND n AND n-1 equals zero"]
+    U4["Missing number: XOR all indices with all values"]
+    U1 --> U2 --> U3 --> U4
+  end
+```
+
+```java
+// PROBLEM 1: Single Number — one appears once, rest appear twice
+public int singleNumber(int[] nums) {
+    int result = 0;
+    for (int n : nums) result ^= n;  // XOR: pairs cancel (a^a=0), lone value survives
+    return result;
+}
+// [4,1,2,1,2] → 4^1^2^1^2 = 4^(1^1)^(2^2) = 4^0^0 = 4 ✅
+// Time: O(n)  Space: O(1)
+
+// PROBLEM 2: Count set bits (Hamming weight)
+public int hammingWeight(int n) {
+    int count = 0;
+    while (n != 0) {
+        n = n & (n - 1);  // remove the lowest set bit each iteration
+        count++;
+    }
+    return count;
+}
+// 12 = 1100: 12&11=1000 (count=1), 8&7=0000 (count=2). Two 1-bits.
+
+// PROBLEM 3: Power of Two
+public boolean isPowerOfTwo(int n) {
+    return n > 0 && (n & (n - 1)) == 0;  // power of 2 has exactly one set bit
+}
+
+// PROBLEM 4: Missing Number in [0..n]
+public int missingNumber(int[] nums) {
+    int xor = nums.length;
+    for (int i = 0; i < nums.length; i++) {
+        xor ^= i ^ nums[i];  // XOR all indices [0..n-1] and all array values
+    }
+    return xor;  // paired values cancel; missing number survives
+}
+
+// PROBLEM 5: Counting bits for all numbers 0..n — O(n) with DP + bit trick
+public int[] countBits(int n) {
+    int[] dp = new int[n + 1];
+    for (int i = 1; i <= n; i++) {
+        dp[i] = dp[i >> 1] + (i & 1);  // i>>1 = i/2, (i&1) = last bit
+    }
+    return dp;
+}
+```
+
+**Bit Manipulation Cheat Sheet:**
+
+| Operation | Code | Use Case |
+|-----------|------|----------|
+| Check bit `i` | `(n >> i) & 1` | Is bit i set? |
+| Set bit `i` | `n \| (1 << i)` | Turn bit i on |
+| Clear bit `i` | `n & ~(1 << i)` | Turn bit i off |
+| Toggle bit `i` | `n ^ (1 << i)` | Flip bit i |
+| Remove lowest set bit | `n & (n-1)` | Count set bits loop |
+| Isolate lowest set bit | `n & (-n)` | Find rightmost 1 |
+| Is power of 2 | `n > 0 && (n & (n-1)) == 0` | Exactly one set bit |
+
+**❓ Interview Q: "Why is XOR useful for finding a single non-duplicate?"**
+> **A:** XOR has two key properties: `a ^ a = 0` (same values cancel) and `a ^ 0 = a` (zero is the identity). When you XOR all elements, every element that appears twice produces a `0`. The one element that appears only once is XORed with `0` and survives, because `0 ^ x = x`. This gives O(n) time and O(1) space — far better than sorting (O(n log n)) or using a hash set (O(n) space).
+
+---
+
+### Pattern 19 — Binary Tree Deep Dive
+
+> **What is it?** Most binary tree problems are solved by DFS with the right traversal order and the right return value. Each recursive call returns information "upward" that its parent uses.
+
+**The Five Tree Traversals:**
+
+```mermaid
+flowchart TB
+  subgraph ExampleTree["Example Tree"]
+    T4["4 root"]
+    T4 --> T2["2"]
+    T4 --> T6["6"]
+    T2 --> T1["1"]
+    T2 --> T3["3"]
+    T6 --> T5["5"]
+    T6 --> T7["7"]
+  end
+  subgraph Orders["Traversal results"]
+    PR["Preorder root-left-right: 4 2 1 3 6 5 7"]
+    IN["Inorder left-root-right: 1 2 3 4 5 6 7  sorted for BST!"]
+    PO["Postorder left-right-root: 1 3 2 5 7 6 4"]
+    LO["Level-order BFS: 4 then 2-6 then 1-3-5-7"]
+    PR --> IN --> PO --> LO
+  end
+```
+
+**When to use which traversal:**
+
+| Traversal | Use When |
+|-----------|----------|
+| **Preorder** | Serialize tree, clone tree, print paths top-down |
+| **Inorder** | BST sorted order, validate BST, find kth smallest |
+| **Postorder** | Compute height from leaves up, delete tree, bottom-up DP |
+| **Level-order (BFS)** | Level-by-level results, minimum depth, zigzag traversal |
+
+```java
+// Maximum depth — classic postorder
+public int maxDepth(TreeNode root) {
+    if (root == null) return 0;
+    return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+}
+
+// Diameter of Binary Tree (longest path — may not pass through root)
+private int maxDiameter = 0;
+public int diameterOfBinaryTree(TreeNode root) {
+    computeHeight(root);
+    return maxDiameter;
+}
+private int computeHeight(TreeNode node) {
+    if (node == null) return 0;
+    int left  = computeHeight(node.left);
+    int right = computeHeight(node.right);
+    maxDiameter = Math.max(maxDiameter, left + right);  // path through this node
+    return 1 + Math.max(left, right);                   // height returned upward
+}
+
+// Lowest Common Ancestor (LCA) — most important tree problem
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    if (root == null || root == p || root == q) return root;
+    TreeNode left  = lowestCommonAncestor(root.left, p, q);
+    TreeNode right = lowestCommonAncestor(root.right, p, q);
+    if (left != null && right != null) return root;  // p and q on different sides
+    return left != null ? left : right;              // both on same side
+}
+
+// Validate Binary Search Tree — pass min/max bounds downward
+public boolean isValidBST(TreeNode root) {
+    return validate(root, Long.MIN_VALUE, Long.MAX_VALUE);
+}
+private boolean validate(TreeNode node, long min, long max) {
+    if (node == null) return true;
+    if (node.val <= min || node.val >= max) return false;
+    return validate(node.left,  min, node.val) &&
+           validate(node.right, node.val, max);
+}
+
+// Binary Tree Maximum Path Sum — hard but common in interviews
+private int maxPathSum = Integer.MIN_VALUE;
+public int maxPathSum(TreeNode root) {
+    gainFromNode(root);
+    return maxPathSum;
+}
+private int gainFromNode(TreeNode node) {
+    if (node == null) return 0;
+    int leftGain  = Math.max(gainFromNode(node.left),  0);  // ignore negative subtrees
+    int rightGain = Math.max(gainFromNode(node.right), 0);
+    maxPathSum = Math.max(maxPathSum, node.val + leftGain + rightGain);
+    return node.val + Math.max(leftGain, rightGain);  // return max single-branch
+}
+```
+
+**Tree Problem Pattern Decision Guide:**
+
+```mermaid
+flowchart TB
+  Q{"What are you computing?"}
+  Q --> H["Height or depth from leaves up\n→ Postorder DFS"]
+  Q --> P["Path sum from root down\n→ Preorder DFS accumulate"]
+  Q --> L["Level-by-level result\n→ BFS with queue"]
+  Q --> S["Sorted order or BST property\n→ Inorder DFS"]
+  Q --> A["LCA or path between two nodes\n→ Postorder with upward return"]
+  Q --> SER["Serialize or reconstruct\n→ Preorder with null markers"]
+```
+
+**❓ Interview Q: "Why is inorder traversal special for a BST?"**
+> **A:** In a BST, for every node, all left-subtree values are smaller and all right-subtree values are larger. Inorder traversal visits `left (smaller) → root → right (larger)`, which produces elements in **sorted ascending order**. This means: (1) the kth smallest element is the kth element in inorder, (2) to validate a BST you can check inorder produces a strictly increasing sequence, (3) BST problems often use inorder implicitly.
+
+---
+
+### Pattern 20 — Linked List Techniques
+
+> **What is it?** Linked list manipulation is almost always about pointer tricks in-place. The three essential techniques: the **dummy head node**, **fast and slow pointers**, and **in-place reversal**.
+
+**The Dummy Head Node — always use it:**
+```
+Without dummy: special case for inserting/removing at head
+With dummy:    dummy.next = head; treat head like any other node; return dummy.next
+
+Rule: ListNode dummy = new ListNode(0); dummy.next = head;
+```
+
+**In-place Reversal Step-by-Step:**
+
+```mermaid
+flowchart TB
+  subgraph Reverse["Reverse 1 to 2 to 3 to null"]
+    R1["prev=null  curr=1  save next=2"]
+    R2["set curr.next=null  prev=1  curr=2  save next=3"]
+    R3["set curr.next=1  prev=2  curr=3  save next=null"]
+    R4["set curr.next=2  prev=3  curr=null  DONE"]
+    R5["return prev which is 3  new head: 3 to 2 to 1"]
+    R1 --> R2 --> R3 --> R4 --> R5
+  end
+```
+
+```java
+// Reverse Linked List — iterative
+public ListNode reverseList(ListNode head) {
+    ListNode prev = null, curr = head;
+    while (curr != null) {
+        ListNode next = curr.next;  // save next before overwriting
+        curr.next = prev;           // reverse the link
+        prev = curr;                // advance prev
+        curr = next;                // advance curr
+    }
+    return prev;  // prev is the new head
+}
+
+// Palindrome Linked List — O(n) time, O(1) space
+public boolean isPalindrome(ListNode head) {
+    ListNode slow = head, fast = head;
+    // Step 1: find middle using fast/slow
+    while (fast != null && fast.next != null) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    // Step 2: reverse second half
+    ListNode reversed = reverseList(slow);
+    // Step 3: compare first half with reversed second half
+    ListNode left = head, right = reversed;
+    while (right != null) {
+        if (left.val != right.val) return false;
+        left = left.next;
+        right = right.next;
+    }
+    return true;
+}
+
+// Remove Nth Node From End — single pass with two pointers
+public ListNode removeNthFromEnd(ListNode head, int n) {
+    ListNode dummy = new ListNode(0);
+    dummy.next = head;
+    ListNode fast = dummy, slow = dummy;
+    // Advance fast n+1 steps ahead
+    for (int i = 0; i <= n; i++) fast = fast.next;
+    while (fast != null) { slow = slow.next; fast = fast.next; }
+    slow.next = slow.next.next;  // skip (remove) the nth-from-end node
+    return dummy.next;
+}
+// When fast=null, slow is exactly at the node BEFORE the target → perfect
+
+// Merge Two Sorted Lists
+public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+    ListNode dummy = new ListNode(0), curr = dummy;
+    while (l1 != null && l2 != null) {
+        if (l1.val <= l2.val) { curr.next = l1; l1 = l1.next; }
+        else                  { curr.next = l2; l2 = l2.next; }
+        curr = curr.next;
+    }
+    curr.next = (l1 != null) ? l1 : l2;
+    return dummy.next;
+}
+
+// Add Two Numbers (digits in reverse in linked list)
+public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+    ListNode dummy = new ListNode(0), curr = dummy;
+    int carry = 0;
+    while (l1 != null || l2 != null || carry != 0) {
+        int sum = carry;
+        if (l1 != null) { sum += l1.val; l1 = l1.next; }
+        if (l2 != null) { sum += l2.val; l2 = l2.next; }
+        carry = sum / 10;
+        curr.next = new ListNode(sum % 10);
+        curr = curr.next;
+    }
+    return dummy.next;
+}
+```
+
+**Linked List Tricks Quick Reference:**
+
+| Problem | Technique | Key Insight |
+|---------|-----------|-------------|
+| Find middle | Fast/slow pointers | Slow is at mid when fast reaches end |
+| Detect cycle | Fast/slow; if `fast==slow` | Floyd's cycle detection |
+| Find cycle start | Floyd phase 2 | Reset slow to head; both meet at start |
+| Reverse in-place | `prev/curr/next` pattern | Save next before overwriting |
+| Nth from end | Two pointers gap=n+1 | When fast=null, slow is before target |
+| Palindrome | Find mid + reverse + compare | In-place O(1) space trick |
+| Merge sorted | Dummy head + compare | Simplifies head edge case |
+
+**❓ Interview Q: "How do you detect the intersection of two linked lists in O(n) time and O(1) space?"**
+> **A:** Create two pointers `pA = headA` and `pB = headB`. Advance both. When `pA` reaches null, redirect it to `headB`. When `pB` reaches null, redirect it to `headA`. They meet at the intersection after both traverse the same total distance `(a + b - common)` steps. If no intersection, both reach null simultaneously. Time O(a+b), Space O(1) — no hash set needed.
+
+---
+
+## 🏆 Senior-Level DSA Interview Q&A
+
+> These are the conceptual questions senior interviewers ask. A 10-year engineer must give trade-off-aware, production-grade answers.
+
+---
+
+**Q1: "When would you use a TreeMap vs HashMap in production?"**
+> **A:** Use `TreeMap` when you need **sorted key order** or **range-based queries** like `headMap()`, `tailMap()`, `subMap()`, `floorKey()`, `ceilingKey()`. Operations are O(log n) vs O(1) average for HashMap. Production examples: booking system ("next available slot after time T"), sliding window maximum (SortedMap of indices), leaderboards needing top-N in a score range, calendar event ranges in e-commerce. If you only need O(1) lookups and ordering doesn't matter → use HashMap.
+
+---
+
+**Q2: "Explain when BFS and DFS each shine in production systems."**
+> **A:** **BFS** guarantees shortest path in unweighted graphs — use for: social network "friends within 2 hops", shortest delivery route (unweighted roads), web crawlers bounded by depth levels, propagating cache invalidation breadth-first. **DFS** uses less memory for deep trees, handles backtracking naturally — use for: file system traversal, permission inheritance checks, detecting circular dependencies (topological sort), recursive category trees in e-commerce, Sudoku/constraint solving. Production rule: BFS = "shortest"; DFS = "exhaustive / all paths".
+
+---
+
+**Q3: "Why is quicksort faster in practice despite the same O(n log n) as mergesort?"**
+> **A:** Quicksort works **in-place** on contiguous memory — excellent CPU cache locality (sequential access patterns). Mergesort requires O(n) extra space and writes to scattered memory locations. Quicksort's constant factor is ~2x smaller in practice. However quicksort's worst case is O(n²) with a bad pivot; mitigated by randomisation or median-of-three pivot selection. Java's `Arrays.sort(int[])` uses **dual-pivot quicksort** (Yaroslavskiy) for primitives — cache-friendly, ~10-20% faster than classic quicksort. `Arrays.sort(Object[])` uses **Timsort** (stable, exploits real-world sorted runs).
+
+---
+
+**Q4: "What is amortised O(1) for ArrayList.add() and why does it matter?"**
+> **A:** ArrayList doubles capacity when full — occasional O(n) copy at sizes 1, 2, 4, 8, ..., n. Total cost for n insertions: `n + n/2 + n/4 + ... = 2n = O(n)`. Amortised per insertion: O(n)/n = **O(1)**. It matters for production because: (1) you can append to ArrayList in a hot loop without performance concern, (2) understanding amortisation helps explain similar patterns — HashMap resizing, StringBuilder append, database WAL (write-ahead log) flushing. The "spread expensive work over many cheap operations" model applies broadly.
+
+---
+
+**Q5: "What is the time complexity of HashMap when all keys hash to the same bucket?"**
+> **A:** Worst-case O(n) per operation for Java 7 and earlier (linear chain). Java 8+ converts chains longer than **TREEIFY_THRESHOLD (8)** to a **Red-Black Tree**, making worst case **O(log n)** per operation. In practice this almost never happens with Java's well-distributed `hashCode()`. But it's a real attack vector: adversaries can craft keys that deliberately collide to degrade performance to O(n) — called a "HashDoS" attack. Java's HashMap uses randomised hashing (since Java 7u6) for String keys to mitigate this.
+
+---
+
+**Q6: "How would you find the median from a data stream in O(log n) per insertion?"**
+> **A:** Maintain two heaps: a **max-heap** for the lower half and a **min-heap** for the upper half. Invariant: `maxHeap.size() == minHeap.size()` or `maxHeap.size() == minHeap.size() + 1`. For each new number: offer to max-heap, then balance by offering max-heap's root to min-heap, then if min-heap is bigger, offer min-heap's root back to max-heap. Median = max-heap root (odd total) or average of both roots (even total). `addNum()`: O(log n). `findMedian()`: O(1). This is exactly `MedianFinder` on LeetCode — a canonical two-heaps problem.
+
+---
+
+**Q7: "Explain the difference between greedy and DP with a concrete example."**
+> **A:** Coin change is the perfect contrast. With coins `[1, 5, 6]`, amount = 10: **Greedy** picks `6 + 1 + 1 + 1 + 1 = 5 coins`. **DP** finds `5 + 5 = 2 coins`. Greedy fails here because taking 6 (locally largest) prevents the 5+5 solution. **When greedy works**: when the "greedy choice property" holds — the locally best choice is always part of the globally best solution. Proof technique: exchange argument (show that swapping greedy's choice for any other never improves the result). When proof fails → DP. Activity Selection, Dijkstra, and Huffman Coding all admit greedy proofs.
+
+---
+
+**Q8: "How does Java's Arrays.sort() choose between algorithms?"**
+> **A:** Java 7+ `Arrays.sort()`:
+> - `int[]`, `long[]`, `float[]`, `double[]` primitives → **dual-pivot quicksort** (Yaroslavskiy). In-place, cache-friendly, but unstable. Uses **insertion sort** for arrays of size < 47 (small arrays; less overhead). Uses **merge sort merge** when the array appears nearly sorted (detect sorted runs).
+> - `Object[]` / generics → **Timsort**. Stable. Detects and exploits natural runs in input. Best case O(n) for nearly-sorted; worst case O(n log n). Uses **binary insertion sort** for runs shorter than 32 elements.
+    > Senior answer: knowing which algorithm Java uses matters for understanding why sorting a `List<Integer>` preserves equal-element order (stable), but you shouldn't rely on that for correctness.
+
+---
+
+## 📊 LeetCode Problem Priority List — by Difficulty
+
+### EASY — Master All 15 First
+
+| # | Problem | Pattern | Key Insight |
+|---|---------|---------|-------------|
+| 1 | Two Sum | HashMap | store complement, O(n) single pass |
+| 2 | Best Time to Buy and Sell Stock | Single pass | track min so far, max profit |
+| 3 | Contains Duplicate | HashSet | O(1) existence check |
+| 4 | Valid Palindrome | Two Pointers | skip non-alphanumeric, compare ends |
+| 5 | Valid Anagram | Frequency count | 26-char array or frequency map |
+| 6 | Invert Binary Tree | DFS | swap left/right recursively |
+| 7 | Maximum Depth of Binary Tree | DFS | 1 + max(left, right) |
+| 8 | Linked List Cycle | Fast/Slow | Floyd's algorithm |
+| 9 | Reverse Linked List | prev/curr/next | save next before overwriting |
+| 10 | Merge Two Sorted Lists | Dummy head | simpler than handling empty edge cases |
+| 11 | Climbing Stairs | DP Fibonacci | dp[i] = dp[i-1] + dp[i-2] |
+| 12 | Valid Parentheses | Stack | push open, pop on close, check match |
+| 13 | Binary Search | Binary Search | lo + (hi-lo)/2 to avoid overflow |
+| 14 | Flood Fill | DFS on grid | change value = mark visited |
+| 15 | Majority Element | Boyer-Moore voting | cancel every non-majority pair |
+
+---
+
+### MEDIUM — Core 20 Every Senior Engineer Must Know
+
+| # | Problem | Pattern | Key Insight |
+|---|---------|---------|-------------|
+| 1 | 3Sum | Sort + Two Pointers | fix one element, two-pointer on the rest, skip duplicates |
+| 2 | Longest Substring Without Repeating | Sliding Window | map char to last-seen index; `left = lastSeen[c] + 1` |
+| 3 | Group Anagrams | HashMap | sorted string as canonical key |
+| 4 | Top K Frequent Elements | Min-Heap size k | root of size-k heap = kth most frequent |
+| 5 | Product of Array Except Self | Prefix + Suffix | no division; left pass then right pass |
+| 6 | Find Min in Rotated Sorted Array | Binary Search | the minimum is in the unsorted half |
+| 7 | Search in Rotated Sorted Array | Binary Search | identify which half is sorted, check target range |
+| 8 | Subarray Sum Equals K | Prefix Sum + Map | count occurrences of `prefixSum - k` |
+| 9 | Merge Intervals | Sort + Merge | sort by start; extend end when overlap |
+| 10 | Binary Tree Level Order Traversal | BFS | queue + track level size |
+| 11 | Validate BST | DFS + bounds | pass `(min, max)` constraints downward |
+| 12 | LRU Cache | LinkedHashMap or DLL+Map | O(1) get and put |
+| 13 | Number of Islands | DFS/BFS | sink visited cells, count calls |
+| 14 | Course Schedule | Topological Sort | Kahn's BFS; cycle = not all processed |
+| 15 | Coin Change | DP Unbounded | dp[i] = min(dp[i], dp[i-coin]+1) |
+| 16 | Longest Increasing Subsequence | DP or Patience Sort | O(n log n) with binary search |
+| 17 | House Robber | DP | dp[i] = max(dp[i-1], dp[i-2]+nums[i]) |
+| 18 | Kth Largest Element | QuickSelect or Heap | min-heap of size k |
+| 19 | Decode Ways | DP | check 1-digit and 2-digit possibilities |
+| 20 | Combination Sum | Backtracking | reuse allowed; sort + prune when > remaining |
+
+---
+
+### HARD — Know the Approach (Senior Expectation)
+
+| # | Problem | Pattern | Approach |
+|---|---------|---------|----------|
+| 1 | Trapping Rain Water | Two Pointers | track leftMax and rightMax; process the smaller side |
+| 2 | Sliding Window Maximum | Monotonic Deque | deque stores indices; front = max; remove out-of-window |
+| 3 | Minimum Window Substring | Sliding Window | need/formed counters; shrink when all chars satisfied |
+| 4 | Serialize and Deserialize Tree | DFS + Queue | preorder with null markers; reconstruct with queue |
+| 5 | Word Ladder | BFS + word graph | transform one character at a time; BFS levels = min steps |
+| 6 | N-Queens | Backtracking | column + diagonal sets for O(1) conflict check |
+| 7 | Median from Data Stream | Two Heaps | maxHeap (lower half) + minHeap (upper half); balance after each insert |
+| 8 | Largest Rectangle in Histogram | Monotonic Stack | stack of indices; pop when shorter bar found; area = height × width |
+| 9 | Regular Expression Matching | DP | `dp[i][j]` = text[0..i] matches pattern[0..j]; handle `*` as zero-or-more |
+| 10 | Edit Distance | 2D DP | dp[i][j] = 1 + min(insert, delete, replace) |
+
+---
+
+## 🎯 Pattern Trigger Word Master Index
+
+> Use this as a mental lookup table during interviews. See the input shape → immediately know which pattern to apply.
+
+```
+TRIGGER → PATTERN
+
+sorted array + find pair/triplet with target sum
+  → TWO POINTERS (opposite ends)
+
+"in-place", duplicate removal, slow+fast advancement
+  → TWO POINTERS (same direction, fast+slow)
+
+contiguous subarray / substring + constraint
+  → SLIDING WINDOW (fixed size or variable)
+
+multiple range-sum queries on same array
+  → PREFIX SUM
+
+number of subarrays with sum equal to k
+  → PREFIX SUM + HASH MAP
+
+sorted or monotonically ordered search space
+  → BINARY SEARCH
+
+"find minimum X where condition(X) is true"
+  → BINARY SEARCH ON ANSWER (predicate function)
+
+check existence / count frequency / group by property
+  → HASH MAP or HASH SET
+
+linked list + cycle detection / middle / palindrome
+  → FAST AND SLOW POINTERS (Floyd's)
+
+balanced parentheses / matching brackets
+  → STACK
+
+next greater element / daily temperatures / histogram
+  → MONOTONIC STACK
+
+shortest path in unweighted graph or grid
+  → BFS (guarantees minimum steps)
+
+level-order / minimum steps / spreading from a source
+  → BFS
+
+all paths / connected components / cycle in directed graph
+  → DFS
+
+topological order / task dependencies / course schedule
+  → TOPOLOGICAL SORT (Kahn's BFS or DFS-based)
+
+overlapping intervals / meeting rooms / schedules
+  → MERGE INTERVALS (sort by start)
+
+all subsets / all permutations / all valid combinations
+  → BACKTRACKING (choose → explore → unchoose)
+
+optimal value (min/max/count) + overlapping subproblems
+  → DYNAMIC PROGRAMMING
+
+1D sequence, "ways to reach" or "minimum/maximum steps"
+  → DP (1D, Fibonacci-style or Knapsack)
+
+two sequences / strings, "longest common" / edit distance
+  → DP (2D table on both strings)
+
+K largest / K smallest / streaming top-K
+  → HEAP (min-heap of size K)
+
+connected components / cycle in undirected / merge groups
+  → UNION FIND (path compression + union by rank)
+
+prefix search / autocomplete / dictionary word search
+  → TRIE
+
+"can you always make the greedy choice and be optimal?"
+  → GREEDY (prove with exchange argument)
+
+single non-duplicate when rest appear twice
+  → BIT MANIPULATION (XOR)
+
+count set bits / power of 2 checks
+  → BIT MANIPULATION (n & (n-1))
+
+binary tree height / bottom-up computation
+  → POSTORDER DFS (compute children before root)
+
+binary tree path sum / top-down accumulation
+  → PREORDER DFS (carry value from root down)
+
+BST sorted order / kth smallest / BST validation
+  → INORDER DFS (left → root → right = sorted)
+```
+
+---
+
+## 📅 60-Day Study Plan — Structured Path to DSA Mastery
+
+> Follow this plan for 2 problems per day = 120 problems in 60 days. This covers all patterns at all levels.
+
+| Week | Focus | Patterns | Problems to Solve |
+|------|-------|---------|-------------------|
+| Week 1 | Foundations | Big-O, Two Pointers, Sliding Window | Two Sum, Three Sum, Longest Substring, Trapping Rain Water |
+| Week 2 | Search & Hash | Prefix Sum, Binary Search, Hash Map | Subarray Sum = K, Search Rotated Array, Group Anagrams |
+| Week 3 | Linked Lists | Fast/Slow, Reversal, Merge | Cycle Detection, Palindrome LL, Merge K Sorted |
+| Week 4 | Stacks & Trees | Monotonic Stack, DFS, BFS | Daily Temperatures, Max Depth, Level Order, Islands |
+| Week 5 | Intervals & Graphs | Merge Intervals, Topological Sort | Merge Intervals, Course Schedule, Clone Graph |
+| Week 6 | Backtracking | Backtracking + pruning | Subsets, Permutations, Combination Sum, N-Queens |
+| Week 7 | Dynamic Programming | 1D DP, 2D DP, Knapsack | Coin Change, LCS, House Robber, Longest Palindrome |
+| Week 8 | Advanced | Heaps, Union Find, Trie, Greedy, Bit | Top K Freq, Redundant Connection, Implement Trie, Jump Game |
+| Week 9 | Hard Problems | Mixed patterns | Median Stream, LRU Cache, Word Ladder, Serialize Tree |
+| Week 10 | Mock Interviews | Timed practice | Full LeetCode mock + verbal explanation + complexity analysis |
+
+---
+
+*🏆 DSA Mastery Formula: Pattern Recognition + Clean Implementation + Complexity Analysis*
+
+*Practice 2–3 problems per day for 60 days with active recall (write solution from memory after 24 hours). This is the fastest path to cracking senior-level coding interviews.*
 
 # 💻 Part 5: Practical Coding Challenges
 
