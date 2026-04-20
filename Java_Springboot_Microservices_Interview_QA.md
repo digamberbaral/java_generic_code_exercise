@@ -95,6 +95,7 @@
 |---|---|---|---|
 | 21 | [🎓 Resume-Based Q&A — Digamber Singh](#-resume-based-interview-qa--digamber-singh) | Introduction, Projects, Skills, Leadership, Behavioral, STAR | 🟢 All Levels |
 | 22 | [🎓 Interview Cheat Sheet](#-interview-cheat-sheet) | Top 10 Questions, Quick-Fire Answers, HTTP Codes, Anti-Patterns | 🟢 All Levels |
+| 23 | [🏦 Societe Generale — Company-Specific Interview Prep](#-societe-generale--company-specific-interview-prep) | Banking Domain, SocGen Tech Stack, Java/Spring/SQL/Docker/K8s Q&A | 🟢 All Levels |
 
 ---
 
@@ -2482,280 +2483,773 @@ long total = clickCount.sum();     // Merge all internal counters
 
 ## Q21. Parallel Stream vs Stream
 
-> **🔰 Beginner's Concept**
-> - **Sequential stream:** processes elements one-by-one on the calling thread. Predictable, ordered.
-> - **Parallel stream:** splits data across multiple threads from `ForkJoinPool.commonPool()`, then merges results.
-> - **When parallel helps:** Large datasets (>10K elements) + CPU-intensive operations (no I/O, no shared state).
-> - **When parallel HURTS:** Small datasets, I/O operations, synchronized code, order-sensitive logic.
->
-> 💡 Always **benchmark** before choosing parallel. The overhead of splitting/merging often makes small datasets **slower**.
+### 🟢 Level 1 — Beginner: What Is a Stream?
 
-```mermaid
-flowchart LR
-  subgraph Seq["Sequential Stream"]
-    S0["Main Thread"] --> S1["filter"] --> S2["map"] --> S3["result"]
-  end
-  subgraph Par["Parallel Stream"]
-    P0["ForkJoinPool"] --> P1["partition data"]
-    P1 --> P2["filter/map in parallel"]
-    P2 --> P3["merge results"]
-  end
+A **stream** is a pipeline that processes a collection of data in steps — like an assembly line in a factory.
+
+```
+Raw Data → [filter] → [map] → [collect] → Result
 ```
 
-**Step-by-step**
-1. Sequential streams process elements one-by-one on a single thread.
-2. Parallel streams partition data and process chunks concurrently.
-3. Results are merged after parallel stages complete.
+There are **two kinds**:
 
-**Architectural reasoning**
-- Parallel streams help CPU-bound workloads with large datasets.
-- For I/O-bound or small datasets, parallel overhead can hurt performance.
-- Always ensure operations are stateless and associative to avoid bugs.
+| Type                  | How It Works                                                  | Analogy                                                |
+|-----------------------|---------------------------------------------------------------|--------------------------------------------------------|
+| **Sequential Stream** | One worker on the assembly line, handles every item one-by-one | One cashier at a store                                 |
+| **Parallel Stream**   | Multiple workers split the items and work simultaneously       | 4 cashiers, each takes a quarter of the queue          |
 
 ```java
-// Sequential — predictable order, single thread
-long count = orders.stream()
-    .filter(o -> o.getAmount().compareTo(BigDecimal.valueOf(1000)) > 0)
-    .count();
+// Sequential — one thread, predictable order
+List<String> names = people.stream()
+    .filter(p -> p.getAge() > 18)
+    .map(Person::getName)
+    .collect(Collectors.toList());
 
-// Parallel — uses ForkJoinPool.commonPool() (CPU cores - 1 threads)
-BigDecimal total = orders.parallelStream()
-    .filter(o -> o.getStatus() == OrderStatus.COMPLETED)
-    .map(Order::getAmount)
-    .reduce(BigDecimal.ZERO, BigDecimal::add);  // Must be associative!
-
-// Custom pool for parallel streams (avoid stealing from common pool)
-ForkJoinPool customPool = new ForkJoinPool(4);
-customPool.submit(() ->
-    orders.parallelStream().map(this::process).collect(Collectors.toList())
-).get();
-
-// ⚠️ Avoid parallel streams when:
-// - Data set is small (< 10K elements)
-// - Operations involve I/O, DB calls, or synchronized blocks
-// - Order matters (use forEachOrdered)
-// - Shared mutable state exists
+// Parallel — multiple threads, faster for BIG + CPU-heavy work
+List<String> names = people.parallelStream()
+    .filter(p -> p.getAge() > 18)
+    .map(Person::getName)
+    .collect(Collectors.toList());
 ```
+
+> 💡 Just add `.parallelStream()` instead of `.stream()` — the API is identical!
+
+### 🔵 Level 2 — Intermediate: How Parallel Streams Work Internally
+
+```mermaid
+flowchart TB
+    subgraph SEQ["Sequential Stream — Single Thread"]
+        direction LR
+        S1["item1"] --> S2["item2"] --> S3["item3"] --> S4["item4"] --> SR["Result"]
+    end
+
+    subgraph PAR["Parallel Stream — ForkJoinPool"]
+        direction TB
+        DATA["Original Data"] --> SPLIT["Spliterator splits data"]
+        SPLIT --> W1["Worker-1: item1,item2"]
+        SPLIT --> W2["Worker-2: item3,item4"]
+        W1 --> MERGE["Merge Results"]
+        W2 --> MERGE
+        MERGE --> PR["Final Result"]
+    end
+```
+
+**Behind the scenes — the Fork/Join framework:**
+
+1. **FORK:** The `Spliterator` recursively splits the data source into chunks
+2. **PROCESS:** Each chunk is assigned to a thread from `ForkJoinPool.commonPool()`
+3. **JOIN:** After processing, results are merged back together
+
+```java
+// Default pool size = Runtime.getRuntime().availableProcessors() - 1
+// On a 4-core machine → 3 worker threads + 1 calling thread = 4 total
+
+// You can check it:
+System.out.println(ForkJoinPool.commonPool().getParallelism()); // e.g., 3
+```
+
+### 🔵 Level 3 — When to Use What (Interview Gold)
+
+| Criteria                | Sequential `.stream()`   | Parallel `.parallelStream()`                             |
+|-------------------------|--------------------------|----------------------------------------------------------|
+| **Dataset size**        | Any size                 | Large: more than 10,000 elements                         |
+| **Operation type**      | Any                      | CPU-intensive only (math, transform)                     |
+| **I/O involved?**       | OK                       | NEVER (blocks shared threads)                            |
+| **Order matters?**      | Preserved automatically  | NOT guaranteed (use `forEachOrdered`)                    |
+| **Shared mutable state?** | Risky but single-threaded | BUGS guaranteed — race conditions                       |
+| **Data source**         | Any                      | `ArrayList`, arrays best (easy to split); `LinkedList` terrible |
+
+**Why parallel HURTS for small data or I/O:**
+
+```
+SMALL DATA (5 items):
+  Sequential:  process 5 items               = 0.001ms ✅
+  Parallel:    split + assign + process + merge = 0.12ms  ❌ 120x SLOWER!
+
+I/O-BOUND (HTTP calls):
+  ForkJoinPool has only 4 threads (4-core CPU)
+  Thread-1: [--- waiting 200ms for HTTP ---] 💤
+  Thread-2: [--- waiting 200ms for HTTP ---] 💤
+  Thread-3: [--- waiting 200ms for HTTP ---] 💤
+  Thread-4: [--- waiting 200ms for HTTP ---] 💤
+  → All threads BLOCKED — entire app's parallel streams STARVED!
+```
+
+### 🔴 Level 4 — Advanced: Custom ForkJoinPool + Pitfalls
+
+```java
+// ❌ BAD — parallel stream for I/O (starves common pool)
+urls.parallelStream()
+    .map(url -> httpClient.get(url))  // BLOCKS threads on I/O!
+    .collect(Collectors.toList());
+
+// ✅ GOOD — custom pool isolates parallel work
+ForkJoinPool customPool = new ForkJoinPool(8);
+List<Result> results = customPool.submit(() ->
+    bigList.parallelStream()
+        .map(this::cpuHeavyTransform)
+        .collect(Collectors.toList())
+).get();
+customPool.shutdown();
+
+// ✅ For I/O — use CompletableFuture (see Q22 below)
+
+// ⚠️ Stateful lambda — RACE CONDITION with parallel!
+List<Integer> unsafeList = new ArrayList<>();
+numbers.parallelStream().forEach(unsafeList::add);  // ❌ ConcurrentModificationException!
+
+// ✅ Fix — use thread-safe collector
+List<Integer> safeList = numbers.parallelStream().collect(Collectors.toList()); // ✅
+```
+
+### 📋 Decision Flowchart
+
+```
+Is the dataset > 10,000 elements?
+├── NO → Use sequential .stream()
+└── YES
+    └── Is the operation CPU-heavy (no I/O, no DB, no HTTP)?
+        ├── NO → Use CompletableFuture + custom ExecutorService
+        └── YES
+            └── Is the operation stateless and associative?
+                ├── NO → Use sequential .stream()
+                └── YES → ✅ Use .parallelStream()
+```
+
+### 🎯 Interview Quick Answer
+
+> **"Sequential streams process one element at a time on the calling thread. Parallel streams use the ForkJoinPool to split data across multiple threads. Parallel only helps for large datasets with CPU-bound, stateless operations. For I/O-bound work, use CompletableFuture with a custom executor instead."**
 
 ---
 
 ## Q22. CompletableFuture
 
-> **🔰 Beginner's Concept**
-> `CompletableFuture` is Java's way to write **non-blocking asynchronous code** — start work, chain what to do next, don't wait.
-> - **Sequential (slow):** fetch user (100ms) → fetch orders (100ms) → fetch notifications (100ms) = **300ms**
-> - **Parallel (fast):** `allOf(userFuture, ordersFuture, notifFuture)` → all 3 run simultaneously = **~100ms**
-> - Pipeline ops: `supplyAsync()` → `thenApply()` → `thenCombine()` → `exceptionally()` → `thenAccept()`
->
-> 💡 Always supply a **custom executor** to `supplyAsync()` — the default ForkJoinPool can starve parallel streams.
+### 🟢 Level 1 — Beginner: What Problem Does It Solve?
+
+**The problem — Sequential blocking:**
+
+```
+fetchUser()          → 100ms  💤 waiting...
+fetchOrders()        → 100ms  💤 waiting...
+fetchNotifications() → 100ms  💤 waiting...
+                       ─────
+Total:                 300ms  😩
+```
+
+**The solution — Run them all at once:**
+
+```
+fetchUser()          → |████████| 100ms
+fetchOrders()        → |████████| 100ms    (all 3 run simultaneously)
+fetchNotifications() → |████████| 100ms
+                       ─────────
+Total:                   100ms  🚀
+```
+
+> 💡 `CompletableFuture` = **"Start this work in the background, and I'll tell you what to do when it's done."**
+
+### 🟢 Level 2 — The Building Blocks (Step-by-Step)
+
+```mermaid
+flowchart LR
+    A["supplyAsync\nStart work"] --> B["thenApply\nTransform result"]
+    B --> C["thenAccept\nConsume result"]
+    C --> D["exceptionally\nHandle errors"]
+```
+
+| Method                          | What It Does                                       | Analogy                            |
+|---------------------------------|----------------------------------------------------|------------------------------------|
+| `supplyAsync(() -> ...)`        | Start work in background thread, returns a value    | Order food delivery                |
+| `runAsync(() -> ...)`           | Start work in background, returns nothing            | Send a fire-and-forget email       |
+| `thenApply(x -> ...)`          | Transform the result (like `.map()`)                | Delivery arrives → unwrap it       |
+| `thenAccept(x -> ...)`         | Use the result, return nothing                       | Eat the food                       |
+| `thenCompose(x -> ...)`        | Chain another async step (like `.flatMap()`)        | After food → order dessert         |
+| `thenCombine(otherFuture, ...)` | Combine two independent futures                     | Pizza + Drink → Meal               |
+| `exceptionally(ex -> ...)`     | Recover from error                                   | Delivery failed → cook at home     |
+| `join()`                        | Block and get the result                             | Wait at the door                   |
+
+```java
+// Step 1: Start async work
+CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+    return fetchDataFromAPI(); // runs on ForkJoinPool thread
+});
+
+// Step 2: Transform the result
+CompletableFuture<Integer> lengthFuture = future.thenApply(data -> data.length());
+
+// Step 3: Use the result
+lengthFuture.thenAccept(len -> System.out.println("Length: " + len));
+
+// Step 4: Handle errors
+lengthFuture.exceptionally(ex -> {
+    System.err.println("Failed: " + ex.getMessage());
+    return 0; // fallback value
+});
+```
+
+### 🔵 Level 3 — Combining Multiple Futures (Interview Favorite)
 
 ```mermaid
 flowchart TB
-  A["supplyAsync()\nStart async task"]
-  B["thenApply()\nTransform (sync)"]
-  C["thenApplyAsync()\nTransform (async)"]
-  D["thenCombine()\nCombine futures"]
-  E["exceptionally()\nError handling"]
-  F["thenAccept()\nConsume result"]
-  G["join()/get()\nBlock for result"]
-  A --> B --> C --> D --> E --> F --> G
+    subgraph PARALLEL["All 3 run simultaneously"]
+        F1["supplyAsync: fetchUser"]
+        F2["supplyAsync: fetchOrders"]
+        F3["supplyAsync: fetchNotifs"]
+    end
+    F1 --> JOIN["allOf: wait for all"]
+    F2 --> JOIN
+    F3 --> JOIN
+    JOIN --> BUILD["Build DashboardData"]
 ```
-
-**Step-by-step**
-1. Start asynchronous work with `supplyAsync()`.
-2. Transform results synchronously or asynchronously.
-3. Combine independent futures when needed.
-4. Handle errors and consume the final result.
-
-**Architectural reasoning**
-- Async pipelines reduce end-to-end latency by parallelizing independent work.
-- Explicit executor usage prevents thread starvation in shared pools.
-- Structured error handling avoids silent failures in production.
 
 ```java
-@Service
-public class DashboardAggregatorService {
+// ✅ Pattern 1: allOf — wait for ALL futures to complete
+public DashboardData getDashboard(String userId) {
+    ExecutorService executor = Executors.newFixedThreadPool(10); // custom pool!
 
-    // Run 3 calls in parallel — not sequential!
-    public DashboardData getDashboard(String userId) {
-        CompletableFuture<UserProfile>  profileFuture  =
-            CompletableFuture.supplyAsync(() -> userService.getProfile(userId), executor);
+    CompletableFuture<UserProfile> profileF =
+        CompletableFuture.supplyAsync(() -> userService.getProfile(userId), executor);
 
-        CompletableFuture<List<Order>>  ordersFuture   =
-            CompletableFuture.supplyAsync(() -> orderService.getRecent(userId), executor);
+    CompletableFuture<List<Order>> ordersF =
+        CompletableFuture.supplyAsync(() -> orderService.getRecent(userId), executor);
 
-        CompletableFuture<List<Notification>> notifFuture =
-            CompletableFuture.supplyAsync(() -> notifService.getUnread(userId), executor);
+    CompletableFuture<List<Notification>> notifsF =
+        CompletableFuture.supplyAsync(() -> notifService.getUnread(userId), executor);
 
-        // Wait for ALL to complete — parallel execution!
-        CompletableFuture.allOf(profileFuture, ordersFuture, notifFuture).join();
+    // Wait for ALL three — they ran in parallel!
+    CompletableFuture.allOf(profileF, ordersF, notifsF).join();
 
-        return DashboardData.builder()
-            .profile(profileFuture.join())   // Already done — no blocking
-            .orders(ordersFuture.join())
-            .notifications(notifFuture.join())
-            .build();
-        // Sequential: 3 × 100ms = 300ms
-        // Parallel:   max(100ms) = ~100ms ✅
-    }
+    return DashboardData.builder()
+        .profile(profileF.join())
+        .orders(ordersF.join())
+        .notifications(notifsF.join())
+        .build();
+    // Sequential: 100 + 100 + 100 = 300ms
+    // Parallel:   max(100, 100, 100) = ~100ms 🚀
+}
 
-    // Pipeline with error handling
-    public CompletableFuture<String> processOrder(OrderRequest req) {
-        return CompletableFuture
-            .supplyAsync(() -> validateOrder(req))
-            .thenApplyAsync(order -> chargePaPayment(order), paymentExecutor)
-            .thenApplyAsync(order -> updateInventory(order), inventoryExecutor)
-            .thenApply(order -> "Order " + order.getId() + " completed")
-            .exceptionally(ex -> {
-                log.error("Order failed", ex);
-                compensate(req);          // Rollback
-                return "Order failed: " + ex.getMessage();
-            });
-    }
+// ✅ Pattern 2: thenCombine — combine exactly 2 futures
+CompletableFuture<String> greeting = userFuture.thenCombine(weatherFuture,
+    (user, weather) -> "Hello " + user.getName() + "! It's " + weather);
+
+// ✅ Pattern 3: anyOf — first one to finish wins (for racing/fallback)
+CompletableFuture<Object> fastest = CompletableFuture.anyOf(
+    fetchFromCacheAsync(key),
+    fetchFromDbAsync(key)
+);
+```
+
+### 🔵 Level 4 — Pipeline Chaining with Error Handling
+
+```java
+// Real-world pipeline: validate → charge → ship → notify
+public CompletableFuture<String> processOrder(OrderRequest req) {
+    return CompletableFuture
+        .supplyAsync(() -> validateOrder(req), executor)         // Step 1
+        .thenApplyAsync(order -> chargePayment(order), paymentExecutor) // Step 2
+        .thenApplyAsync(order -> shipOrder(order), shippingExecutor)    // Step 3
+        .thenApply(order -> {
+            notifyCustomer(order);
+            return "Order " + order.getId() + " completed!";           // Step 4
+        })
+        .exceptionally(ex -> {
+            log.error("Order pipeline failed", ex);
+            compensate(req); // rollback / saga compensation
+            return "Order failed: " + ex.getMessage();
+        });
 }
 ```
+
+### 🔴 Level 5 — Advanced: Always Use a Custom Executor
+
+```java
+// ❌ BAD — uses ForkJoinPool.commonPool() (shared with parallel streams!)
+CompletableFuture.supplyAsync(() -> httpClient.get(url)); // starves other work!
+
+// ✅ GOOD — custom thread pool for I/O work
+ExecutorService ioExecutor = Executors.newFixedThreadPool(20);
+CompletableFuture.supplyAsync(() -> httpClient.get(url), ioExecutor);
+
+// ✅ Java 21+ — Virtual Threads (best for massive I/O concurrency)
+ExecutorService vtExecutor = Executors.newVirtualThreadPerTaskExecutor();
+CompletableFuture.supplyAsync(() -> httpClient.get(url), vtExecutor);
+```
+
+### 🔴 Level 6 — Timeout + Advanced Error Handling (Java 9+)
+
+```java
+CompletableFuture<String> future = CompletableFuture
+    .supplyAsync(() -> slowService.call(), executor)
+    .orTimeout(5, TimeUnit.SECONDS)                   // throws TimeoutException after 5s
+    .completeOnTimeout("default-value", 3, TimeUnit.SECONDS) // fallback after 3s
+    .handle((result, ex) -> {                          // handle BOTH success and failure
+        if (ex != null) {
+            log.warn("Fallback triggered: {}", ex.getMessage());
+            return "fallback";
+        }
+        return result;
+    });
+```
+
+### 📋 CompletableFuture vs Parallel Stream — When to Use What
+
+| Criteria              | Parallel Stream                      | CompletableFuture                               |
+|-----------------------|--------------------------------------|------------------------------------------------|
+| **Best for**          | CPU-heavy data processing            | I/O-bound tasks (HTTP, DB, files)              |
+| **Thread pool**       | ForkJoinPool.commonPool()            | Custom ExecutorService (you control)           |
+| **Error handling**    | Exceptions kill the stream           | `.exceptionally()`, `.handle()`                |
+| **Chaining**          | `.filter().map().collect()`          | `.thenApply().thenCompose().thenCombine()`     |
+| **Combining results** | Auto-merged by collector             | `allOf()`, `thenCombine()`, `anyOf()`          |
+| **Timeout support**   | No                                   | Yes (Java 9+)                                  |
+
+### 🎯 Interview Quick Answer
+
+> **"CompletableFuture lets me run multiple I/O tasks in parallel and chain transformations without blocking the calling thread. I always use a custom ExecutorService to avoid starving the common ForkJoinPool. For combining independent calls, I use allOf(). For error handling, exceptionally() or handle()."**
 
 ---
 
 ## Q23. Generics & Type Erasure
 
-```mermaid
-flowchart LR
-  subgraph Compile["Compile Time"]
-    G1["List<String>"] -->|type-checked| OK1["OK"]
-    G2["List<Integer>"] -->|type-checked| OK2["OK"]
-  end
-  subgraph Runtime["Runtime — Type Erasure"]
-    R1["List (raw type)"]
-    R2["List (raw type)"]
-  end
-  OK1 -->|erase| R1
-  OK2 -->|erase| R2
-```
+### 🟢 Level 1 — Beginner: Why Do We Need Generics?
 
-**What are Generics?**
-Generics allow writing type-safe, reusable code. Type parameters are checked at compile time and erased at runtime.
-
-**Step-by-step**
-1. You declare `List<String>` — compiler enforces only Strings.
-2. At runtime JVM sees just `List` — type info is erased.
-3. Compiler inserts casts automatically where needed.
-
-**Architectural reasoning**
-- Eliminates `ClassCastException` at runtime by catching errors at compile time.
-- Enables reusable algorithms (sort, search) that work on any type.
-- Type erasure maintains backward compatibility with pre-generics code.
+**Before generics (Java 1.4 and earlier) — no type safety:**
 
 ```java
-// Generic class — single API, multiple types
+// ❌ Without generics — anything goes in, ClassCastException at runtime
+List list = new ArrayList();
+list.add("hello");
+list.add(42);               // compiler allows this! 😱
+String s = (String) list.get(1); // 💥 ClassCastException at RUNTIME!
+```
+
+**With generics (Java 5+) — compiler catches errors:**
+
+```java
+// ✅ With generics — type-safe at compile time
+List<String> list = new ArrayList<>();
+list.add("hello");
+list.add(42);               // ❌ COMPILE ERROR — caught immediately!
+String s = list.get(0);     // ✅ No cast needed
+```
+
+> 💡 **Generics = "Tell the compiler what type you expect, and it will enforce it for you."**
+
+### 🟢 Level 2 — Generic Classes, Methods, and Interfaces
+
+```java
+// ── Generic CLASS ──
+// T is a placeholder — replaced with actual type when used
+public class Box<T> {
+    private T item;
+
+    public void put(T item) { this.item = item; }
+    public T get() { return item; }
+}
+
+Box<String> stringBox = new Box<>();   // T = String
+stringBox.put("hello");
+String val = stringBox.get();          // no cast needed!
+
+Box<Integer> intBox = new Box<>();     // T = Integer
+intBox.put(42);
+
+// ── Generic METHOD ──
+// <T> before return type = "this method has its own type parameter"
+public static <T> T firstOrNull(List<T> list) {
+    return list.isEmpty() ? null : list.get(0);
+}
+String first = firstOrNull(List.of("a", "b")); // compiler infers T = String
+
+// ── Generic INTERFACE ──
+public interface Repository<T, ID> {
+    T findById(ID id);
+    List<T> findAll();
+    void save(T entity);
+}
+// Spring Data JPA: public interface UserRepo extends JpaRepository<User, Long> {}
+```
+
+### 🔵 Level 3 — Bounded Type Parameters
+
+```java
+// "T must be a type that implements Comparable"
+// This is called an UPPER BOUND
+public static <T extends Comparable<T>> T findMax(List<T> list) {
+    return list.stream()
+        .max(Comparator.naturalOrder())
+        .orElseThrow();
+}
+
+findMax(List.of(3, 1, 4, 1, 5));     // ✅ Integer implements Comparable
+findMax(List.of("z", "a", "m"));     // ✅ String implements Comparable
+// findMax(List.of(new Object()));   // ❌ Object doesn't implement Comparable
+
+// Multiple bounds — T must extend Number AND implement Serializable
+public static <T extends Number & Serializable> void process(T item) { }
+```
+
+### 🔵 Level 4 — Wildcards and the PECS Rule (Interview Favorite)
+
+```
+PECS = Producer Extends, Consumer Super
+
+? extends T  → READ from it (producer)   — "anything that IS-A T or subclass"
+? super T    → WRITE to it (consumer)    — "anything that IS-A T or superclass"
+?            → READ as Object only       — "I don't care about the type"
+```
+
+```java
+// ── PRODUCER: ? extends (READ-ONLY) ──
+// "Give me a list of any kind of Number — I'll only READ from it"
+public static double sum(List<? extends Number> numbers) {
+    double total = 0;
+    for (Number n : numbers) {
+        total += n.doubleValue();  // ✅ Reading works
+    }
+    // numbers.add(42);           // ❌ COMPILE ERROR — can't write!
+    return total;
+}
+sum(List.of(1, 2, 3));            // ✅ List<Integer> — Integer extends Number
+sum(List.of(1.5, 2.5));           // ✅ List<Double>  — Double extends Number
+
+// ── CONSUMER: ? super (WRITE-ONLY) ──
+// "Give me a list that can accept Integers — I'll WRITE to it"
+public static void fill(List<? super Integer> list) {
+    list.add(1);                   // ✅ Writing works
+    list.add(2);
+    // Integer x = list.get(0);   // ❌ Can only read as Object
+}
+fill(new ArrayList<Integer>());    // ✅
+fill(new ArrayList<Number>());     // ✅ Number is super of Integer
+fill(new ArrayList<Object>());     // ✅ Object is super of Integer
+```
+
+### 🔴 Level 5 — Type Erasure (What the JVM Actually Sees)
+
+```mermaid
+flowchart LR
+    subgraph CT["At Compile Time"]
+        A["List of String"]
+        B["List of Integer"]
+    end
+    subgraph RT["At Runtime after Erasure"]
+        C["List raw"]
+        D["List raw"]
+    end
+    A -->|erased| C
+    B -->|erased| D
+    E["Both are just List!\nGeneric info is GONE"]
+```
+
+**What happens during erasure:**
+
+```java
+// ── What YOU write ──
+public class Box<T> {
+    private T item;
+    public T get() { return item; }
+}
+
+// ── What the JVM sees (after erasure) ──
+public class Box {
+    private Object item;                     // T → Object
+    public Object get() { return item; }     // T → Object
+}
+
+// ── What the compiler adds (invisible casts) ──
+Box<String> box = new Box<>();
+String s = box.get();
+// Actually compiles to: String s = (String) box.get();
+
+// PROOF of erasure:
+List<String> strings = new ArrayList<>();
+List<Integer> ints = new ArrayList<>();
+System.out.println(strings.getClass() == ints.getClass()); // true!
+// Both are just java.util.ArrayList at runtime
+```
+
+**Type erasure gotchas (interview traps):**
+
+```java
+// ❌ Cannot create generic array
+// T[] arr = new T[10]; // COMPILE ERROR — T is unknown at runtime
+
+// ❌ Cannot use instanceof with generics
+// if (obj instanceof List<String>) { } // COMPILE ERROR
+
+// ❌ Cannot overload methods that differ only by type parameter
+// void process(List<String> list) { }
+// void process(List<Integer> list) { } // COMPILE ERROR — same erasure!
+
+// ✅ Workaround for generic array
+@SuppressWarnings("unchecked")
+T[] arr = (T[]) new Object[10];
+```
+
+### 🔴 Level 6 — Real-World Generic Patterns
+
+```java
+// ── Pattern 1: Generic API Response (used in every REST service) ──
 public class ApiResponse<T> {
-    private final T data;
-    private final String message;
-    private final int status;
+    private T data;
+    private String message;
+    private int status;
 
     public static <T> ApiResponse<T> success(T data) {
         return new ApiResponse<>(data, "OK", 200);
     }
-    public static <T> ApiResponse<T> error(String msg, int status) {
-        return new ApiResponse<>(null, msg, status);
+    public static <T> ApiResponse<T> error(String msg, int code) {
+        return new ApiResponse<>(null, msg, code);
     }
 }
-// ApiResponse<UserDTO> r1 = ApiResponse.success(userDto);
-// ApiResponse<List<Order>> r2 = ApiResponse.success(orders);
+// ApiResponse<UserDTO> resp = ApiResponse.success(userDto);
+// ApiResponse<List<Order>> resp = ApiResponse.success(orders);
 
-// Bounded type parameter
-public <T extends Comparable<T>> T findMax(List<T> list) {
-    return list.stream().max(Comparator.naturalOrder())
-               .orElseThrow(() -> new NoSuchElementException("Empty list"));
+// ── Pattern 2: Generic Repository Base ──
+public abstract class BaseRepository<T, ID> {
+    public abstract T findById(ID id);
+    public abstract List<T> findAll();
+    public abstract T save(T entity);
 }
+public class UserRepository extends BaseRepository<User, Long> { /* ... */ }
 
-// Wildcard — covariant read-only
-public double sumAll(List<? extends Number> numbers) {
-    return numbers.stream().mapToDouble(Number::doubleValue).sum();
-}
-
-// Wildcard — contravariant write
-public void addNumbers(List<? super Integer> list) {
-    list.add(1); list.add(2);
-}
-
-// Type erasure gotcha
-List<String> strings = new ArrayList<>();
-List<Integer> ints   = new ArrayList<>();
-System.out.println(strings.getClass() == ints.getClass()); // true — both are ArrayList
+// ── Pattern 3: Type token (workaround for erasure) ──
+// Used by Jackson, Gson, Spring RestTemplate
+TypeReference<List<User>> typeRef = new TypeReference<>() {};
+List<User> users = objectMapper.readValue(json, typeRef);
 ```
 
-**Interview tips**
-- `List<String>` is NOT a subtype of `List<Object>` — use `List<? extends Object>` instead.
-- Cannot create `new T[]` — use `(T[]) new Object[size]` with cast.
-- Prefer bounded wildcards (`? extends / ? super`) for flexible APIs (PECS rule).
+### 📋 Quick Reference Table
+
+| Feature                      | Syntax                          | Meaning                                    |
+|------------------------------|---------------------------------|--------------------------------------------|
+| Generic class                | `class Box<T>`                  | T is decided when creating an instance     |
+| Generic method               | `<T> T find(List<T> list)`      | T is decided per method call               |
+| Upper bound                  | `<T extends Number>`            | T must be Number or subclass               |
+| Unbounded wildcard           | `List<?>`                       | Any type, read-only as Object              |
+| Upper-bounded wildcard       | `List<? extends Number>`        | Read Numbers, can't write                  |
+| Lower-bounded wildcard       | `List<? super Integer>`         | Write Integers, read as Object             |
+| Type erasure                 | `List<String>` becomes `List`   | Generic info removed at runtime            |
+
+### 🎯 Interview Quick Answer
+
+> **"Generics provide compile-time type safety and code reuse. The compiler enforces type constraints, then erases all generic info at runtime — this is type erasure. At runtime, `List<String>` and `List<Integer>` are both just `List`. I use bounded wildcards following the PECS rule: `? extends T` for reading, `? super T` for writing."**
 
 ---
 
 ## Q24. Functional Interfaces & Lambdas (Java 8+)
 
-```mermaid
-flowchart TB
-  subgraph BuiltIn["Built-|in| Functional Interfaces"]
-    direction LR
-    Supplier["Supplier<T>\n() -> T"]
-    Consumer["Consumer<T>\nT -> void"]
-    Function["Function<T,R>\nT -> R"]
-    Predicate["Predicate<T>\nT -> boolean"]
-    BiFunction["BiFunction<T,U,R>\n(T,U) -> R"]
-    UnaryOp["UnaryOperator<T>\nT -> T"]
-  end
-```
+### 🟢 Level 1 — Beginner: What Is a Functional Interface?
 
-**Step-by-step**
-1. A functional interface has exactly one abstract method (`@FunctionalInterface`).
-2. Lambda expressions provide a concise implementation of that interface.
-3. Method references (`::`) are even more concise alternatives.
+A **functional interface** is an interface with **exactly one abstract method**. That's it!
 
 ```java
-// Built-in interfaces
-Supplier<UUID>            idGen    = UUID::randomUUID;
-Consumer<String>          logger   = msg -> log.info("Event: {}", msg);
-Function<String, Integer> parser   = Integer::parseInt;
-Predicate<String>         notEmpty = s -> !s.isBlank();
-BiFunction<Integer, Integer, Integer> add = Integer::sum;
-UnaryOperator<String>     trim     = s -> s.trim().toUpperCase();
+// This IS a functional interface — one abstract method
+@FunctionalInterface
+public interface Greeting {
+    String sayHello(String name);  // the ONE abstract method
+}
 
-// Function composition
-Function<String, String> pipeline =
-    ((Function<String, Integer>) Integer::parseInt)
-        .andThen(n -> n * 2)
-        .andThen(Object::toString);
+// Before Java 8 — anonymous inner class (verbose!)
+Greeting g1 = new Greeting() {
+    @Override
+    public String sayHello(String name) {
+        return "Hello, " + name;
+    }
+};
 
-// Predicate chaining
-Predicate<Order> valid = ((Predicate<Order>) o -> o.getId() != null)
-    .and(o -> o.getAmount() > 0)
-    .and(o -> o.getStatus() == Status.PENDING);
+// Java 8+ — lambda expression (concise!)
+Greeting g2 = name -> "Hello, " + name;
 
-// Custom functional interface with default combinator
+// Both produce the same result:
+System.out.println(g2.sayHello("Digamber")); // "Hello, Digamber"
+```
+
+> 💡 **Lambda = a short way to implement a functional interface, without writing a whole class.**
+
+### 🟢 Level 2 — Lambda Syntax Variations
+
+```java
+// Full syntax
+(String name) -> { return "Hello, " + name; }
+
+// Type inference (compiler knows the type)
+(name) -> { return "Hello, " + name; }
+
+// Single parameter — no parentheses needed
+name -> { return "Hello, " + name; }
+
+// Single expression — no braces, no return keyword
+name -> "Hello, " + name
+
+// No parameters
+() -> System.out.println("Hello!")
+
+// Two parameters
+(a, b) -> a + b
+```
+
+### 🔵 Level 3 — The 6 Built-in Functional Interfaces (Interview Must-Know)
+
+```mermaid
+flowchart TB
+    subgraph SIX["The Big 6 Functional Interfaces"]
+        direction TB
+        S["Supplier T\n() produces T"]
+        C["Consumer T\nT consumed void"]
+        F["Function T R\nT transforms R"]
+        P["Predicate T\nT tests boolean"]
+        BF["BiFunction T U R\nT U produces R"]
+        UO["UnaryOperator T\nT transforms T"]
+    end
+```
+
+| Interface            | Input    | Output    | Use Case                    | Example                     |
+|----------------------|----------|-----------|-----------------------------|-----------------------------|
+| `Supplier<T>`        | None     | `T`       | Generate/provide values     | `() -> UUID.randomUUID()`   |
+| `Consumer<T>`        | `T`      | None      | Process/consume values      | `msg -> log.info(msg)`      |
+| `Function<T,R>`      | `T`      | `R`       | Transform one type to another | `String -> Integer`       |
+| `Predicate<T>`       | `T`      | `boolean` | Test a condition            | `s -> s.length() > 5`      |
+| `BiFunction<T,U,R>`  | `T`, `U` | `R`       | Combine two values          | `(a, b) -> a + b`          |
+| `UnaryOperator<T>`   | `T`      | `T`       | Transform, keep same type   | `s -> s.toUpperCase()`     |
+
+```java
+// Supplier — produces a value from nothing
+Supplier<UUID> idGenerator = UUID::randomUUID;
+UUID newId = idGenerator.get(); // generates a new UUID
+
+// Consumer — takes a value, returns nothing
+Consumer<String> logger = msg -> System.out.println("LOG: " + msg);
+logger.accept("Server started"); // prints "LOG: Server started"
+
+// Function — takes one type, returns another
+Function<String, Integer> strLength = String::length;
+int len = strLength.apply("hello"); // 5
+
+// Predicate — takes a value, returns true/false
+Predicate<String> isLong = s -> s.length() > 10;
+boolean result = isLong.test("hello"); // false
+
+// BiFunction — takes two values, returns one
+BiFunction<Integer, Integer, Integer> multiply = (a, b) -> a * b;
+int product = multiply.apply(3, 4); // 12
+
+// UnaryOperator — same input and output type
+UnaryOperator<String> shout = s -> s.toUpperCase() + "!!!";
+String yell = shout.apply("hello"); // "HELLO!!!"
+```
+
+### 🔵 Level 4 — Method References (4 Types)
+
+Method references are an even shorter way to write lambdas when you're just calling an existing method.
+
+```java
+// TYPE 1: Static method reference
+// Lambda:           s -> Integer.parseInt(s)
+// Method reference: Integer::parseInt
+Function<String, Integer> parse = Integer::parseInt;
+
+// TYPE 2: Instance method on a specific object
+// Lambda:           s -> System.out.println(s)
+// Method reference: System.out::println
+Consumer<String> print = System.out::println;
+
+// TYPE 3: Instance method on an arbitrary object of a type
+// Lambda:           s -> s.toUpperCase()
+// Method reference: String::toUpperCase
+Function<String, String> upper = String::toUpperCase;
+
+// TYPE 4: Constructor reference
+// Lambda:           s -> new ArrayList(s)
+// Method reference: ArrayList::new
+Function<Integer, List<Object>> listMaker = ArrayList::new;
+```
+
+### 🔵 Level 5 — Composition and Chaining (Power Feature)
+
+```java
+// ── Function chaining with andThen / compose ──
+Function<String, String> trim      = String::trim;
+Function<String, String> upperCase = String::toUpperCase;
+Function<String, Integer> length   = String::length;
+
+// andThen: trim → uppercase → length
+Function<String, Integer> pipeline = trim.andThen(upperCase).andThen(length);
+int result = pipeline.apply("  hello  "); // "hello" → "HELLO" → 5
+
+// compose: applies the INNER function first (reverse order)
+Function<String, Integer> composed = length.compose(upperCase).compose(trim);
+// same result: trim → uppercase → length → 5
+
+// ── Predicate chaining with and / or / negate ──
+Predicate<String> notEmpty   = s -> !s.isEmpty();
+Predicate<String> notTooLong = s -> s.length() <= 100;
+Predicate<String> isValid    = notEmpty.and(notTooLong);
+
+// negate
+Predicate<String> isEmpty = notEmpty.negate();
+
+// Predicate.not() — Java 11+
+Predicate<String> isNotBlank = Predicate.not(String::isBlank);
+
+// ── Consumer chaining with andThen ──
+Consumer<Order> logOrder    = o -> log.info("Order: {}", o.getId());
+Consumer<Order> notifyUser  = o -> emailService.send(o.getUserEmail());
+Consumer<Order> fullProcess = logOrder.andThen(notifyUser);
+```
+
+### 🔴 Level 6 — Custom Functional Interfaces (Real-World)
+
+```java
+// Custom validator with chaining support
 @FunctionalInterface
 public interface Validator<T> {
     ValidationResult validate(T input);
 
+    // Default method — allows chaining: validator1.and(validator2).and(validator3)
     default Validator<T> and(Validator<T> other) {
         return input -> {
-            ValidationResult r = this.validate(input);
-            return r.isValid() ? other.validate(input) : r;
+            ValidationResult result = this.validate(input);
+            return result.isValid() ? other.validate(input) : result;
         };
     }
 }
 
-// Method references — 4 kinds
-list.forEach(System.out::println);      // instance method on arbitrary object
-list.stream().map(String::toUpperCase); // instance method on type
-list.stream().map(Integer::parseInt);   // static method
-list.stream().map(Order::new);          // constructor reference
+// Usage
+Validator<Order> hasId     = order -> order.getId() != null
+    ? ValidationResult.valid()
+    : ValidationResult.invalid("Missing ID");
+
+Validator<Order> hasAmount = order -> order.getAmount() > 0
+    ? ValidationResult.valid()
+    : ValidationResult.invalid("Invalid amount");
+
+Validator<Order> fullValidator = hasId.and(hasAmount);
+ValidationResult result = fullValidator.validate(myOrder);
 ```
 
-**Interview tips**
-- `Predicate.not(String::isBlank)` — negate a method reference (Java 11+).
-- Default methods in functional interfaces are allowed; only one abstract method matters.
-- Use `Function.identity()` instead of `x -> x`.
+### 🔴 Level 7 — Lambdas in Stream API (Tying It All Together)
+
+```java
+List<OrderDTO> result = orders.stream()
+    .filter(o -> o.getStatus() == Status.COMPLETED)  // Predicate<Order>
+    .filter(o -> o.getAmount() > 100)                 // Predicate<Order>
+    .map(o -> new OrderDTO(o.getId(), o.getTotal()))   // Function<Order, OrderDTO>
+    .sorted(Comparator.comparing(OrderDTO::getTotal).reversed()) // Comparator
+    .peek(dto -> log.info("Processing: {}", dto))     // Consumer<OrderDTO>
+    .collect(Collectors.toList());
+
+// Every stream operation takes a functional interface:
+//   filter()  → Predicate<T>
+//   map()     → Function<T, R>
+//   forEach() → Consumer<T>
+//   reduce()  → BinaryOperator<T>
+//   sorted()  → Comparator<T>
+```
+
+### 🎯 Interview Quick Answer
+
+> **"A functional interface has exactly one abstract method. Lambdas provide a concise way to implement them. Java 8 ships with key built-in interfaces: Supplier, Consumer, Function, Predicate, BiFunction, and UnaryOperator. I use Function.andThen() for chaining transformations, Predicate.and()/or() for combining conditions, and method references (Class::method) for cleaner code."**
 
 ---
 
@@ -2763,9 +3257,9 @@ list.stream().map(Order::new);          // constructor reference
 
 ```mermaid
 flowchart LR
-  Comparable["Comparable<T>\ncompareTo(T o)\nNatural ordering\nInside the class\nOne fixed order"]
-  Comparator["Comparator<T>\ncompare(T a, T b)\nCustom ordering\nOutside the class\nMultiple orderings"]
-  List["Collections.sort(list)"] --> Comparable
+  Comparable["Comparable T\ncompareTo T o\nNatural ordering\nInside the class\nOne fixed order"]
+  Comparator["Comparator T\ncompare T a T b\nCustom ordering\nOutside the class\nMultiple orderings"]
+  List["Collections.sort list"] --> Comparable
   List --> Comparator
 ```
 
@@ -2807,106 +3301,303 @@ TreeMap<Product, Integer> inventory = new TreeMap<>(byPriceDesc);
 
 ## Q26. Design Patterns — Most Asked
 
-### Singleton
+### 🟢 Level 1 — What Are Design Patterns?
+
+Design patterns are **proven, reusable solutions** to common software design problems. Think of them as **recipes** — you don't reinvent cooking each time.
+
+**Three categories:**
+
+| Category        | Purpose                      | Patterns Covered                       |
+|-----------------|------------------------------|----------------------------------------|
+| **Creational**  | How to CREATE objects        | Singleton, Factory, Builder            |
+| **Structural**  | How to COMPOSE objects       | Adapter, Decorator, Proxy              |
+| **Behavioral**  | How objects COMMUNICATE      | Strategy, Observer, Template Method    |
+
+### 🟢 When to Use What — Decision Guide (Interview Gold)
+
+```
+"I need only ONE instance of this class"
+    → Singleton
+
+"I need to create objects without knowing the exact class"
+    → Factory
+
+"I need to construct a complex object step-by-step"
+    → Builder
+
+"I need to switch algorithms/behavior at runtime"
+    → Strategy
+
+"I need to notify multiple components when something happens"
+    → Observer
+
+"I need to add behavior to an object without changing its class"
+    → Decorator
+
+"I need to make incompatible interfaces work together"
+    → Adapter
+```
+
+---
+
+### 🔵 Pattern 1: Singleton — One Instance, Globally Shared
+
+**When:** Database connection pool, configuration, logging, caches.
+
+```mermaid
+flowchart LR
+    A["Thread-1: getInstance"] --> S["Single Instance\nConnectionPool"]
+    B["Thread-2: getInstance"] --> S
+    C["Thread-3: getInstance"] --> S
+```
 
 ```java
-// Thread-safe lazy — Bill Pugh idiom (preferred)
+// ✅ Approach 1: Bill Pugh Idiom (PREFERRED — lazy, thread-safe, no synchronization cost)
 public class ConnectionPool {
-    private ConnectionPool() { }
+    private ConnectionPool() { }  // private constructor — no one else can create
+
     private static class Holder {
+        // JVM guarantees this is initialized only once, when Holder is first accessed
         static final ConnectionPool INSTANCE = new ConnectionPool();
     }
-    public static ConnectionPool getInstance() { return Holder.INSTANCE; }
+
+    public static ConnectionPool getInstance() {
+        return Holder.INSTANCE;  // lazy — created only when this method is called
+    }
 }
 
-// Enum singleton — Effective Java recommendation
+// ✅ Approach 2: Enum Singleton (Effective Java recommendation — simplest)
 public enum AppConfig {
     INSTANCE;
-    public String get(String key) { return System.getProperty(key); }
+    private final Properties props = loadProperties();
+    public String get(String key) { return props.getProperty(key); }
+}
+
+// ✅ Approach 3: Double-Checked Locking (for understanding — not preferred)
+public class Singleton {
+    private static volatile Singleton instance; // volatile prevents partial construction
+
+    public static Singleton getInstance() {
+        if (instance == null) {                   // 1st check — avoid locking every time
+            synchronized (Singleton.class) {
+                if (instance == null) {            // 2nd check — inside lock
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
 }
 ```
 
-### Factory
+**Interview tip:** When asked "how to break Singleton?" → Reflection, Serialization, Cloning. Enum Singleton is immune to all three.
+
+---
+
+### 🔵 Pattern 2: Factory — Create Without Knowing the Exact Class
+
+**When:** Multiple implementations of an interface, decision based on input/config.
+
+```mermaid
+flowchart LR
+    Client["Client: send notification\nchannel = sms"] --> Factory["NotificationFactory\ncreate channel"]
+    Factory -->|email| E["EmailSender"]
+    Factory -->|sms| S["SmsSender"]
+    Factory -->|push| P["PushSender"]
+```
 
 ```java
+// Step 1: Common interface
 public interface NotificationSender {
     void send(String to, String message);
 }
 
+// Step 2: Multiple implementations
+public class EmailSender implements NotificationSender {
+    public void send(String to, String msg) { /* send email */ }
+}
+public class SmsSender implements NotificationSender {
+    public void send(String to, String msg) { /* send SMS */ }
+}
+public class PushSender implements NotificationSender {
+    public void send(String to, String msg) { /* send push */ }
+}
+
+// Step 3: Factory decides which one to create
 public class NotificationFactory {
     public static NotificationSender create(String channel) {
         return switch (channel.toLowerCase()) {
             case "email" -> new EmailSender();
             case "sms"   -> new SmsSender();
             case "push"  -> new PushSender();
-            default      -> throw new IllegalArgumentException("Unknown: " + channel);
+            default -> throw new IllegalArgumentException("Unknown: " + channel);
         };
+    }
+}
+
+// Usage — client doesn't know which class is created!
+NotificationSender sender = NotificationFactory.create("sms");
+sender.send("+91...", "Hello!");
+
+// ✅ Spring-powered factory (auto-discovers all implementations)
+@Service
+public class NotificationService {
+    private final Map<String, NotificationSender> senders; // Spring injects all beans!
+    public NotificationService(Map<String, NotificationSender> senders) {
+        this.senders = senders;
+    }
+    public void notify(String channel, String to, String msg) {
+        senders.get(channel).send(to, msg);
     }
 }
 ```
 
-### Builder
+---
+
+### 🔵 Pattern 3: Builder — Construct Complex Objects Step-by-Step
+
+**When:** Object has many fields, some optional, immutability needed.
 
 ```java
+// ✅ Builder pattern — fluent, readable, immutable result
 public class OrderRequest {
-    private final String customerId;
-    private final List<OrderItem> items;
-    private final String currency;
+    private final String customerId;       // required
+    private final List<OrderItem> items;   // required
+    private final String currency;         // optional, default "INR"
+    private final String notes;            // optional
 
     private OrderRequest(Builder b) {
-        this.customerId = Objects.requireNonNull(b.customerId);
-        this.items      = List.copyOf(b.items);
+        this.customerId = Objects.requireNonNull(b.customerId, "customerId required");
+        this.items      = List.copyOf(b.items);   // immutable copy!
         this.currency   = b.currency;
+        this.notes      = b.notes;
     }
 
-    public static Builder builder(String customerId) { return new Builder(customerId); }
+    public static Builder builder(String customerId) {
+        return new Builder(customerId);
+    }
 
     public static class Builder {
         private final String customerId;
         private final List<OrderItem> items = new ArrayList<>();
-        private String currency = "INR";
+        private String currency = "INR";   // default value
+        private String notes;
 
         private Builder(String cid) { this.customerId = cid; }
-        public Builder item(OrderItem i)    { items.add(i); return this; }
-        public Builder currency(String c)   { this.currency = c; return this; }
-        public OrderRequest build()         { return new OrderRequest(this); }
+
+        public Builder item(OrderItem i)  { items.add(i); return this; }
+        public Builder currency(String c) { this.currency = c; return this; }
+        public Builder notes(String n)    { this.notes = n; return this; }
+        public OrderRequest build()       { return new OrderRequest(this); }
     }
 }
-// OrderRequest.builder("c1").item(item1).currency("USD").build();
+
+// Usage — clean, readable, impossible to mix up parameter order
+OrderRequest order = OrderRequest.builder("cust-123")
+    .item(new OrderItem("SKU-1", 2))
+    .item(new OrderItem("SKU-2", 1))
+    .currency("USD")
+    .notes("Gift wrap please")
+    .build();
+
+// 💡 Lombok shortcut: @Builder on the class generates all of this automatically!
 ```
 
-### Strategy
+**Builder vs Constructor vs Setter:**
+
+| Approach                      | Readability                                  | Immutability | Validation     |
+|-------------------------------|----------------------------------------------|-------------|----------------|
+| Constructor (many params)     | ❌ `new Order("c1", items, "INR", null, null)` | ✅           | ✅              |
+| Setters                       | 🔵 Readable                                  | ❌ Mutable   | ❌ Partial objects |
+| **Builder**                   | ✅ Fluent chain                               | ✅ Immutable | ✅ In `build()`  |
+
+---
+
+### 🔵 Pattern 4: Strategy — Swap Algorithms at Runtime
+
+**When:** Multiple ways to do the same thing (pricing, sorting, validation, authentication).
+
+```mermaid
+flowchart TB
+    Client["PricingService\ngetPrice user base"] --> Check{"user.getType?"}
+    Check -->|premium| P["PremiumPricing\n20% discount"]
+    Check -->|student| S["StudentPricing\n40% discount"]
+    Check -->|standard| D["StandardPricing\nno discount"]
+```
 
 ```java
+// Step 1: Strategy interface
 public interface PricingStrategy {
-    BigDecimal calculate(BigDecimal base, User user);
+    BigDecimal calculate(BigDecimal basePrice, User user);
 }
 
-@Component("premium") public class PremiumPricing implements PricingStrategy {
+// Step 2: Concrete strategies
+@Component("premium")
+public class PremiumPricing implements PricingStrategy {
     public BigDecimal calculate(BigDecimal base, User user) {
-        return base.multiply(BigDecimal.valueOf(0.8)); // 20% discount
+        return base.multiply(BigDecimal.valueOf(0.80)); // 20% off
     }
 }
 
+@Component("student")
+public class StudentPricing implements PricingStrategy {
+    public BigDecimal calculate(BigDecimal base, User user) {
+        return base.multiply(BigDecimal.valueOf(0.60)); // 40% off
+    }
+}
+
+@Component("standard")
+public class StandardPricing implements PricingStrategy {
+    public BigDecimal calculate(BigDecimal base, User user) {
+        return base; // no discount
+    }
+}
+
+// Step 3: Context — uses strategy without knowing which one
 @Service
 public class PricingService {
-    // Spring auto-injects all PricingStrategy beans keyed by bean name
-    private final Map<String, PricingStrategy> strategies;
+    private final Map<String, PricingStrategy> strategies; // Spring injects all!
+
     public PricingService(Map<String, PricingStrategy> strategies) {
         this.strategies = strategies;
     }
+
     public BigDecimal getPrice(BigDecimal base, User user) {
-        return strategies.getOrDefault(user.getType(), strategies.get("standard"))
-                         .calculate(base, user);
+        PricingStrategy strategy = strategies.getOrDefault(
+            user.getType(), strategies.get("standard"));
+        return strategy.calculate(base, user);
     }
 }
+
+// Adding a NEW pricing tier = just add a new @Component. ZERO changes to PricingService!
 ```
 
-### Observer (Spring Events)
+**Why Strategy over if-else?**
+
+| if-else / switch                               | Strategy Pattern                               |
+|------------------------------------------------|------------------------------------------------|
+| Adding new behavior = modify existing code     | Adding new behavior = add new class            |
+| Violates Open/Closed Principle                 | Follows Open/Closed Principle                  |
+| Hard to test individual branches               | Each strategy is independently testable        |
+
+---
+
+### 🔵 Pattern 5: Observer — Notify When Something Happens
+
+**When:** Events (order created, user registered), loose coupling between components.
+
+```mermaid
+flowchart LR
+    OS["OrderService\npublishEvent"] -->|OrderCreatedEvent| L1["EmailNotifier\nsend confirmation"]
+    OS -->|OrderCreatedEvent| L2["InventoryService\nreserve stock"]
+    OS -->|OrderCreatedEvent| L3["AnalyticsTracker\ntrack event"]
+```
 
 ```java
+// Step 1: Define the event
 public record OrderCreatedEvent(Order order) {}
 
+// Step 2: Publisher — fires the event
 @Service
 public class OrderService {
     private final ApplicationEventPublisher publisher;
@@ -2914,21 +3605,92 @@ public class OrderService {
     @Transactional
     public Order createOrder(OrderRequest req) {
         Order order = orderRepo.save(build(req));
-        publisher.publishEvent(new OrderCreatedEvent(order)); // notify all listeners
+        publisher.publishEvent(new OrderCreatedEvent(order)); // fire!
         return order;
     }
 }
 
-@Component public class EmailNotifier {
+// Step 3: Listeners — react independently (loose coupling!)
+@Component
+public class EmailNotifier {
     @EventListener
-    public void on(OrderCreatedEvent e) { emailService.sendConfirmation(e.order()); }
+    public void on(OrderCreatedEvent e) {
+        emailService.sendConfirmation(e.order());
+    }
 }
 
-@Component public class AnalyticsTracker {
-    @EventListener @Async
-    public void on(OrderCreatedEvent e) { analytics.track(e.order()); }
+@Component
+public class InventoryService {
+    @EventListener
+    public void on(OrderCreatedEvent e) {
+        reserveStock(e.order().getItems());
+    }
 }
+
+@Component
+public class AnalyticsTracker {
+    @EventListener @Async  // runs in separate thread — doesn't slow down order creation
+    public void on(OrderCreatedEvent e) {
+        analytics.track("order_created", e.order().getId());
+    }
+}
+
+// Adding a NEW listener = add a new @Component. OrderService doesn't change!
 ```
+
+---
+
+### 🔴 Pattern 6: Decorator — Add Behavior Without Changing the Class
+
+**When:** Logging, caching, retry, metrics — wrapping existing functionality.
+
+```java
+// Base interface
+public interface OrderService {
+    Order createOrder(OrderRequest req);
+}
+
+// Core implementation
+@Service @Primary
+public class OrderServiceImpl implements OrderService {
+    public Order createOrder(OrderRequest req) { /* core logic */ }
+}
+
+// Decorator — adds logging
+public class LoggingOrderService implements OrderService {
+    private final OrderService delegate;
+
+    public LoggingOrderService(OrderService delegate) { this.delegate = delegate; }
+
+    public Order createOrder(OrderRequest req) {
+        log.info("Creating order for {}", req.getCustomerId());
+        Order order = delegate.createOrder(req);  // delegate to real service
+        log.info("Order created: {}", order.getId());
+        return order;
+    }
+}
+// Can stack decorators: Logging → Caching → Retry → Actual Service
+```
+
+---
+
+### 📋 Pattern Cheat Sheet — When to Use What
+
+| Pattern              | One-Line Purpose                         | Real-World Example                       |
+|----------------------|------------------------------------------|------------------------------------------|
+| **Singleton**        | One shared instance                      | Connection pool, Config, Logger          |
+| **Factory**          | Create object by type/config             | NotificationSender, PaymentProcessor     |
+| **Builder**          | Build complex object step-by-step        | OrderRequest, HttpRequest, Query         |
+| **Strategy**         | Swap algorithm at runtime                | Pricing, Sorting, Authentication         |
+| **Observer**         | React to events loosely                  | Spring Events, Webhooks, Pub/Sub         |
+| **Decorator**        | Add behavior by wrapping                 | Logging, Caching, Retry, Metrics         |
+| **Adapter**          | Make incompatible interfaces work        | Legacy system integration                |
+| **Template Method**  | Define skeleton, subclass fills steps    | AbstractController, JdbcTemplate         |
+
+### 🎯 Interview Quick Answer
+
+> **"I use Singleton for shared resources like connection pools, Factory when object creation depends on runtime input, Builder for complex objects with many optional fields, Strategy when I need to swap algorithms without changing calling code, and Observer via Spring Events for loose coupling between components. Each pattern follows the Open/Closed Principle — I can extend behavior without modifying existing code."**
+
 
 ## Q27. Deadlock — Detection & Prevention
 
@@ -32140,5 +32902,6088 @@ mindmap
 | **Morning of** | Re-read Quick Navigation above — it'll all click |
 
 > 💡 **Senior Lead tip:** Interviewers aren't just testing *what* you know — they're evaluating *how you think*. Always state your assumption, name the trade-off, and give the "it depends" reason before your answer.
+
+---
+
+---
+
+# 🏦 Societe Generale — Company-Specific Interview Prep
+
+> **About Societe Generale (SocGen):** A major French multinational bank and financial services company. Their **Global Technology Centre (GTC)** in **Bangalore/Chennai** builds core banking platforms, trading systems, risk engines, and regulatory reporting using Java, Spring Boot, Kafka, and cloud-native technologies. SocGen heavily values **clean code, TDD, pair programming, and software craftsmanship** (they follow the **Software Craftsmanship manifesto**).
+
+```mermaid
+flowchart LR
+    subgraph SocGen["Societe Generale — Interview Flow"]
+        R1["Round 1\nOnline Assessment\nJava + SQL + DSA"] --> R2["Round 2\nTechnical Deep-Dive\nSpring Boot + Microservices\n+ System Design"]
+        R2 --> R3["Round 3\nDesign + Architecture\nLLD + HLD\n+ Domain Knowledge"]
+        R3 --> R4["Round 4\nManagerial\nLeadership + Behavioral\n+ Craftsmanship Culture"]
+        R4 --> R5["Round 5\nHR\nCTC + Notice Period"]
+    end
+```
+
+---
+
+## 🏦 Why SocGen Interviews Are Different
+
+| Aspect | What SocGen Emphasizes | How It Differs From Product Companies |
+|--------|----------------------|--------------------------------------|
+| **Software Craftsmanship** | TDD, pair programming, clean code — they ASK about these | Most companies just ask "do you write tests?" |
+| **Banking Domain** | Trade lifecycle, settlement, regulatory compliance, audit trails | Domain knowledge is a differentiator, not just tech |
+| **Data Integrity** | ACID, exactly-once processing, idempotency — zero tolerance for data loss | Eventual consistency is less acceptable here |
+| **Security** | OAuth2, mTLS, data encryption at rest/transit, PII masking, audit logging | Regulatory mandate — not optional |
+| **Legacy Modernization** | Migrating COBOL/mainframe to Java microservices — they LOVE migration stories | Your ColdFusion → Spring Boot experience is GOLD |
+| **Resilience** | Circuit breakers, bulkheads, retry with backoff — production failures cost millions | Trading systems cannot afford downtime |
+
+---
+
+## 📋 Section 1: Core Java — SocGen Favorites
+
+### SG-J1. What are the SOLID principles? Give a real example from your project.
+
+> **Why SocGen asks this:** They follow Software Craftsmanship — SOLID is foundational.
+
+#### 🟢 Simple Analogy
+
+Think of SOLID as **5 rules for building with LEGO**:
+- **S** — Each LEGO piece does ONE thing (a wheel is a wheel, not also a window)
+- **O** — You can ADD new LEGO pieces without breaking existing ones
+- **L** — Any red brick can replace another red brick without the structure falling
+- **I** — You don't force someone to buy the whole LEGO set when they only need wheels
+- **D** — The instruction manual says "attach a wheel" — not "attach LEGO® wheel part #4286"
+
+#### 🔵 Each Principle Explained with Banking Code
+
+```java
+// ── S: Single Responsibility ──
+// Each class has ONE job, ONE reason to change
+
+// ❌ BAD — one class doing 3 things
+public class TradeService {
+    public Trade createTrade() { ... }     // business logic
+    public void saveToDb() { ... }         // database access
+    public void sendToSalesforce() { ... } // external integration
+}
+
+// ✅ GOOD — each class has one job
+public class TradeService { ... }          // business logic only
+public class TradeRepository { ... }       // database only
+public class SalesforcePublisher { ... }   // integration only
+// If DB changes, only TradeRepository changes. TradeService is untouched.
+```
+
+```java
+// ── O: Open/Closed ──
+// Open for EXTENSION, Closed for MODIFICATION
+// "Add new behavior without changing existing code"
+
+// ❌ BAD — modifying existing code for every new pricing rule
+public BigDecimal calculatePrice(String type, BigDecimal base) {
+    if (type.equals("standard")) return base;
+    else if (type.equals("premium")) return base.multiply(0.8);  // 20% off
+    else if (type.equals("student")) return base.multiply(0.6);  // 40% off
+    // Adding "corporate"? Must modify this method! Risky.
+}
+
+// ✅ GOOD — Strategy pattern: add new class, never touch existing code
+public interface PricingStrategy {
+    BigDecimal calculate(BigDecimal base);
+}
+public class StandardPricing implements PricingStrategy { ... }
+public class PremiumPricing implements PricingStrategy { ... }
+// Adding "corporate"? Just add CorporatePricing class. Zero changes to existing code!
+```
+
+```java
+// ── L: Liskov Substitution ──
+// Any child class can replace its parent without breaking anything
+
+// ✅ GOOD — EmailSender and SmsSender both implement NotificationSender
+NotificationSender sender = factory.create("email"); // or "sms"
+sender.send(to, message);  // works perfectly with ANY implementation
+```
+
+```java
+// ── I: Interface Segregation ──
+// Don't force classes to implement methods they don't need
+
+// ❌ BAD — one fat interface
+public interface TradeOperations {
+    Trade create(); Trade read(); Trade update(); void delete(); void generateReport();
+}
+// A read-only reporting service is forced to implement create/update/delete!
+
+// ✅ GOOD — split into focused interfaces
+public interface TradeReader { Trade findById(String id); List<Trade> findAll(); }
+public interface TradeWriter { Trade save(Trade t); void delete(String id); }
+// Reporting service implements only TradeReader. Clean!
+```
+
+```java
+// ── D: Dependency Inversion ──
+// Depend on INTERFACES, not concrete classes
+
+// ❌ BAD — tightly coupled to PostgreSQL
+public class TradeService {
+    private PostgresTradeRepository repo = new PostgresTradeRepository(); // hard-coded!
+}
+
+// ✅ GOOD — depends on interface, injected by Spring
+public class TradeService {
+    private final TradeRepository repo;  // interface!
+    public TradeService(TradeRepository repo) { this.repo = repo; }
+    // In production: Spring injects PostgresTradeRepository
+    // In tests: you inject MockTradeRepository — no DB needed!
+}
+```
+
+#### 🎯 Interview One-Liner
+
+> **"SOLID means: each class has one job (S), I extend behavior by adding new classes not modifying existing ones (O), subtypes are interchangeable (L), interfaces are small and focused (I), and I depend on abstractions not concrete implementations (D). At Comviva, I applied all five in the Quote Management microservice — Strategy for pricing (O), Repository interface for data access (D), and split interfaces for read vs write operations (I)."**
+
+---
+
+### SG-J2. Explain immutability. Why is it important in banking/financial systems?
+
+#### 🟢 Simple Analogy
+
+Think of immutability like a **printed bank receipt**:
+- Once printed, you **cannot change the numbers** on it
+- If you need to correct something, you **print a NEW receipt** (create a new object)
+- The original receipt is **permanent evidence** (audit trail)
+
+> 💡 **One sentence:** Immutable = once created, the object can NEVER be changed. To "modify" it, you create a brand new copy with the changes.
+
+#### 🔵 Mutable vs Immutable — Side by Side
+
+```java
+// ❌ MUTABLE — dangerous in banking (someone can change the amount after creation!)
+public class Trade {
+    private String tradeId;
+    private BigDecimal amount;
+
+    public void setAmount(BigDecimal amount) {  // ANYONE can change this!
+        this.amount = amount;
+    }
+}
+
+Trade trade = new Trade("T001", new BigDecimal("10000"));
+trade.setAmount(new BigDecimal("1"));  // 💥 Someone changed 10,000 to 1!
+// No audit trail, no evidence of the change. Regulators will NOT be happy.
+
+// ✅ IMMUTABLE — safe for banking
+public final class Trade {                    // 'final' — can't extend
+    private final String tradeId;             // 'final' — set once in constructor
+    private final BigDecimal amount;          // 'final' — can never change
+    private final LocalDateTime timestamp;
+
+    public Trade(String tradeId, BigDecimal amount, LocalDateTime timestamp) {
+        this.tradeId = Objects.requireNonNull(tradeId);
+        this.amount = Objects.requireNonNull(amount);
+        this.timestamp = Objects.requireNonNull(timestamp);
+    }
+
+    // Only GETTERS — no setters!
+    public String getTradeId() { return tradeId; }
+    public BigDecimal getAmount() { return amount; }
+
+    // To "change" the amount, create a BRAND NEW object
+    public Trade withAmount(BigDecimal newAmount) {
+        return new Trade(this.tradeId, newAmount, LocalDateTime.now());
+        // Original object is UNCHANGED — it still has the old amount
+    }
+}
+
+// Or even simpler — Java 16+ Record (immutable by default!)
+public record Trade(String tradeId, BigDecimal amount, String currency,
+                    LocalDateTime timestamp, TradeStatus status) {}
+// Records automatically: final class, final fields, constructor, getters, equals, hashCode, toString
+```
+
+#### 🔵 Why Banking Systems NEED Immutability
+
+| Reason | What Happens Without It | What Immutability Gives You |
+|--------|------------------------|---------------------------|
+| **Audit trail** | Someone changes a trade amount — no record of original value | Original trade object exists forever — proof for regulators |
+| **Thread safety** | Two threads modify the same Trade object simultaneously — corrupted data | Immutable objects can be shared across threads with ZERO synchronization |
+| **Cache safety** | Object in cache gets modified — all readers see corrupted data | Can cache freely — nobody can change it |
+| **Event sourcing** | Past events get modified — history is unreliable | Each event is an immutable fact — trade history is trustworthy |
+| **HashMap keys** | Key object changes after insertion — can never find it again | Immutable keys (String, Integer) always work correctly |
+
+#### 🎯 Interview One-Liner
+
+> **"Immutability means an object cannot be modified after creation — all fields are final, no setters, and any 'change' creates a new object. In banking, this is critical for audit trails (regulator proof), thread safety (concurrent trading engines), and event sourcing (immutable facts). I use Java Records or final-field classes with factory methods."**
+
+---
+
+### SG-J3. HashMap internals — What happens when two keys have the same hashCode?
+
+> **SocGen asks this in almost every Java interview.**
+
+#### 🟢 Simple Analogy
+
+Think of HashMap as a **library with numbered shelves**:
+1. You bring a book (key-value pair)
+2. The librarian (hashCode) looks at the book title and says: **"Go to shelf #7"** (bucket index)
+3. If shelf #7 is **empty** → place the book directly
+4. If shelf #7 **already has books** (COLLISION!) → the librarian reads each book title on that shelf using **equals()** to check if it's the same book:
+   - **Same title (equals=true)** → replace the old book with your new one
+   - **Different title (equals=false)** → add your book next to the existing ones (linked list)
+
+#### 🔵 Step-by-Step Visual
+
+```
+HashMap<String, Trade> trades = new HashMap<>();
+
+Step 1: trades.put("T001", trade1)
+  hashCode("T001") → 2345
+  bucket index = 2345 % 16 = 5    (16 = default capacity)
+  Bucket[5] is empty → store here
+
+  Bucket: [0][ ][ ][ ][ ][T001=trade1][ ][ ][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+
+Step 2: trades.put("T002", trade2)
+  hashCode("T002") → 2346
+  bucket index = 2346 % 16 = 6
+  Bucket[6] is empty → store here
+
+  Bucket: [0][ ][ ][ ][ ][T001=trade1][T002=trade2][ ][ ][ ][ ][ ][ ][ ][ ][ ]
+
+Step 3: trades.put("T999", trade3)   ← COLLISION! hashCode gives same bucket as T001
+  hashCode("T999") → 2345           (same hashCode as T001!)
+  bucket index = 2345 % 16 = 5      (same bucket!)
+  Bucket[5] is occupied → compare using equals()
+  "T999".equals("T001") → false     (different key)
+  → Add to linked list in Bucket[5]
+
+  Bucket[5]: [T001=trade1] → [T999=trade3]    (linked list)
+
+Java 8+ optimization:
+  If a bucket has > 8 entries → converts LinkedList to Red-Black Tree
+  LinkedList lookup: O(n)  →  Tree lookup: O(log n)
+  When bucket shrinks to ≤ 6 → converts back to LinkedList
+```
+
+#### 🔴 The Classic Bug: Override equals() but forget hashCode()
+
+```java
+// 💥 BUG — In a trading system, this means LOSING A TRADE!
+public class TradeId {
+    private final String id;
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof TradeId t && this.id.equals(t.id);
+    }
+    // FORGOT hashCode()! Uses default Object.hashCode() (memory address)
+}
+
+Map<TradeId, Trade> trades = new HashMap<>();
+trades.put(new TradeId("T001"), trade1);           // hashCode = 897654 → Bucket[3]
+Trade result = trades.get(new TradeId("T001"));    // hashCode = 112233 → Bucket[7] ← WRONG BUCKET!
+// result = null! 💥 Trade is "lost" — two different TradeId objects with same "T001"
+// have different hashCodes, so HashMap looks in the wrong bucket.
+
+// ✅ FIX: Always override BOTH equals() AND hashCode()
+@Override
+public int hashCode() {
+    return Objects.hash(id);  // same "T001" → same hashCode → same bucket
+}
+```
+
+#### 🎯 Interview One-Liner
+
+> **"HashMap uses hashCode() to find the bucket index, and equals() to find the exact key within that bucket. Collisions (same bucket) are handled via linked list (Java 7) or Red-Black tree after 8 entries (Java 8+). You MUST override both equals() and hashCode() together — otherwise the map can't find keys correctly."**
+
+---
+
+### SG-J4. Explain the Java Memory Model and how `volatile` works.
+
+#### 🟢 Simple Analogy
+
+Imagine **two people working in separate offices** (threads) with their **own whiteboards** (CPU cache):
+- Each person copies numbers from a **shared wall chart** (main memory) to their whiteboard
+- Person A updates their whiteboard: `price = 150`
+- But Person B's whiteboard still says `price = 100` — **they can't see A's change!**
+- **`volatile`** = A rule that says: "Always read/write from the **shared wall chart**, never use your personal whiteboard"
+
+#### 🔵 Visual: Without vs With volatile
+
+```
+WITHOUT volatile:
+  Thread-1 (CPU core 1)         Main Memory         Thread-2 (CPU core 2)
+  ┌─────────────────┐          ┌──────────┐         ┌─────────────────┐
+  │ Cache: flag=true │←── copy ──│ flag=true │──copy→  │ Cache: flag=true │
+  └─────────────────┘          └──────────┘         └─────────────────┘
+
+  Thread-1 sets flag=false:
+  ┌──────────────────┐         ┌──────────┐         ┌─────────────────┐
+  │ Cache: flag=FALSE │         │ flag=true │         │ Cache: flag=true │
+  └──────────────────┘         └──────────┘         └─────────────────┘
+  ↑ Only Thread-1's cache updated!   ↑ Main memory NOT updated!  ↑ Thread-2 still sees true!
+
+WITH volatile:
+  Thread-1 sets volatile flag=false:
+  ┌──────────────────┐         ┌───────────┐        ┌──────────────────┐
+  │ writes directly → │ ──────→ │ flag=FALSE │ ←───── │ ← reads directly │
+  └──────────────────┘         └───────────┘        └──────────────────┘
+  ↑ Bypasses cache!             ↑ Updated!           ↑ Sees false immediately!
+```
+
+#### 🔵 What volatile Guarantees (and What It DOESN'T)
+
+| Feature | volatile | synchronized | AtomicInteger |
+|---------|---------|-------------|--------------|
+| **Visibility** (other threads see the change) | ✅ Yes | ✅ Yes | ✅ Yes |
+| **Atomicity** (read-modify-write is one step) | ❌ No | ✅ Yes | ✅ Yes |
+| **Use case** | Flags, status fields | Critical sections | Counters |
+
+```java
+// ⚠️ volatile does NOT make counter++ safe!
+volatile int counter = 0;
+counter++;  // This is actually 3 steps: READ counter, ADD 1, WRITE counter
+// Two threads can both READ 5, both ADD 1, both WRITE 6 → lost increment!
+
+// ✅ Use AtomicInteger for counters
+AtomicInteger counter = new AtomicInteger(0);
+counter.incrementAndGet();  // truly atomic — one step
+```
+
+#### 🔵 Real-World Banking Example
+
+```java
+// Graceful shutdown of a trading engine
+public class TradingEngine {
+    private volatile boolean running = true;  // volatile = visible across threads
+
+    // Thread 1: processing trades
+    public void start() {
+        while (running) {  // reads from main memory every time (volatile!)
+            Trade trade = queue.poll();
+            if (trade != null) process(trade);
+        }
+        log.info("Trading engine stopped gracefully");
+    }
+
+    // Thread 2: admin calls shutdown
+    public void shutdown() {
+        running = false;  // immediately visible to Thread 1 (volatile!)
+        // Without volatile, Thread 1 might NEVER see this change
+        // and the trading engine would run forever!
+    }
+}
+```
+
+#### 🎯 Interview One-Liner
+
+> **"The Java Memory Model says each thread has its own CPU cache. Without synchronization, one thread's write may never be visible to another thread. `volatile` fixes this — every read goes to main memory, every write goes to main memory. But volatile only guarantees visibility, NOT atomicity. For counters, use AtomicInteger. For complex critical sections, use synchronized or ReentrantLock."**
+
+---
+
+### SG-J5. What is the difference between `String`, `StringBuilder`, and `StringBuffer`?
+
+#### 🟢 Simple Analogy
+
+- **String** = A **printed poster** — once printed, you can't change it. To add text, you must print a whole new poster.
+- **StringBuilder** = A **whiteboard** — you can erase and write freely. Fast, but only one person should use it.
+- **StringBuffer** = A **whiteboard with a lock** — safe for multiple people, but they must take turns (slower).
+
+#### 🔵 Visual: Why String Concatenation in Loops Is Bad
+
+```
+String report = "";
+for each trade:
+    report += trade.toString();
+
+Iteration 1: "" + "Trade-1"     → creates NEW String "Trade-1"         (old "" is garbage)
+Iteration 2: "Trade-1" + "Trade-2" → creates NEW String "Trade-1Trade-2" (old "Trade-1" is garbage)
+Iteration 3: "Trade-1Trade-2" + "Trade-3" → creates NEW String           (old is garbage)
+...
+1000 trades = 1000 String objects created and thrown away! 💥 Slow + GC pressure
+
+StringBuilder: writes to the SAME internal char array. ONE object, no garbage.
+```
+
+#### 🔵 Comparison Table
+
+| Feature | `String` | `StringBuilder` | `StringBuffer` |
+|---------|---------|----------------|---------------|
+| **Mutability** | ❌ Immutable (new object each time) | ✅ Mutable (same object) | ✅ Mutable (same object) |
+| **Thread-safe?** | ✅ Yes (can't change = always safe) | ❌ No (single-thread only) | ✅ Yes (synchronized methods) |
+| **Performance** | Slow for concatenation loops | 🚀 Fastest | Slower than StringBuilder |
+| **When to use** | Constants, keys, sharing between threads | Building strings in a loop (99% of cases) | Multi-threaded string building (very rare) |
+
+```java
+// ❌ BAD — banking report generation (creates 10,000 String objects!)
+String report = "";
+for (Trade trade : trades) {
+    report += trade.toString() + "\n"; // new String object EVERY iteration!
+}
+
+// ✅ GOOD — ONE StringBuilder object, mutated in place
+StringBuilder sb = new StringBuilder(trades.size() * 100); // pre-size for efficiency
+for (Trade trade : trades) {
+    sb.append(trade.toString()).append('\n');
+}
+String report = sb.toString();
+
+// 💡 Pro tip: String concatenation with + is FINE for simple one-liners
+String msg = "Trade " + tradeId + " settled";  // compiler optimizes this automatically
+// Only use StringBuilder for LOOPS or complex multi-step building
+```
+
+#### 🎯 Interview One-Liner
+
+> **"String is immutable — every modification creates a new object, so concatenation in loops creates N garbage objects. StringBuilder is mutable and fast for single-threaded string building. StringBuffer is like StringBuilder but synchronized — rarely needed. I use StringBuilder in loops and String for constants."**
+
+---
+
+## 📋 Section 2: Spring Boot & Microservices — SocGen Deep-Dive
+
+### SG-S2. How do you design microservices for a banking system? Walk through your architecture.
+
+> **Tailored to your experience — map Comviva/VMware to banking domain.**
+
+#### 🟢 Simple Analogy
+
+Think of a banking system as a **shopping mall**:
+- **API Gateway** = the mall entrance (security check, directs you to the right store)
+- **Each microservice** = a separate store (shoe store, food court, pharmacy — each runs independently)
+- **Kafka** = the mall intercom (announcements heard by all stores that care)
+- **Database per service** = each store has its own inventory system (not shared)
+- If the shoe store closes for renovation, the food court still works!
+
+#### 🔵 Architecture Diagram
+
+```mermaid
+flowchart TB
+    subgraph CLIENT["Client Layer"]
+        UI["Web/Mobile App"]
+        API["API Gateway\nSpring Cloud Gateway\nRate limiting + JWT validation"]
+    end
+
+    subgraph SERVICES["Microservices (each independently deployable)"]
+        AS["Account Service\nBalance, KYC"]
+        TS["Trade Service\nBuy/Sell orders"]
+        PS["Payment Service\nSettlement, Transfer"]
+        NS["Notification Service\nEmail, SMS, Push"]
+        RS["Reporting Service\nRegulatory reports"]
+    end
+
+    subgraph DATA["Data Layer (each service owns its data)"]
+        PG["PostgreSQL\nTransactional data\nACID compliance"]
+        MG["MongoDB\nAudit logs\nDocument storage"]
+        RD["Redis\nSession cache\nRate limiting"]
+        KF["Kafka\nEvent streaming\nTrade events"]
+    end
+
+    UI --> API
+    API --> AS & TS & PS
+    TS --> KF
+    KF --> PS & NS & RS
+    AS & TS & PS --> PG
+    NS & RS --> MG
+    API --> RD
+```
+
+#### 🔵 6 Key Design Decisions (Interview Answer)
+
+| # | Decision | Why | Your Experience |
+|---|----------|-----|----------------|
+| 1 | **API Gateway** | Single entry point: JWT validation, rate limiting, request logging for audit | Same as your Quote Management API at Comviva |
+| 2 | **Event-driven (Kafka)** | Trade creation publishes event; settlement, notification consume independently | Same as your Salesforce integration with Outbox pattern |
+| 3 | **Outbox pattern** | Trade + event saved in ONE DB transaction — guarantees no event loss | Exactly what you built at Comviva |
+| 4 | **Database per service** | Trade Service owns its PostgreSQL schema; Reporting has a read replica | Same principle as VMware billing — separate data ownership |
+| 5 | **Saga pattern** | Cross-service transactions use choreography with compensation on failure | New concept to mention — shows distributed systems knowledge |
+| 6 | **Circuit breaker** | Resilience4j on all external calls — one slow API can't crash everything | Maps to your experience with Salesforce API timeouts |
+
+#### 🎯 Interview One-Liner
+
+> **"I'd design it as independently deployable Spring Boot services communicating via Kafka events, with an API Gateway for security, the Outbox pattern for guaranteed event delivery, database-per-service for data ownership, Saga for distributed transactions, and Resilience4j circuit breakers on all external calls. This is the same architecture I built at Comviva for 100K+ daily transactions."**
+
+---
+
+### SG-S3. Explain the Circuit Breaker pattern. How do you implement it?
+
+> **Banking systems CANNOT cascade failures — SocGen asks this regularly.**
+
+#### 🟢 Simple Analogy
+
+Think of a circuit breaker like the **electrical circuit breaker in your house**:
+- **Normal (CLOSED):** Electricity flows, appliances work. If a short circuit happens, the breaker counts faults.
+- **Tripped (OPEN):** Too many faults! Breaker trips — electricity STOPS flowing. This protects your house from fire.
+- **Testing (HALF-OPEN):** After some time, you flip the breaker to test. If electricity flows safely → back to normal. If it trips again → stays open.
+
+> 💡 In software: instead of electricity, it's **API requests**. Instead of protecting your house, it protects your **entire banking system** from one slow/broken service.
+
+#### 🔵 The 3 States — Visual
+
+```mermaid
+flowchart LR
+    CLOSED["🟢 CLOSED\nRequests flow normally\nFailures counted"]
+    OPEN["🔴 OPEN\nAll requests FAIL FAST\nFallback returned instantly\nDownstream NOT called"]
+    HALF["🟡 HALF-OPEN\nAllow 3 test requests\nIf they succeed: close\nIf they fail: reopen"]
+
+    CLOSED -->|"50% of last 10\ncalls failed"| OPEN
+    OPEN -->|"30 seconds\nwait time passed"| HALF
+    HALF -->|"test requests\nSUCCEED"| CLOSED
+    HALF -->|"test requests\nFAIL"| OPEN
+```
+
+#### 🔵 Why Banking Needs This
+
+```
+WITHOUT circuit breaker:
+  Trade Service → Payment API (down!) → waits 30s timeout → EVERY request waits 30s
+  → Thread pool exhausted → Trade Service becomes unresponsive
+  → API Gateway can't reach Trade Service → ENTIRE SYSTEM DOWN 💥
+  → One broken service took down everything = cascading failure
+
+WITH circuit breaker:
+  Trade Service → Payment API (down!) → 5 failures detected → circuit OPENS
+  → All subsequent calls return INSTANTLY with fallback (queued for retry)
+  → Trade Service stays healthy → other operations continue normally ✅
+  → One broken service is ISOLATED = system resilience
+```
+
+#### 🔵 Implementation with Resilience4j
+
+```java
+// application.yml — configure the circuit breaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      paymentService:
+        slidingWindowSize: 10          # track last 10 calls
+        failureRateThreshold: 50       # OPEN if 50% fail (5 out of 10)
+        waitDurationInOpenState: 30s   # wait 30s before testing again
+        permittedNumberOfCallsInHalfOpenState: 3  # test with 3 calls
+        recordExceptions:              # which exceptions count as "failure"
+          - java.io.IOException
+          - java.util.concurrent.TimeoutException
+
+// Service — annotate the method
+@Service
+public class PaymentGatewayService {
+
+    // If payment API fails too much → circuit opens → fallback called instead
+    @CircuitBreaker(name = "paymentService", fallbackMethod = "paymentFallback")
+    @TimeLimiter(name = "paymentService")    // timeout after X seconds
+    @Retry(name = "paymentService")          // retry X times before counting as failure
+    public CompletableFuture<PaymentResponse> processPayment(PaymentRequest req) {
+        return CompletableFuture.supplyAsync(() ->
+            restTemplate.postForObject("/api/payment", req, PaymentResponse.class)
+        );
+    }
+
+    // Fallback — called INSTANTLY when circuit is OPEN (no waiting!)
+    private CompletableFuture<PaymentResponse> paymentFallback(PaymentRequest req, Throwable t) {
+        log.warn("Payment circuit open, queuing for retry: {}", req.getTradeId());
+        kafkaTemplate.send("payment-retry", req); // queue for later processing
+        return CompletableFuture.completedFuture(
+            PaymentResponse.pending("Payment queued — will process when service recovers"));
+    }
+}
+```
+
+#### 🎯 Interview One-Liner
+
+> **"Circuit Breaker has 3 states: CLOSED (normal), OPEN (fail fast with fallback), HALF-OPEN (test with a few requests). I use Resilience4j — configure failure threshold, wait duration, and a fallback method. In banking, this prevents cascading failures: if the payment API goes down, the circuit opens and we queue payments for retry via Kafka instead of blocking all trade processing."**
+
+---
+
+### SG-S4. What is the Saga pattern? How do you handle distributed transactions?
+
+> **Banking = multi-step transactions across services. SocGen asks this for senior roles.**
+
+#### 🟢 Simple Analogy
+
+Think of booking a **vacation package**:
+1. Book flight ✅
+2. Book hotel ✅
+3. Book car rental ❌ — failed!
+4. **Compensation:** Cancel hotel, cancel flight (undo everything in reverse order)
+
+> In banking: Buy stock → Debit account → Execute on exchange → Settle. If any step fails, **undo all previous steps** in reverse order.
+
+#### 🔵 Two Types of Sagas
+
+| Type | How It Works | When to Use |
+|------|-------------|------------|
+| **Choreography** | Each service publishes an event, next service listens and reacts. No central controller. | Simple flows (2-4 steps), loosely coupled teams |
+| **Orchestration** | A central "Saga Orchestrator" tells each service what to do, step by step. | Complex flows (5+ steps), need visibility |
+
+#### 🔵 Choreography Saga — Visual
+
+```mermaid
+flowchart LR
+    subgraph HAPPY["Happy Path ✅"]
+        T1["Trade Service\nCreate trade\n→ publish: trade.created"]
+        T2["Account Service\nDebit account\n→ publish: account.debited"]
+        T3["Market Service\nExecute on exchange\n→ publish: trade.executed"]
+        T4["Settlement Service\nSettle trade\n→ publish: trade.settled"]
+    end
+    T1 --> T2 --> T3 --> T4
+
+    subgraph FAIL["Failure → Compensation (undo in reverse) ❌"]
+        F3["Market fails!\n→ publish: trade.execution.failed"]
+        F2["Account Service\nhears failure\n→ CREDIT account back"]
+        F1["Trade Service\nhears failure\n→ CANCEL trade"]
+    end
+    F3 --> F2 --> F1
+```
+
+#### 🔵 Code — Kafka-Based Choreography Saga
+
+```java
+// Step 1: Trade Service creates trade + publishes event
+@Service
+public class TradeService {
+
+    @Transactional
+    public Trade createTrade(TradeRequest req) {
+        Trade trade = tradeRepository.save(Trade.from(req));
+
+        // Outbox pattern — event is saved in SAME transaction as trade
+        outboxRepository.save(new OutboxEvent("trade.created",
+            toJson(new TradeCreatedEvent(trade))));
+        return trade;
+    }
+
+    // COMPENSATION — if account debit fails, cancel the trade
+    @KafkaListener(topics = "account.debit.failed")
+    public void handleDebitFailed(AccountDebitFailedEvent event) {
+        Trade trade = tradeRepository.findById(event.getTradeId()).orElseThrow();
+        trade.setStatus(TradeStatus.CANCELLED);  // undo!
+        tradeRepository.save(trade);
+        log.warn("Trade {} cancelled — account debit failed", event.getTradeId());
+    }
+}
+
+// Step 2: Account Service listens, debits account
+@KafkaListener(topics = "trade.created")
+public void handleTradeCreated(TradeCreatedEvent event) {
+    try {
+        accountService.debit(event.getAccountId(), event.getAmount());
+        kafkaTemplate.send("account.debited", new AccountDebitedEvent(...));
+    } catch (InsufficientFundsException e) {
+        // Publish FAILURE event — Trade Service will compensate
+        kafkaTemplate.send("account.debit.failed",
+            new AccountDebitFailedEvent(event.getTradeId(), "Insufficient funds"));
+    }
+}
+```
+
+#### 🎯 Interview One-Liner
+
+> **"The Saga pattern manages distributed transactions across microservices without a global lock. Each service performs its local transaction and publishes an event. If any step fails, compensation events undo the previous steps in reverse order. I prefer choreography for simple flows (Kafka events) and orchestration for complex ones. At Comviva, I used the same event-driven pattern with the Outbox pattern for Salesforce sync."**
+
+
+#### 🔴 Orchestration Saga — Detailed Explanation
+
+**Why Orchestration?** Choreography works for 2-4 services, but when you have 5+ steps (common in banking: validate -> compliance check -> risk check -> debit -> execute -> settle -> report), choreography becomes spaghetti — every service must know about every other service’s events. Orchestration solves this with a **central coordinator**.
+
+**How it works:**
+
+```
++---------------------------------------------------+
+|            SAGA ORCHESTRATOR                       |
+|  (Central coordinator - knows all steps)          |
+|                                                   |
+|  Step 1: Tell Trade Service -> Create Trade       |
+|  Step 2: Tell Account Service -> Debit Account    |
+|  Step 3: Tell Market Service -> Execute Trade     |
+|  Step 4: Tell Settlement Service -> Settle        |
+|                                                   |
+|  If Step 3 FAILS:                                 |
+|    Compensate Step 2: Tell Account -> Credit back |
+|    Compensate Step 1: Tell Trade -> Cancel trade  |
+|                                                   |
+|  The orchestrator walks BACKWARDS through         |
+|  completed steps, calling compensation for each.  |
++---------------------------------------------------+
+```
+
+**Key difference from Choreography:**
+
+| Aspect | Choreography | Orchestration |
+|--------|-------------|---------------|
+| **Who decides next step?** | Each service (event-driven) | Central orchestrator |
+| **Coupling** | Services know each other's events | Only orchestrator knows the flow |
+| **Visibility** | Hard to see full flow | Easy — orchestrator has full picture |
+| **Debugging** | Hard (trace events across services) | Easy (check orchestrator state) |
+| **Failure handling** | Each service handles own rollback | Orchestrator manages all compensation |
+| **Best for** | Simple flows (2-4 steps) | Complex flows (5+ steps, banking) |
+| **Example** | Order -> Payment -> Shipping | Trade -> Compliance -> Risk -> Debit -> Execute -> Settle |
+
+**Orchestration Saga — Full Code Example (Banking Trade Flow):**
+
+```java
+// The Orchestrator -- central coordinator that manages the entire saga
+@Service
+@Slf4j
+public class TradeSagaOrchestrator {
+
+    private final TradeServiceClient tradeClient;
+    private final ComplianceServiceClient complianceClient;
+    private final AccountServiceClient accountClient;
+    private final MarketServiceClient marketClient;
+    private final SettlementServiceClient settlementClient;
+    private final SagaStateRepository sagaStateRepository;
+
+    /**
+     * Execute the full trade saga -- step by step.
+     * If any step fails, compensate all previous steps in REVERSE order.
+     */
+    public SagaResult executeTradeSaga(TradeRequest request) {
+        // Create saga state to track progress (persisted in DB)
+        SagaState saga = SagaState.builder()
+            .sagaId(UUID.randomUUID().toString())
+            .status(SagaStatus.STARTED)
+            .request(request)
+            .completedSteps(new ArrayList<>())
+            .build();
+        sagaStateRepository.save(saga);
+
+        try {
+            // ---- STEP 1: Create Trade ----
+            log.info("Saga {}: Step 1 -- Creating trade", saga.getSagaId());
+            TradeResponse trade = tradeClient.createTrade(request);
+            saga.addCompletedStep("CREATE_TRADE", trade.getTradeId());
+            sagaStateRepository.save(saga);
+
+            // ---- STEP 2: Compliance Check (MiFID II) ----
+            log.info("Saga {}: Step 2 -- Compliance check", saga.getSagaId());
+            ComplianceResult compliance = complianceClient.check(trade.getTradeId());
+            if (!compliance.isApproved()) {
+                throw new SagaStepException("Compliance rejected: " + compliance.getReason());
+            }
+            saga.addCompletedStep("COMPLIANCE_CHECK", trade.getTradeId());
+            sagaStateRepository.save(saga);
+
+            // ---- STEP 3: Debit Account ----
+            log.info("Saga {}: Step 3 -- Debiting account", saga.getSagaId());
+            accountClient.debit(request.getAccountId(), request.getAmount(), saga.getSagaId());
+            saga.addCompletedStep("DEBIT_ACCOUNT", request.getAccountId());
+            sagaStateRepository.save(saga);
+
+            // ---- STEP 4: Execute on Market ----
+            log.info("Saga {}: Step 4 -- Executing on exchange", saga.getSagaId());
+            ExecutionResult execution = marketClient.execute(trade.getTradeId());
+            saga.addCompletedStep("EXECUTE_TRADE", execution.getExecutionId());
+            sagaStateRepository.save(saga);
+
+            // ---- STEP 5: Settle Trade ----
+            log.info("Saga {}: Step 5 -- Settling trade", saga.getSagaId());
+            settlementClient.settle(trade.getTradeId(), execution.getExecutionId());
+            saga.addCompletedStep("SETTLE_TRADE", trade.getTradeId());
+
+            // ---- ALL STEPS SUCCEEDED ----
+            saga.setStatus(SagaStatus.COMPLETED);
+            sagaStateRepository.save(saga);
+            log.info("Saga {}: COMPLETED successfully", saga.getSagaId());
+
+            return SagaResult.success(saga.getSagaId(), trade.getTradeId());
+
+        } catch (Exception e) {
+            // ---- FAILURE -- COMPENSATE in REVERSE order ----
+            log.error("Saga {}: FAILED -- starting compensation", saga.getSagaId(), e);
+            saga.setStatus(SagaStatus.COMPENSATING);
+            saga.setFailureReason(e.getMessage());
+            sagaStateRepository.save(saga);
+
+            compensate(saga);
+
+            saga.setStatus(SagaStatus.COMPENSATED);
+            sagaStateRepository.save(saga);
+
+            return SagaResult.failed(saga.getSagaId(), e.getMessage());
+        }
+    }
+
+    /**
+     * Walk BACKWARDS through completed steps and undo each one.
+     * Each compensation is idempotent (safe to retry).
+     */
+    private void compensate(SagaState saga) {
+        List<SagaStep> steps = new ArrayList<>(saga.getCompletedSteps());
+        Collections.reverse(steps);  // REVERSE order!
+
+        for (SagaStep step : steps) {
+            try {
+                switch (step.getStepName()) {
+                    case "SETTLE_TRADE" -> {
+                        log.info("Compensating -- reversing settlement");
+                        settlementClient.reverseSettlement(step.getResourceId());
+                    }
+                    case "EXECUTE_TRADE" -> {
+                        log.info("Compensating -- cancelling market execution");
+                        marketClient.cancelExecution(step.getResourceId());
+                    }
+                    case "DEBIT_ACCOUNT" -> {
+                        log.info("Compensating -- crediting account back");
+                        accountClient.credit(step.getResourceId(),
+                            saga.getRequest().getAmount(), saga.getSagaId());
+                    }
+                    case "CREATE_TRADE" -> {
+                        log.info("Compensating -- cancelling trade");
+                        tradeClient.cancelTrade(step.getResourceId());
+                    }
+                    // COMPLIANCE_CHECK has no compensation (read-only)
+                }
+            } catch (Exception compensationError) {
+                // Log but continue -- a background job will retry later
+                log.error("Compensation FAILED for step {} -- will retry",
+                    step.getStepName(), compensationError);
+            }
+        }
+    }
+}
+```
+
+**Saga State Entity (persisted for crash recovery):**
+
+```java
+@Entity
+@Table(name = "saga_state")
+public class SagaState {
+    @Id
+    private String sagaId;
+
+    @Enumerated(EnumType.STRING)
+    private SagaStatus status;  // STARTED, COMPENSATING, COMPENSATED, COMPLETED
+
+    @Type(JsonType.class)
+    @Column(columnDefinition = "jsonb")
+    private TradeRequest request;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SagaStep> completedSteps = new ArrayList<>();
+
+    private String failureReason;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    public void addCompletedStep(String stepName, String resourceId) {
+        completedSteps.add(new SagaStep(stepName, resourceId, LocalDateTime.now()));
+    }
+}
+
+// Why persist saga state?
+// 1. If orchestrator CRASHES mid-saga, it can RESUME from last completed step
+// 2. Background job finds STUCK sagas and retries compensation
+// 3. Full audit trail for regulators (MiFID II loves this!)
+```
+
+**Background Recovery Job (handles crashed sagas):**
+
+```java
+@Scheduled(fixedRate = 60000) // Every 60 seconds
+public void recoverStuckSagas() {
+    List<SagaState> stuckSagas = sagaStateRepository.findByStatusInAndUpdatedAtBefore(
+        List.of(SagaStatus.STARTED, SagaStatus.COMPENSATING),
+        LocalDateTime.now().minusMinutes(5)
+    );
+
+    for (SagaState saga : stuckSagas) {
+        log.warn("Recovering stuck saga: {}", saga.getSagaId());
+        compensate(saga);
+        saga.setStatus(SagaStatus.COMPENSATED);
+        sagaStateRepository.save(saga);
+    }
+}
+```
+
+#### 🏦 When to Use What at SocGen
+
+```
+Simple: Order -> Payment (2 steps)
+  --> Use Choreography (event-driven, less code)
+
+Complex: Trade -> Compliance -> Risk -> Debit -> Execute -> Settle (6 steps)
+  --> Use Orchestration (central control, easy to debug, audit trail)
+
+Banking rule of thumb:
+  - If regulators need to SEE the full transaction flow --> Orchestration
+  - If you need to RETRY or RESUME failed transactions --> Orchestration
+  - If the flow has CONDITIONAL steps (skip settlement for OTC) --> Orchestration
+```
+
+---
+
+### SG-S5. How do you ensure idempotency in microservices?
+
+> **Banking: A payment must NEVER be processed twice. SocGen always asks this.**
+
+#### 🟢 Simple Analogy
+
+Imagine you're at an ATM and press "Withdraw ₹10,000":
+- The ATM processes it... but the screen freezes. Did it work?
+- You press the button **again**.
+- **Without idempotency:** You get charged ₹20,000! 💥
+- **With idempotency:** The system says "I already processed this request" and returns the same result. You're only charged ₹10,000. ✅
+
+> 💡 **Idempotent = calling the same operation multiple times has the SAME effect as calling it once.**
+
+#### 🔵 Two Approaches — Visual
+
+```
+Approach 1: Idempotency Key (for REST APIs)
+
+  Client sends:  POST /api/payments
+                 Header: X-Idempotency-Key: "abc-123"
+                 Body: { amount: 10000 }
+
+  First call:    Server processes payment, stores result keyed by "abc-123"
+                 → 201 Created
+
+  Retry call:    Server sees "abc-123" already processed
+                 → Returns SAME stored result (200 OK), does NOT process again ✅
+
+Approach 2: Database Unique Constraint (for Kafka consumers)
+
+  Event arrives:  { eventId: "evt-001", tradeId: "T001" }
+
+  First time:     INSERT INTO processed_events (event_id) → SUCCESS
+                  Process the trade ✅
+
+  Duplicate:      INSERT INTO processed_events (event_id) → UNIQUE CONSTRAINT VIOLATION!
+                  Skip processing — already done ✅
+```
+
+#### 🔵 Code — Both Approaches
+
+```java
+// ✅ Approach 1: Idempotency Key for REST APIs
+@PostMapping("/api/payments")
+public ResponseEntity<PaymentResponse> processPayment(
+        @RequestHeader("X-Idempotency-Key") String idempotencyKey,
+        @RequestBody PaymentRequest request) {
+
+    // Check if this EXACT request was already processed
+    Optional<Payment> existing = paymentRepository.findByIdempotencyKey(idempotencyKey);
+    if (existing.isPresent()) {
+        return ResponseEntity.ok(PaymentResponse.from(existing.get())); // return CACHED result
+        // No double-charge! Same result as first call.
+    }
+
+    // First time — process the payment
+    Payment payment = paymentService.process(request, idempotencyKey);
+    return ResponseEntity.status(HttpStatus.CREATED).body(PaymentResponse.from(payment));
+}
+
+// ✅ Approach 2: Database Unique Constraint for Kafka Consumers
+@Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "eventId"))
+public class ProcessedEvent {
+    @Id private String eventId;  // Kafka event ID
+    private LocalDateTime processedAt;
+}
+
+@KafkaListener(topics = "trade.created")
+@Transactional
+public void handleTradeCreated(TradeCreatedEvent event) {
+    try {
+        // If eventId already exists → UNIQUE CONSTRAINT VIOLATION → skip!
+        processedEventRepo.save(new ProcessedEvent(event.getEventId(), LocalDateTime.now()));
+
+        // Only reaches here if event is NEW (not duplicate)
+        settlementService.settle(event);
+
+    } catch (DataIntegrityViolationException e) {
+        log.info("Duplicate event ignored: {}", event.getEventId()); // safe!
+    }
+}
+```
+
+#### 🎯 Interview One-Liner
+
+> **"Idempotency means processing the same request multiple times produces the same result. For REST APIs, I use an X-Idempotency-Key header — the server checks if this key was already processed before doing any work. For Kafka consumers, I use a processed_events table with a unique constraint on the event ID — duplicate events are rejected at the database level. In banking, this prevents double-charging or double-settlement."**
+
+---
+
+## 📋 Section 3: SQL & Database — SocGen Banking Questions
+
+### SG-D1. Write a SQL query to find the second highest salary.
+
+> **Classic SocGen screening question.**
+
+#### 🟢 Three Approaches (Simple → Advanced)
+
+```sql
+-- Approach 1: LIMIT/OFFSET (simplest — PostgreSQL/MySQL)
+-- "Sort by salary descending, skip the first one, take the next one"
+SELECT DISTINCT salary
+FROM employees
+ORDER BY salary DESC
+LIMIT 1 OFFSET 1;
+-- OFFSET 1 = skip the highest → gives you the 2nd highest
+
+-- Approach 2: Subquery (works on ALL databases)
+-- "Find the MAX salary that is LESS than the overall MAX"
+SELECT MAX(salary) AS second_highest
+FROM employees
+WHERE salary < (SELECT MAX(salary) FROM employees);
+-- Inner query finds MAX (say 100K)
+-- Outer query finds MAX where salary < 100K → second highest
+
+-- Approach 3: DENSE_RANK (best for Nth highest — interview follow-up!)
+-- "Rank all salaries, then pick rank = 2"
+SELECT salary FROM (
+    SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) AS rnk
+    FROM employees
+) ranked
+WHERE rnk = 2;
+-- DENSE_RANK: if two people have the same highest salary, they both get rank 1
+-- Next salary gets rank 2 (no gap). ROW_NUMBER would give rank 1, 2, 3 even for ties.
+
+-- Follow-up: "Find the Nth highest salary" → Just change rnk = N
+```
+
+#### 🎯 Interview Tip
+
+> Say: "I'd use DENSE_RANK for production code because it handles ties correctly and generalizes to any Nth value. LIMIT/OFFSET is simpler but doesn't handle ties."
+
+---
+
+### SG-D2. Explain ACID properties with a banking example.
+
+#### 🟢 Simple Analogy — Bank Transfer of ₹10,000 from Account A → B
+
+| Property | What It Means | Bank Transfer Example |
+|----------|--------------|----------------------|
+| **A — Atomicity** | "All or nothing" — entire operation succeeds or entirely rolls back | Debit A by ₹10,000 AND Credit B by ₹10,000. If credit fails → debit is rolled back. Money doesn't disappear! |
+| **C — Consistency** | Database moves from one valid state to another | Total money in system before = after. Account balance can't go negative (CHECK constraint). |
+| **I — Isolation** | Concurrent transactions don't interfere with each other | Two people transfer from Account A simultaneously → no double-spend. Each sees a consistent snapshot. |
+| **D — Durability** | Once committed, data survives crashes | Transfer committed → server crashes → after restart, the transfer is still there. Written to disk, not just memory. |
+
+#### 🔵 Code — ACID in Spring Boot
+
+```java
+@Service
+public class TransferService {
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public void transfer(String fromAcct, String toAcct, BigDecimal amount) {
+        // SELECT ... FOR UPDATE → locks the rows so no one else can modify them (Isolation)
+        Account from = accountRepo.findByIdForUpdate(fromAcct);
+        Account to = accountRepo.findByIdForUpdate(toAcct);
+
+        if (from.getBalance().compareTo(amount) < 0) {
+            throw new InsufficientFundsException("Balance too low"); // → Atomicity: rolls back everything
+        }
+
+        from.setBalance(from.getBalance().subtract(amount));  // Debit
+        to.setBalance(to.getBalance().add(amount));            // Credit
+
+        accountRepo.save(from);
+        accountRepo.save(to);
+
+        // @Transactional ensures:
+        // - Atomicity: if save(to) fails, save(from) is rolled back too
+        // - Consistency: DB constraints enforced (balance >= 0)
+        // - Isolation: FOR UPDATE locks prevent concurrent double-spend
+        // - Durability: after commit, data is on disk — survives crash
+    }
+}
+```
+
+#### 🎯 Interview One-Liner
+
+> **"ACID guarantees: Atomicity (all or nothing), Consistency (valid state to valid state), Isolation (concurrent transactions don't interfere), Durability (committed data survives crashes). For banking transfers, I use @Transactional with REPEATABLE_READ isolation and SELECT FOR UPDATE to lock rows."**
+
+---
+
+### SG-D3. What are database indexes? When would you NOT use an index?
+
+#### 🟢 Simple Analogy
+
+An index is like the **index at the back of a textbook**:
+- Without it: To find "Kafka" you read every page (full table scan) — slow!
+- With it: Look up "Kafka → page 147" — jump directly there — fast!
+- But: If the book has 5 pages, an index is pointless. Just read the whole thing.
+
+#### 🔵 Index Types with Examples
+
+```sql
+-- 1. Simple index — speed up WHERE queries
+CREATE INDEX idx_trades_account_id ON trades(account_id);
+-- SELECT * FROM trades WHERE account_id = 'ACC-001' → uses index (fast!)
+
+-- 2. Composite index — order matters! (leftmost prefix rule)
+CREATE INDEX idx_trades_account_date ON trades(account_id, trade_date);
+-- ✅ WHERE account_id = ? AND trade_date > ?   → uses index
+-- ✅ WHERE account_id = ?                       → uses index (leftmost column)
+-- ❌ WHERE trade_date > ?                       → CANNOT use index (missing leftmost column!)
+
+-- 3. Covering index — all needed columns IN the index (no table lookup needed)
+CREATE INDEX idx_covering ON trades(account_id, trade_date, amount, status);
+-- The DB can answer the query entirely from the index without touching the table rows
+```
+
+#### 🔵 When NOT to Index
+
+| Scenario | Why Index Hurts | Better Approach |
+|----------|----------------|----------------|
+| **Small tables** (< 1,000 rows) | Full scan is faster than index lookup overhead | No index needed |
+| **Low cardinality** (`status` with 3 values: OPEN/CLOSED/PENDING) | Index doesn't narrow the search — most rows match | Partial index: `WHERE status = 'OPEN'` |
+| **Write-heavy, rarely read** (audit logs) | Every INSERT/UPDATE must also update the index — slows writes | Index only what you query |
+| **Function on column** (`WHERE UPPER(name) = ...`) | Index on `name` is ignored — DB can't use it | Functional index: `CREATE INDEX ON trades(UPPER(name))` |
+
+#### 🎯 Interview One-Liner
+
+> **"An index is a B-tree structure that speeds up reads at the cost of slower writes. I create indexes on columns used in WHERE, JOIN, and ORDER BY. For composite indexes, leftmost column must appear in the query. I avoid indexing small tables, low-cardinality columns, and write-heavy tables. I always check EXPLAIN ANALYZE to verify the query actually uses the index."**
+
+---
+
+### SG-D4. Explain database transaction isolation levels.
+
+#### 🟢 Simple Analogy
+
+Think of isolation levels as **privacy levels in an exam hall**:
+- **READ UNCOMMITTED** = You can see other students' answer sheets even before they submit (dangerous!)
+- **READ COMMITTED** = You can only see submitted answer sheets (default — safe for most cases)
+- **REPEATABLE READ** = Once you start reading a sheet, it won't change even if the student submits a correction
+- **SERIALIZABLE** = Students take the exam one at a time in a private room (safest but slowest)
+
+#### 🔵 What Can Go Wrong at Each Level
+
+| Level | Dirty Read | Non-Repeatable Read | Phantom Read | Speed | Banking Use |
+|-------|-----------|-------------------|-------------|-------|------------|
+| **READ UNCOMMITTED** | ⚠️ Yes — see uncommitted data | ⚠️ Yes | ⚠️ Yes | Fastest | ❌ NEVER in banking |
+| **READ COMMITTED** | ✅ No | ⚠️ Yes — same query returns different results | ⚠️ Yes | Fast | Default PostgreSQL — OK for most reads |
+| **REPEATABLE READ** | ✅ No | ✅ No | ⚠️ Yes — new rows appear | Medium | Account balance queries |
+| **SERIALIZABLE** | ✅ No | ✅ No | ✅ No | Slowest | Money transfers — full isolation |
+
+```
+What are these problems?
+
+DIRTY READ:      Transaction A writes but hasn't committed. Transaction B reads A's uncommitted data.
+                 If A rolls back → B read data that NEVER EXISTED! 💥
+
+NON-REPEATABLE:  Transaction B reads balance = 1000. Transaction A commits a debit.
+                 Transaction B reads AGAIN → balance = 500! Same query, different result! 💥
+
+PHANTOM READ:    Transaction B counts 10 trades. Transaction A inserts a new trade and commits.
+                 Transaction B counts AGAIN → 11 trades! A new row "appeared" like a phantom! 💥
+```
+
+```java
+// Banking: Use appropriate isolation for each operation
+@Transactional(isolation = Isolation.REPEATABLE_READ) // snapshot — balance won't change mid-query
+public BigDecimal getBalance(String accountId) {
+    return accountRepo.findBalance(accountId);
+}
+
+@Transactional(isolation = Isolation.SERIALIZABLE) // full isolation — no concurrency issues possible
+public void transfer(String from, String to, BigDecimal amount) {
+    // safest for money transfers — no concurrent transaction can interfere
+}
+```
+
+#### 🎯 Interview One-Liner
+
+> **"Isolation levels control what one transaction can see of another's uncommitted changes. READ COMMITTED (PostgreSQL default) prevents dirty reads. REPEATABLE READ gives a consistent snapshot. SERIALIZABLE is the safest but slowest — I use it for money transfers. The higher the isolation, the safer but slower."**
+
+---
+
+### SG-D5. What is the difference between `DELETE`, `TRUNCATE`, and `DROP`?
+
+#### 🟢 Simple Analogy
+
+- **DELETE** = Erasing specific lines from a notebook with a pencil (can undo, slow)
+- **TRUNCATE** = Ripping out ALL pages from the notebook (fast, can't undo, notebook still exists)
+- **DROP** = Throwing the entire notebook in the trash (notebook is gone)
+
+#### 🔵 Comparison Table
+
+| Feature | `DELETE` | `TRUNCATE` | `DROP` |
+|---------|---------|-----------|--------|
+| **What it does** | Removes specific rows | Removes ALL rows | Removes entire table |
+| **WHERE clause?** | ✅ Yes — delete only matching rows | ❌ No — all or nothing | ❌ No — table gone |
+| **Can you ROLLBACK?** | ✅ Yes — fully logged | ❌ No — minimal logging | ❌ No |
+| **Triggers fire?** | ✅ Yes | ❌ No | ❌ No |
+| **Auto-increment** | Keeps counter (next ID continues) | Resets counter to 1 | Table gone |
+| **Speed** | Slow (processes each row) | Very fast | Fastest |
+| **Disk space freed?** | ❌ Not immediately (needs VACUUM) | ✅ Immediately | ✅ Immediately |
+| **Banking use** | Soft-delete with audit trail | ❌ Never on transactional tables | Only in dev/test environments |
+
+> **🏦 Banking rule:** In production, NEVER use TRUNCATE or DROP on transactional tables. Use **soft-delete**: `UPDATE trades SET is_deleted = true, deleted_at = NOW() WHERE id = ?`. This preserves audit trail.
+
+#### 🎯 Interview One-Liner
+
+> **"DELETE removes specific rows, is fully logged and can be rolled back. TRUNCATE removes all rows instantly but can't be rolled back and doesn't fire triggers. DROP removes the entire table. In banking, I use soft-delete (is_deleted flag) to preserve audit trails — regulators require complete data history."**
+
+---
+
+## 📋 Section 4: NoSQL (MongoDB) — SocGen Questions
+
+### SG-N1. When would you use MongoDB vs PostgreSQL in a banking system?
+
+#### 🟢 Simple Rule
+
+> **"If you're dealing with MONEY → PostgreSQL. If you're dealing with LOGS → MongoDB."**
+
+#### 🔵 Decision Table
+
+| Use Case | PostgreSQL (SQL) | MongoDB (NoSQL) | Winner |
+|----------|-----------------|-----------------|--------|
+| **Trade transactions** | ✅ ACID, foreign keys, joins | ❌ Eventual consistency risk | **PostgreSQL** |
+| **Account balances** | ✅ Strong consistency, CHECK constraints | ❌ Risk of stale reads | **PostgreSQL** |
+| **Audit logs** | 🔵 Works but rigid schema | ✅ Flexible schema, fast writes, append-only | **MongoDB** |
+| **User activity/session** | 🔵 Over-engineered | ✅ Document model fits naturally | **MongoDB** |
+| **Regulatory reports** | ✅ Complex JOINs across tables | ❌ No joins — aggregation less intuitive | **PostgreSQL** |
+| **Trade documents/PDFs** | ❌ BLOBs are painful | ✅ GridFS or document references | **MongoDB** |
+| **Real-time analytics** | 🔵 Slower for aggregation | ✅ Aggregation pipeline, change streams | **MongoDB** |
+
+#### 🎯 Interview One-Liner
+
+> **"PostgreSQL for anything involving money — trades, balances, settlements — because ACID compliance is non-negotiable. MongoDB for audit logs, user activity, and document storage where the flexible schema and fast append-only writes are advantages. At VMware, I used PostgreSQL for billing transactions and would use MongoDB for audit trails in a banking system."**
+
+---
+
+### SG-N2. What is the MongoDB aggregation pipeline?
+
+#### 🟢 Simple Analogy
+
+Think of it as a **data assembly line** — data flows through stages, each stage transforms it:
+
+```
+Raw documents → [match: filter] → [group: aggregate] → [sort: order] → [limit: top N] → Result
+```
+
+Like SQL: `SELECT account_id, SUM(amount) FROM trades WHERE status='SETTLED' GROUP BY account_id ORDER BY total DESC LIMIT 5`
+
+#### 🔵 Java Example — Spring Data MongoDB
+
+```java
+// "Find top 5 accounts by total trade volume this month"
+Aggregation aggregation = Aggregation.newAggregation(
+    // Stage 1: MATCH (like WHERE) — filter settled trades this month
+    match(Criteria.where("tradeDate")
+        .gte(LocalDate.now().withDayOfMonth(1))
+        .and("status").is("SETTLED")),
+
+    // Stage 2: GROUP (like GROUP BY) — sum amounts per account
+    group("accountId")
+        .sum("amount").as("totalVolume")
+        .count().as("tradeCount"),
+
+    // Stage 3: SORT (like ORDER BY) — highest volume first
+    sort(Sort.Direction.DESC, "totalVolume"),
+
+    // Stage 4: LIMIT — top 5 only
+    limit(5),
+
+    // Stage 5: PROJECT (like SELECT) — shape the output
+    project()
+        .and("_id").as("accountId")
+        .andInclude("totalVolume", "tradeCount")
+);
+
+List<TradeVolumeSummary> results = mongoTemplate.aggregate(
+    aggregation, "trades", TradeVolumeSummary.class).getMappedResults();
+```
+
+#### 🎯 Interview One-Liner
+
+> **"The aggregation pipeline is MongoDB's way to process data through stages: match (filter), group (aggregate), sort, project (shape output), limit. Each stage transforms documents and passes them to the next. It's like a SQL query decomposed into a pipeline of steps."**
+
+---
+
+## 📋 Section 5: Docker & Kubernetes — SocGen Questions
+
+### SG-K1. Write a multi-stage Dockerfile for a Spring Boot application.
+
+#### 🟢 Simple Analogy
+
+Think of multi-stage Docker build as **cooking in a professional kitchen then plating for the customer**:
+- **Stage 1 (Kitchen):** Big messy workspace — all ingredients, tools, raw materials (Maven, source code, compiler)
+- **Stage 2 (Plate):** Only the finished dish goes to the customer (just JRE + JAR)
+- Customer never sees the mess in the kitchen! (smaller, safer, faster)
+
+#### 🔵 The Dockerfile
+
+```dockerfile
+# ══════════════════════════════════════════════════
+# Stage 1: BUILD (the "kitchen" — has everything needed to cook)
+# ══════════════════════════════════════════════════
+FROM maven:3.9-eclipse-temurin-21 AS builder
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline          # download all dependencies (cached if pom.xml unchanged)
+COPY src ./src
+RUN mvn clean package -DskipTests      # compile + package into JAR
+
+# ══════════════════════════════════════════════════
+# Stage 2: RUNTIME (the "plate" — only what's needed to run)
+# ══════════════════════════════════════════════════
+FROM eclipse-temurin:21-jre-alpine     # tiny image — only JRE, no JDK/Maven/source
+WORKDIR /app
+
+# Security: run as non-root user (banking compliance!)
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
+# Copy ONLY the built JAR from Stage 1 (nothing else!)
+COPY --from=builder /app/target/*.jar app.jar
+
+# JVM tuning for containers
+ENV JAVA_OPTS="-XX:MaxRAMPercentage=75.0 -XX:+UseG1GC -XX:+ExitOnOutOfMemoryError"
+
+EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=5s CMD wget -qO- http://localhost:8080/actuator/health || exit 1
+
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+```
+
+#### 🔵 Why Multi-Stage Matters for Banking
+
+| Benefit | Single-Stage | Multi-Stage |
+|---------|-------------|------------|
+| **Image size** | ~800MB (Maven + JDK + source + JAR) | ~200MB (JRE + JAR only) |
+| **Security** | Source code, build tools, credentials in image | Only runtime — minimal attack surface |
+| **Compliance** | Regulators flag unnecessary tools in production | Banking audit-ready — clean image |
+| **Build speed** | Everything rebuilds each time | Dependency layer cached — faster builds |
+
+#### 🎯 Interview One-Liner
+
+> **"Multi-stage Docker builds use one stage to compile (with Maven/JDK) and a separate stage for runtime (just JRE + JAR). The final image has no source code, no build tools, and runs as non-root — critical for banking security compliance. Image size drops from ~800MB to ~200MB."**
+
+---
+
+### SG-K2. Explain Kubernetes Deployment, Service, and Ingress.
+
+#### 🟢 Simple Analogy
+
+- **Pod** = A single running instance of your app (one server)
+- **Deployment** = The "manager" that ensures 3 pods are always running (if one crashes, it creates a new one)
+- **Service** = The "receptionist" that routes traffic to any available pod (clients don't know which pod handles their request)
+- **Ingress** = The "front door" of the building (handles HTTPS, domain names, path routing)
+
+#### 🔵 Visual
+
+```mermaid
+flowchart TB
+    USER["User Request\nhttps://trades.socgen.com"] --> ING["Ingress\n(front door)\nSSL termination\nPath routing"]
+    ING --> SVC["Service\n(receptionist)\nLoad balances across pods"]
+    SVC --> P1["Pod 1\nTrade Service v2.1"]
+    SVC --> P2["Pod 2\nTrade Service v2.1"]
+    SVC --> P3["Pod 3\nTrade Service v2.1"]
+    DEP["Deployment\n(manager)\nEnsures 3 replicas\nRolling updates"] -.->|manages| P1 & P2 & P3
+```
+
+#### 🔵 K8s YAML — Explained Line by Line
+
+```yaml
+# ── DEPLOYMENT: "I want 3 pods running at all times" ──
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trade-service
+spec:
+  replicas: 3                          # always run 3 pods
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1                      # during update: allow 1 EXTRA pod (total 4)
+      maxUnavailable: 0                # during update: ZERO downtime (banking requirement!)
+  selector:
+    matchLabels:
+      app: trade-service
+  template:
+    spec:
+      containers:
+      - name: trade-service
+        image: registry.socgen.com/trade-service:2.1
+        ports:
+        - containerPort: 8080
+        resources:                     # resource limits (prevent one pod from eating all CPU)
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        readinessProbe:                # "Is this pod READY to receive traffic?"
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 15      # wait 15s before first check (Spring Boot needs startup time)
+        livenessProbe:                 # "Is this pod still ALIVE?"
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 30
+
+---
+# ── SERVICE: "Route traffic to any healthy pod" ──
+apiVersion: v1
+kind: Service
+metadata:
+  name: trade-service
+spec:
+  selector:
+    app: trade-service                 # find pods with this label
+  ports:
+  - port: 80                          # external port
+    targetPort: 8080                   # pod's port
+  type: ClusterIP                     # only accessible inside the cluster
+
+---
+# ── HPA: "Auto-scale when busy" ──
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: trade-service
+  minReplicas: 3                       # never go below 3
+  maxReplicas: 10                      # scale up to 10 during peak
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        averageUtilization: 70         # scale up when CPU > 70%
+```
+
+#### 🎯 Interview One-Liner
+
+> **"A Deployment manages pod replicas and rolling updates with zero downtime. A Service provides a stable endpoint that load-balances across pods. An Ingress handles external HTTPS traffic and path routing. HPA auto-scales pods based on CPU/memory. I configure readiness and liveness probes using Spring Boot Actuator endpoints."**
+
+---
+
+### SG-K3. How do you handle secrets in Kubernetes for a banking application?
+
+#### 🟢 Simple Analogy
+
+- **ConfigMap** = A notice board — anyone walking by can read it (NOT for passwords!)
+- **K8s Secret** = A locked drawer — base64 encoded, slightly better, but still accessible with kubectl
+- **HashiCorp Vault** = A bank vault — encrypted, audited access, automatic rotation (banking standard)
+
+#### 🔵 Three Levels of Secret Management
+
+```yaml
+# ❌ Level 1: NEVER DO THIS — hardcoded in code or ConfigMap
+spring:
+  datasource:
+    password: "my-secret-password"     # visible in Git, ConfigMap, logs — AUDIT FAIL!
+
+# 🔵 Level 2: Kubernetes Secret (minimum acceptable)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: trade-service-secrets
+type: Opaque
+data:
+  DB_PASSWORD: cGFzc3dvcmQxMjM=       # base64 encoded (NOT encrypted!)
+  KAFKA_PASSWORD: a2Fma2ExMjM=
+
+# Mount as environment variables in Deployment:
+env:
+- name: SPRING_DATASOURCE_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: trade-service-secrets
+      key: DB_PASSWORD
+# Pod reads password from env var — never in code
+
+# ✅ Level 3: HashiCorp Vault (banking standard)
+# - Secrets are encrypted at rest
+# - Access is audited (who accessed what secret, when)
+# - Automatic rotation (DB password changes every 24 hours)
+# - Vault Agent Injector adds secrets to pods automatically
+# - Secrets NEVER stored in YAML files or Git
+```
+
+#### 🎯 Interview One-Liner
+
+> **"For banking, I use HashiCorp Vault with the Kubernetes Vault Injector — secrets are encrypted, access is audited, and passwords rotate automatically. At minimum, Kubernetes Secrets with RBAC policies. Never hardcode secrets in code or ConfigMaps."**
+
+---
+
+## 📋 Section 6: Kafka — SocGen Event-Driven Architecture
+
+### SG-K4. How do you guarantee exactly-once delivery in Kafka?
+
+> **Banking: A trade event must be processed exactly once — no duplicates, no losses.**
+
+#### 🟢 Simple Analogy
+
+Imagine sending a **money transfer instruction by mail**:
+- **At-most-once:** Send the letter and forget it. If it gets lost, too bad. (Message might never arrive)
+- **At-least-once:** Keep sending copies until you get a confirmation. But they might process 3 copies! (Duplicates!)
+- **Exactly-once:** Send with a **tracking number**. Recipient checks: "Did I already process tracking #12345?" If yes, ignore the duplicate. ✅
+
+> **Exactly-once = At-least-once delivery + Idempotent processing**
+
+#### 🔵 Three Layers of Protection
+
+```
+Layer 1: PRODUCER — Idempotent writes (no duplicate messages in Kafka)
+  acks=all + enable.idempotence=true
+  → Even if producer retries, Kafka deduplicates by sequence number
+
+Layer 2: CONSUMER — Manual commit (no message loss)
+  enable.auto.commit=false
+  → Only commit offset AFTER successful processing
+  → If consumer crashes mid-processing, Kafka redelivers the message
+
+Layer 3: CONSUMER — Idempotent processing (no duplicate business effect)
+  → Check: "Have I already processed this event ID?"
+  → If yes → skip. If no → process and mark as done.
+```
+
+#### 🔵 Code — All 3 Layers
+
+```java
+// ── Layer 1: Producer config ──
+spring:
+  kafka:
+    producer:
+      acks: all                      # wait for ALL replicas to acknowledge
+      properties:
+        enable.idempotence: true     # Kafka deduplicates retries
+      retries: 3                     # retry up to 3 times on failure
+
+// ── Layer 2 + 3: Consumer with manual commit + idempotent processing ──
+@KafkaListener(topics = "trade.created", groupId = "settlement-service")
+public void handleTradeCreated(
+        @Payload TradeCreatedEvent event,
+        Acknowledgment ack) {             // manual acknowledgment
+    try {
+        // Layer 3: Idempotency check — have I processed this event before?
+        if (processedEventRepo.existsById(event.getEventId())) {
+            ack.acknowledge();  // already done — just skip
+            return;
+        }
+
+        // First time — process the event
+        settlementService.settle(event);
+
+        // Mark as processed (so duplicates will be skipped)
+        processedEventRepo.save(new ProcessedEvent(event.getEventId()));
+
+        // Layer 2: Only commit offset AFTER successful processing
+        ack.acknowledge();
+
+    } catch (Exception e) {
+        log.error("Failed to process: {}", event.getTradeId(), e);
+        // DON'T ack → Kafka will redeliver → Layer 3 prevents duplicate processing
+    }
+}
+```
+
+#### 🎯 Interview One-Liner
+
+> **"Exactly-once = Idempotent Producer (acks=all, enable.idempotence=true) + Manual Offset Commit (only after success) + Idempotent Consumer (check processed_events table before processing). This three-layer approach ensures no message is lost and no message is processed twice."**
+
+---
+
+## 📋 Section 7: Security — SocGen Banking Security Questions
+
+### SG-SEC1. How do you implement OAuth2 + JWT in a Spring Boot microservice?
+
+#### 🟢 Simple Analogy
+
+Think of it like entering a **secure office building**:
+1. **Login** = You go to the reception desk (Auth Server / Keycloak) with your ID (username+password)
+2. **Get a badge** = Reception gives you a visitor badge (JWT token) with your name and access level
+3. **Enter the building** = You show the badge at every door (API call with `Authorization: Bearer <token>`)
+4. **Door checks the badge** = Security guard (Spring Security) checks: Is this badge valid? Not expired? Does this person have access to this floor?
+
+#### 🔵 Flow Diagram
+
+```mermaid
+flowchart LR
+    C["Client App"] -->|"1. Login\nusername + password"| AUTH["Auth Server\nKeycloak"]
+    AUTH -->|"2. Here's your badge\nJWT access token\n+ refresh token"| C
+    C -->|"3. API request\nAuthorization: Bearer eyJhbG..."| API["Trade Service"]
+    API -->|"4. Validate badge\nSignature OK?\nNot expired?\nHas TRADER role?"| API
+    API -->|"5. Access granted"| RESP["200 OK\nTrade data"]
+```
+
+#### 🔵 Spring Security Config — Explained Line by Line
+
+```java
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity  // enables @PreAuthorize on methods
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
+            .csrf(csrf -> csrf.disable())  // REST API is stateless — no CSRF needed
+            .sessionManagement(sm -> sm.sessionCreationPolicy(STATELESS)) // no sessions — JWT only
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/actuator/health/**").permitAll() // health checks — no auth needed
+                .requestMatchers("/api/trades/**").hasRole("TRADER") // only traders can access trades
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")   // only admins
+                .anyRequest().authenticated()                        // everything else needs login
+            )
+            .oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter()))
+                // "I'm a Resource Server — I VALIDATE JWT tokens, I don't ISSUE them"
+            )
+            .build();
+    }
+
+    // Extract roles from JWT — SocGen uses Keycloak which puts roles in realm_access.roles
+    private JwtAuthenticationConverter jwtAuthConverter() {
+        JwtGrantedAuthoritiesConverter conv = new JwtGrantedAuthoritiesConverter();
+        conv.setAuthorityPrefix("ROLE_");
+        conv.setAuthoritiesClaimName("realm_access.roles");
+        JwtAuthenticationConverter jwtConv = new JwtAuthenticationConverter();
+        jwtConv.setJwtGrantedAuthoritiesConverter(conv);
+        return jwtConv;
+    }
+}
+
+// Method-level security — fine-grained control
+@RestController
+@RequestMapping("/api/trades")
+public class TradeController {
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('TRADER') or hasRole('ADMIN')")  // both can read
+    public TradeDTO getTrade(@PathVariable String id) { ... }
+
+    @PostMapping
+    @PreAuthorize("hasRole('TRADER')")  // only traders can create
+    public TradeDTO createTrade(@Valid @RequestBody TradeRequest req) { ... }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")   // only admins can cancel
+    public void cancelTrade(@PathVariable String id) { ... }
+}
+```
+
+#### 🎯 Interview One-Liner
+
+> **"I configure Spring Security as an OAuth2 Resource Server — it validates JWTs issued by Keycloak. The filter chain defines URL-level rules, and @PreAuthorize gives method-level role checks. JWTs are stateless — no sessions. For banking, this means every API call carries proof of identity and authorization, which also serves as an audit trail."**
+
+
+
+
+
+---
+
+## 📋 Section 8: Your Experience Mapped to SocGen — Ready-Made Answers
+
+### SG-EXP1. "Tell me about yourself" — SocGen Version
+
+> "I'm Digamber Singh, a Senior Technical Lead with nearly 10 years in Java and Spring Boot ecosystems. At **Comviva**, I currently architect Spring Boot microservices for Quote Management and Salesforce integration — systems handling 100K+ daily transactions with Kafka event-driven sync. I reduced API latency by 25% through async processing and Redis caching, and I lead a 5-engineer Agile team with strong focus on TDD, CI/CD, and software craftsmanship.
+>
+> Before that, at **VMware**, I built billing and invoice microservices processing millions of transactions daily — similar to the high-volume financial systems at SocGen. I led a legacy ColdFusion-to-Spring Boot migration using the Strangler Fig pattern, and introduced BDD automation that raised test coverage by 80%.
+>
+> What excites me about SocGen is the emphasis on **software craftsmanship** — TDD, pair programming, clean code — which aligns perfectly with how I lead my teams. I'm also drawn to the challenge of building resilient, audit-compliant financial systems at scale."
+
+---
+
+### SG-EXP2. How Your Comviva/VMware Experience Maps to Banking
+
+| Your Experience | SocGen Banking Equivalent |
+|----------------|--------------------------|
+| Quote Management (100K+ daily txns) | Trade Management / Order Management System |
+| Salesforce Integration (Outbox + Kafka) | External Market Data Integration / Settlement System |
+| Billing microservice (millions daily, VMware) | Payment Processing / Invoice Settlement System |
+| ColdFusion → Spring Boot migration | COBOL/Mainframe → Java Microservices migration |
+| Redis caching for quote lookups | Caching trade/market data for low-latency reads |
+| Kafka event-driven architecture | Trade event streaming / CDC for regulatory reporting |
+| Playwright BDD automation | BDD testing for trade lifecycle scenarios |
+| Jenkins + SonarQube CI/CD | Same stack — SocGen uses Jenkins, SonarQube, Nexus |
+| ELK Stack monitoring | Same stack — SocGen uses ELK + Grafana |
+| Team of 5 engineers, Agile | Squads of 5-8, Agile + Craftsmanship practices |
+| Spring AI prototype | Innovation — shows you explore emerging tech |
+
+---
+
+### SG-EXP3. "Why Societe Generale?" — Best Answer
+
+> "Three reasons:
+>
+> 1. **Software Craftsmanship culture** — I actively drive TDD, code review standards, and craftsmanship practices in my current team. SocGen's commitment to the Software Craftsmanship manifesto — pair programming, TDD, clean code — is exactly the engineering culture I believe in and want to grow in.
+>
+> 2. **Technical depth at scale** — Building trading and settlement systems that process billions of euros requires the kind of resilience engineering, data integrity guarantees, and security rigor that challenges me technically. My experience with high-volume transaction systems at VMware and Comviva has prepared me for this.
+>
+> 3. **Impact** — In banking technology, the code I write directly impacts millions of customers and real financial outcomes. That accountability and the regulatory rigor that comes with it appeals to my engineering mindset."
+
+---
+
+## 📋 Section 9: Frequently Asked Coding Questions at SocGen
+
+### SG-CODE1. Find duplicate elements in an array
+
+```java
+// Simple approach using HashSet — O(n) time, O(n) space
+public List<Integer> findDuplicates(int[] nums) {
+    Set<Integer> seen = new HashSet<>();
+    Set<Integer> duplicates = new LinkedHashSet<>(); // maintains insertion order
+    for (int num : nums) {
+        if (!seen.add(num)) {    // add() returns false if already present
+            duplicates.add(num);
+        }
+    }
+    return new ArrayList<>(duplicates);
+}
+// Example: [1, 3, 4, 2, 3, 1] → [3, 1]
+```
+
+### SG-CODE2. Reverse a linked list
+
+```java
+// Iterative — O(n) time, O(1) space
+public ListNode reverse(ListNode head) {
+    ListNode prev = null, curr = head;
+    while (curr != null) {
+        ListNode next = curr.next;  // save next
+        curr.next = prev;           // reverse pointer
+        prev = curr;                // move prev forward
+        curr = next;                // move curr forward
+    }
+    return prev;  // new head
+}
+// 1 → 2 → 3 → null  becomes  null ← 1 ← 2 ← 3
+```
+
+### SG-CODE3. Check if a string has balanced parentheses
+
+```java
+public boolean isBalanced(String s) {
+    Deque<Character> stack = new ArrayDeque<>();
+    Map<Character, Character> pairs = Map.of(')', '(', '}', '{', ']', '[');
+    for (char c : s.toCharArray()) {
+        if (pairs.containsValue(c)) {        // opening bracket → push
+            stack.push(c);
+        } else if (pairs.containsKey(c)) {   // closing bracket → check match
+            if (stack.isEmpty() || stack.pop() != pairs.get(c)) return false;
+        }
+    }
+    return stack.isEmpty();  // all brackets matched
+}
+// "({[]})" → true    "(})" → false    "(()" → false
+```
+
+### SG-CODE4. Producer-Consumer using BlockingQueue
+
+```java
+// Classic concurrency question at SocGen
+public class ProducerConsumerDemo {
+    private final BlockingQueue<Trade> queue = new LinkedBlockingQueue<>(100);
+
+    // Producer — market data feed
+    public void produce() throws InterruptedException {
+        while (true) {
+            Trade trade = receiveFromMarket();
+            queue.put(trade);  // blocks if queue is full (backpressure!)
+        }
+    }
+
+    // Consumer — trade processor
+    public void consume() throws InterruptedException {
+        while (true) {
+            Trade trade = queue.take();  // blocks if queue is empty (waits for data)
+            processSettlement(trade);
+        }
+    }
+}
+```
+
+### SG-CODE5. Implement a simple LRU Cache
+
+```java
+// "Implement a cache for trade lookups" — often asked at SocGen
+public class LRUCache<K, V> {
+    private final int capacity;
+    private final Map<K, V> cache;
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        // accessOrder=true → least recently accessed entry is first (LRU)
+        this.cache = new LinkedHashMap<>(capacity, 0.75f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+                return size() > capacity;  // auto-evict when over capacity
+            }
+        };
+    }
+
+    public synchronized V get(K key) { return cache.get(key); }
+    public synchronized void put(K key, V value) { cache.put(key, value); }
+}
+// LRUCache<String, Trade> cache = new LRUCache<>(1000);
+// Oldest unused trades get evicted when cache is full
+```
+
+---
+
+## 📋 Section 10: SocGen Behavioral & Craftsmanship Questions
+
+### SG-BEH1. "What does Software Craftsmanship mean to you?"
+
+> "Software craftsmanship means treating code as a professional craft — not just making it work, but making it **clean, tested, and maintainable**. Specifically:
+>
+> - **TDD** — I write failing tests first, then code to pass them, then refactor. At Comviva, I introduced TDD adoption through pair-programming sessions.
+> - **Clean Code** — Meaningful names, small methods, single responsibility. Code should read like well-written prose.
+> - **Pair Programming** — Two minds catch bugs and design flaws that one might miss. I pair with juniors for knowledge transfer and with peers for complex problems.
+> - **Continuous Improvement** — Every sprint, I look at our SonarQube dashboard for code smells and tech debt trends.
+> - **Boy Scout Rule** — Leave the code better than you found it. Every PR should improve something, even if it's just renaming a confusing variable."
+
+### SG-BEH2. "How do you handle disagreements about technical decisions?"
+
+> "I use data, not opinions. At Comviva, a teammate wanted to use synchronous REST calls for Salesforce integration. I proposed async Kafka. Instead of debating, I set up a quick benchmark: measured latency under load for both approaches. The data showed REST added 200-400ms to every request. The team agreed on Kafka immediately. I always aim for **disagree and commit** — once we decide, we all move forward together."
+
+### SG-BEH3. "Describe a time you failed and what you learned."
+
+> "At VMware, early in the ColdFusion migration, I tried to migrate three modules simultaneously to prove the approach. We hit integration issues everywhere — different data formats, shared database state, untested edge cases. I learned to **migrate incrementally** — one module at a time with the Strangler Fig pattern. After that, each module went live with zero issues. The lesson: **velocity comes from small, confident steps, not big bold leaps.**"
+
+---
+
+## 📋 Quick Reference — SocGen Interview Cheat Sheet
+
+| Topic | Key Points to Remember |
+|-------|----------------------|
+| **SOLID** | Real examples from your projects — not textbook definitions |
+| **TDD** | Red → Green → Refactor. Mention you introduced TDD at Comviva |
+| **Immutability** | Records, final fields, audit trails — banking compliance |
+| **HashMap** | Internals, collision, equals/hashCode contract |
+| **Spring Auto-config** | @Conditional, META-INF, how to override |
+| **Circuit Breaker** | 3 states (Closed/Open/Half-Open), Resilience4j config |
+| **Saga Pattern** | Choreography vs Orchestration, compensation |
+| **Idempotency** | Idempotency key header, DB unique constraint |
+| **ACID** | Banking transfer example with @Transactional |
+| **Isolation Levels** | READ_COMMITTED (default), SERIALIZABLE (transfers) |
+| **Kafka Exactly-Once** | Idempotent producer + manual commit + dedup consumer |
+| **OAuth2/JWT** | Resource server, role extraction, @PreAuthorize |
+| **Docker** | Multi-stage, non-root user, health check |
+| **K8s** | Deployment, Service, HPA, readiness/liveness probes |
+| **MongoDB vs PostgreSQL** | PostgreSQL for transactions, MongoDB for audit logs |
+| **Craftsmanship** | TDD, pair programming, clean code, Boy Scout Rule |
+| **Your story** | Comviva = Trade Management, VMware = Payment Processing |
+
+
+
+## 📋 Section 11: Scenario-Based Questions — Deep-Dive From Your Experience
+
+> **Why scenario questions?** SocGen interviewers don't ask "what is X?" — they ask "You're in situation X, what do you do?" These are drawn directly from your Comviva and VMware experience, reframed as banking scenarios.
+
+---
+
+### SCENARIO 1: N+1 Query Problem in Production
+
+**Interviewer:** *"Your Trade Listing API has a P99 latency of 2 seconds. Users are complaining. How do you diagnose and fix it?"*
+
+**Context from your experience:** This mirrors the Quote API latency issue you fixed at Comviva (800ms → 590ms).
+
+**Step-by-step answer:**
+
+```
+Step 1: MEASURE — Don't guess
+  → Add @Timed (Micrometer) to the endpoint
+  → Check Grafana dashboard for P50, P95, P99 latency
+  → Check Zipkin/Jaeger distributed trace to find the slow span
+
+Step 2: IDENTIFY — What's slow?
+  → Zipkin shows: TradeService.listTrades() → 47 DB queries for 46 trades
+  → Root cause: N+1 query — fetching trades, then each trade's settlement details in a loop
+
+Step 3: FIX — Three-pronged approach
+```
+
+```java
+// ❌ BEFORE — N+1 problem (1 query for trades + N queries for settlements)
+@Entity
+public class Trade {
+    @OneToMany(fetch = FetchType.LAZY)  // LAZY but accessed in loop = N+1!
+    private List<Settlement> settlements;
+}
+
+// Controller calls:
+List<Trade> trades = tradeRepository.findByAccountId(accountId);
+trades.forEach(t -> t.getSettlements().size()); // triggers N separate queries!
+
+// ✅ FIX 1: JOIN FETCH — single query loads everything
+public interface TradeRepository extends JpaRepository<Trade, Long> {
+
+    @Query("SELECT DISTINCT t FROM Trade t JOIN FETCH t.settlements WHERE t.accountId = :accountId")
+    List<Trade> findByAccountIdWithSettlements(@Param("accountId") String accountId);
+}
+
+// ✅ FIX 2: @EntityGraph — declarative approach
+@EntityGraph(attributePaths = {"settlements", "settlements.counterparty"})
+List<Trade> findByAccountId(String accountId);
+
+// ✅ FIX 3: Redis cache for frequently accessed trade lists
+@Cacheable(value = "tradeList", key = "#accountId", unless = "#result.isEmpty()")
+public List<TradeDTO> getTradesByAccount(String accountId) {
+    return tradeRepository.findByAccountIdWithSettlements(accountId)
+        .stream()
+        .map(TradeDTO::from)
+        .toList();
+}
+```
+
+```
+Step 4: VERIFY
+  → P99 dropped from 2s to 350ms
+  → DB queries: 47 → 1
+  → Added alert: if P99 > 500ms → Slack notification
+
+Step 5: PREVENT
+  → Added Hibernate query log in test profile: hibernate.generate_statistics=true
+  → CI pipeline fails if any endpoint makes > 5 DB queries (custom test assertion)
+```
+
+**Follow-up Q:** *"How do you detect N+1 in the future before it reaches production?"*
+
+```java
+// In test profile — log all SQL queries
+spring.jpa.properties.hibernate.generate_statistics=true
+logging.level.org.hibernate.SQL=DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+
+// Integration test assertion — fail if too many queries
+@Test
+void shouldFetchTradesInSingleQuery() {
+    // Use datasource-proxy or Hibernate statistics
+    Statistics stats = entityManager.unwrap(Session.class).getSessionFactory().getStatistics();
+    stats.clear();
+
+    tradeService.getTradesByAccount("ACC-001");
+
+    assertThat(stats.getQueryExecutionCount()).isLessThanOrEqualTo(2);
+}
+```
+
+---
+
+### SCENARIO 2: Kafka Consumer Lag Spike in Production
+
+**Interviewer:** *"It's Monday morning. Your monitoring shows Kafka consumer lag has spiked to 50,000 messages on the trade.settlement topic. What do you do?"*
+
+**Context from your experience:** This mirrors the Kafka consumer lag incident you handled at Comviva by scaling consumer group from 3 to 6 instances.
+
+**Step-by-step answer:**
+
+```mermaid
+flowchart TB
+    ALERT["🚨 Alert: Consumer lag 50K\non trade.settlement topic"] --> TRIAGE["Step 1: TRIAGE (< 5 min)\n- Is it growing or stable?\n- Which consumer group?\n- When did it start?"]
+    TRIAGE --> MITIGATE["Step 2: MITIGATE (< 15 min)\n- Scale consumers: kubectl scale\n  deployment settlement-consumer --replicas=6\n- Check: are consumers processing at all?"]
+    MITIGATE --> DIAGNOSE["Step 3: DIAGNOSE\n- Check consumer logs for errors\n- Check downstream (DB, API) for slowness\n- Check if partition assignment is balanced"]
+    DIAGNOSE --> ROOT["Root Cause Found:\nSettlement API response time\nspiked from 50ms to 2s\n(3rd-party market data provider issue)"]
+    ROOT --> FIX["Step 4: PERMANENT FIX\n- Add @TimeLimiter(timeout=500ms)\n- Add circuit breaker on settlement API\n- Separate slow API calls to dedicated thread pool\n- Add consumer lag alert at 5K (early warning)"]
+```
+
+```java
+// Immediate fix — scale consumers
+// kubectl scale deployment settlement-consumer --replicas=6
+
+// Permanent fix — add resilience to the consumer
+@KafkaListener(topics = "trade.settlement", groupId = "settlement-service",
+    concurrency = "4")  // 4 threads per instance
+public void handleSettlement(@Payload TradeSettlementEvent event, Acknowledgment ack) {
+
+    try {
+        // TimeLimiter — fail fast if settlement API is slow
+        CompletableFuture<SettlementResult> result = CompletableFuture.supplyAsync(() ->
+            settlementApiClient.settle(event), settlementExecutor // dedicated thread pool!
+        ).orTimeout(500, TimeUnit.MILLISECONDS);  // don't block consumer thread
+
+        result.thenAccept(r -> {
+            settlementRepo.save(r);
+            ack.acknowledge();
+        }).exceptionally(ex -> {
+            log.error("Settlement failed for trade {}: {}", event.getTradeId(), ex.getMessage());
+            // Don't ack — Kafka will retry
+            // After 3 retries (configured in consumer), send to DLQ
+            return null;
+        });
+
+    } catch (Exception e) {
+        log.error("Unexpected error processing settlement", e);
+    }
+}
+
+// DLQ configuration
+@Bean
+public DefaultErrorHandler errorHandler(KafkaTemplate<String, Object> template) {
+    DeadLetterPublishingRecoverer recoverer =
+        new DeadLetterPublishingRecoverer(template);
+    return new DefaultErrorHandler(recoverer,
+        new FixedBackOff(1000L, 3));  // 3 retries, 1s apart, then DLQ
+}
+```
+
+**Post-incident checklist:**
+
+| Action | Detail |
+|--------|--------|
+| **Early warning alert** | Consumer lag > 5K → Slack warning (currently only alerts at 50K) |
+| **Consumer metrics dashboard** | Records processed/sec, avg processing time, error rate per partition |
+| **Runbook update** | Document the scaling procedure and root cause for team reference |
+| **Blameless postmortem** | Timeline, root cause, what went well, what to improve, action items |
+
+---
+
+### SCENARIO 3: Database Deadlock During Fund Transfers
+
+**Interviewer:** *"Two concurrent fund transfer requests are deadlocking. How do you diagnose and fix?"*
+
+**Context from your experience:** Relates to your knowledge of transaction management and concurrent systems at VMware billing.
+
+```java
+// ❌ THE PROBLEM — Thread 1 and Thread 2 lock accounts in different order
+// Thread 1: transfer(A → B)  →  locks A, then tries to lock B
+// Thread 2: transfer(B → A)  →  locks B, then tries to lock A
+// DEADLOCK! Both waiting for each other
+
+@Transactional
+public void transfer(String fromAcctId, String toAcctId, BigDecimal amount) {
+    Account from = accountRepo.findByIdForUpdate(fromAcctId);  // SELECT ... FOR UPDATE
+    Account to = accountRepo.findByIdForUpdate(toAcctId);      // DEADLOCK HERE!
+    // ...
+}
+```
+
+**Step-by-step diagnosis:**
+
+```sql
+-- Step 1: Detect deadlocks in PostgreSQL
+SELECT * FROM pg_stat_activity WHERE wait_event_type = 'Lock';
+
+-- Step 2: Check which queries are blocking
+SELECT blocked.pid     AS blocked_pid,
+       blocked.query   AS blocked_query,
+       blocking.pid    AS blocking_pid,
+       blocking.query  AS blocking_query
+FROM pg_catalog.pg_locks bl
+JOIN pg_stat_activity blocked  ON bl.pid = blocked.pid
+JOIN pg_stat_activity blocking ON bl.pid != blocking.pid
+WHERE NOT bl.granted;
+
+-- PostgreSQL log will also show: "deadlock detected"
+```
+
+**The fix — consistent lock ordering:**
+
+```java
+// ✅ FIX: Always lock accounts in the SAME ORDER (by account ID)
+@Transactional(isolation = Isolation.REPEATABLE_READ)
+public void transferSafe(String fromAcctId, String toAcctId, BigDecimal amount) {
+    // Sort by account ID — both threads will lock in the same order
+    String firstId  = fromAcctId.compareTo(toAcctId) < 0 ? fromAcctId : toAcctId;
+    String secondId = firstId.equals(fromAcctId) ? toAcctId : fromAcctId;
+
+    Account first  = accountRepo.findByIdForUpdate(firstId);   // always locks lower ID first
+    Account second = accountRepo.findByIdForUpdate(secondId);  // then higher ID
+
+    Account from = firstId.equals(fromAcctId) ? first : second;
+    Account to   = firstId.equals(fromAcctId) ? second : first;
+
+    if (from.getBalance().compareTo(amount) < 0) {
+        throw new InsufficientFundsException("Balance too low: " + from.getBalance());
+    }
+
+    from.debit(amount);
+    to.credit(amount);
+
+    accountRepo.save(from);
+    accountRepo.save(to);
+
+    // Publish event for audit trail
+    eventPublisher.publishEvent(new TransferCompletedEvent(fromAcctId, toAcctId, amount));
+}
+
+// ✅ Alternative: Use optimistic locking with @Version
+@Entity
+public class Account {
+    @Version
+    private Long version;  // JPA auto-increments on update
+    // If concurrent update → OptimisticLockException → retry
+}
+
+// ✅ Alternative: Use tryLock with timeout (ReentrantLock)
+public boolean transferWithTimeout(String fromId, String toId, BigDecimal amount)
+        throws InterruptedException {
+    Lock fromLock = lockRegistry.obtain(fromId);
+    Lock toLock   = lockRegistry.obtain(toId);
+
+    if (fromLock.tryLock(100, TimeUnit.MILLISECONDS)) {
+        try {
+            if (toLock.tryLock(100, TimeUnit.MILLISECONDS)) {
+                try {
+                    doTransfer(fromId, toId, amount);
+                    return true;
+                } finally { toLock.unlock(); }
+            }
+        } finally { fromLock.unlock(); }
+    }
+    return false; // caller retries
+}
+```
+
+---
+
+### SCENARIO 4: Salesforce Integration Goes Down — Data Consistency
+
+**Interviewer:** *"Your microservice syncs trade data to an external system (like Salesforce). The external system goes down for 4 hours. How do you ensure no data is lost?"*
+
+**Context from your experience:** This is exactly your Comviva Salesforce integration with Outbox pattern.
+
+```mermaid
+flowchart TB
+    subgraph NORMAL["Normal Flow"]
+        T1["Trade created"] --> TX["Single DB Transaction"]
+        TX --> TR["Save Trade to trades table"]
+        TX --> OB["Save Event to outbox table"]
+        OB --> POLL["Outbox Poller\n(@Scheduled every 2s)"]
+        POLL --> KF["Publish to Kafka\ntrade.sync topic"]
+        KF --> CONSUMER["Sync Consumer\ncalls External API"]
+        CONSUMER --> EXT["External System\n(Salesforce/Bloomberg)"]
+    end
+
+    subgraph OUTAGE["External System Down for 4 Hours"]
+        KF2["Kafka retains all events\n(retention: 7 days)"]
+        CONSUMER2["Consumer retries with\nexponential backoff\n1s → 2s → 4s → ... → 60s max"]
+        CONSUMER2 -->|"still failing\nafter 5 retries"| DLQ["DLQ topic\ntrade.sync.DLQ"]
+        DLQ --> ALERT["Slack alert:\n'External system sync failing\nDLQ count: 847 events'"]
+    end
+
+    subgraph RECOVERY["After External System Recovers"]
+        DLQ2["DLQ Replay Tool\n(admin endpoint)"] --> CONSUMER3["Reprocess all DLQ events\nin order"]
+        CONSUMER3 --> IDEM["Idempotency check\n(skip already synced)"]
+        IDEM --> EXT2["External System\n(back online)"]
+        EXT2 --> VERIFY["Reconciliation job\ncompare counts:\nlocal trades vs external"]
+    end
+```
+
+```java
+// 1. Outbox pattern — event is PART of the business transaction
+@Service
+public class TradeService {
+
+    @Transactional  // trade + outbox event in ONE transaction
+    public Trade createTrade(TradeRequest req) {
+        Trade trade = tradeRepository.save(Trade.from(req));
+
+        outboxRepository.save(OutboxEvent.builder()
+            .aggregateId(trade.getId())
+            .eventType("TRADE_CREATED")
+            .payload(objectMapper.writeValueAsString(trade))
+            .status(OutboxStatus.PENDING)
+            .createdAt(Instant.now())
+            .build());
+
+        return trade;
+        // Even if Kafka is down, the event is safely in the DB!
+    }
+}
+
+// 2. Outbox poller — publishes pending events to Kafka
+@Component
+public class OutboxPublisher {
+
+    @Scheduled(fixedDelay = 2000)  // every 2 seconds
+    @Transactional
+    public void publishPendingEvents() {
+        List<OutboxEvent> pending = outboxRepository
+            .findTop100ByStatusOrderByCreatedAtAsc(OutboxStatus.PENDING);
+
+        for (OutboxEvent event : pending) {
+            try {
+                kafkaTemplate.send("trade.sync", event.getAggregateId(), event.getPayload())
+                    .get(5, TimeUnit.SECONDS);  // wait for Kafka ack
+                event.setStatus(OutboxStatus.PUBLISHED);
+            } catch (Exception e) {
+                log.warn("Failed to publish event {}: {}", event.getId(), e.getMessage());
+                event.setRetryCount(event.getRetryCount() + 1);
+                // Will be retried in next poll cycle
+            }
+            outboxRepository.save(event);
+        }
+    }
+}
+
+// 3. Consumer with retry + DLQ
+@KafkaListener(topics = "trade.sync", groupId = "external-sync")
+public void syncToExternal(@Payload String payload, Acknowledgment ack) {
+    TradeDTO trade = objectMapper.readValue(payload, TradeDTO.class);
+
+    try {
+        externalApiClient.syncTrade(trade);  // calls Salesforce/Bloomberg
+        ack.acknowledge();
+    } catch (ExternalSystemUnavailableException e) {
+        // Don't ack — Kafka retries. After max retries → DLQ
+        throw e;
+    }
+}
+
+// 4. DLQ replay endpoint — for ops team after outage recovery
+@RestController
+@RequestMapping("/admin/dlq")
+@PreAuthorize("hasRole('ADMIN')")
+public class DlqReplayController {
+
+    @PostMapping("/replay/{topic}")
+    public ResponseEntity<String> replayDlq(@PathVariable String topic,
+                                             @RequestParam(defaultValue = "100") int batchSize) {
+        int replayed = dlqReplayService.replay(topic + ".DLQ", topic, batchSize);
+        return ResponseEntity.ok("Replayed " + replayed + " events");
+    }
+}
+
+// 5. Reconciliation job — runs daily at 2 AM
+@Scheduled(cron = "0 0 2 * * *")
+public void reconcile() {
+    long localCount = tradeRepository.countByDateRange(yesterday(), today());
+    long externalCount = externalApiClient.getTradeCount(yesterday(), today());
+
+    if (localCount != externalCount) {
+        long diff = localCount - externalCount;
+        alertService.sendSlack(String.format(
+            "⚠️ RECONCILIATION MISMATCH: %d local trades, %d external trades (diff: %d)",
+            localCount, externalCount, diff));
+    }
+}
+```
+
+---
+
+### SCENARIO 5: Memory Leak in Production — OOM After 3 Days
+
+**Interviewer:** *"Your Spring Boot service restarts every 3 days with OutOfMemoryError. How do you diagnose and fix it?"*
+
+**Context:** Common in long-running billing services like what you built at VMware.
+
+```
+Step 1: CAPTURE EVIDENCE
+  → JVM flag: -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/dumps/
+  → Grafana: JVM Heap Used graph — see a steady upward trend (sawtooth getting higher)
+  → GC logs: -Xlog:gc*:file=gc.log — Full GC happening more frequently
+
+Step 2: ANALYZE HEAP DUMP
+  → Tool: Eclipse MAT (Memory Analyzer) or VisualVM
+  → Open the .hprof file
+  → "Leak Suspects" report shows the top memory consumers
+```
+
+```java
+// ❌ COMMON CAUSE 1: Unbounded cache (no eviction)
+// Found in heap dump: 2 million TradeDTO objects in a HashMap
+private static final Map<String, TradeDTO> cache = new HashMap<>();  // NEVER evicted!
+
+public TradeDTO getTrade(String id) {
+    return cache.computeIfAbsent(id, k -> tradeRepository.findById(k).map(TradeDTO::from).orElseThrow());
+    // Objects keep accumulating — never removed!
+}
+
+// ✅ FIX: Use bounded cache with TTL
+@Bean
+public CacheManager cacheManager() {
+    CaffeineCacheManager manager = new CaffeineCacheManager("trades");
+    manager.setCaffeine(Caffeine.newBuilder()
+        .maximumSize(10_000)           // max 10K entries
+        .expireAfterWrite(5, TimeUnit.MINUTES)  // TTL
+        .recordStats());               // expose metrics
+    return manager;
+}
+
+// ❌ COMMON CAUSE 2: InputStream/Connection not closed
+public String fetchMarketData(String symbol) {
+    HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+    InputStream is = conn.getInputStream();  // NEVER CLOSED!
+    return new String(is.readAllBytes());
+    // Each call leaks a socket + buffer — OOM after thousands of calls
+}
+
+// ✅ FIX: try-with-resources
+public String fetchMarketData(String symbol) {
+    HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+    try (InputStream is = conn.getInputStream()) {
+        return new String(is.readAllBytes());
+    } finally {
+        conn.disconnect();
+    }
+}
+
+// ❌ COMMON CAUSE 3: ThreadLocal not cleaned up (in thread pools)
+private static final ThreadLocal<UserContext> context = new ThreadLocal<>();
+
+public void processRequest(UserContext ctx) {
+    context.set(ctx);  // set per request
+    // ... process ...
+    // FORGOT context.remove()!
+    // In a thread pool, the thread is REUSED — old UserContext stays in memory!
+}
+
+// ✅ FIX: Always clean up in finally block or use Filter
+@Component
+public class ContextCleanupFilter extends OncePerRequestFilter {
+    @Override
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res,
+                                     FilterChain chain) throws ServletException, IOException {
+        try {
+            chain.doFilter(req, res);
+        } finally {
+            UserContextHolder.clear();  // ALWAYS clean up
+        }
+    }
+}
+```
+
+**Prevention checklist:**
+
+| Prevention | How |
+|-----------|-----|
+| **JVM monitoring** | Grafana dashboard: heap used, GC pause time, GC count |
+| **Heap dump on OOM** | `-XX:+HeapDumpOnOutOfMemoryError` in every Dockerfile |
+| **Bounded caches** | Always set `maximumSize` and `expireAfterWrite` |
+| **Resource management** | try-with-resources for ALL streams, connections, readers |
+| **ThreadLocal cleanup** | Servlet filter that clears all ThreadLocals after each request |
+| **Load testing** | Run 24-hour soak test before release — memory should stabilize |
+
+---
+
+### SCENARIO 6: Rolling Deployment With Zero Downtime
+
+**Interviewer:** *"You need to deploy a new version of the Trade Service with a database schema change. How do you achieve zero downtime?"*
+
+**Context from your experience:** Your K8s deployment experience at Comviva + VMware.
+
+```mermaid
+flowchart TB
+    subgraph STEP1["Step 1: Backward-Compatible DB Migration"]
+        DB1["Flyway V1: ADD new column\n(nullable, with default)\nOld code ignores it\nNew code writes to it"]
+    end
+    subgraph STEP2["Step 2: Rolling Deploy — New Code"]
+        K8["K8s Rolling Update\nmaxSurge=1, maxUnavailable=0"]
+        K8 --> OLD["Old Pod (v1)\nstill running, serves traffic"]
+        K8 --> NEW["New Pod (v2)\nstarts, passes readiness probe\nthen receives traffic"]
+        OLD -->|"drained gracefully\nafter new pod is ready"| GONE["Old Pod terminated"]
+    end
+    subgraph STEP3["Step 3: Data Backfill (if needed)"]
+        BF["Background job fills\nnew column for existing rows"]
+    end
+    subgraph STEP4["Step 4: Cleanup Migration"]
+        DB2["Flyway V2: Make column NOT NULL\n(after all old pods gone\nand backfill complete)"]
+    end
+    STEP1 --> STEP2 --> STEP3 --> STEP4
+```
+
+```java
+// Flyway migration — backward compatible (Step 1)
+// V20260417_1__add_settlement_currency.sql
+ALTER TABLE trades ADD COLUMN settlement_currency VARCHAR(3) DEFAULT 'USD';
+-- Old code (v1) ignores this column — still works fine
+-- New code (v2) starts writing to it
+
+// Spring Boot — graceful shutdown (no in-flight requests dropped)
+// application.yml
+server:
+  shutdown: graceful                 # wait for in-flight requests to complete
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 30s  # max 30s to drain
+
+// K8s — preStop hook gives time for load balancer to drain
+spec:
+  containers:
+  - name: trade-service
+    lifecycle:
+      preStop:
+        exec:
+          command: ["sh", "-c", "sleep 10"]  # wait for LB to stop sending traffic
+    terminationGracePeriodSeconds: 45
+
+// Readiness probe — new pod only receives traffic when fully ready
+readinessProbe:
+  httpGet:
+    path: /actuator/health/readiness
+    port: 8080
+  initialDelaySeconds: 20
+  periodSeconds: 5
+  failureThreshold: 3
+```
+
+**Deployment sequence timeline:**
+
+```
+T=0s    Flyway migration runs (ADD COLUMN — backward compatible)
+T=5s    kubectl apply — Rolling Update starts
+T=10s   New Pod v2 created, starts Spring Boot
+T=30s   New Pod v2 passes readiness probe → starts receiving traffic
+T=35s   Old Pod v1 receives SIGTERM → preStop hook (sleep 10s)
+T=45s   Old Pod v1 drains in-flight requests (graceful shutdown 30s)
+T=75s   Old Pod v1 terminated. All traffic on v2.
+T=80s   Background backfill job fills new column for historical records
+        → Total downtime: ZERO
+```
+
+---
+
+### SCENARIO 7: API Rate Limiting for External Partners
+
+**Interviewer:** *"External partners are calling your Trade API. One partner is sending 10x the agreed rate, impacting other partners. How do you handle this?"*
+
+**Context from your experience:** Your API Gateway and quote management API experience at Comviva.
+
+```java
+// Approach 1: Redis-based rate limiting (per partner API key)
+@Component
+public class RateLimitFilter extends OncePerRequestFilter {
+
+    private final StringRedisTemplate redis;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res,
+                                     FilterChain chain) throws ServletException, IOException {
+        String apiKey = req.getHeader("X-API-Key");
+        if (apiKey == null) {
+            res.setStatus(401);
+            res.getWriter().write("{\"error\":\"Missing API key\"}");
+            return;
+        }
+
+        String rateLimitKey = "rate_limit:" + apiKey + ":" + currentMinute();
+        Long count = redis.opsForValue().increment(rateLimitKey);
+
+        if (count == 1) {
+            redis.expire(rateLimitKey, 60, TimeUnit.SECONDS);  // auto-expire after 1 min
+        }
+
+        int limit = getPartnerLimit(apiKey);  // e.g., 100 requests/min for standard, 1000 for premium
+
+        if (count > limit) {
+            res.setStatus(429);  // Too Many Requests
+            res.setHeader("Retry-After", "60");
+            res.setHeader("X-RateLimit-Limit", String.valueOf(limit));
+            res.setHeader("X-RateLimit-Remaining", "0");
+            res.getWriter().write("{\"error\":\"Rate limit exceeded. Try after 60s.\"}");
+            return;
+        }
+
+        res.setHeader("X-RateLimit-Limit", String.valueOf(limit));
+        res.setHeader("X-RateLimit-Remaining", String.valueOf(limit - count));
+        chain.doFilter(req, res);
+    }
+}
+
+// Approach 2: Resilience4j RateLimiter (simpler, in-memory)
+@RateLimiter(name = "tradeApi", fallbackMethod = "rateLimitFallback")
+@GetMapping("/api/trades")
+public List<TradeDTO> listTrades(@RequestHeader("X-API-Key") String apiKey) {
+    return tradeService.listAll();
+}
+
+private List<TradeDTO> rateLimitFallback(String apiKey, RequestNotPermitted ex) {
+    throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS,
+        "Rate limit exceeded. Please retry after 60 seconds.");
+}
+
+// application.yml
+resilience4j:
+  ratelimiter:
+    instances:
+      tradeApi:
+        limitForPeriod: 100            # 100 requests
+        limitRefreshPeriod: 60s        # per 60 seconds
+        timeoutDuration: 0s            # fail immediately (don't queue)
+```
+
+---
+
+### SCENARIO 8: Migrating Monolith to Microservices (Your ColdFusion Story)
+
+**Interviewer:** *"You have a legacy monolith handling trades, settlements, and reporting in one codebase. How do you break it into microservices?"*
+
+**Context from your experience:** Exactly your ColdFusion → Spring Boot migration at VMware using the Strangler Fig pattern.
+
+```mermaid
+flowchart TB
+    subgraph PHASE1["Phase 1 — Identify Bounded Contexts (Week 1-2)"]
+        M["Legacy Monolith"] --> BC1["Trade Management\n(create, amend, cancel)"]
+        M --> BC2["Settlement\n(match, settle, reconcile)"]
+        M --> BC3["Reporting\n(regulatory, P&L, audit)"]
+        M --> BC4["Reference Data\n(currencies, counterparties)"]
+    end
+
+    subgraph PHASE2["Phase 2 — Strangler Fig (Month 1-3)"]
+        PROXY["API Gateway / Proxy\n(routes traffic)"]
+        PROXY -->|"/api/trades/*\n(5% → 50% → 100%)"| NEW["New Trade Service\n(Spring Boot)"]
+        PROXY -->|"everything else"| M2["Legacy Monolith\n(still running)"]
+    end
+
+    subgraph PHASE3["Phase 3 — Data Separation (Month 3-6)"]
+        SHARED["Shared DB\n(monolith schema)"] --> OWN1["Trade DB\n(trade service owns)"]
+        SHARED --> OWN2["Settlement DB\n(settlement service owns)"]
+        SHARED --> READ["Reporting Read Replica\n(reporting service reads)"]
+    end
+
+    subgraph PHASE4["Phase 4 — Decommission (Month 6+)"]
+        DONE["All traffic on\nmicroservices\nMonolith decommissioned"]
+    end
+
+    PHASE1 --> PHASE2 --> PHASE3 --> PHASE4
+```
+
+**Step-by-step answer:**
+
+> "At VMware, I led this exact migration from ColdFusion to Spring Boot. Here's the approach:
+>
+> **Phase 1 — Domain decomposition (2 weeks):**
+> - Mapped every API endpoint in the monolith to a bounded context
+> - Identified data ownership — which tables belong to which context
+> - Created a dependency graph to find the least coupled module (start there)
+>
+> **Phase 2 — Strangler Fig (3 months):**
+> - Built the first microservice (Trade Management) with full test coverage
+> - Deployed behind an API Gateway with feature flag routing
+> - Routed 5% traffic to new service → monitored errors, latency, data consistency
+> - Gradually increased to 25% → 50% → 100%
+> - Old endpoint kept running as fallback
+>
+> **Phase 3 — Data separation (3 months):**
+> - Hardest part — monolith had shared tables across modules
+> - Used CDC (Change Data Capture) with Kafka Connect to keep data in sync during migration
+> - Each new microservice got its own database schema
+> - Reporting service used a read replica to avoid impacting transactional services
+>
+> **Phase 4 — Decommission:**
+> - After 100% traffic on new services and 2 weeks of stable operation
+> - Decommissioned monolith endpoints one by one
+> - Kept the monolith DB as read-only archive for 6 months
+>
+> **Key lessons:**
+> - **Never do a big-bang rewrite** — migrate one module at a time
+> - **Parallel run** is essential — both old and new must work simultaneously
+> - **Data is the hardest part** — invest in CDC and reconciliation
+> - **Feature flags** saved us multiple times — instant rollback without redeployment"
+
+---
+
+### SCENARIO 9: Designing Audit Trail for Regulatory Compliance
+
+**Interviewer:** *"Banking regulators require a complete audit trail of every trade modification. How do you implement this?"*
+
+**Context:** Your experience with ELK Stack monitoring and production audit at Comviva.
+
+```java
+// Approach 1: Event Sourcing — store every change as an immutable event
+@Entity
+@Table(name = "trade_events")
+public class TradeEvent {
+    @Id @GeneratedValue
+    private Long id;
+
+    private String tradeId;
+    private String eventType;       // CREATED, AMENDED, CANCELLED, SETTLED
+
+    @Column(columnDefinition = "jsonb")
+    private String payload;         // full trade state at this point
+
+    private String performedBy;     // user who made the change
+    private String ipAddress;       // source IP for audit
+    private Instant timestamp;      // immutable — never updated
+
+    // NO SETTER for timestamp — set in constructor only
+    public TradeEvent(String tradeId, String eventType, String payload,
+                      String performedBy, String ipAddress) {
+        this.tradeId = tradeId;
+        this.eventType = eventType;
+        this.payload = payload;
+        this.performedBy = performedBy;
+        this.ipAddress = ipAddress;
+        this.timestamp = Instant.now();
+    }
+}
+
+// Service — every mutation creates an event
+@Service
+public class TradeService {
+
+    @Transactional
+    public Trade amendTrade(String tradeId, TradeAmendRequest req, UserContext user) {
+        Trade trade = tradeRepository.findById(tradeId).orElseThrow();
+        Trade beforeState = trade.snapshot();  // capture state before change
+
+        trade.amend(req);
+        tradeRepository.save(trade);
+
+        // Audit event — immutable record of what changed, who did it, when
+        tradeEventRepository.save(new TradeEvent(
+            tradeId,
+            "AMENDED",
+            objectMapper.writeValueAsString(Map.of(
+                "before", beforeState,
+                "after", trade,
+                "changes", req
+            )),
+            user.getUsername(),
+            user.getIpAddress()
+        ));
+
+        // Also publish to Kafka for downstream audit consumers
+        kafkaTemplate.send("trade.audit", tradeId,
+            new TradeAuditEvent(tradeId, "AMENDED", user.getUsername(), Instant.now()));
+
+        return trade;
+    }
+}
+
+// Approach 2: Hibernate Envers — automatic audit with annotations
+@Entity
+@Audited  // Envers will auto-track all changes to this entity
+public class Trade {
+    @Id private String id;
+    private BigDecimal amount;
+    private String currency;
+    private TradeStatus status;
+    // Envers creates a trade_AUD table with revision history automatically
+}
+
+// Query audit history
+AuditReader reader = AuditReaderFactory.get(entityManager);
+List<Number> revisions = reader.getRevisions(Trade.class, tradeId);
+Trade tradeAtRevision = reader.find(Trade.class, tradeId, revisions.get(0));
+
+// Approach 3: Spring Data JPA @CreatedBy, @LastModifiedBy
+@EntityListeners(AuditingEntityListener.class)
+@Entity
+public class Trade {
+    @CreatedBy       private String createdBy;
+    @CreatedDate     private Instant createdDate;
+    @LastModifiedBy  private String modifiedBy;
+    @LastModifiedDate private Instant modifiedDate;
+}
+```
+
+---
+
+### SCENARIO 10: Handling Concurrent Requests — Optimistic vs Pessimistic Locking
+
+**Interviewer:** *"Two traders simultaneously try to amend the same trade. How do you prevent one from overwriting the other's changes?"*
+
+```java
+// ✅ Approach 1: Optimistic Locking (preferred for reads >> writes)
+@Entity
+public class Trade {
+    @Id private String id;
+    @Version private Long version;  // JPA auto-increments on each update
+    private BigDecimal amount;
+    private TradeStatus status;
+}
+
+// When two traders load the same trade (version=5):
+// Trader A: amend → saves with version=5 → DB updates to version=6 ✅
+// Trader B: amend → saves with version=5 → version mismatch! → OptimisticLockException ❌
+// Trader B gets: "This trade was modified by another user. Please refresh and try again."
+
+@Service
+public class TradeService {
+    @Transactional
+    @Retryable(value = OptimisticLockException.class, maxAttempts = 3, backoff = @Backoff(100))
+    public Trade amendTrade(String tradeId, TradeAmendRequest req) {
+        Trade trade = tradeRepository.findById(tradeId).orElseThrow();
+        trade.amend(req);
+        return tradeRepository.save(trade);
+        // If version conflict → @Retryable automatically retries up to 3 times
+    }
+}
+
+// ✅ Approach 2: Pessimistic Locking (for critical financial operations)
+public interface TradeRepository extends JpaRepository<Trade, String> {
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)  // SELECT ... FOR UPDATE
+    @Query("SELECT t FROM Trade t WHERE t.id = :id")
+    Optional<Trade> findByIdForUpdate(@Param("id") String id);
+    // This BLOCKS other transactions until this one commits/rolls back
+}
+```
+
+| Aspect | Optimistic Locking | Pessimistic Locking |
+|--------|-------------------|-------------------|
+| **How** | `@Version` field, checks at commit time | `SELECT ... FOR UPDATE`, locks row in DB |
+| **Conflict handling** | Retry on `OptimisticLockException` | Other transactions WAIT (blocked) |
+| **Best when** | Reads >> Writes, low contention | Writes are frequent, high contention |
+| **Performance** | Better (no DB lock held) | Worse (holds DB lock during transaction) |
+| **Risk** | Stale data until retry | Deadlocks if lock ordering is wrong |
+| **Banking use case** | Trade amendments (rare conflicts) | Fund transfers (must not double-debit) |
+
+---
+
+### SCENARIO 11: Designing a Health Check System for Production Services
+
+**Interviewer:** *"How do you monitor the health of 20 microservices in production?"*
+
+**Context from your experience:** Your ELK Stack monitoring and daily health check process at Comviva.
+
+```java
+// Spring Boot Actuator — custom health indicators
+@Component
+public class KafkaHealthIndicator implements HealthIndicator {
+
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    @Override
+    public Health health() {
+        try {
+            kafkaTemplate.send("health-check", "ping").get(3, TimeUnit.SECONDS);
+            return Health.up()
+                .withDetail("broker", "reachable")
+                .withDetail("latency", "< 3s")
+                .build();
+        } catch (Exception e) {
+            return Health.down()
+                .withDetail("error", e.getMessage())
+                .build();
+        }
+    }
+}
+
+// Custom health for external dependencies
+@Component
+public class SalesforceHealthIndicator implements HealthIndicator {
+    @Override
+    public Health health() {
+        try {
+            ResponseEntity<String> resp = restTemplate.getForEntity(
+                salesforceBaseUrl + "/health", String.class);
+            if (resp.getStatusCode().is2xxSuccessful()) {
+                return Health.up().withDetail("salesforce", "connected").build();
+            }
+            return Health.down().withDetail("status", resp.getStatusCode()).build();
+        } catch (Exception e) {
+            return Health.down().withDetail("error", e.getMessage()).build();
+        }
+    }
+}
+
+// application.yml — expose health details
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics, info, prometheus
+  endpoint:
+    health:
+      show-details: always   # show kafka, db, redis, salesforce status
+      probes:
+        enabled: true        # /health/readiness and /health/liveness for K8s
+  health:
+    kafka:
+      enabled: true
+    db:
+      enabled: true
+    redis:
+      enabled: true
+```
+
+**Daily health check routine (from your Comviva process):**
+
+```
+Morning Check (15 min):
+1. Grafana dashboard → error rate, latency, JVM memory per service
+2. Kibana → filter ERROR/WARN logs from last 12 hours
+3. Kafka UI → consumer lag per topic (should be < 1000)
+4. Jira → open P1/P2 tickets, any aging > 3 days?
+5. K8s → pod restarts (kubectl get pods → RESTARTS column)
+
+Weekly Review (30 min):
+1. SonarQube → new code smells, coverage trends
+2. Dependency check → CVE scan results
+3. DORA metrics → deployment frequency, lead time, MTTR
+4. Capacity → DB storage growth, Kafka disk usage
+```
+
+---
+
+### SCENARIO 12: Handling Sensitive Data — PII Masking and Encryption
+
+**Interviewer:** *"Trade data contains customer PII (name, account number, PAN). How do you protect it across microservices?"*
+
+```java
+// 1. Encrypt at rest — DB-level (transparent) + field-level (application)
+@Entity
+public class Customer {
+    @Id private String id;
+    private String name;                    // non-sensitive
+
+    @Convert(converter = EncryptedStringConverter.class)
+    private String panNumber;               // encrypted in DB
+
+    @Convert(converter = EncryptedStringConverter.class)
+    private String accountNumber;           // encrypted in DB
+}
+
+// JPA AttributeConverter for field-level encryption
+@Converter
+public class EncryptedStringConverter implements AttributeConverter<String, String> {
+    private final EncryptionService encryptionService;
+
+    @Override
+    public String convertToDatabaseColumn(String plainText) {
+        return encryptionService.encrypt(plainText);  // AES-256 encrypt before saving
+    }
+
+    @Override
+    public String convertToEntityAttribute(String cipherText) {
+        return encryptionService.decrypt(cipherText);  // decrypt when reading
+    }
+}
+
+// 2. Mask in logs — NEVER log full PII
+@Slf4j
+@Service
+public class TradeService {
+    public void processTrade(Trade trade) {
+        // ❌ NEVER: log.info("Processing trade for account: {}", trade.getAccountNumber());
+        // ✅ ALWAYS: mask sensitive fields
+        log.info("Processing trade for account: {}",
+            maskAccountNumber(trade.getAccountNumber())); // "****1234"
+    }
+
+    private String maskAccountNumber(String acctNum) {
+        if (acctNum == null || acctNum.length() < 4) return "****";
+        return "****" + acctNum.substring(acctNum.length() - 4);
+    }
+}
+
+// 3. Mask in API responses — use DTO with @JsonSerialize
+public class CustomerDTO {
+    private String name;
+
+    @JsonSerialize(using = MaskedAccountSerializer.class)
+    private String accountNumber;  // API returns "****1234"
+}
+
+// 4. Logback pattern — mask any PAN-like pattern in ALL logs
+// logback-spring.xml
+// <pattern>%replace(%msg){'[0-9]{12,16}', '****MASKED****'}%n</pattern>
+
+// 5. Kafka — encrypt sensitive event payloads
+// Use Kafka interceptor or serialize with encryption before producing
+```
+
+---
+
+## 📋 Scenario Quick Reference — Map Your Experience to SocGen Answers
+
+| Scenario | Your Real Experience | SocGen Banking Equivalent |
+|----------|---------------------|--------------------------|
+| **N+1 Query Fix** | Quote API P99 800ms → 590ms at Comviva | Trade Listing API optimization |
+| **Kafka Lag Spike** | Scaled consumers 3 → 6 at Comviva | Settlement consumer lag incident |
+| **Database Deadlock** | Transaction management at VMware billing | Concurrent fund transfers |
+| **External System Down** | Salesforce outage — Outbox pattern at Comviva | Bloomberg/market data outage |
+| **Memory Leak** | Long-running billing service at VMware | OOM in settlement processing |
+| **Zero-Downtime Deploy** | K8s rolling updates at Comviva | Trade service deployment with schema change |
+| **Rate Limiting** | Quote Management API at Comviva | Partner API throttling |
+| **Monolith Migration** | ColdFusion → Spring Boot at VMware | COBOL → Java microservices |
+| **Audit Trail** | ELK + production monitoring at Comviva | Regulatory trade audit compliance |
+| **Concurrent Updates** | Billing invoice concurrency at VMware | Two traders amending same trade |
+| **Health Monitoring** | Daily checks + ELK dashboards at Comviva | 20-service production health |
+| **PII Protection** | SSL/TLS + encryption at Comviva | Customer data masking & encryption |
+
+
+
+---
+
+## 📋 Section 12: Advanced SocGen Scenario Questions — Banking Domain Deep-Dive
+
+> These questions go deeper into **banking-specific** technical scenarios that SocGen is known to ask at Lead/Senior Engineer level. Each answer uses your Comviva/VMware experience reframed for financial services.
+
+---
+
+### SCENARIO 13: Design a Trade Matching Engine
+
+**Interviewer:** *"Two counterparties submit trade details independently. Design a system that matches them and flags mismatches for manual review."*
+
+> **Why SocGen asks:** Trade matching (confirmation/reconciliation) is a core banking process. This tests system design + domain understanding.
+
+```mermaid
+flowchart TB
+    subgraph INGEST["Ingestion Layer"]
+        CP1["Counterparty A\nsubmits trade details\nvia REST/FIX protocol"]
+        CP2["Counterparty B\nsubmits trade details\nvia REST/FIX protocol"]
+    end
+
+    subgraph MATCH["Matching Engine"]
+        Q["Kafka Topic\ntrade.submitted"]
+        ME["Matching Service\nSpring Boot"]
+        ME -->|"match key:\ntradeDate + ISIN\n+ buySell + quantity"| CHECK{"Match\nfound?"}
+        CHECK -->|"All fields match"| MATCHED["Status: MATCHED\n→ Proceed to settlement"]
+        CHECK -->|"Partial match\n(amount differs)"| BREAK["Status: BREAK\n→ Manual review queue"]
+        CHECK -->|"No match within\nT+1 window"| UNMATCHED["Status: UNMATCHED\n→ Alert + escalation"]
+    end
+
+    subgraph STORE["Data Layer"]
+        PG["PostgreSQL\nTrade pairs\nMatch status\nAudit trail"]
+        ES["Elasticsearch\nFull-text search\nfor operations team"]
+    end
+
+    CP1 & CP2 --> Q --> ME
+    MATCHED & BREAK & UNMATCHED --> PG
+    PG --> ES
+```
+
+```java
+// Trade Matching Service
+@Service
+public class TradeMatchingService {
+
+    // Match key — combination of fields that identify the same trade from both sides
+    private String buildMatchKey(TradeSubmission trade) {
+        return String.join("|",
+            trade.getTradeDate().toString(),
+            trade.getIsin(),                    // instrument identifier
+            trade.getBuySell().name(),           // BUY or SELL
+            trade.getQuantity().toPlainString(),
+            trade.getCurrency()
+        );
+    }
+
+    @KafkaListener(topics = "trade.submitted", groupId = "matching-engine")
+    @Transactional
+    public void onTradeSubmitted(TradeSubmission submission, Acknowledgment ack) {
+        String matchKey = buildMatchKey(submission);
+
+        // Check if the other side already submitted
+        Optional<TradeSubmission> counterpart =
+            submissionRepo.findPendingByMatchKey(matchKey, submission.getCounterpartyId());
+
+        if (counterpart.isPresent()) {
+            // Both sides present — compare all fields
+            MatchResult result = compareFields(submission, counterpart.get());
+
+            if (result.isFullMatch()) {
+                // ✅ Matched — create confirmed trade pair
+                TradePair pair = TradePair.matched(submission, counterpart.get());
+                tradePairRepo.save(pair);
+                kafkaTemplate.send("trade.matched", pair.getTradeId(), pair);
+                log.info("Trade MATCHED: {}", pair.getTradeId());
+
+            } else {
+                // ⚠️ Break — fields differ (e.g., price mismatch)
+                TradePair pair = TradePair.broken(submission, counterpart.get(), result.getMismatches());
+                tradePairRepo.save(pair);
+                kafkaTemplate.send("trade.break", pair.getTradeId(), pair);
+                log.warn("Trade BREAK: {} — mismatches: {}", pair.getTradeId(), result.getMismatches());
+            }
+        } else {
+            // First side submitted — wait for counterpart
+            submission.setStatus(SubmissionStatus.PENDING);
+            submission.setMatchKey(matchKey);
+            submissionRepo.save(submission);
+        }
+        ack.acknowledge();
+    }
+
+    private MatchResult compareFields(TradeSubmission a, TradeSubmission b) {
+        List<String> mismatches = new ArrayList<>();
+        if (a.getPrice().compareTo(b.getPrice()) != 0)
+            mismatches.add("price: " + a.getPrice() + " vs " + b.getPrice());
+        if (!a.getSettlementDate().equals(b.getSettlementDate()))
+            mismatches.add("settlementDate: " + a.getSettlementDate() + " vs " + b.getSettlementDate());
+        // ... check all reconciliation fields
+
+        return new MatchResult(mismatches.isEmpty(), mismatches);
+    }
+
+    // Scheduled job — flag unmatched trades after T+1 window
+    @Scheduled(cron = "0 0 8 * * MON-FRI") // 8 AM on business days
+    public void flagUnmatchedTrades() {
+        LocalDate cutoff = LocalDate.now().minusDays(1);
+        List<TradeSubmission> unmatched = submissionRepo.findPendingBefore(cutoff);
+        unmatched.forEach(t -> {
+            t.setStatus(SubmissionStatus.UNMATCHED);
+            submissionRepo.save(t);
+            alertService.sendSlack("⚠️ Unmatched trade: " + t.getTradeRef() +
+                " from " + t.getCounterpartyId() + " submitted " + t.getTradeDate());
+        });
+    }
+}
+```
+
+**Follow-up Q:** *"How do you handle a scenario where Counterparty A submits first, your system processes it, then crashes before Counterparty B's submission?"*
+
+> "The Outbox pattern — same approach I used at Comviva for Salesforce sync. The submission is persisted in PostgreSQL in the same transaction as the Kafka acknowledgment. Even if the service crashes, the pending submission is in the DB and will be matched when Counterparty B submits."
+
+---
+
+### SCENARIO 14: Implement a Trade Reconciliation Batch Job
+
+**Interviewer:** *"Every night at midnight, you need to reconcile all trades from your system against an external clearinghouse CSV file. Design this."*
+
+```mermaid
+flowchart TB
+    subgraph BATCH["Spring Batch Job — Nightly Reconciliation"]
+        direction TB
+        TRIGGER["@Scheduled cron\n0 0 0 * * MON-FRI"] --> DOWNLOAD["Step 1: Download\nCSV from SFTP"]
+        DOWNLOAD --> READ["Step 2: Read\nFlatFileItemReader\nparse CSV rows"]
+        READ --> PROCESS["Step 3: Process\nCompare each row\nagainst local DB"]
+        PROCESS --> WRITE["Step 4: Write\nReconciliation results\nMATCHED / MISSING / MISMATCH"]
+        WRITE --> REPORT["Step 5: Report\nEmail summary\nSlack alert for mismatches"]
+    end
+```
+
+```java
+@Configuration
+@EnableBatchProcessing
+public class ReconciliationBatchConfig {
+
+    @Bean
+    public Job reconciliationJob(JobRepository jobRepository,
+                                  Step downloadStep,
+                                  Step reconcileStep,
+                                  Step reportStep) {
+        return new JobBuilder("nightlyReconciliation", jobRepository)
+            .incrementer(new RunIdIncrementer())
+            .start(downloadStep)
+            .next(reconcileStep)
+            .next(reportStep)
+            .listener(new ReconciliationJobListener()) // send summary on completion
+            .build();
+    }
+
+    @Bean
+    public Step reconcileStep(JobRepository jobRepository,
+                               PlatformTransactionManager txManager) {
+        return new StepBuilder("reconcileStep", jobRepository)
+            .<ExternalTradeRecord, ReconciliationResult>chunk(500, txManager) // process 500 at a time
+            .reader(csvReader())
+            .processor(reconciliationProcessor())
+            .writer(resultWriter())
+            .faultTolerant()
+            .skipLimit(100)              // allow up to 100 bad records
+            .skip(FlatFileParseException.class)
+            .retryLimit(3)
+            .retry(DataAccessException.class)
+            .build();
+    }
+
+    @Bean
+    public FlatFileItemReader<ExternalTradeRecord> csvReader() {
+        return new FlatFileItemReaderBuilder<ExternalTradeRecord>()
+            .name("externalTradeReader")
+            .resource(new FileSystemResource("/data/reconciliation/clearinghouse_" +
+                LocalDate.now().minusDays(1) + ".csv"))
+            .delimited()
+            .names("tradeRef", "isin", "quantity", "price", "settlementDate", "status")
+            .targetType(ExternalTradeRecord.class)
+            .build();
+    }
+
+    @Bean
+    public ItemProcessor<ExternalTradeRecord, ReconciliationResult> reconciliationProcessor() {
+        return externalRecord -> {
+            Optional<Trade> localTrade = tradeRepo.findByExternalRef(externalRecord.getTradeRef());
+
+            if (localTrade.isEmpty()) {
+                return ReconciliationResult.missing(externalRecord, "Trade not found in local system");
+            }
+
+            Trade local = localTrade.get();
+            List<String> diffs = new ArrayList<>();
+
+            if (local.getQuantity().compareTo(externalRecord.getQuantity()) != 0)
+                diffs.add("quantity: local=" + local.getQuantity() + " ext=" + externalRecord.getQuantity());
+            if (local.getPrice().compareTo(externalRecord.getPrice()) != 0)
+                diffs.add("price: local=" + local.getPrice() + " ext=" + externalRecord.getPrice());
+
+            if (diffs.isEmpty()) {
+                return ReconciliationResult.matched(externalRecord, local);
+            } else {
+                return ReconciliationResult.mismatch(externalRecord, local, diffs);
+            }
+        };
+    }
+}
+
+// Results summary
+// Matched: 45,230 | Mismatched: 12 | Missing: 3 | Errors: 0
+// Mismatches emailed to operations team with full diff details
+```
+
+**Your experience mapping:** "At VMware, I built Informatica ETL pipelines for billing reconciliation — comparing invoice records against vendor payment files. Same concept: read external data, compare against local, flag discrepancies. I improved pipeline efficiency by 50% through parallelization."
+
+---
+
+### SCENARIO 15: Implement Event Sourcing for Trade Lifecycle
+
+**Interviewer:** *"Regulators want to replay the complete history of any trade — every state change, who did it, when, and why. How do you architect this?"*
+
+```mermaid
+flowchart LR
+    subgraph ES["Event Store (append-only)"]
+        E1["TradeCreated\namount=10K\nby=trader1\nt=09:01"]
+        E2["TradeAmended\nprice changed\nby=trader1\nt=09:15"]
+        E3["TradeApproved\nby=manager1\nt=09:30"]
+        E4["TradeSettled\nby=system\nt=T+2"]
+    end
+
+    subgraph REPLAY["Replay to any point"]
+        R1["Current state\n= E1 + E2 + E3 + E4"]
+        R2["State at 09:20\n= E1 + E2 only"]
+    end
+
+    ES --> R1
+    ES --> R2
+```
+
+```java
+// Event Store — immutable, append-only
+@Entity
+@Table(name = "trade_event_store")
+public class TradeEvent {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long sequenceNumber;       // global order
+
+    @Column(nullable = false)
+    private String tradeId;            // aggregate ID
+
+    @Column(nullable = false)
+    private int version;               // per-aggregate version (1, 2, 3...)
+
+    @Column(nullable = false)
+    private String eventType;          // CREATED, AMENDED, APPROVED, SETTLED, CANCELLED
+
+    @Column(columnDefinition = "jsonb", nullable = false)
+    private String eventData;          // full event payload as JSON
+
+    @Column(nullable = false)
+    private String performedBy;        // who triggered this change
+
+    @Column(nullable = false)
+    private Instant occurredAt;        // when it happened
+
+    private String reason;             // why (amendment reason, cancellation reason)
+}
+
+// Aggregate — rebuilt from events
+public class TradeAggregate {
+    private String tradeId;
+    private BigDecimal amount;
+    private BigDecimal price;
+    private String isin;
+    private TradeStatus status;
+    private int version;
+
+    // Rebuild state by replaying events in order
+    public static TradeAggregate rebuild(List<TradeEvent> events) {
+        TradeAggregate trade = new TradeAggregate();
+        events.stream()
+            .sorted(Comparator.comparingInt(TradeEvent::getVersion))
+            .forEach(trade::apply);
+        return trade;
+    }
+
+    // Rebuild state AT A SPECIFIC POINT IN TIME (regulator's dream)
+    public static TradeAggregate rebuildAsOf(List<TradeEvent> events, Instant asOf) {
+        TradeAggregate trade = new TradeAggregate();
+        events.stream()
+            .filter(e -> e.getOccurredAt().isBefore(asOf) || e.getOccurredAt().equals(asOf))
+            .sorted(Comparator.comparingInt(TradeEvent::getVersion))
+            .forEach(trade::apply);
+        return trade;
+    }
+
+    private void apply(TradeEvent event) {
+        switch (event.getEventType()) {
+            case "CREATED" -> {
+                TradeCreatedData data = parse(event.getEventData(), TradeCreatedData.class);
+                this.tradeId = data.getTradeId();
+                this.amount = data.getAmount();
+                this.price = data.getPrice();
+                this.isin = data.getIsin();
+                this.status = TradeStatus.PENDING;
+            }
+            case "AMENDED" -> {
+                TradeAmendedData data = parse(event.getEventData(), TradeAmendedData.class);
+                if (data.getNewPrice() != null) this.price = data.getNewPrice();
+                if (data.getNewAmount() != null) this.amount = data.getNewAmount();
+            }
+            case "APPROVED" -> this.status = TradeStatus.APPROVED;
+            case "SETTLED"  -> this.status = TradeStatus.SETTLED;
+            case "CANCELLED" -> this.status = TradeStatus.CANCELLED;
+        }
+        this.version = event.getVersion();
+    }
+}
+
+// Service — all mutations create events (never update the aggregate directly)
+@Service
+public class TradeCommandService {
+
+    @Transactional
+    public String createTrade(TradeCreateCommand cmd, UserContext user) {
+        String tradeId = UUID.randomUUID().toString();
+
+        TradeEvent event = new TradeEvent();
+        event.setTradeId(tradeId);
+        event.setVersion(1);
+        event.setEventType("CREATED");
+        event.setEventData(toJson(new TradeCreatedData(tradeId, cmd.getAmount(),
+            cmd.getPrice(), cmd.getIsin())));
+        event.setPerformedBy(user.getUsername());
+        event.setOccurredAt(Instant.now());
+
+        eventStore.save(event);
+
+        // Publish to Kafka for read-model projection + downstream consumers
+        kafkaTemplate.send("trade.events", tradeId, event);
+
+        return tradeId;
+    }
+
+    @Transactional
+    public void amendTrade(String tradeId, TradeAmendCommand cmd, UserContext user) {
+        int currentVersion = eventStore.getLatestVersion(tradeId);
+
+        TradeEvent event = new TradeEvent();
+        event.setTradeId(tradeId);
+        event.setVersion(currentVersion + 1);
+        event.setEventType("AMENDED");
+        event.setEventData(toJson(new TradeAmendedData(cmd.getNewPrice(), cmd.getNewAmount())));
+        event.setPerformedBy(user.getUsername());
+        event.setOccurredAt(Instant.now());
+        event.setReason(cmd.getAmendReason());  // regulatory requirement!
+
+        eventStore.save(event);
+        kafkaTemplate.send("trade.events", tradeId, event);
+    }
+}
+
+// Query side — read model (CQRS)
+// A Kafka consumer builds a denormalized "current state" table for fast queries
+@KafkaListener(topics = "trade.events", groupId = "trade-projector")
+public void projectTradeView(TradeEvent event) {
+    TradeView view = tradeViewRepo.findById(event.getTradeId())
+        .orElse(new TradeView(event.getTradeId()));
+
+    // Apply event to the read model
+    switch (event.getEventType()) {
+        case "CREATED"   -> view.applyCreated(parse(event.getEventData()));
+        case "AMENDED"   -> view.applyAmended(parse(event.getEventData()));
+        case "APPROVED"  -> view.setStatus("APPROVED");
+        case "SETTLED"   -> view.setStatus("SETTLED");
+        case "CANCELLED" -> view.setStatus("CANCELLED");
+    }
+    view.setLastUpdated(event.getOccurredAt());
+    tradeViewRepo.save(view);
+}
+```
+
+**Regulator query:** *"Show me the state of trade T-12345 as it was on March 15 at 2:30 PM"*
+
+```java
+// API endpoint for regulators
+@GetMapping("/api/trades/{tradeId}/history")
+public List<TradeEvent> getTradeHistory(@PathVariable String tradeId) {
+    return eventStore.findByTradeIdOrderByVersion(tradeId);
+}
+
+@GetMapping("/api/trades/{tradeId}/state-at")
+public TradeAggregate getTradeStateAt(@PathVariable String tradeId,
+                                       @RequestParam Instant asOf) {
+    List<TradeEvent> events = eventStore.findByTradeId(tradeId);
+    return TradeAggregate.rebuildAsOf(events, asOf);
+}
+```
+
+---
+
+### SCENARIO 16: Design a Real-Time P&L (Profit & Loss) Dashboard
+
+**Interviewer:** *"Traders need to see their real-time P&L updating every second. How do you design this?"*
+
+```mermaid
+flowchart LR
+    subgraph FEEDS["Data Sources"]
+        MKT["Market Data Feed\n(prices every 100ms)"]
+        TRD["Trade Events\n(from Kafka)"]
+    end
+
+    subgraph CALC["Calculation Engine"]
+        AGG["P&L Aggregator\n(Spring Boot)\nposition × (current price - entry price)"]
+    end
+
+    subgraph DELIVERY["Real-Time Delivery"]
+        WS["WebSocket\n(STOMP over SockJS)"]
+        UI["Trader Dashboard\nReact + WebSocket"]
+    end
+
+    MKT --> AGG
+    TRD --> AGG
+    AGG --> WS --> UI
+```
+
+```java
+// WebSocket config
+@Configuration
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker("/topic");   // clients subscribe here
+        config.setApplicationDestinationPrefixes("/app");
+    }
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws/pnl").setAllowedOrigins("*").withSockJS();
+    }
+}
+
+// P&L Calculation Service
+@Service
+public class PnlService {
+
+    private final SimpMessagingTemplate messagingTemplate;
+    private final ConcurrentMap<String, Position> positions = new ConcurrentHashMap<>();
+
+    // Listen to trade events — update positions
+    @KafkaListener(topics = "trade.executed")
+    public void onTradeExecuted(TradeExecutedEvent event) {
+        positions.compute(event.getIsin(), (isin, existing) -> {
+            if (existing == null) existing = new Position(isin);
+            existing.addTrade(event.getQuantity(), event.getPrice(), event.getBuySell());
+            return existing;
+        });
+    }
+
+    // Listen to market data — recalculate P&L every second
+    @Scheduled(fixedRate = 1000)
+    public void recalculateAndBroadcast() {
+        Map<String, BigDecimal> currentPrices = marketDataService.getLatestPrices();
+
+        List<PnlRow> pnlRows = positions.values().stream()
+            .map(pos -> {
+                BigDecimal currentPrice = currentPrices.getOrDefault(pos.getIsin(), pos.getAvgEntryPrice());
+                BigDecimal unrealizedPnl = pos.getQuantity()
+                    .multiply(currentPrice.subtract(pos.getAvgEntryPrice()));
+                return new PnlRow(pos.getIsin(), pos.getQuantity(), pos.getAvgEntryPrice(),
+                    currentPrice, unrealizedPnl, pos.getRealizedPnl());
+            })
+            .toList();
+
+        BigDecimal totalPnl = pnlRows.stream()
+            .map(r -> r.unrealizedPnl().add(r.realizedPnl()))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // Push to all connected WebSocket clients
+        messagingTemplate.convertAndSend("/topic/pnl",
+            new PnlSnapshot(pnlRows, totalPnl, Instant.now()));
+    }
+}
+
+// Position tracking
+public class Position {
+    private final String isin;
+    private BigDecimal quantity = BigDecimal.ZERO;
+    private BigDecimal totalCost = BigDecimal.ZERO;
+    private BigDecimal realizedPnl = BigDecimal.ZERO;
+
+    public synchronized void addTrade(BigDecimal qty, BigDecimal price, BuySell side) {
+        if (side == BuySell.BUY) {
+            totalCost = totalCost.add(qty.multiply(price));
+            quantity = quantity.add(qty);
+        } else {
+            BigDecimal pnl = qty.multiply(price.subtract(getAvgEntryPrice()));
+            realizedPnl = realizedPnl.add(pnl);
+            quantity = quantity.subtract(qty);
+            totalCost = totalCost.subtract(qty.multiply(getAvgEntryPrice()));
+        }
+    }
+
+    public BigDecimal getAvgEntryPrice() {
+        return quantity.compareTo(BigDecimal.ZERO) == 0
+            ? BigDecimal.ZERO
+            : totalCost.divide(quantity, 6, RoundingMode.HALF_UP);
+    }
+}
+```
+
+---
+
+### SCENARIO 17: Handle a Distributed Cache Invalidation Problem
+
+**Interviewer:** *"Your Trade Service runs on 5 pods with local Redis cache. A trade is updated on Pod 1, but Pods 2-5 still serve stale cached data. How do you fix this?"*
+
+```mermaid
+flowchart TB
+    subgraph PROBLEM["The Problem"]
+        P1["Pod 1: UPDATE trade\n→ invalidates LOCAL cache\n→ DB updated"]
+        P2["Pod 2: GET trade\n→ serves STALE cache ❌"]
+        P3["Pod 3: GET trade\n→ serves STALE cache ❌"]
+    end
+
+    subgraph FIX["The Fix — Redis Pub/Sub cache invalidation"]
+        U["Pod 1: UPDATE trade\n→ update DB\n→ publish to Redis channel\n'cache:invalidate'"]
+        U --> CH["Redis Pub/Sub\nchannel: cache:invalidate\nmessage: trade:T-123"]
+        CH --> S2["Pod 2: receives message\n→ evicts trade:T-123\nfrom local cache"]
+        CH --> S3["Pod 3: receives message\n→ evicts trade:T-123\nfrom local cache"]
+    end
+```
+
+```java
+// Solution 1: Redis Pub/Sub for cache invalidation across pods
+@Service
+public class TradeService {
+
+    private final StringRedisTemplate redisTemplate;
+
+    @Transactional
+    @CacheEvict(value = "trades", key = "#tradeId")  // evict local cache
+    public Trade updateTrade(String tradeId, TradeUpdateRequest req) {
+        Trade trade = tradeRepo.findById(tradeId).orElseThrow();
+        trade.update(req);
+        Trade saved = tradeRepo.save(trade);
+
+        // Broadcast invalidation to ALL pods
+        redisTemplate.convertAndSend("cache:invalidate", "trades:" + tradeId);
+
+        return saved;
+    }
+}
+
+// Listener on every pod — evicts local cache when notified
+@Component
+public class CacheInvalidationListener {
+
+    private final CacheManager cacheManager;
+
+    @Bean
+    public MessageListenerAdapter listenerAdapter() {
+        return new MessageListenerAdapter(this, "onMessage");
+    }
+
+    public void onMessage(String message) {
+        // message = "trades:T-123"
+        String[] parts = message.split(":", 2);
+        String cacheName = parts[0];
+        String key = parts[1];
+
+        Cache cache = cacheManager.getCache(cacheName);
+        if (cache != null) {
+            cache.evict(key);
+            log.debug("Evicted cache entry: {}:{}", cacheName, key);
+        }
+    }
+}
+
+// Solution 2: Short TTL + cache-aside (simpler but eventual consistency)
+@Cacheable(value = "trades", key = "#tradeId", unless = "#result == null")
+public TradeDTO getTrade(String tradeId) {
+    return tradeRepo.findById(tradeId).map(TradeDTO::from).orElse(null);
+}
+// Redis TTL = 30 seconds → worst case, stale for 30s
+// For banking: 30s staleness may be acceptable for read-heavy views, NOT for balance queries
+```
+
+---
+
+### SCENARIO 18: Thread Pool Sizing for a Trading System
+
+**Interviewer:** *"Your service handles both CPU-intensive price calculations and I/O-bound database calls. How do you configure thread pools?"*
+
+```java
+@Configuration
+public class ThreadPoolConfig {
+
+    // CPU-bound work — thread count = number of cores
+    // Price calculations, risk computations, P&L
+    @Bean("cpuExecutor")
+    public ExecutorService cpuExecutor() {
+        int cores = Runtime.getRuntime().availableProcessors();
+        return new ThreadPoolExecutor(
+            cores, cores,                   // fixed pool = core count
+            60L, TimeUnit.SECONDS,
+            new LinkedBlockingQueue<>(1000),
+            new ThreadFactoryBuilder().setNameFormat("cpu-worker-%d").build(),
+            new ThreadPoolExecutor.CallerRunsPolicy()  // backpressure: caller thread helps
+        );
+    }
+
+    // I/O-bound work — thread count = cores × (1 + wait/compute ratio)
+    // DB calls, HTTP calls, Kafka produce
+    // If wait=200ms, compute=10ms → ratio=20 → threads = 4 × 21 = 84
+    @Bean("ioExecutor")
+    public ExecutorService ioExecutor() {
+        int cores = Runtime.getRuntime().availableProcessors();
+        int ioThreads = cores * 20;  // for I/O-heavy: high ratio
+        return new ThreadPoolExecutor(
+            cores, ioThreads,
+            60L, TimeUnit.SECONDS,
+            new SynchronousQueue<>(),       // no queuing — scale threads immediately
+            new ThreadFactoryBuilder().setNameFormat("io-worker-%d").build(),
+            new ThreadPoolExecutor.AbortPolicy()  // reject if maxed out → circuit break
+        );
+    }
+
+    // Dedicated pool for external API calls (isolate from DB calls)
+    @Bean("externalApiExecutor")
+    public ExecutorService externalApiExecutor() {
+        return Executors.newFixedThreadPool(10,
+            new ThreadFactoryBuilder().setNameFormat("ext-api-%d").build());
+        // Separate pool — if external API is slow, it doesn't starve DB operations
+    }
+}
+
+// Usage — different pools for different work
+@Service
+public class PricingService {
+
+    @Qualifier("cpuExecutor") private final ExecutorService cpuExecutor;
+    @Qualifier("ioExecutor") private final ExecutorService ioExecutor;
+
+    public CompletableFuture<PricingResult> calculatePrice(TradeRequest req) {
+        // Step 1: Fetch market data (I/O-bound → ioExecutor)
+        CompletableFuture<MarketData> marketDataF =
+            CompletableFuture.supplyAsync(() -> marketDataService.fetch(req.getIsin()), ioExecutor);
+
+        // Step 2: Fetch historical vol (I/O-bound → ioExecutor)
+        CompletableFuture<VolData> volF =
+            CompletableFuture.supplyAsync(() -> volService.getVol(req.getIsin()), ioExecutor);
+
+        // Step 3: Calculate price (CPU-bound → cpuExecutor)
+        return marketDataF.thenCombineAsync(volF, (md, vol) ->
+            pricingEngine.calculate(req, md, vol),  // heavy math
+            cpuExecutor  // use CPU pool for compute!
+        );
+    }
+}
+```
+
+**Key formula:**
+
+```
+CPU-bound threads = Number of CPU cores (4 cores → 4 threads)
+I/O-bound threads = cores × (1 + waitTime / computeTime)
+
+Example for DB calls:
+  - DB call takes 200ms (wait), processing takes 10ms (compute)
+  - Ratio = 200/10 = 20
+  - On 4 cores: 4 × (1 + 20) = 84 threads
+```
+
+---
+
+### SCENARIO 19: Design API Versioning for a Banking Platform
+
+**Interviewer:** *"You're releasing v2 of the Trade API with breaking changes. How do you handle backward compatibility for existing clients?"*
+
+```java
+// Approach 1: URI versioning (SocGen's common approach)
+@RestController
+@RequestMapping("/api/v1/trades")
+public class TradeControllerV1 {
+
+    @GetMapping("/{id}")
+    public TradeResponseV1 getTrade(@PathVariable String id) {
+        Trade trade = tradeService.findById(id);
+        return TradeResponseV1.from(trade);  // old format: amount as String
+    }
+}
+
+@RestController
+@RequestMapping("/api/v2/trades")
+public class TradeControllerV2 {
+
+    @GetMapping("/{id}")
+    public TradeResponseV2 getTrade(@PathVariable String id) {
+        Trade trade = tradeService.findById(id);
+        return TradeResponseV2.from(trade);  // new format: amount as nested Money object
+    }
+}
+
+// API Gateway routes based on version
+// /api/v1/** → old controller (deprecation warning header)
+// /api/v2/** → new controller
+
+// Approach 2: Header versioning (cleaner URLs)
+@RestController
+@RequestMapping("/api/trades")
+public class TradeController {
+
+    @GetMapping(value = "/{id}", headers = "X-API-Version=1")
+    public TradeResponseV1 getTradeV1(@PathVariable String id) { ... }
+
+    @GetMapping(value = "/{id}", headers = "X-API-Version=2")
+    public TradeResponseV2 getTradeV2(@PathVariable String id) { ... }
+}
+
+// Deprecation strategy
+@GetMapping("/{id}")
+public ResponseEntity<TradeResponseV1> getTradeV1(@PathVariable String id) {
+    return ResponseEntity.ok()
+        .header("Deprecation", "true")
+        .header("Sunset", "2026-12-31")      // end-of-life date
+        .header("Link", "</api/v2/trades>; rel=\"successor-version\"")
+        .body(tradeService.getTradeV1(id));
+}
+
+// Backward-compatible DTO evolution (add fields, never remove)
+public record TradeResponseV1(
+    String tradeId,
+    String amount,       // "10000.00" — String (legacy)
+    String currency,
+    String status
+) {}
+
+public record TradeResponseV2(
+    String tradeId,
+    Money amount,        // { "value": 10000.00, "currency": "EUR" } — structured
+    String status,
+    Instant createdAt,   // NEW field — non-breaking for v1 clients
+    String settlementDate // NEW field
+) {}
+```
+
+---
+
+### SCENARIO 20: Implement Distributed Tracing Across Microservices
+
+**Interviewer:** *"A trade request passes through API Gateway → Trade Service → Settlement Service → Notification Service. How do you trace the full journey for debugging?"*
+
+```mermaid
+flowchart LR
+    GW["API Gateway\ntraceId=abc123\nspanId=001"] --> TS["Trade Service\ntraceId=abc123\nspanId=002"]
+    TS --> SS["Settlement Service\ntraceId=abc123\nspanId=003"]
+    TS --> NS["Notification Service\ntraceId=abc123\nspanId=004"]
+    SS --> DB["PostgreSQL\ntraceId=abc123\nspanId=005"]
+```
+
+```java
+// Spring Boot 3 + Micrometer Tracing (replaces Spring Cloud Sleuth)
+// pom.xml dependencies:
+// micrometer-tracing-bridge-otel (OpenTelemetry bridge)
+// opentelemetry-exporter-zipkin (send traces to Zipkin/Jaeger)
+
+// application.yml
+management:
+  tracing:
+    sampling:
+      probability: 1.0        # trace 100% of requests (production: 0.1 for 10%)
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
+
+// Traces propagate AUTOMATICALLY through:
+// - REST calls (via RestTemplate/WebClient interceptor)
+// - Kafka messages (via Kafka interceptor)
+// - JDBC calls (via DataSource proxy)
+
+// Custom span for important business operations
+@Service
+public class SettlementService {
+
+    private final Tracer tracer;
+
+    public SettlementResult settle(TradeEvent event) {
+        Span span = tracer.nextSpan().name("settle-trade").start();
+        try (Tracer.SpanInScope ws = tracer.withSpan(span)) {
+            span.tag("tradeId", event.getTradeId());
+            span.tag("amount", event.getAmount().toPlainString());
+
+            SettlementResult result = doSettlement(event);
+
+            span.tag("settlementStatus", result.getStatus().name());
+            span.event("settlement-completed");
+            return result;
+
+        } catch (Exception e) {
+            span.error(e);
+            throw e;
+        } finally {
+            span.end();
+        }
+    }
+}
+
+// Structured logging with traceId (ELK/Grafana Loki can correlate)
+// logback-spring.xml pattern:
+// %d{yyyy-MM-dd HH:mm:ss} [%X{traceId}] [%X{spanId}] %-5level %logger - %msg%n
+
+// Now in Kibana, searching traceId=abc123 shows ALL logs from ALL services
+// for that single trade request — Gateway, Trade, Settlement, Notification
+```
+
+**Your experience mapping:** "At Comviva, I used ELK Stack for log aggregation and Zipkin for distributed tracing across our Quote Management and Salesforce Integration microservices. When debugging a slow Salesforce sync, I could see the entire request journey — from API Gateway to Quote Service to Kafka to Salesforce Consumer — in a single Zipkin trace."
+
+---
+
+## 📋 Advanced Scenario Quick Reference
+
+| # | Scenario | Core Concepts Tested | Banking Domain |
+|---|----------|---------------------|----------------|
+| 13 | **Trade Matching Engine** | Kafka consumers, idempotency, scheduled jobs | Trade confirmation/reconciliation |
+| 14 | **Nightly Reconciliation Batch** | Spring Batch, CSV parsing, fault tolerance | Clearinghouse reconciliation |
+| 15 | **Event Sourcing** | Append-only store, aggregate replay, CQRS | Regulatory audit + trade history |
+| 16 | **Real-Time P&L Dashboard** | WebSocket, STOMP, market data, ConcurrentHashMap | Trader desktop |
+| 17 | **Distributed Cache Invalidation** | Redis Pub/Sub, cache-aside, TTL strategy | Multi-pod consistency |
+| 18 | **Thread Pool Sizing** | CPU-bound vs I/O-bound, pool isolation, formulas | Trading system throughput |
+| 19 | **API Versioning** | URI/header versioning, deprecation, DTO evolution | Partner API backward compat |
+| 20 | **Distributed Tracing** | Micrometer, OpenTelemetry, Zipkin, trace propagation | Cross-service debugging |
+
+---
+
+# 🏆 Senior Tech Lead (10+ Years) — Advanced Interview Questions & Answers
+
+> **Target Role:** Java Sr. Tech Lead | 10+ years experience | Societe Generale & Banking Domain
+> **Focus:** Architecture decisions, team leadership, production firefighting, system design trade-offs, mentoring, deep Java/Spring internals, and SocGen-specific banking scenarios
+
+---
+
+## 📋 Section A: Java Internals — Deep Dive for Tech Leads
+
+---
+
+### STL-1. Explain the JVM memory model in detail. How do you diagnose and fix memory leaks in production?
+
+**Why they ask:** At 10+ years, you MUST understand what happens under the hood — not just "heap and stack."
+
+**JVM Memory Architecture:**
+
+```
++-------------------------------------------------------------+
+|                        JVM MEMORY                           |
++----------------------+--------------------------------------+
+|     HEAP (shared)    |         NON-HEAP                     |
+|  +----------------+  |  +---------------------------------+ |
+|  |  Young Gen     |  |  | Metaspace (class metadata)      | |
+|  |  +----------+  |  |  | Code Cache (JIT compiled)       | |
+|  |  | Eden     |  |  |  | Thread Stacks (per thread)      | |
+|  |  +----------+  |  |  | Direct ByteBuffers (off-heap)   | |
+|  |  | S0 | S1  |  |  |  +---------------------------------+ |
+|  |  +----------+  |  |                                      |
+|  +----------------+  |                                      |
+|  |  Old Gen       |  |                                      |
+|  |  (Tenured)     |  |                                      |
+|  +----------------+  |                                      |
++----------------------+--------------------------------------+
+```
+
+**Object Lifecycle:**
+
+| Step | What Happens | Where |
+|------|-------------|-------|
+| 1 | New object created | Eden space |
+| 2 | Survives Minor GC | S0 or S1 (survivor spaces, copied back and forth) |
+| 3 | Survives N GCs (threshold ~15) | Promoted to Old Gen (tenured) |
+| 4 | Old Gen full | Major/Full GC (expensive, stop-the-world!) |
+
+**Memory Leak Detection — Step by Step:**
+
+```bash
+# Step 1: Check heap usage
+jcmd <pid> GC.heap_info
+
+# Step 2: Take heap dump
+jmap -dump:live,format=b,file=heapdump.hprof <pid>
+
+# Step 3: Analyze with Eclipse MAT or VisualVM
+# Look for: Dominator Tree -> largest retained objects
+
+# Step 4: Common culprits
+# - Static collections that grow forever
+# - Unclosed streams/connections
+# - ThreadLocal not cleaned up
+# - Listeners/callbacks not deregistered
+```
+
+**Real Production Example:**
+
+```java
+// BAD: MEMORY LEAK -- static map grows forever
+public class UserSessionCache {
+    private static final Map<String, UserSession> sessions = new HashMap<>();
+    public void login(String userId) {
+        sessions.put(userId, new UserSession(userId)); // keeps growing!
+    }
+}
+
+// GOOD: Use bounded cache with TTL
+public class UserSessionCache {
+    private static final Cache<String, UserSession> sessions = Caffeine.newBuilder()
+        .maximumSize(10_000)
+        .expireAfterAccess(30, TimeUnit.MINUTES)
+        .build();
+    public void login(String userId) {
+        sessions.put(userId, new UserSession(userId));
+    }
+}
+```
+
+**GC Tuning for Production:**
+
+```bash
+-XX:+UseG1GC -XX:MaxGCPauseMillis=200     # G1GC (default Java 11+)
+-XX:+UseZGC -XX:+ZGenerational             # ZGC (Java 17+, sub-ms pauses)
+-XX:+UseShenandoahGC                       # Shenandoah (RedHat)
+-Xlog:gc*:file=gc.log:time,uptime,level,tags  # GC logging
+```
+
+**Your experience mapping:** "At Comviva, I diagnosed a memory leak in the Fulfillment Orchestration service where unclosed Kafka consumer connections were accumulating. Using jmap heap dumps analyzed in Eclipse MAT, I found 12,000+ KafkaConsumer instances retained. Fix: proper try-with-resources and connection pooling."
+
+---
+
+### STL-2. GC Algorithms — G1GC vs ZGC vs Shenandoah
+
+| GC | Pause Time | Throughput | Heap Size | Best For |
+|----|-----------|-----------|-----------|----------|
+| **Serial GC** | High (seconds) | Good for small | < 256MB | CLI tools |
+| **Parallel GC** | Medium | Highest | 1-4GB | Batch jobs |
+| **G1GC** | Low (~200ms) | Good | 4-16GB | Most microservices (DEFAULT) |
+| **ZGC** | Ultra-low (sub-ms) | Good | 8GB-16TB | Trading, real-time |
+| **Shenandoah** | Ultra-low (sub-10ms) | Good | Any | RedHat ecosystems |
+
+**SocGen relevance:** ZGC for matching engine (sub-ms pauses critical), Parallel GC for batch reconciliation.
+
+---
+
+### STL-3. Virtual Threads (Java 21)
+
+| Aspect | Platform Thread | Virtual Thread |
+|--------|----------------|----------------|
+| **Backed by** | OS thread (1:1) | JVM-managed (M:N) |
+| **Memory** | ~1MB stack | ~1KB initially |
+| **Max count** | ~5,000-10,000 | Millions |
+| **Context switch** | OS-level (expensive) | JVM-level (cheap) |
+| **Blocking I/O** | Blocks OS thread | Unmounts from carrier |
+| **Best for** | CPU-bound | I/O-bound |
+
+```java
+// BEFORE: Thread pool limits concurrency
+ExecutorService executor = Executors.newFixedThreadPool(200);
+
+// AFTER (Java 21): One virtual thread per request
+ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+
+// Spring Boot 3.2+: spring.threads.virtual.enabled=true
+```
+
+**GOTCHAS:** Don't use `synchronized` (pins VT), don't use ThreadLocal with large objects, don't pool VTs.
+
+---
+
+### STL-4. Java Memory Model (JMM) — Happens-Before
+
+| Rule | Meaning |
+|------|---------|
+| **Program order** | Within a thread, each action happens-before the next |
+| **Monitor lock** | unlock() happens-before next lock() on same monitor |
+| **volatile** | Write to volatile happens-before read of same volatile |
+| **Thread start** | thread.start() happens-before any action in that thread |
+| **Thread join** | All actions in thread happen-before join() returns |
+| **Transitivity** | If A hb B, and B hb C, then A hb C |
+
+**Double-Checked Locking fix:** Use `private static volatile Singleton instance;`
+
+---
+
+## 📋 Section B: Architecture & System Design
+
+---
+
+### STL-5. Monolith to Microservices Migration
+
+| Phase | Duration | Action | Risk |
+|-------|----------|--------|------|
+| **1. Domain Analysis** | 2 weeks | Map bounded contexts (DDD), identify seams | Low |
+| **2. Decouple Database** | 4 weeks | Split shared tables, database-per-service | Medium |
+| **3. Extract Edge Service** | 2 weeks | Least-coupled module first (Notification) | Low |
+| **4. API Gateway** | 1 week | Route old->monolith, new->service | Low |
+| **5. Extract Core** | 8-12 weeks | Order, Payment, User — one at a time | High |
+| **6. Event-Driven** | 4 weeks | Replace sync calls with Kafka events | Medium |
+| **7. Decommission** | Ongoing | Remove extracted code gradually | Low |
+
+Use **Strangler Fig Pattern** with feature flags for instant rollback.
+
+---
+
+### STL-6. Distributed Rate Limiter (100K+ req/sec)
+
+| Algorithm | How | Pros | Cons |
+|-----------|-----|------|------|
+| **Token Bucket** | Fixed fill rate, take token per request | Allows bursts | Needs atomic ops |
+| **Sliding Window Log** | Timestamp per request, count in window | Accurate | Memory-heavy |
+| **Sliding Window Counter** | Weighted count across windows | Efficient | Approximate |
+| **Fixed Window** | Count per time window | Simple | Boundary burst |
+
+Use Redis Sorted Set + Lua script for atomicity across pods.
+
+---
+
+### STL-7. Distributed Transactions
+
+| Pattern | Consistency | Complexity | Use When |
+|---------|------------|-----------|----------|
+| **2PC** | Strong | High | Rarely (tight coupling) |
+| **SAGA Choreography** | Eventual | Medium | Few services, simple |
+| **SAGA Orchestration** | Eventual | Medium-High | Many services, complex |
+| **Outbox Pattern** | Eventual | Low-Medium | Reliable event publishing |
+
+**Banking:** SAGA Orchestration + Outbox Pattern for fund transfers.
+
+---
+
+### STL-8. 99.99% Availability Design
+
+**Three pillars: Redundancy + Resilience + Observability**
+
+Use: Multi-AZ, read replicas, circuit breakers (Resilience4j), retry with backoff, bulkhead, fallback, auto-scaling, rolling deployments with `maxUnavailable: 0`.
+
+---
+
+## 📋 Section C: Leadership & Decision-Making
+
+---
+
+### STL-9. Incident Response at 2 AM
+
+| Phase | Duration | Actions | Who |
+|-------|----------|---------|-----|
+| **1. DETECT** | 0-5 min | PagerDuty, dashboards | On-call |
+| **2. TRIAGE** | 5-15 min | Severity P1-P4, assemble team if P1 | Tech Lead |
+| **3. MITIGATE** | 15-60 min | Rollback, feature flag, scale up | Team |
+| **4. FIX** | 1-4 hrs | RCA, hotfix, deploy | Seniors |
+| **5. POSTMORTEM** | Next day | Blameless RCA, action items | All |
+
+| Level | Impact | Response | Example |
+|-------|--------|----------|---------|
+| **P1** | System down | War room | Payment failed |
+| **P2** | Major feature broken | Fix 4 hrs | Search broken |
+| **P3** | Minor feature broken | Fix 24 hrs | CSV export wrong |
+| **P4** | Cosmetic | Next sprint | Typo |
+
+---
+
+### STL-10. Technical Debt Management
+
+**20% rule** — 20% of each sprint for tech debt. Make it visible in JIRA. Show PM the data: "This causes 3 incidents/month." Piggyback on new features. 1 hardening sprint every 4 sprints.
+
+---
+
+### STL-11. Mentoring & Code Reviews
+
+**Progressive Responsibility:** Bug fixes (week 1-4) -> Own feature (month 2) -> Review others (month 3) -> Lead project (month 6). Automate style checks, focus human reviews on logic/design.
+
+---
+
+## 📋 Section D: Spring Boot & Microservices — Advanced
+
+---
+
+### STL-12. Spring Boot Auto-Configuration & Custom Starters
+
+Use `@ConditionalOnClass`, `@ConditionalOnProperty`, `@ConditionalOnMissingBean`. Register in `META-INF/spring/...AutoConfiguration.imports`.
+
+---
+
+### STL-13. Distributed Caching (L1 Caffeine + L2 Redis + Pub/Sub)
+
+| Strategy | How | Consistency | Performance |
+|----------|-----|------------|-------------|
+| **Cache-Aside** | App checks cache then DB | Read-your-writes | Best read |
+| **Write-Through** | Cache + DB together | Strong | Slower writes |
+| **Write-Behind** | Cache first, async DB | Eventual | Best write |
+| **Read-Through** | Cache loads from DB | Read-your-writes | Simpler |
+
+On update: DB write -> Redis delete -> Pub/Sub -> ALL pods invalidate L1.
+
+---
+
+### STL-14. HikariCP Tuning
+
+**Formula:** `pool_size = (cores * 2) + spindle_count` (typically 9-10 for SSD).
+
+```yaml
+spring.datasource.hikari:
+  maximum-pool-size: 10
+  minimum-idle: 5
+  connection-timeout: 30000
+  leak-detection-threshold: 60000
+```
+
+Always use try-with-resources. Monitor `hikaricp.connections.pending`.
+
+---
+
+## 📋 Section E: Production & Performance
+
+---
+
+### STL-15. 10x Traffic Spike Response
+
+Detect (0-2 min) -> Scale (2-5 min, `kubectl scale --replicas=20`) -> Shed Load (5-10 min, rate limit, circuit break, cache aggressively) -> Stabilize.
+
+---
+
+### STL-16. N+1 Query Solutions
+
+| Solution | How | When |
+|----------|-----|------|
+| **JOIN FETCH** | `@Query("SELECT o FROM Order o JOIN FETCH o.customer")` | Known relations |
+| **@EntityGraph** | `@EntityGraph(attributePaths = {"customer"})` | Declarative |
+| **@BatchSize(100)** | Load in batches | Collections |
+| **DTO Projection** | `SELECT new DTO(o.id, c.name)` | Read-only, fastest |
+
+---
+
+### STL-17. Idempotency
+
+Use idempotency key (client-provided UUID) + DB unique constraint. For Kafka: Redis `SETNX` with TTL.
+
+---
+
+### STL-18. API Versioning
+
+| Factor | URI `/v1/` | Header `X-API-Version` | Content Negotiation |
+|--------|-----------|----------------------|---------------------|
+| **Clarity** | Best | Good | Complex |
+| **Caching** | Easy | Needs Vary | Needs Vary |
+| **Recommendation** | DEFAULT | Internal APIs | Rarely |
+
+---
+
+## 📋 Section F: Kafka — Advanced
+
+---
+
+### STL-19. Exactly-Once Processing
+
+Enable `ENABLE_IDEMPOTENCE_CONFIG=true`, `TRANSACTIONAL_ID_CONFIG`, `ACKS=all`. Consumer: `isolation.level=read_committed` + `@Transactional("kafkaTransactionManager")`.
+
+---
+
+### STL-20. Consumer Lag & Rebalancing
+
+Use `CooperativeStickyAssignor`, static membership (`group.instance.id`), increase `max.poll.interval.ms`.
+
+---
+
+## 📋 Section G: Database — Senior Level
+
+---
+
+### STL-21. Indexing Strategies
+
+| Type | Use Case |
+|------|---------|
+| **B-Tree** (default) | Equality + Range queries |
+| **Hash** | Equality ONLY |
+| **GIN** | Full-text, JSONB, arrays |
+| **Partial** | Index only subset of rows |
+| **Covering** | All query columns in index |
+
+**Rule:** Equality columns FIRST in composite indexes, then range/sort.
+
+---
+
+### STL-22. Zero-Downtime Migrations
+
+Never rename/drop columns directly. Use **expand-contract**: Add new -> Backfill -> Deploy new code -> Drop old. Use Flyway or Liquibase.
+
+---
+
+## 📋 Section H: Docker & Kubernetes
+
+---
+
+### STL-23. Debug Crashing Pod
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| **OOMKilled** | Memory limit too low | Increase limits.memory |
+| **CrashLoopBackOff** | App fails on startup | Check logs, fix config |
+| **ImagePullBackOff** | Wrong image/no auth | Fix image, add secrets |
+| **Pending** | No resources | Scale cluster |
+
+---
+
+### STL-24. Blue-Green & Canary Deployments
+
+**Blue-Green:** Deploy green, switch Service selector. **Canary (Istio):** 90/10 weight split, gradually increase.
+
+---
+
+## 📋 Section I: Security
+
+---
+
+### STL-25. Zero-Trust Microservices
+
+mTLS (Istio sidecar), JWT propagation, K8s NetworkPolicy (restrict pod-to-pod), RBAC, audit logging.
+
+---
+
+## 📋 Section J: Behavioral & Leadership
+
+---
+
+### STL-26. Wrong Technical Decision (STAR)
+
+Sync REST -> cascading failures. Fix: circuit breaker (immediate), Kafka async (short-term), event-driven (long-term). Result: 3s->200ms, 500->5000 concurrent.
+
+---
+
+### STL-27. Disagreements
+
+Data over opinions. Benchmark both. Time-box experiments. Disagree and commit. Document in ADRs.
+
+---
+
+### STL-28. Code Quality at Scale
+
+Automate: Spotless, SonarQube gate, JaCoCo 80%, OWASP scan. Human: 2 PR approvals, weekly tech debt review, pair programming.
+
+---
+
+## 📋 Section K: Societe Generale — Senior Tech Lead Specific Questions
+
+> **Context:** SocGen is a global investment bank. They value regulatory compliance, low-latency systems, data integrity, and risk management. These questions are tailored for 10+ years Sr. Tech Lead candidates.
+
+---
+
+### STL-SG-1. Design a real-time trade processing system at SocGen
+
+**Architecture:**
+
+```
+Market Data (FIX) --> API Gateway --> Order Service --> Kafka
+                                     |                  |
+                                     v                  v
+                               Matching Engine    Position Service
+                                     |                  |
+                                     v                  v
+                              Settlement         Risk Engine
+                                     |
+                                     v
+                          Regulatory Reporting (MiFID II, EMIR)
+                                     |
+                                     v
+                          Audit & Logging (ELK, 7yr retention)
+```
+
+**Key Design Decisions:**
+
+| Decision | Choice | Why |
+|----------|--------|-----|
+| **Messaging** | Kafka exactly-once | Trades MUST NOT be lost/duplicated |
+| **Database** | PostgreSQL + TimescaleDB | ACID for trades + time-series for market data |
+| **Caching** | Redis Cluster | Sub-ms price lookups |
+| **GC** | ZGC (Java 21) | Sub-ms pauses for matching engine |
+| **Serialization** | Protobuf | 10x smaller, 5x faster than JSON |
+| **Audit** | Event Sourcing | Complete history for regulators |
+
+**Order Validation with Compliance:**
+
+```java
+@Service
+public class OrderValidationService {
+
+    @Transactional
+    public ValidationResult validateOrder(TradeOrder order) {
+        // Step 1: Basic validation
+        if (order.getQuantity() <= 0) {
+            auditPublisher.publish(AuditEvent.rejected(order, "Invalid quantity"));
+            return ValidationResult.rejected("Invalid order parameters");
+        }
+
+        // Step 2: MiFID II pre-trade compliance check
+        ComplianceResult compliance = complianceService.preTradeCheck(order);
+        if (!compliance.isApproved()) {
+            auditPublisher.publish(AuditEvent.complianceRejected(order, compliance.getReason()));
+            return ValidationResult.rejected("Compliance: " + compliance.getReason());
+        }
+
+        // Step 3: Risk limit check (position limits, exposure)
+        RiskCheckResult risk = riskChecker.checkLimits(order);
+        if (risk.isBreached()) {
+            auditPublisher.publish(AuditEvent.riskBreached(order, risk));
+            return ValidationResult.rejected("Risk limit breached");
+        }
+
+        // Step 4: Audit trail -- EVERY order logged for regulators
+        auditPublisher.publish(AuditEvent.validated(order));
+        return ValidationResult.approved();
+    }
+}
+```
+
+---
+
+### STL-SG-2. Data consistency in distributed banking systems
+
+**Consistency Patterns:**
+
+| Scenario | Pattern | Why |
+|----------|---------|-----|
+| **Fund transfer** | SAGA with compensation | Cross-service, undo on failure |
+| **Trade + position** | Outbox Pattern | Event guaranteed after DB commit |
+| **Balance inquiry** | Read from primary | No stale reads for balance |
+| **Reporting** | Eventual consistency OK | CQRS read model can lag |
+| **Audit trail** | Event Sourcing | Immutable append-only log |
+
+**Fund Transfer SAGA with Idempotency:**
+
+```java
+@Service
+public class FundTransferSaga {
+
+    public TransferResult transfer(TransferRequest request) {
+        String sagaId = UUID.randomUUID().toString();
+        try {
+            accountService.debit(request.getFromAccount(), request.getAmount(), sagaId);
+            accountService.credit(request.getToAccount(), request.getAmount(), sagaId);
+            ledgerService.record(request, sagaId);
+            return TransferResult.success(sagaId);
+        } catch (InsufficientFundsException e) {
+            return TransferResult.failed("Insufficient funds");
+        } catch (CreditFailedException e) {
+            accountService.reverseDebit(request.getFromAccount(), request.getAmount(), sagaId);
+            return TransferResult.failed("Credit failed, debit reversed");
+        }
+    }
+}
+
+// Double-debit prevention
+@Transactional
+public void debit(String accountId, BigDecimal amount, String sagaId) {
+    if (transactionRepository.existsBySagaIdAndType(sagaId, "DEBIT")) {
+        return; // Already processed -- idempotent!
+    }
+    Account account = accountRepository.findByIdWithLock(accountId); // SELECT FOR UPDATE
+    if (account.getBalance().compareTo(amount) < 0) {
+        throw new InsufficientFundsException();
+    }
+    account.setBalance(account.getBalance().subtract(amount));
+    accountRepository.save(account);
+    transactionRepository.save(new Transaction(sagaId, accountId, "DEBIT", amount));
+}
+```
+
+---
+
+### STL-SG-3. Regulatory requirements (MiFID II, GDPR) in microservices
+
+**MiFID II Requirements:**
+
+| Requirement | Technical Implementation |
+|-------------|------------------------|
+| **Pre-trade transparency** | Real-time order book via WebSocket |
+| **Post-trade reporting** | Kafka -> Reporting service -> ESMA within T+1 |
+| **Best execution** | Log venue, price comparison, execution quality |
+| **Transaction reporting** | 65 data fields per trade within T+1 |
+| **Record keeping** | 5-7 years immutable storage |
+| **Audit trail** | Event sourcing -- complete state change history |
+
+**GDPR Right to Erasure (while keeping financial records):**
+
+```java
+@Transactional
+public void handleDeletionRequest(String customerId) {
+    Customer customer = customerRepository.findById(customerId).orElseThrow();
+
+    // Anonymize personal data (GDPR Article 17)
+    customer.setName("ANONYMIZED");
+    customer.setEmail("deleted_" + customerId + "@anonymized.com");
+    customer.setPhone(null);
+    customer.setAddress(null);
+    customerRepository.save(customer);
+
+    // Financial transaction records MUST be kept (MiFID II)
+    // Anonymize customer link but KEEP transaction data
+    auditPublisher.publish(AuditEvent.gdprDeletion(customerId));
+}
+```
+
+---
+
+### STL-SG-4. Trading system database schema
+
+```sql
+CREATE TABLE trades (
+    trade_id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    order_id          UUID NOT NULL REFERENCES orders(order_id),
+    instrument_id     VARCHAR(20) NOT NULL,
+    trade_type        VARCHAR(10) NOT NULL,       -- BUY/SELL
+    quantity          DECIMAL(18,4) NOT NULL,
+    price             DECIMAL(18,8) NOT NULL,
+    currency          VARCHAR(3) NOT NULL,
+    execution_venue   VARCHAR(50) NOT NULL,        -- MiFID II
+    counterparty_id   VARCHAR(50) NOT NULL,
+    settlement_date   DATE NOT NULL,               -- T+2 equities
+    status            VARCHAR(20) DEFAULT 'PENDING',
+    created_at        TIMESTAMPTZ DEFAULT NOW(),
+    version           INTEGER DEFAULT 1            -- Optimistic locking
+);
+
+-- Partition by date (millions of trades/day)
+CREATE TABLE trades_2026_q1 PARTITION OF trades_partitioned
+    FOR VALUES FROM ('2026-01-01') TO ('2026-04-01');
+
+-- Indexes for common queries
+CREATE INDEX idx_trades_instrument_date ON trades (instrument_id, created_at DESC);
+CREATE INDEX idx_trades_status ON trades (status) WHERE status IN ('PENDING', 'MATCHED');
+
+-- Audit trail (append-only, NEVER updated or deleted)
+CREATE TABLE trade_audit (
+    audit_id    BIGSERIAL PRIMARY KEY,
+    trade_id    UUID NOT NULL,
+    action      VARCHAR(20) NOT NULL,
+    old_values  JSONB,
+    new_values  JSONB,
+    changed_by  VARCHAR(100) NOT NULL,
+    changed_at  TIMESTAMPTZ DEFAULT NOW(),
+    reason      TEXT
+);
+```
+
+---
+
+### STL-SG-5. Production trade processing slow at market open — diagnosis
+
+```
+SITUATION: Latency 5ms -> 500ms at 9:00-9:15 AM (market open)
+
+DIAGNOSIS:
+  Grafana:  CPU 85%, GC pauses 150ms every 2s
+  Database: Pool exhausted (10/10 active, 5 pending)
+            Slow query: UPDATE positions (200ms) -- MISSING INDEX!
+  Kafka:    Consumer lag 50K, rebalancing every 30s
+
+FIXES (priority order):
+  1. IMMEDIATE: CREATE INDEX CONCURRENTLY idx_positions_instrument
+     ON positions (instrument_id);  --> 200ms -> 2ms
+  2. SHORT: Pool 10->15, connection-timeout 30s->10s
+  3. SHORT: Kafka max.poll.interval.ms=300000, CooperativeStickyAssignor
+  4. MEDIUM: Switch to ZGC --> GC 150ms -> sub-1ms
+
+RESULT: Latency back to 5ms within 10 minutes of adding index.
+```
+
+---
+
+### STL-SG-6. Secrets management in banking
+
+```
+Requirements: No secrets in code, encrypted at rest+transit, rotation without downtime, audit trail.
+
+Architecture: Spring Boot <-> HashiCorp Vault (via sidecar agent)
+  - Vault Agent injects secrets as env vars
+  - Auto-rotates tokens and DB credentials
+  - Never in application.yml or Pod spec
+```
+
+```java
+@Configuration
+@VaultPropertySource("secret/trade-service")
+public class VaultConfig { }
+
+@Value("${db.username}")  // From Vault, rotated automatically
+private String dbUsername;
+```
+
+---
+
+### STL-SG-7. Performance testing strategy for banking
+
+| Phase | Duration | What |
+|-------|----------|------|
+| **1. Baseline** | Week 1 | Single user, measure avg/p95/p99 |
+| **2. Load Test** | Week 2 | Ramp to 10K trades/sec peak |
+| **3. Stress Test** | Week 3 | Push to 20K-50K, find breaking point |
+| **4. Endurance** | Week 4 | 70% peak for 72 hours, check leaks |
+
+| Tool | Purpose |
+|------|---------|
+| **Gatling** | Load testing (preferred at SocGen) |
+| **JMeter** | Traditional load testing |
+| **Prometheus + Grafana** | Monitoring during tests |
+| **async-profiler** | CPU/allocation profiling |
+| **JFR** | Low-overhead production profiling |
+
+---
+
+### STL-SG-8. Observability in banking microservices
+
+**Three Pillars:**
+
+| Pillar | Tool | Shows |
+|--------|------|-------|
+| **Metrics** | Prometheus + Grafana | Numbers over time |
+| **Logs** | ELK Stack | What happened when |
+| **Traces** | Zipkin/Jaeger/OTel | Request journey |
+
+**SRE Golden Signals:**
+
+| Signal | Metric | Alert |
+|--------|--------|-------|
+| **Latency** | p99 response time | > 500ms for 5 min |
+| **Traffic** | Requests/sec | Sudden 5x spike |
+| **Errors** | 5xx rate | > 1% for 2 min |
+| **Saturation** | CPU/Mem/Pool % | > 80% for 5 min |
+
+```java
+@Component
+public class TradeMetrics {
+    private final MeterRegistry registry;
+
+    public void recordTradeProcessed(String instrument, String type) {
+        registry.counter("trades.processed",
+            "instrument", instrument, "type", type).increment();
+    }
+
+    public void recordTradeLatency(String instrument, Duration duration) {
+        registry.timer("trades.latency",
+            "instrument", instrument).record(duration);
+    }
+}
+```
+
+---
+
+## 📋 Senior Tech Lead — Quick Reference
+
+| # | Question | Core Concepts | Domain |
+|---|----------|--------------|--------|
+| STL-1 | JVM Memory & Leaks | Heap, GC, heap dumps, MAT | Java Internals |
+| STL-2 | GC Algorithms | G1GC, ZGC, Shenandoah | Java Internals |
+| STL-3 | Virtual Threads | Platform vs Virtual, pinning | Java Concurrency |
+| STL-4 | JMM Happens-Before | volatile, visibility, DCL | Java Concurrency |
+| STL-5 | Monolith Migration | Strangler Fig, DDD | Architecture |
+| STL-6 | Rate Limiter | Token bucket, Redis Lua | System Design |
+| STL-7 | Distributed Txns | SAGA, Outbox | Microservices |
+| STL-8 | 99.99% Availability | Circuit breaker, zero-downtime | Production |
+| STL-9 | Incident Response | Triage, postmortem | Leadership |
+| STL-10 | Tech Debt | 20% rule, piggyback | Leadership |
+| STL-11 | Mentoring | Code review pyramid | Leadership |
+| STL-12 | Auto-Configuration | Conditional beans, starters | Spring Boot |
+| STL-13 | Distributed Cache | L1/L2, Pub/Sub invalidation | Caching |
+| STL-14 | HikariCP Tuning | Pool sizing, leak detection | Database |
+| STL-15 | Traffic Spike | HPA, load shedding | Production |
+| STL-16 | N+1 Query | JOIN FETCH, BatchSize, DTO | Database |
+| STL-17 | Idempotency | Unique constraint, Redis SETNX | Microservices |
+| STL-18 | API Versioning | URI, header, deprecation | API Design |
+| STL-19 | Kafka Exactly-Once | EOS, transactions | Kafka |
+| STL-20 | Consumer Lag | Static membership, rebalancing | Kafka |
+| STL-21 | DB Indexing | B-Tree, composite, partial | Database |
+| STL-22 | Zero-Downtime Migration | Expand-contract, Flyway | Database |
+| STL-23 | K8s Pod Debug | OOMKilled, CrashLoop | Kubernetes |
+| STL-24 | Blue-Green/Canary | Istio, traffic split | Kubernetes |
+| STL-25 | Zero-Trust Security | mTLS, JWT, NetworkPolicy | Security |
+| STL-26 | Wrong Decision (STAR) | Async vs sync | Behavioral |
+| STL-27 | Disagreements | Data-driven, ADRs | Behavioral |
+| STL-28 | Code Quality | SonarQube, JaCoCo | Leadership |
+| STL-SG-1 | Trade Processing | Low-latency, MiFID II | SocGen |
+| STL-SG-2 | Banking Consistency | SAGA, SELECT FOR UPDATE | SocGen |
+| STL-SG-3 | MiFID II / GDPR | Audit trail, anonymization | SocGen |
+| STL-SG-4 | Trading DB Schema | Partitioning, audit tables | SocGen |
+| STL-SG-5 | Prod Slowness | Missing index, GC, Kafka lag | SocGen |
+| STL-SG-6 | Secrets Management | Vault, rotation | SocGen |
+| STL-SG-7 | Performance Testing | Gatling, load/stress/endurance | SocGen |
+| STL-SG-8 | Observability | Prometheus, ELK, golden signals | SocGen |
+
+---
+
+
+# 🎯 Sr. Tech Lead Answer Depth Framework — How to Give 10+ Year Depth Answers
+
+> **Problem:** You KNOW the concepts but your answers sound like a 5-year developer, not a 10+ year Tech Lead.
+> **Solution:** Use the frameworks below to add LAYERS of depth that interviewers expect from senior leaders.
+
+---
+
+## 📋 The DEPTH Framework — 5 Layers Every Sr. Lead Answer Must Have
+
+Most candidates stop at Layer 1-2. **Sr. Tech Leads must reach Layer 4-5.**
+
+```
++---------------------------------------------------------------+
+|  Layer 1: WHAT (Everyone knows this)                          |
+|    "Circuit breaker prevents cascading failures"              |
++---------------------------------------------------------------+
+|  Layer 2: HOW (Mid-level knows this)                          |
+|    "It has 3 states: Closed, Open, Half-Open. After N         |
+|     failures, it opens and returns fallback"                  |
++---------------------------------------------------------------+
+|  Layer 3: WHY + TRADE-OFFS (Senior knows this)                |
+|    "We chose Resilience4j over Hystrix because Hystrix is     |
+|     deprecated. Trade-off: R4j is lighter but has less        |
+|     community support for complex patterns"                   |
++---------------------------------------------------------------+
+|  Layer 4: PRODUCTION EXPERIENCE (Tech Lead knows this)        |
+|    "In production, we set failure threshold to 50% over 10    |
+|     calls, with 30s wait in open state. We learned the hard   |
+|     way that timeout must be SHORTER than the circuit breaker |
+|     window, otherwise the CB never triggers"                  |
++---------------------------------------------------------------+
+|  Layer 5: ARCHITECTURE IMPACT (Sr. Tech Lead knows this)      |
+|    "Circuit breaker alone isn't enough. We combine it with    |
+|     bulkhead (limit concurrent calls), retry with exponential |
+|     backoff, and a fallback cache. The CB metrics feed into   |
+|     our Grafana dashboard with PagerDuty alerts when circuits |
+|     open. We also considered service mesh (Istio) for CB but  |
+|     chose application-level for finer control per endpoint"   |
++---------------------------------------------------------------+
+```
+
+---
+
+## 📋 Before/After Examples — Same Question, Different Depth
+
+---
+
+### Example 1: "How do you handle database connection pooling?"
+
+**SHALLOW Answer (5-year developer):**
+
+```
+"We use HikariCP. It's the default in Spring Boot. We configure
+max pool size and connection timeout in application.yml."
+```
+
+**DEEP Answer (Sr. Tech Lead):**
+
+```
+"Connection pooling is critical -- wrong sizing causes cascading failures.
+
+SIZING: We use the formula (cores * 2) + spindle_count. For our 4-core
+pods on SSD, that's 9-10 connections. Counter-intuitively, SMALLER pools
+perform better because they reduce database context switching.
+
+PRODUCTION CONFIG:
+- max-pool-size: 10 (not 50 -- common mistake)
+- connection-timeout: 10s (fail fast, don't queue forever)
+- leak-detection-threshold: 60s (alerts us if code holds connections)
+- max-lifetime: 30min (recycle before DB-side timeout kills them)
+
+LESSONS FROM PRODUCTION:
+1. We once had an outage because one slow query held all 10 connections.
+   Fix: Added statement-timeout at DB level + leak detection alerts.
+
+2. During a traffic spike, our pool exhausted because we had N+1 queries
+   in a new feature. The pending connection count metric in Grafana
+   caught it before production. We now have a CI check that fails if
+   hibernate.generate_statistics shows more than 10 queries per request.
+
+3. Multi-pod consideration: 10 connections x 20 pods = 200 connections
+   to the DB. PostgreSQL default max_connections is 100! We had to
+   coordinate pool size with DBA and use PgBouncer for connection
+   multiplexing.
+
+MONITORING: We alert on hikaricp.connections.pending > 0 for 1 minute.
+That's the earliest signal of pool exhaustion, before users see errors."
+```
+
+**What makes it deep:** Production war stories, specific numbers, cross-team coordination (DBA), monitoring strategy, and lessons learned.
+
+---
+
+### Example 2: "Explain microservices communication patterns"
+
+**SHALLOW Answer:**
+
+```
+"Services communicate via REST or messaging. REST is synchronous,
+Kafka is asynchronous. We use REST for queries and Kafka for events."
+```
+
+**DEEP Answer (Sr. Tech Lead):**
+
+```
+"Communication pattern choice depends on the USE CASE, not preference.
+
+DECISION MATRIX I use:
+- Need immediate response? --> Sync (REST/gRPC)
+- Can the caller continue without waiting? --> Async (Kafka)
+- Need to broadcast to multiple consumers? --> Kafka topic
+- Need request-reply but async? --> Kafka with reply topic or correlation ID
+- High throughput, low latency? --> gRPC (binary, HTTP/2, streaming)
+
+IN MY CURRENT PROJECT:
+- Quote Service -> Pricing Engine: We STARTED with REST, hit cascading
+  failure at 500 concurrent users. Pricing Engine slowed to 3s, Quote
+  Service thread pool exhausted, API Gateway timed out. Classic
+  distributed monolith problem.
+
+  FIX: Moved to async via Kafka. Quote Service publishes price-request
+  event, continues with 'PENDING' status. Pricing Engine publishes
+  price-calculated event. Client polls or uses WebSocket for real-time
+  update. Response went from 3s to 200ms (async ack).
+
+- Inventory Check: Kept as REST with circuit breaker because traders
+  need REAL-TIME stock availability. Added:
+  * Resilience4j circuit breaker (50% failure -> open)
+  * Bulkhead (max 20 concurrent calls to inventory)
+  * Fallback: Return last-known inventory from Redis cache
+  * Timeout: 2s (if inventory takes > 2s, use cached value)
+
+TRADE-OFF I learned:
+Async is not always better. We made notification service async via Kafka
+but then couldn't guarantee delivery ORDER. Traders got 'trade settled'
+email BEFORE 'trade executed' email. Fix: Kafka partition by tradeId
+ensures ordering per trade.
+
+gRPC CONSIDERATION:
+For internal service-to-service in our new project, we're evaluating gRPC.
+Benefits: 10x faster than REST (protobuf), streaming, code generation.
+Challenges: Harder to debug (binary), needs proto file management, load
+balancing is trickier (HTTP/2 multiplexing defeats round-robin)."
+```
+
+**What makes it deep:** Decision matrix, real project example with failure story, specific numbers, trade-offs learned from mistakes, forward-looking technology evaluation.
+
+---
+
+### Example 3: "How do you ensure data consistency across microservices?"
+
+**SHALLOW Answer:**
+
+```
+"We use the Saga pattern with compensation. If one service fails,
+we undo the previous steps."
+```
+
+**DEEP Answer (Sr. Tech Lead):**
+
+```
+"Data consistency strategy depends on the BUSINESS requirement,
+not a one-size-fits-all pattern.
+
+I categorize consistency needs:
+
+1. STRONG CONSISTENCY (must be correct NOW):
+   - Bank balance after transfer
+   - Stock quantity after purchase
+   --> Use: Database transaction with SELECT FOR UPDATE
+   --> If cross-service: Saga with orchestration + idempotency keys
+
+2. EVENTUAL CONSISTENCY (can lag a few seconds):
+   - Search index after product update
+   - Analytics dashboard
+   - Notification after order
+   --> Use: Kafka events, CQRS read models
+
+3. READ-YOUR-WRITES CONSISTENCY:
+   - User updates profile, sees old data on next page load
+   --> Use: Write to primary DB, read from primary for N seconds
+       after write, then allow read replica
+
+IMPLEMENTATION IN MY PROJECT:
+
+For fund transfers (strong consistency):
+- Saga Orchestrator with 5 steps
+- Each step has an idempotency key (saga_id + step_name)
+- Saga state persisted in DB -- if orchestrator crashes, recovery job
+  picks up stuck sagas within 60 seconds
+- Compensation is ALSO idempotent -- safe to retry
+- We use SELECT FOR UPDATE on account balance to prevent double-debit
+- Critical lesson: We discovered a race condition where two concurrent
+  transfers could both pass the balance check. Fix: Pessimistic locking
+  with SELECT FOR UPDATE NOWAIT -- second transaction immediately fails
+  instead of waiting
+
+For order events (eventual consistency):
+- Outbox pattern: Order + outbox event in SAME DB transaction
+- Debezium CDC reads outbox table, publishes to Kafka
+- Why Debezium over polling? Polling has latency (poll interval) and
+  adds load to DB. CDC captures changes in real-time from WAL.
+- Consumers are idempotent (Redis SETNX with event_id)
+
+MONITORING:
+- We track 'consistency_lag_seconds' metric: time between DB write
+  and Kafka consumer processing the event. Alert if > 30 seconds.
+- We have a reconciliation job that runs nightly: compares Order DB
+  with Inventory DB and flags mismatches. In 6 months, we found
+  3 inconsistencies -- all caused by Kafka consumer bugs, not
+  infrastructure issues."
+```
+
+---
+
+## 📋 The "So What?" Test — Add This to EVERY Answer
+
+After every technical statement, ask yourself **"So what? Why does this matter in production?"**
+
+| Your Statement | "So What?" Addition |
+|---------------|---------------------|
+| "We use Redis for caching" | "...which reduced DB load by 80% and p99 latency from 500ms to 50ms" |
+| "We use Kafka for messaging" | "...with exactly-once semantics because duplicate trade execution costs real money" |
+| "We use Docker containers" | "...with multi-stage builds that reduced image size from 800MB to 120MB, cutting deployment time by 70%" |
+| "We follow SOLID principles" | "...which allowed us to add a new payment provider in 2 days instead of 2 weeks by just implementing a new PaymentGateway interface" |
+| "We use circuit breaker" | "...which prevented a 30-minute outage when the payment service went down. Without it, our entire platform would have cascaded" |
+| "We write unit tests" | "...with 85% coverage, but more importantly, we have contract tests between services that caught 12 breaking changes before production in the last quarter" |
+
+---
+
+## 📋 Topic-Specific Depth Additions — What Sr. Tech Leads Must Add
+
+---
+
+### When Asked About Java/Spring:
+
+**Always mention these (most candidates forget):**
+
+```
+1. MEMORY IMPACT:
+   "This approach uses more heap because..." or
+   "We chose streams over for-loops for readability, but profiled
+    to ensure no excessive object allocation in hot paths"
+
+2. THREAD SAFETY:
+   "This is thread-safe because..." or
+   "We use ConcurrentHashMap instead of synchronizedMap because
+    it allows concurrent reads without locking"
+
+3. GC IMPACT:
+   "For our trading service, we switched to ZGC because G1GC's
+    200ms pauses caused missed market ticks"
+
+4. STARTUP TIME:
+   "We reduced Spring Boot startup from 45s to 12s by using
+    lazy initialization and excluding unused auto-configurations"
+```
+
+---
+
+### When Asked About Database:
+
+**Always mention these:**
+
+```
+1. QUERY PLAN:
+   "I always check EXPLAIN ANALYZE before deploying any new query.
+    Last month I caught a sequential scan on a 50M row table"
+
+2. INDEX IMPACT ON WRITES:
+   "We have 5 indexes on the orders table. Each INSERT updates all 5.
+    We monitor insert latency and dropped 2 unused indexes last quarter"
+
+3. CONNECTION TO APPLICATION:
+   "The query is fast (2ms) but the connection pool was exhausted
+    because we had 200 concurrent requests with pool size 10.
+    We solved it with read replicas for read-heavy endpoints"
+
+4. DATA GROWTH:
+   "This table grows 1M rows/day. We partition by month and archive
+    data older than 1 year to cold storage (S3 + Athena for queries)"
+```
+
+---
+
+### When Asked About Architecture:
+
+**Always mention these:**
+
+```
+1. TRADE-OFFS:
+   "We chose X over Y because... but the downside is..."
+   NEVER say something is "better" -- always show trade-off awareness
+
+2. SCALE NUMBERS:
+   "This handles 10K requests/second per pod"
+   "Our Kafka topic has 20 partitions for 20 consumers"
+   "Database has 50M rows, growing 1M/day"
+
+3. FAILURE SCENARIOS:
+   "What happens when Redis is down? We fall back to DB"
+   "What happens when Kafka consumer lags? We alert at 10K lag"
+   "What happens during deployment? Zero downtime via rolling update"
+
+4. COST:
+   "We evaluated managed Kafka (Confluent Cloud) vs self-hosted.
+    Self-hosted saves $5K/month but requires DevOps expertise.
+    We chose managed because our team is 8 developers, no dedicated DevOps"
+
+5. TEAM IMPACT:
+   "We chose Spring Boot over Quarkus because the team has 10 years
+    of Spring experience. Productivity matters more than 200ms faster startup"
+```
+
+---
+
+## 📋 Sr. Tech Lead "Power Phrases" — Use These in Interviews
+
+These phrases signal senior-level thinking:
+
+```
+DECISION MAKING:
+- "The trade-off we evaluated was..."
+- "We chose this approach because of [constraint], but if [constraint changes], we'd reconsider"
+- "I created an ADR (Architecture Decision Record) for this decision"
+
+PRODUCTION EXPERIENCE:
+- "In production, we learned that..."
+- "We discovered this during a load test / incident / code review"
+- "The monitoring showed us that..."
+
+TEAM LEADERSHIP:
+- "I established a guideline for the team that..."
+- "During code reviews, I noticed a pattern of [mistake], so I created a team-wide standard"
+- "I mentored a junior developer on this -- they initially did X, I guided them to Y because..."
+
+BUSINESS AWARENESS:
+- "This directly impacts revenue because..."
+- "The SLA requires 99.9% uptime, which means max 8.7 hours downtime/year"
+- "The regulatory requirement (MiFID II / GDPR) requires us to..."
+
+FORWARD THINKING:
+- "For the next iteration, I'm evaluating..."
+- "This works at our current scale (10K TPS), but at 100K TPS we'd need to..."
+- "Java 21 virtual threads would simplify this -- we're planning the migration"
+```
+
+---
+
+## 📋 Common Questions Where Depth Is Lost — Quick Reference
+
+| Question | Shallow Trap | What Sr. Lead Must Add |
+|----------|-------------|----------------------|
+| "How does Spring Boot auto-config work?" | "It scans classpath and configures beans" | Explain @Conditional annotations, custom starters you've built, debugging with --debug flag, startup performance impact |
+| "How do you handle exceptions?" | "We use @ControllerAdvice" | Global exception hierarchy, error response standardization across 15 microservices, correlation IDs in error responses, PII masking in logs |
+| "What is your testing strategy?" | "Unit tests, integration tests, e2e" | Test pyramid ratios (70/20/10), contract tests between services, TestContainers for DB tests, mutation testing for quality, flaky test policy |
+| "How do you deploy?" | "We use Jenkins/GitHub Actions" | Blue-green vs canary decision, rollback strategy, database migration safety, feature flags, deployment frequency metrics (DORA) |
+| "How do you monitor?" | "We use Prometheus and Grafana" | SRE golden signals, custom business metrics, alert fatigue prevention, runbooks for each alert, on-call rotation, incident response SLA |
+| "How do you handle security?" | "JWT tokens and Spring Security" | OWASP Top 10 mitigations, secret rotation (Vault), mTLS between services, NetworkPolicy in K8s, penetration test findings you fixed |
+| "Describe your microservices architecture" | "API Gateway, services, Kafka, DB" | Service boundaries (how you decided), data ownership, shared-nothing, eventual consistency strategy, service mesh evaluation |
+
+---
+
+## 📋 The 30-Second Rule — Structure Every Answer Like This
+
+```
++----------------------------------------------------------+
+| FIRST 30 SECONDS: Give the direct answer                 |
+|   "We use the Saga pattern with orchestration"           |
++----------------------------------------------------------+
+| NEXT 60 SECONDS: Explain HOW with specifics              |
+|   "The orchestrator has 5 steps: Trade -> Compliance ->  |
+|    Risk -> Debit -> Execute. State is persisted in DB"   |
++----------------------------------------------------------+
+| NEXT 60 SECONDS: Share WHY and TRADE-OFFS                |
+|   "We chose orchestration over choreography because      |
+|    we have 6 steps and regulators need full audit trail.  |
+|    Trade-off: single point of failure, but we mitigate   |
+|    with saga state persistence and recovery job"         |
++----------------------------------------------------------+
+| FINAL 30 SECONDS: Production story or lesson             |
+|   "In production, we discovered that compensation must   |
+|    be idempotent. A network retry caused double-credit.  |
+|    We added unique constraint on saga_id + step_name"    |
++----------------------------------------------------------+
+```
+
+---
+
+## 📋 Interview Self-Assessment Checklist
+
+After each answer, mentally check:
+
+```
+[ ] Did I mention SPECIFIC NUMBERS? (TPS, latency, team size, data size)
+[ ] Did I mention a TRADE-OFF? (chose X over Y because...)
+[ ] Did I share a PRODUCTION STORY? (we learned that... / we discovered...)
+[ ] Did I mention MONITORING? (how would I know if this breaks?)
+[ ] Did I mention TEAM IMPACT? (how did this affect the team / process?)
+[ ] Did I mention BUSINESS VALUE? (why does the business care?)
+[ ] Did I mention what I'd do DIFFERENTLY next time?
+```
+
+If you checked fewer than 3 boxes, your answer lacked depth.
+
+---
+
+
+
+
+# 🏅 Sr. Tech Lead Ready Answers — Top 12 Questions with Full Depth
+
+> **How to use:** These 12 questions will DEFINITELY be asked. Each has SHALLOW vs DEEP comparison.
+
+---
+
+## STLR-1. Spring Boot auto-configuration internals
+
+**SHALLOW:** "Spring Boot scans classpath and auto-configures beans."
+
+**DEEP (Sr. Tech Lead):**
+
+Auto-configuration is conditional bean registration. @SpringBootApplication includes @EnableAutoConfiguration, triggering AutoConfigurationImportSelector. It reads META-INF/spring/...AutoConfiguration.imports (150+ classes). Each has conditions: @ConditionalOnClass, @ConditionalOnMissingBean, @ConditionalOnProperty.
+
+**Production depth I always add:**
+- Debugged custom ObjectMapper overridden by Jackson auto-config. Fix: @AutoConfigureBefore
+- Startup: 45s to 12s by excluding 30 unused auto-configs + lazy init + Spring AOT
+- Built comviva-logging-spring-boot-starter for 15 services. Zero config for teams.
+- Debug tip: --debug flag shows full auto-config report
+
+---
+
+## STLR-2. Distributed transactions across microservices
+
+**SHALLOW:** "We use Saga pattern with compensation."
+
+**DEEP (Sr. Tech Lead):**
+
+**Decision framework I use:**
+
+| Scenario | Pattern | Example |
+|---|---|---|
+| Must be consistent NOW | Saga Orchestration + pessimistic lock | Fund transfer |
+| Can lag seconds | Outbox + Kafka + idempotent consumer | Order notification |
+| Read-your-writes | Write to primary, read primary for N sec | Profile update |
+
+**Real project:** Quote-to-Order had 5 steps across 4 services. Started with choreography, migrated to orchestration with saga state in DB.
+
+**Lessons:**
+1. Compensation must be idempotent (unique constraint on saga_id + step_name)
+2. Timeout: step succeeded but saga thought it failed. Added reconciliation job every 5 min.
+3. Outbox pattern: app crashed after DB commit, before Kafka publish. Debezium CDC fixed this.
+4. Monitoring: Grafana dashboard with completion time 2.3s, failure rate 0.02%
+
+---
+
+## STLR-3. Distributed caching strategy
+
+**SHALLOW:** "We use Redis with TTL."
+
+**DEEP:** Layered: L1 (Caffeine, in-JVM, 5ms) -> L2 (Redis, shared, 20ms) -> DB (100ms)
+
+**Production numbers:** Before: p99=450ms, DB CPU 80%. After: p99=15ms, DB CPU 20%. Hit: L1=85%, L2=12%, DB=3%
+
+**Problems solved:**
+1. **Cache stampede:** 500 concurrent on expiry. Fix: Redis SETNX distributed lock.
+2. **Stale data:** Fix: write-through + Redis Pub/Sub invalidation to all pods.
+3. **Memory pressure:** L1 grew to 2GB. Fix: Caffeine maximumSize + softValues.
+4. **Serialization:** JdkSerializer slow. Switched to Jackson JSON -- 3x faster.
+5. **Cold start:** Fix: pre-warm top-1000 products on startup.
+
+---
+
+## STLR-4. How did you decide microservice boundaries?
+
+**SHALLOW:** "Split by domain, each has its own DB."
+
+**DEEP:** Event Storming workshop (2 days), identify aggregates, team ownership test.
+
+**Service map:**
+
+| Service | Team | DB | Why Separate |
+|---|---|---|---|
+| Quote | 4 devs | PostgreSQL | Changes weekly |
+| Order | 3 devs | PostgreSQL | Stable monthly |
+| Inventory | 2 devs | Redis+PG | High-read scale |
+| Notification | 2 devs | MongoDB | Different SLA |
+| Salesforce Sync | 2 devs | PostgreSQL | External dependency |
+
+**Key:** Merged Quote+Pricing (changed together 90%). Deploy freq: 3/week vs 1/month.
+
+---
+
+## STLR-5. High availability and failure handling
+
+**SHALLOW:** "Circuit breakers and retry."
+
+**DEEP -- 4 layers:**
+
+| Layer | What | Examples |
+|---|---|---|
+| 1. Prevent | Infrastructure | Multi-AZ, 3 replicas, read replicas |
+| 2. Contain | Application | Circuit breaker, bulkhead, retry, fallback |
+| 3. Detect | Observability | SRE golden signals, alerts |
+| 4. Recover | Operations | Rollback < 60s, feature flags, runbooks |
+
+**SRE Golden Signals:**
+
+| Signal | Metric | Alert |
+|---|---|---|
+| Latency | p99 | > 500ms for 5 min |
+| Errors | 5xx rate | > 1% for 2 min |
+| Traffic | RPS | Sudden 5x spike |
+| Saturation | CPU/pool | > 80% for 5 min |
+
+**Incident:** Payment provider outage 3AM. CB opened. Fallback queued payments. Zero user errors.
+
+---
+
+## STLR-6. Database performance optimization
+
+**SHALLOW:** "Add indexes, use EXPLAIN."
+
+**DEEP:** Order listing 2.5s to 8ms (312x):
+1. Composite index (equality first): `CREATE INDEX idx ON orders (status, created_at DESC)`
+2. N+1 fix: @EntityGraph JOIN FETCH (101 queries to 1)
+3. DTO projection: 4 columns instead of 30
+
+**Pool math:** 20 pods x 10 conn = 200. PG default max_connections=100! Added PgBouncer.
+
+**Partitioning:** trade_audit 2M rows/day. Partition by quarter.
+
+---
+
+## STLR-7. CI/CD and zero-downtime deployments
+
+**SHALLOW:** "Jenkins, Docker, K8s."
+
+**DEEP -- Quality gates:**
+
+| Gate | Criteria | Blocks? |
+|---|---|---|
+| Unit tests | 100% pass, 80% coverage | Yes |
+| SonarQube | Zero critical | Yes |
+| OWASP | Zero high vulns | Yes |
+| Canary | Error < 0.5% | Yes (auto-rollback) |
+
+**DB migration:** Expand-contract pattern. 5 deploys for safety.
+
+**DORA:**
+
+| Metric | Value | Target |
+|---|---|---|
+| Deploy freq | 3/week/svc | On-demand |
+| Lead time | 2 days | < 1 day |
+| Failure rate | 3% | < 5% |
+| MTTR | 8 min | < 1 hour |
+
+---
+
+## STLR-8. Kafka in production
+
+**SHALLOW:** "Event-driven messaging."
+
+**DEEP:**
+- **Lag:** Payment consumer 2hrs behind. Fix: batch 100/poll, partitions 6->20, async fraud check.
+- **Ordering:** Partition by tradeId. Gotcha: rebalance. Fix: CooperativeStickyAssignor + static membership.
+- **Exactly-once:** Idempotent producer + acks=all + Redis SETNX dedup.
+- **Numbers:** 15 topics, 200 partitions, 50K msg/min, lag < 100, p99 200ms.
+
+---
+
+## STLR-9. Microservices security
+
+**SHALLOW:** "JWT and Spring Security."
+
+**DEEP -- 4 layers:**
+
+| Layer | What | Implementation |
+|---|---|---|
+| Edge | Gateway | OAuth2, rate limit, WAF, SSL |
+| Svc-to-svc | Zero trust | mTLS, JWT propagation, NetworkPolicy |
+| App | Spring Security | RBAC, @PreAuthorize |
+| Data | Encryption | KMS, TLS, PII masking, Vault |
+
+**OWASP mitigations:**
+
+| Vulnerability | Fix |
+|---|---|
+| Injection | Parameterized queries, Bean Validation |
+| Broken Auth | Short JWT (15min) + refresh rotation |
+| Sensitive Data | TLS, field-level encryption |
+| Broken Access | @PreAuthorize user owns resource |
+| Known Vulns | OWASP Dep Check in CI |
+
+**Real:** Pen test found IDOR. Fixed with @PreAuthorize.
+
+---
+
+## STLR-10. Production incident response
+
+**SHALLOW:** "Restarted the service."
+
+**DEEP -- minute-by-minute:**
+
+```
+14:05 - PagerDuty: 60% errors
+14:07 - Pool exhausted (pending=15)
+14:12 - Bad query: LIKE with leading wildcard on 50M rows
+14:15 - Kill query, pool recovers
+14:20 - Root cause: new dashboard
+14:25 - Feature flag off
+14:30 - All clear (25 min)
+```
+
+**Post-mortem:**
+
+| Action | Impact |
+|---|---|
+| statement_timeout=10s | No query runs forever |
+| leak-detection: 60s | Alert on held connections |
+| CI EXPLAIN ANALYZE | Catch before deploy |
+| Alert pending > 0 | Earliest pool signal |
+
+**Culture:** Blame-free. "How did process allow this?" Added guardrails.
+
+---
+
+## STLR-11. API versioning
+
+**SHALLOW:** "URL /v1/ /v2/."
+
+**DEEP:**
+
+| Change | Bump? | Example |
+|---|---|---|
+| Add optional field | No | Add middleName |
+| Add endpoint | No | GET /orders/summary |
+| Remove field | YES | Remove legacyId |
+| Rename field | YES | userName->displayName |
+| Change type | YES | String->BigDecimal |
+
+**Contract testing:** Spring Cloud Contract caught 12 breaking changes before prod.
+
+---
+
+## STLR-12. Team leadership
+
+**SHALLOW:** "Agile, sprints, reviews."
+
+**DEEP:**
+
+| Role | Count | Responsibility |
+|---|---|---|
+| Sr. Tech Lead | 1 | Architecture, mentoring |
+| Senior | 2 | Feature leads, review gates |
+| Mid-level | 3 | Implementation, on-call |
+| Junior | 2 | Bug fixes, learning |
+
+**Practices:** 2 PR approvals, 400-line max, 80% coverage, 20% tech debt.
+**Mentoring:** Bugs (wk1-4) -> Own feature (mo2) -> Review others (mo3) -> Lead (mo6).
+
+| Metric | Value | Target |
+|---|---|---|
+| PR review time | 3.5 hrs | < 4 hrs |
+| Deploy freq | 3/wk/svc | On-demand |
+| Bug escape | 2/sprint | < 1 |
+| On-call pages | 4/mo | < 2 |
+| Team satisfaction | 4.2/5 | > 4.0 |
+
+---
+
+## Quick Reference -- 12 Deep Answers
+
+| # | Topic | Key Depth Signals |
+|---|---|---|
+| 1 | Spring Auto-Config | Custom starter, startup 45s->12s, --debug |
+| 2 | Distributed Txns | Saga state in DB, idempotent compensation |
+| 3 | Caching | L1/L2 layers, stampede, warming |
+| 4 | Service Boundaries | Event Storming, team ownership |
+| 5 | High Availability | 4 layers, CB config, incident story |
+| 6 | DB Performance | EXPLAIN, composite index, pool math |
+| 7 | CI/CD | Quality gates, canary, DORA metrics |
+| 8 | Kafka | Lag fix, ordering, exactly-once |
+| 9 | Security | 4 layers, OWASP, pen test |
+| 10 | Incidents | Timeline, post-mortem, culture |
+| 11 | API Versioning | Change matrix, contract testing |
+| 12 | Team Leadership | Structure, mentoring, metrics |
+
+---
+
+
+
+# 🧠 Sr. Tech Lead Deep Scenario Questions — Microservices, Design Patterns, CI/CD, Cloud & Security
+
+> **Target:** 10+ years Sr. Tech Lead. Scenario-based with in-depth answers.
+> **Topics:** Microservice Architecture, Design Patterns, CI/CD (AWS/GCP), Helm, Docker, K8s, OpenShift, Keycloak
+
+---
+
+## 🏗 Section A: Microservice Architecture Design
+
+---
+
+### STLD-1. Design a new e-commerce platform. Walk through your architecture decisions.
+
+**Deep Answer:**
+
+**Step 1: Start Modular Monolith** (not microservices day 1)
+- Clear module boundaries (Order, Payment, Inventory)
+- In-process events (Spring ApplicationEvent)
+- Extract services when signals appear:
+
+| Signal | Action | Example |
+|---|---|---|
+| Module changes 5x more | Extract | Pricing rules change daily |
+| Different scaling needs | Extract | Search needs 10x instances |
+| Different SLA | Extract | Notification can lag |
+| Different team owns it | Extract | Mobile team owns Profile |
+| Different tech stack | Extract | ML needs Python |
+
+**Architecture after extraction:**
+
+```
+Client
+  |
+API Gateway (Spring Cloud Gateway + Keycloak)
+  |
+  +---+---+---+---+
+  |   |   |   |   |
+Order Payment Inventory Search Notification
+  |   |   |   |   |
+ PG   PG  Redis+PG  ES   MongoDB
+          |
+     Kafka (Event Bus)
+```
+
+**Key decisions (documented in ADRs):**
+1. **Sync vs Async:** Order->Payment sync (user waits), Order->Notification async (Kafka)
+2. **DB per service:** No shared DB. Non-negotiable.
+3. **Event sourcing for Audit:** Regulatory requirement
+4. **CQRS for Search:** Write to PG, read from ES via Kafka CDC
+
+**Lesson from Comviva:** Started with 12 microservices for 8 developers. Operational overhead crushing. Consolidated to 5 services. Velocity increased 40%.
+
+---
+
+### STLD-2. How do you handle cross-cutting concerns across 15+ microservices?
+
+**Deep Answer — 3 layers:**
+
+**Layer 1: Custom Spring Boot Starter**
+- Structured JSON logging, correlation ID propagation, global error handling, common metrics
+- Uses @AutoConfiguration + @ConditionalOnMissingBean
+- Teams just add dependency, zero config
+
+**Layer 2: Service Mesh (Istio)**
+- mTLS, retry, timeout, circuit breaker at infrastructure level
+- Distributed tracing (automatic span injection)
+
+**Layer 3: API Gateway**
+- JWT validation, rate limiting, CORS, request transformation
+
+**Rule:** Business logic → starter. Infrastructure → mesh. Edge → gateway.
+
+---
+
+### STLD-3. Read-heavy AND write-heavy service design (CQRS Deep Dive)
+
+**Scenario:** Product Catalog: 50K writes/day, 5M reads/day.
+
+| Aspect | Write Model (PG) | Read Model (ES) |
+|---|---|---|
+| Schema | Normalized 3NF | Denormalized flat docs |
+| Optimized for | ACID consistency | Fast search/filter |
+| Scale | Vertical | Horizontal (add nodes) |
+| Latency | 10-50ms writes | 2-5ms reads |
+
+**Implementation:** Debezium CDC captures PG changes, publishes to Kafka, ES consumer updates search index. Lag: 100-500ms (acceptable for catalog).
+
+```java
+// Write: standard JPA
+@Transactional
+public Product updateProduct(String id, ProductUpdateRequest req) {
+    Product p = repo.findById(id).orElseThrow();
+    p.update(req);
+    return repo.save(p); // Debezium CDC auto-captures
+}
+
+// Read: Elasticsearch
+public SearchResult search(String query, Pageable page) {
+    return esClient.search(s -> s.index("products")
+        .query(q -> q.multiMatch(m -> m.query(query)
+            .fields("name^3", "description", "category"))),
+        ProductDocument.class);
+}
+```
+
+---
+
+## 🎭 Section B: Design Patterns in Microservices
+
+---
+
+### STLD-4. Which design patterns have you used? Real scenarios.
+
+| Pattern | Where Used | Why |
+|---|---|---|
+| API Gateway | All projects | Single entry, auth, rate limit |
+| Circuit Breaker | Payment->Fraud | Prevent cascading failure |
+| SAGA Orchestration | Quote-to-Order | 5-step distributed txn |
+| Outbox Pattern | Order->Kafka | Reliable event publishing |
+| CQRS | Product search | Separate read/write scale |
+| Strangler Fig | Monolith migration | Gradual extraction |
+| Sidecar | Istio mTLS/logging | Cross-cutting without code |
+| Bulkhead | Thread pool isolation | Limit blast radius |
+| Event Sourcing | Audit trail | Complete state history |
+| Retry+Backoff | External API calls | Transient failure handling |
+| DB per Service | All microservices | Data ownership |
+| BFF | Mobile vs Web | Optimized responses |
+
+**Pattern selection decision tree:**
+
+```
+Need to call another service?
+  Sync response needed?   --> REST + Circuit Breaker
+  Can be async?           --> Kafka Event
+  Guaranteed delivery?    --> Outbox + Kafka
+
+Transaction across services?
+  2-3 simple steps?       --> Choreography Saga
+  4+ complex steps?       --> Orchestration Saga
+
+Read/Write ratio > 10:1?
+  Yes --> CQRS
+  No  --> Single model
+```
+
+---
+
+### STLD-5. Strangler Fig migration — real project
+
+**Situation:** Legacy monolith (500K LOC, single WAR, shared Oracle DB)
+
+| Month | Action | Risk |
+|---|---|---|
+| 1-2 | API Gateway in front of monolith | Low |
+| 3 | Extract Notification (least coupled) | Low |
+| 4-5 | Extract Pricing Engine (changes most) | Medium |
+| 6-7 | Extract Quote Management | Medium |
+| 8-9 | Extract Order with Saga | High |
+| 10-11 | Extract CRM/Salesforce integration | Medium |
+| 12 | Decommission monolith shell | Low |
+
+**Key:** Debezium CDC for data sync during transition. Feature flags for rollback. Anti-corruption layer between new/old. Parallel run to compare responses.
+
+**What went wrong:** Forgot batch job that directly updated quote DB. New service had its own DB, data diverged for 2 days. **Lesson:** Map ALL data access paths.
+
+---
+
+### STLD-6. Backend for Frontend (BFF) pattern
+
+**Scenario:** Mobile needs 3 fields, Web needs 20, Admin needs everything.
+
+```
+Mobile App    Web Dashboard    Admin Panel
+    |              |              |
+Mobile BFF     Web BFF       Admin BFF
+    |              |              |
+    +----------+----------+
+    |                    |
+ Order Service      Product Service
+```
+
+**Why:** Bandwidth (mobile), aggregation (web), security (admin sees audit fields). Each BFF owned by its frontend team.
+
+---
+
+## ☁ Section C: CI/CD — AWS, GCP, Helm, Docker, K8s, OpenShift
+
+---
+
+### STLD-7. Full CI/CD pipeline for Spring Boot on AWS EKS
+
+```
+Push code
+  |
+BUILD: mvn package + SonarQube + OWASP check
+  |
+DOCKER: multi-stage build + push ECR + Trivy scan
+  |
+STAGING: helm upgrade + integration tests + contract tests
+  |
+PRODUCTION: manual approval + canary 10% + monitor + rollout
+  |
+POST: smoke tests + Slack notification
+```
+
+**AWS components:**
+
+| Component | AWS Service | Purpose |
+|---|---|---|
+| Registry | ECR | Docker images |
+| K8s | EKS | Run pods |
+| Secrets | Secrets Manager | DB passwords, API keys |
+| DB | RDS PostgreSQL | Multi-AZ auto-failover |
+| Cache | ElastiCache Redis | Cluster mode |
+| Monitoring | CloudWatch + Prometheus | Metrics and alerts |
+| LB | ALB | Ingress controller |
+| IaC | Terraform | Infrastructure as Code |
+
+**Dockerfile (production):**
+
+```dockerfile
+FROM maven:3.9-eclipse-temurin-21 AS builder
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+FROM eclipse-temurin:21-jre-alpine
+RUN addgroup -S app && adduser -S app -G app
+USER app
+COPY --from=builder /app/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-XX:+UseZGC", "-XX:MaxRAMPercentage=75.0", "-jar", "app.jar"]
+```
+
+---
+
+### STLD-8. Helm chart structure for microservices
+
+```
+helm/order-service/
+  Chart.yaml
+  values.yaml          # defaults
+  values-staging.yaml
+  values-prod.yaml
+  templates/
+    deployment.yaml
+    service.yaml
+    hpa.yaml
+    ingress.yaml
+    configmap.yaml
+    networkpolicy.yaml
+    pdb.yaml
+```
+
+**Key values.yaml settings:**
+
+```yaml
+replicaCount: 3
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 20
+  targetCPUUtilization: 60
+probes:
+  readiness: /actuator/health/readiness (30s delay)
+  liveness: /actuator/health/liveness (60s delay)
+```
+
+**Commands:**
+
+```bash
+helm upgrade --install order-service ./helm/order-service \
+  -f values-prod.yaml --set image.tag=$GIT_SHA -n production
+
+helm rollback order-service 1 -n production  # instant rollback
+```
+
+---
+
+### STLD-9. AWS vs GCP CI/CD comparison
+
+| Aspect | AWS (EKS) | GCP (GKE) |
+|---|---|---|
+| Registry | ECR | Artifact Registry |
+| K8s | EKS | GKE Autopilot |
+| CI/CD | CodePipeline / GitHub Actions | Cloud Build / GitHub Actions |
+| Secrets | Secrets Manager | Secret Manager |
+| IaC | Terraform or CDK | Terraform or Deployment Mgr |
+| Service Mesh | App Mesh or Istio | Anthos (managed Istio) |
+| Cost | More granular, complex | Simpler, Autopilot saves cost |
+
+**My preference:** GKE Autopilot for startups (less ops), EKS for enterprise (more control).
+
+---
+
+### STLD-10. Kubernetes vs OpenShift
+
+| Aspect | Kubernetes | OpenShift |
+|---|---|---|
+| Base | Open-source | K8s + Red Hat enterprise |
+| Security | Manual RBAC | SCCs built-in |
+| CI/CD | External tools | Built-in Tekton Pipelines |
+| Registry | External | Built-in integrated registry |
+| Routes | Ingress (manual) | Routes (simpler, auto TLS) |
+| CLI | kubectl | oc CLI + Web Console |
+| Cost | Free (self-managed) | Enterprise license |
+| Support | Community | Red Hat 24/7 |
+
+**Choose OpenShift:** Banking/govt strict security, need built-in CI/CD, Red Hat ecosystem.
+**Choose K8s:** Cloud-native team, want tool flexibility, cost-sensitive.
+
+```bash
+# OpenShift specific
+oc login https://api.cluster.example.com:6443
+oc new-project order-service
+oc new-app order-service:latest
+oc expose svc/order-service  # auto TLS route
+oc scale deployment/order-service --replicas=5
+```
+
+---
+
+## 🔐 Section D: Keycloak & Security Architecture
+
+---
+
+### STLD-11. Keycloak + Spring Boot microservices integration
+
+**Architecture:**
+
+```
+Browser/Mobile
+  | (1. Login)
+KEYCLOAK (IdP)
+  | (2. JWT access + refresh token)
+API Gateway
+  | (3. Validate JWT, extract roles, forward)
+Microservices
+  |-- Order: @PreAuthorize("hasRole(TRADER)")
+  |-- Admin: @PreAuthorize("hasRole(ADMIN)")
+```
+
+```yaml
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://keycloak.example.com/realms/myapp
+```
+
+```java
+@Configuration
+@EnableMethodSecurity
+public class SecurityConfig {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/actuator/health").permitAll()
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/**").authenticated())
+            .oauth2ResourceServer(o -> o.jwt(j -> j.jwtAuthenticationConverter(keycloakConverter())))
+            .build();
+    }
+
+    // Keycloak: roles in realm_access.roles, not standard scope
+    private JwtAuthenticationConverter keycloakConverter() {
+        var conv = new JwtGrantedAuthoritiesConverter();
+        conv.setAuthoritiesClaimName("realm_access.roles");
+        conv.setAuthorityPrefix("ROLE_");
+        var jwtConv = new JwtAuthenticationConverter();
+        jwtConv.setJwtGrantedAuthoritiesConverter(conv);
+        return jwtConv;
+    }
+}
+```
+
+**Keycloak features I use:**
+
+| Feature | Purpose | Example |
+|---|---|---|
+| Realm | Tenant isolation | One realm per client company |
+| Client Scopes | Fine-grained perms | "read:orders" vs "write:orders" |
+| User Federation | LDAP/AD connect | Enterprise SSO |
+| Identity Brokering | Social login | Google, GitHub |
+| Token Exchange | Service-to-service | Svc A gets token for Svc B |
+| Refresh Rotation | Security | New refresh token per use |
+| Admin Events | Audit | Track all Keycloak changes |
+
+**Gotcha:** Keycloak roles are in `realm_access.roles`, NOT standard `scope`. Must write custom JwtAuthenticationConverter.
+
+---
+
+### STLD-12. Service-to-service auth in zero-trust
+
+| Approach | How | When |
+|---|---|---|
+| JWT Propagation | Gateway validates, passes downstream | User context needed |
+| Client Credentials | Service gets own Keycloak token | Background jobs |
+| mTLS (Istio) | Mutual TLS between pods | Infrastructure level |
+
+**Best practice for banking:** ALL THREE. mTLS for transport, JWT for user context, client creds for batch jobs.
+
+```java
+// Client Credentials: Order Service calling Payment Service
+return webClient.post().uri("http://payment-svc/api/payments")
+    .attributes(clientRegistrationId("payment-service"))
+    .bodyValue(request).retrieve().bodyToMono(PaymentResult.class).block();
+```
+
+---
+
+## 🔥 Section E: Advanced Production Scenarios
+
+---
+
+### STLD-13. Process 10K events/sec from Kafka
+
+| Optimization | Before | After | Improvement |
+|---|---|---|---|
+| Batch DB inserts | 1 per msg | 500 in 1 batch | 50x |
+| Partitions | 6 | 20 | 3x parallelism |
+| Async non-critical | Sync fraud check | Publish to fraud topic | 5x latency |
+| Auto-commit | Every 5s | Manual after batch | No reprocessing |
+
+**Result:** 500/sec/consumer x 20 consumers = 10K/sec, sub-second latency.
+
+```java
+@KafkaListener(topics = "trade-events", concurrency = "20",
+    containerFactory = "batchListenerFactory")
+public void processBatch(List<ConsumerRecord<String, TradeEvent>> records) {
+    List<Trade> trades = records.stream().map(r -> map(r.value())).toList();
+    tradeRepository.saveAll(trades); // batch insert
+}
+```
+
+---
+
+### STLD-14. Config management across 15 services and environments
+
+```
+Layer 1: application.yml (defaults, in code)
+Layer 2: ConfigMap / Spring Cloud Config (per env)
+Layer 3: Vault / Secrets Manager (sensitive, encrypted)
+```
+
+| Config | Dev | Staging | Production |
+|---|---|---|---|
+| Replicas | 1 | 2 | 3-20 (HPA) |
+| DB | H2 | RDS small | RDS Multi-AZ |
+| Log level | DEBUG | INFO | WARN |
+| Secrets | .env file | K8s Secret | Vault |
+
+---
+
+### STLD-15. Distributed tracing across 10+ services
+
+**Micrometer + OpenTelemetry (Spring Boot 3+):**
+
+```yaml
+management.tracing.sampling.probability: 1.0  # 100% dev, 10% prod
+management.otlp.tracing.endpoint: http://otel-collector:4318/v1/traces
+```
+
+**What I trace:** HTTP (auto), Kafka (header propagation), DB (JDBC), Redis (Lettuce), custom business spans.
+
+**Prod tip:** Sample 10% normally. Always trace 100% of ERROR requests.
+
+---
+
+### STLD-16. Database schema migrations across 15 microservices
+
+**Tool:** Flyway. **Rules:**
+
+| Rule | Why |
+|---|---|
+| Forward-only migrations | Never edit applied migration |
+| Backward-compatible | Old code must still work |
+| Test on prod-size data | CREATE INDEX takes hours on 50M rows |
+| Migration before deploy | New code expects new schema |
+| Rollback = new migration | V3__revert_v2.sql |
+
+**Pipeline:** Flyway migrate → Deploy new code → If deploy fails, old code still works (schema is backward-compatible).
+
+---
+
+## Quick Reference — All 16 Scenario Questions
+
+| # | Topic | Key Depth |
+|---|---|---|
+| STLD-1 | E-commerce architecture | Modular monolith first, extract by signals |
+| STLD-2 | Cross-cutting concerns | Starter + mesh + gateway |
+| STLD-3 | CQRS deep dive | Debezium CDC, ES read model |
+| STLD-4 | Design patterns | 12 patterns with real mapping |
+| STLD-5 | Strangler Fig | 12-month plan, parallel run |
+| STLD-6 | BFF pattern | Mobile vs Web vs Admin |
+| STLD-7 | AWS EKS CI/CD | Full pipeline with Helm + canary |
+| STLD-8 | Helm charts | Values per env, HPA, PDB |
+| STLD-9 | AWS vs GCP | Side-by-side comparison |
+| STLD-10 | K8s vs OpenShift | When to choose each |
+| STLD-11 | Keycloak+Spring | JWT converter, realm roles |
+| STLD-12 | Zero-trust auth | JWT + client creds + mTLS |
+| STLD-13 | 10K events/sec | Batch + partitions |
+| STLD-14 | Config management | 3-layer, Vault secrets |
+| STLD-15 | Distributed tracing | OpenTelemetry + sampling |
+| STLD-16 | DB migrations | Flyway, backward-compatible |
+
+---
+
+
+---
+
+### STLD-17. What security measures do you take before designing a microservice architecture at HLD and LLD level?
+
+> **Why SocGen asks this:** Banking demands security-first architecture. They want to see that security is NOT an afterthought but baked into every design decision from day 1.
+
+## 🏗 Part 1: Security at HLD (High-Level Design) Level
+
+**At HLD, security is about ARCHITECTURE decisions — what goes where, what talks to what, and how data flows.**
+
+### HLD Security Measure 1: Zero-Trust Network Architecture
+
+**Principle:** "Never trust, always verify." Every service-to-service call is authenticated and authorized, even inside the private network.
+
+```
+TRADITIONAL (trust internal network):
+  Internet --> Firewall --> [All services trust each other]
+  Problem: If one service is compromised, attacker moves freely
+
+ZERO-TRUST (what I design):
+  Internet --> WAF --> API Gateway (AuthN)
+    |
+    |--> Service A --[mTLS + JWT]--> Service B
+    |--> Service A --[mTLS + JWT]--> Service C
+    Every call is: Encrypted (mTLS) + Authenticated (JWT) + Authorized (RBAC)
+```
+
+**What I define at HLD:**
+- mTLS between ALL services (via Istio service mesh — zero code change)
+- Kubernetes NetworkPolicy: only allowed services can talk to each other
+- No service directly exposed to internet — everything behind API Gateway
+- Egress control: services can only call whitelisted external URLs
+
+### HLD Security Measure 2: Authentication & Authorization Architecture
+
+```
+WHO authenticates?    --> API Gateway (validates JWT from Keycloak)
+WHO authorizes?       --> Each service (checks roles/permissions in JWT)
+WHO issues tokens?    --> Keycloak (centralized Identity Provider)
+Service-to-service?   --> Client Credentials flow (Keycloak)
+Background jobs?      --> Service Account tokens (short-lived)
+```
+
+**HLD decision I always document:**
+
+| Decision | Choice | Why |
+|---|---|---|
+| Identity Provider | Keycloak (self-hosted) | Banking: data must stay in our infra |
+| Token type | JWT (short-lived, 15 min) | Stateless, no token DB lookup |
+| Token validation | Gateway validates + services re-validate | Defense in depth |
+| Service-to-service | mTLS + Client Credentials | Transport + application security |
+| API key for external | API key + rate limit + IP whitelist | External partner access |
+| Session management | Stateless (no server sessions) | Horizontal scaling |
+
+### HLD Security Measure 3: Data Classification & Encryption Strategy
+
+**Before writing any code, I classify ALL data:**
+
+| Classification | Examples | Storage | Transit | Access |
+|---|---|---|---|---|
+| PUBLIC | Product catalog, prices | No encryption | TLS | Any authenticated user |
+| INTERNAL | Order details, invoices | Encrypted at rest (AES-256) | TLS | Role-based |
+| CONFIDENTIAL | Customer PII, email, phone | Encrypted at rest + field-level | mTLS | Need-to-know + audit |
+| RESTRICTED | Credit card, SSN, passwords | Tokenized or hashed (never stored raw) | mTLS | Special approval + audit |
+
+**Architecture decisions from classification:**
+- PII fields encrypted at application level (not just DB encryption) using AWS KMS / Vault Transit
+- Credit card numbers NEVER stored — use tokenization (payment gateway handles it)
+- Passwords: bcrypt with cost factor 12 (never MD5/SHA)
+- Audit log for every access to CONFIDENTIAL/RESTRICTED data
+- Data masking in logs: `email: d****@gmail.com`, never full PII in logs
+
+### HLD Security Measure 4: API Gateway as Security Perimeter
+
+```
+Internet
+  |
+WAF (Web Application Firewall)
+  |-- Blocks: SQL injection, XSS, bot traffic, DDoS
+  |
+API Gateway (Spring Cloud Gateway / Kong)
+  |-- Authentication: Validate JWT
+  |-- Rate Limiting: 1000 req/min per client
+  |-- IP Whitelisting: For partner APIs
+  |-- Request Validation: Size limit, content-type check
+  |-- CORS: Strict origin whitelist
+  |-- TLS Termination: HTTPS only
+  |-- Request/Response Logging: For audit (PII masked)
+  |
+Internal Microservices (never directly exposed)
+```
+
+### HLD Security Measure 5: Secrets Management Architecture
+
+| Level | Approach | When |
+|---|---|---|
+| NEVER | Hardcoded in code or config | Never ever |
+| Minimum | K8s Secrets (base64, not encrypted!) | Dev/staging only |
+| Standard | AWS Secrets Manager / GCP Secret Manager | Cloud workloads |
+| Banking Standard | HashiCorp Vault | Production banking apps |
+
+**What I design at HLD:**
+- Vault cluster with HA (3 nodes)
+- Auto-rotation: DB passwords rotate every 24 hours
+- Dynamic secrets: Each pod gets unique short-lived DB credentials
+- Audit: Every secret access logged (who accessed what, when)
+- Vault Agent Injector: Secrets injected into pods at runtime, never in YAML
+
+### HLD Security Measure 6: Network Segmentation
+
+```
+VPC / Virtual Network
+  |
+  +-- Public Subnet
+  |   |-- API Gateway / Load Balancer (only thing exposed)
+  |
+  +-- Private Subnet (Application)
+  |   |-- All microservices run here
+  |   |-- No direct internet access
+  |   |-- NAT Gateway for outbound (dependency downloads)
+  |
+  +-- Private Subnet (Data)
+      |-- PostgreSQL, Redis, Kafka
+      |-- Only application subnet can reach this
+      |-- No internet access at all
+```
+
+**Kubernetes level:**
+- NetworkPolicy: default-deny-all, then whitelist specific service-to-service
+- Separate namespaces: `trading`, `settlement`, `admin` — each with own policies
+- Pod Security Standards: restricted (no root, no privilege escalation)
+
+---
+
+## 🔒 Part 2: Security at LLD (Low-Level Design) Level
+
+**At LLD, security is about CODE-LEVEL decisions — how each service is implemented securely.**
+
+### LLD Security Measure 1: Input Validation (First Line of Defense)
+
+**Rule: NEVER trust any input. Validate everything at the boundary.**
+
+```java
+// WRONG: Trust client input
+public Order createOrder(@RequestBody OrderRequest req) {
+    return orderService.create(req); // No validation!
+}
+
+// CORRECT: Validate at every layer
+public Order createOrder(@Valid @RequestBody OrderRequest req) {
+    return orderService.create(req);
+}
+
+public class OrderRequest {
+    @NotNull
+    @Size(min = 1, max = 100)
+    private String productId;
+
+    @NotNull
+    @Min(1) @Max(10000)
+    private Integer quantity;
+
+    @NotNull
+    @DecimalMin("0.01") @DecimalMax("999999.99")
+    private BigDecimal price;
+
+    @Pattern(regexp = "^[a-zA-Z0-9-]+$") // No special chars!
+    private String customerRef;
+}
+```
+
+**What I validate:**
+- Type, size, range, pattern of every field
+- No SQL-injectable characters in string fields
+- File uploads: type whitelist, size limit, virus scan
+- Request body size limit at gateway (1MB max)
+- Rate limiting per user per endpoint
+
+### LLD Security Measure 2: SQL Injection Prevention
+
+```java
+// WRONG: String concatenation = SQL injection
+String sql = "SELECT * FROM users WHERE email = '" + email + "'";
+
+// CORRECT: Parameterized query (JPA does this automatically)
+@Query("SELECT u FROM User u WHERE u.email = :email")
+Optional<User> findByEmail(@Param("email") String email);
+
+// CORRECT: Spring Data derived query (safe by default)
+Optional<User> findByEmail(String email);
+
+// For native queries: ALWAYS use parameterized
+@Query(value = "SELECT * FROM users WHERE email = :email", nativeQuery = true)
+Optional<User> findByEmailNative(@Param("email") String email);
+```
+
+**Rule:** NEVER use string concatenation for SQL. JPA/Hibernate parameterizes by default. For native queries, always use `@Param`.
+
+### LLD Security Measure 3: Authentication & Authorization in Code
+
+```java
+@Configuration
+@EnableMethodSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
+            // 1. Disable CSRF (stateless JWT, not cookie-based)
+            .csrf(AbstractHttpConfigurer::disable)
+            // 2. Stateless sessions (no server-side state)
+            .sessionManagement(s -> s.sessionCreationPolicy(STATELESS))
+            // 3. URL-level authorization
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/actuator/health").permitAll()
+                .requestMatchers("/api/public/**").permitAll()
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/trades/**").hasAnyRole("TRADER", "ADMIN")
+                .anyRequest().authenticated())
+            // 4. JWT resource server
+            .oauth2ResourceServer(o -> o.jwt(Customizer.withDefaults()))
+            // 5. Security headers
+            .headers(h -> h
+                .contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self'"))
+                .frameOptions(fo -> fo.deny())
+                .xssProtection(Customizer.withDefaults()))
+            .build();
+    }
+}
+
+// Method-level security (most important for banking!)
+@Service
+public class TradeService {
+
+    // Only TRADER role can execute trades
+    @PreAuthorize("hasRole('TRADER')")
+    public Trade executeTrade(TradeRequest req) { ... }
+
+    // User can only view their OWN trades (IDOR prevention)
+    @PreAuthorize("#userId == authentication.principal.claims['sub']")
+    public List<Trade> getTradesByUser(String userId) { ... }
+
+    // Admin OR owner can cancel
+    @PreAuthorize("hasRole('ADMIN') or @tradeOwnerCheck.isOwner(#tradeId, authentication)")
+    public void cancelTrade(String tradeId) { ... }
+}
+```
+
+### LLD Security Measure 4: Sensitive Data Handling
+
+```java
+// 1. PII Masking in Logs
+@Slf4j
+public class OrderService {
+    public void processOrder(Order order) {
+        // WRONG: log.info("Processing order for {}", order.getCustomerEmail());
+        // CORRECT:
+        log.info("Processing order for {}", maskEmail(order.getCustomerEmail()));
+        // Output: Processing order for d****r@gmail.com
+    }
+}
+
+// 2. Field-Level Encryption for PII
+@Entity
+public class Customer {
+    @Id
+    private String id;
+
+    private String name; // not sensitive
+
+    @Convert(converter = EncryptedStringConverter.class)
+    private String email; // encrypted in DB
+
+    @Convert(converter = EncryptedStringConverter.class)
+    private String phone; // encrypted in DB
+
+    @Column(name = "ssn_hash")
+    private String ssnHash; // NEVER store raw, only hash for lookup
+}
+
+// 3. DTO filtering: never expose internal fields
+public record CustomerResponse(
+    String id,
+    String name,
+    String maskedEmail  // "d****r@gmail.com" not raw email
+    // NO: password, ssnHash, internalNotes, auditFields
+) {}
+```
+
+### LLD Security Measure 5: Dependency Security
+
+```xml
+<!-- pom.xml: OWASP Dependency Check plugin -->
+<plugin>
+    <groupId>org.owasp</groupId>
+    <artifactId>dependency-check-maven</artifactId>
+    <configuration>
+        <failBuildOnCVSS>7</failBuildOnCVSS> <!-- Fail on HIGH+ -->
+    </configuration>
+</plugin>
+```
+
+**CI pipeline integration:**
+- OWASP Dependency Check: blocks deploy if HIGH/CRITICAL CVE found
+- Trivy: scans Docker images for OS-level vulnerabilities
+- Snyk: monitors dependencies for new CVEs post-deploy
+- Renovate/Dependabot: auto-creates PRs for dependency updates
+
+### LLD Security Measure 6: Secure API Design Patterns
+
+| Pattern | What | Why |
+|---|---|---|
+| Idempotency keys | Client sends unique key per request | Prevents duplicate transactions in banking |
+| Request signing | HMAC signature on request body | Tamper detection for partner APIs |
+| Correlation ID | Unique ID propagated across services | Security audit trail |
+| Response filtering | Return only fields user is authorized for | Prevent data leakage |
+| Pagination limits | Max 100 items per page | Prevent data dump attacks |
+| Rate limiting per user | 100 req/min for normal, 10 for login | Brute force prevention |
+| Audit logging | Log every write operation with who/what/when | Regulatory compliance |
+
+### LLD Security Measure 7: Error Handling Security
+
+```java
+// WRONG: Expose internal details
+@ExceptionHandler(Exception.class)
+public ResponseEntity<?> handleError(Exception e) {
+    return ResponseEntity.status(500)
+        .body(Map.of("error", e.getMessage(),
+                     "stackTrace", e.getStackTrace())); // NEVER!
+}
+
+// CORRECT: Generic message + correlation ID for internal lookup
+@ExceptionHandler(Exception.class)
+public ResponseEntity<?> handleError(Exception e, HttpServletRequest req) {
+    String correlationId = req.getHeader("X-Correlation-ID");
+    log.error("Internal error [{}]: {}", correlationId, e.getMessage(), e);
+    return ResponseEntity.status(500)
+        .body(Map.of(
+            "error", "Internal server error",
+            "correlationId", correlationId,
+            "message", "Please contact support with this ID"
+        ));
+    // Stack trace in logs only, NEVER in response
+}
+```
+
+---
+
+## ✅ Security Checklist — Before Designing Any Microservice
+
+### HLD Checklist (Architecture Level):
+
+| # | Security Measure | Status |
+|---|---|---|
+| 1 | Zero-trust: mTLS between all services | Required |
+| 2 | API Gateway: single entry point with WAF | Required |
+| 3 | Network segmentation: public/private/data subnets | Required |
+| 4 | Keycloak/OAuth2: centralized identity provider | Required |
+| 5 | Secrets in Vault (never in code/config/Git) | Required |
+| 6 | Data classification: PUBLIC/INTERNAL/CONFIDENTIAL/RESTRICTED | Required |
+| 7 | Encryption: at rest (KMS) + in transit (TLS 1.3) | Required |
+| 8 | K8s NetworkPolicy: default-deny, whitelist only | Required |
+| 9 | Pod Security Standards: no root, no privilege escalation | Required |
+| 10 | Audit logging: all auth events, all data access | Required |
+| 11 | DDoS protection: WAF + rate limiting + auto-scaling | Required |
+| 12 | Disaster recovery: multi-AZ, backup encryption, key rotation | Required |
+
+### LLD Checklist (Code Level):
+
+| # | Security Measure | Status |
+|---|---|---|
+| 1 | Input validation: @Valid + Bean Validation on ALL endpoints | Required |
+| 2 | SQL injection: parameterized queries only (JPA default) | Required |
+| 3 | XSS: output encoding, CSP headers | Required |
+| 4 | IDOR prevention: @PreAuthorize checks user owns resource | Required |
+| 5 | PII masking in logs: never log raw email/phone/SSN | Required |
+| 6 | Field-level encryption for CONFIDENTIAL data | Required |
+| 7 | DTO filtering: never expose internal entity fields | Required |
+| 8 | Error handling: generic messages, no stack traces in response | Required |
+| 9 | Dependency scanning: OWASP check in CI, fail on HIGH | Required |
+| 10 | Docker: non-root user, minimal base image, no secrets in image | Required |
+| 11 | Idempotency keys for financial transactions | Required |
+| 12 | Correlation ID propagation for audit trail | Required |
+| 13 | Rate limiting per user per endpoint | Required |
+| 14 | Secure deserialization: whitelist allowed classes | Required |
+| 15 | CORS: strict origin whitelist (not wildcard) | Required |
+
+### Interview One-Liner:
+
+> **"Security at HLD is about architecture — zero-trust, network segmentation, encryption strategy, and secrets management. Security at LLD is about code — input validation, SQL injection prevention, PII masking, IDOR prevention, and secure error handling. Both levels are non-negotiable. I use a security checklist of 27 items that every microservice MUST pass before going to production."**
 
 ---
