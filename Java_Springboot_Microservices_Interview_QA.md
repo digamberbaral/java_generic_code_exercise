@@ -1,4 +1,4 @@
-# 🎓 Senior Java Tech Lead — Ultimate Interview Master Blueprint
+﻿# 🎓 Senior Java Tech Lead — Ultimate Interview Master Blueprint
 
 <div align="center">
 
@@ -99,7 +99,28 @@
 
 ---
 
-> **⚡ Quick Jump:**
+---
+### 🏆 Phase 8 — Senior Tech Lead (10+ Years) *(Advanced Depth)*
+| # | Section | Key Topics | Level |
+|---|---|---|---|
+| 24 | [🏆 Sr. Tech Lead Advanced Q&A](#-senior-tech-lead-10-years--advanced-interview-questions--answers) | JVM Tuning, Distributed Transactions, Production Incidents, Leadership | 🔴 Advanced |
+| 25 | [🎯 Sr. Tech Lead Answer Depth Framework](#-sr-tech-lead-answer-depth-framework--how-to-give-10-year-depth-answers) | DEPTH Framework, Before/After Examples, Power Phrases, Self-Assessment | 🔴 Advanced |
+| 26 | [🏅 Sr. Tech Lead Ready Answers - Top 12](#-sr-tech-lead-ready-answers--top-12-questions-with-full-depth) | Auto-Config, Distributed TX, Caching, Kafka, Security, CI/CD | 🔴 Advanced |
+| 27 | [🧠 Deep Scenario Questions](#-sr-tech-lead-deep-scenario-questions--microservices-design-patterns-cicd-cloud--security) | Microservice Architecture, Design Patterns, CI/CD, Keycloak, Production | 🔴 Advanced |
+| 28 | [🔐 Security at HLD and LLD Level](#-part-1-security-at-hld-high-level-design-level) | Zero-Trust, Network Segmentation, Input Validation, IDOR, PII Masking | 🔴 Advanced |
+---
+### 🚀 Phase 13 — Deep-Dive Technical Mastery *(2026 Edition)*
+| # | Section | Key Topics | Level |
+|---|---|---|---|
+| 29 | [🟢 DT-1: Virtual Threads & Structured Concurrency](#-dt-1-the-concurrency-revolution-virtual-threads-scoped-values--structured-concurrency) | Project Loom, M:N Scheduling, ScopedValues, StructuredTaskScope | 🟢 Beginner to Advanced |
+| 30 | [🔵 DT-2: Spring AI & RAG Architecture](#-dt-2-ai-ready-backends--spring-ai--rag-architecture) | Vector DB, Embeddings, RAG Pipeline, Hallucination Prevention | 🟢 Beginner to Advanced |
+| 31 | [🟠 DT-3: Transactional Outbox & Debezium](#-dt-3-transactional-outbox-pattern--debezium--solving-dual-writes) | Dual Write Problem, CDC, WAL, Idempotency, Docker Compose Setup | 🟢 Beginner to Advanced |
+| 32 | [🔴 DT-4: FinOps & Cost Optimization](#-dt-4-finops--cost-optimization--the-tech-leads-business-impact) | ARM64/Graviton, eBPF/Cilium, KEDA, Weekend Shutdown, Cost Math | 🟢 Beginner to Advanced |
+| 33 | [🟣 DT-5: Micrometer Observation API](#-dt-5-high-performance-observability--micrometer-observation-api) | Unified Observability, @Observed, p99 vs Average, Trace Exemplars | 🟢 Beginner to Advanced |
+| 34 | [🧪 DT-6: GraalVM & Native Images](#-dt-6-graalvm--native-images--solving-cold-start) | AOT vs JIT, 50ms Startup, When to Use, Spring Boot 3.x Native | 🟢 Beginner to Advanced |
+| 35 | [🏗 DT-7: Platform Engineering & IDP](#-dt-7-platform-engineering--internal-developer-platforms-idp) | Backstage, Self-Service Portal, Golden Paths, Service Templates | 🟢 Beginner to Advanced |
+| 36 | [📉 DT-8: Estimation Cheat Sheet](#-dt-8-the-tech-leads-estimation-cheat-sheet) | Latency Benchmarks, Availability Math, QPS/Storage/Server Estimation | 🟢 Beginner to Advanced |
+---> **⚡ Quick Jump:**
 > [Core Java](#-core-java-mastery) • [DSA](#-dsa--problem-solving--complete-interview-guide) • [Spring Boot](#-spring-boot--data-architecture) • [Database](#-database-interview-questions--mysqlpostgresql--mongodb) • [Microservices](#-microservices--cloud-native) • [Kafka](#-messaging--kafka--rabbitmq-interview-questions) • [System Design](#-system-design--url-shortener) • [Docker/K8s](#-docker--kubernetes-basics-to-advanced) • [CI/CD](#-cicd-pipeline--jenkins-docker-kubernetes-aws--gcp) • [Interview Prep](#-interview-cheat-sheet)
 
 ---
@@ -279,12 +300,12 @@ mindmap
 flowchart LR
     subgraph Prim["📦 Primitive Types — stored on STACK"]
         direction TB
-        P1["byte   → 8-|bit| integer  (-|128| to 127)"]
-        P2["short  → 16-|bit| integer"]
-        P3["int    → 32-|bit| integer (most common)"]
-        P4["long   → 64-|bit| integer"]
-        P5["float  → 32-|bit| decimal"]
-        P6["double → 64-|bit| decimal (most common)"]
+        P1["byte   → 8-bit integer  (-128 to 127)"]
+        P2["short  → 16-bit integer"]
+        P3["int    → 32-bit integer (most common)"]
+        P4["long   → 64-bit integer"]
+        P5["float  → 32-bit decimal"]
+        P6["double → 64-bit decimal (most common)"]
         P7["char   → single Unicode character"]
         P8["boolean→ true / false"]
     end
@@ -323,7 +344,7 @@ flowchart LR
     subgraph Levels["Access Level (most restrictive → least restrictive)"]
         direction TB
         PR["🔒 private\nOnly within this class"]
-        PK["📦 package-|private| (default)\nThis class + same package"]
+        PK["📦 package-private (default)\nThis class + same package"]
         PO["🔓 protected\nThis class + subclasses + same package"]
         PU["🌐 public\nEveryone can access"]
         PR --> PK --> PO --> PU
@@ -417,9 +438,9 @@ flowchart TB
         subgraph DevTools["🛠️ Developer Tools  (only in JDK, NOT in production)"]
             javac["⚙️ javac\nCompiles .java → .class bytecode"]
             javadoc["📄 javadoc\nGenerates HTML API docs"]
-            jdb["🐛 jdb\nCommand-|line| debugger"]
+            jdb["🐛 jdb\nCommand-line debugger"]
             jvisualvm["🖥️ jvisualvm\nVisual profiler — see live threads,\nheap, CPU usage, GC activity"]
-            jconsole["📊 jconsole\nJMX-|based| monitoring console"]
+            jconsole["📊 jconsole\nJMX-based monitoring console"]
             jar["📦 jar\nPack classes into .jar archive"]
         end
 
@@ -691,7 +712,7 @@ flowchart TB
     Animal -->|extends| Cat["🐈 Cat\n+ indoor: boolean\n+ speak() → 'Meow!'\n+ purr(): void"]
     Animal -->|extends| Bird["🦜 Bird\n+ wingspan: double\n+ speak() → 'Tweet!'\n+ fly(): void"]
 
-    subgraph HAS_A["HAS-|A| Relationships (Composition — PREFERRED)"]
+    subgraph HAS_A["HAS-A Relationships (Composition — PREFERRED)"]
         Dog2["Dog"] -->|HAS-A| Collar["Collar\n+ id: String\n+ owner: String"]
         Dog2 -->|HAS-A| Vet["Vet\n+ name: String\n+ clinic: String"]
     end
@@ -720,7 +741,7 @@ flowchart TB
         Vehicle --> Truck
     end
 
-    subgraph HasA["✅ HAS-|A| Composition — loose coupling (flexible)"]
+    subgraph HasA["✅ HAS-A Composition — loose coupling (flexible)"]
         Car2["🚗 Car"]
         Engine["⚙️ Engine\n+ horsepower\n+ start()\n+ stop()"]
         GPS["🗺️ GPS\n+ navigate(dest)"]
@@ -1244,7 +1265,7 @@ flowchart TB
         Note1["get(3) → direct index jump → O(1) ✅\ninsert at [2] → shift [2],[3],[4] right → O(n) ❌"]
     end
 
-    subgraph LL["LinkedList — Doubly-|Linked| Nodes (scattered in memory)"]
+    subgraph LL["LinkedList — Doubly-Linked Nodes (scattered in memory)"]
         direction LR
         N1["10\nprev: null\nnext: →"] <--> N2["20\nprev: ←\nnext: →"] <--> N3["30\nprev: ←\nnext: →"] <--> N4["40\nprev: ←\nnext: null"]
         Note2["get(3) → traverse from head: 10→20→30→40 → O(n) ❌\ninsert between nodes → just relink pointers → O(1) ✅"]
@@ -1953,7 +1974,7 @@ flowchart LR
     subgraph Collectors["GC Collector Comparison"]
         direction TB
         Serial["🐢 SerialGC\nSingle thread\nHigh pause time\nUse for: tiny apps,\nembedded devices"]
-        Parallel["⚡ ParallelGC\nMulti-|thread| GC\nHigh throughput\nUse for: batch jobs,\nnon-|interactive| apps"]
+        Parallel["⚡ ParallelGC\nMulti-thread GC\nHigh throughput\nUse for: batch jobs,\nnon-interactive apps"]
         G1["🎯 G1GC (DEFAULT Java 9+)\nRegion-based\nPredictable pauses\n~200ms target\nUse for: most apps\nlarge heaps (4GB+)"]
         ZGC["🚀 ZGC (Java 11+)\nConcurrent\nSub-millisecond pauses\nUse for: latency-critical\n(APIs with <10ms SLA)"]
         Shen["🌿 ShenandoahGC\nConcurrent\nSub-millisecond pauses\nUse for: same as ZGC\n(Red Hat maintained)"]
@@ -2242,8 +2263,8 @@ Optional<Optional<User>> nested;    // Never nest Optionals!
 ```mermaid
 flowchart TB
   Main["Main Memory\nflag=false"]
-  T1["Thread 1\nCPU Cache\nflag=|true| (updated locally)"]
-  T2["Thread 2\nCPU Cache\nflag=|false| (stale)"]
+  T1["Thread 1\nCPU Cache\nflag=true (updated locally)"]
+  T2["Thread 2\nCPU Cache\nflag=false (stale)"]
   Main --> T1
   Main --> T2
   T1 -.->|no-visibility| T2
@@ -2292,11 +2313,11 @@ flag.compareAndSet(false, true);  // Atomic compare-and-swap
 ```mermaid
 flowchart LR
   subgraph NoVol["Without volatile (CPU caches)"]
-    NV1["CPU1 writes flag=|true| (cache)"] --> NV2["CPU2 reads flag=|false| (cache)"]
+    NV1["CPU1 writes flag=true (cache)"] --> NV2["CPU2 reads flag=false (cache)"]
     NV2 --> NV3["BUG: stale read"]
   end
   subgraph Vol["With volatile (main memory)"]
-    V1["CPU1 writes flag=|true| (main memory)"] --> V2["CPU2 reads flag=|true| (main memory)"]
+    V1["CPU1 writes flag=true (main memory)"] --> V2["CPU2 reads flag=true (main memory)"]
     V2 --> V3["FIXED: latest value"]
   end
 ```
@@ -2444,7 +2465,7 @@ public class ProductCache {
 ```mermaid
 flowchart LR
   SharedMap["Shared map"] --> CHM["ConcurrentHashMap"]
-  WriteRare["Write-|rarely| list"] --> COW["CopyOnWriteArrayList"]
+  WriteRare["Write-rarely list"] --> COW["CopyOnWriteArrayList"]
   Producer["Producer-Consumer"] --> LBQ["LinkedBlockingQueue"]
   Priority["Priority tasks"] --> PBQ["PriorityBlockingQueue"]
   PubSub["Pub/Sub in-process"] --> LTQ["LinkedTransferQueue"]
@@ -3758,7 +3779,7 @@ flowchart TB
   subgraph JVM["JVM Memory"]
     subgraph Heap["Heap — GC managed, shared"]
       Young["Young Gen\nEden + Survivor S0/S1"]
-      Old["Old Gen\nlong-|lived| objects"]
+      Old["Old Gen\nlong-lived objects"]
     end
     subgraph NonHeap["Non-Heap"]
       Meta["Metaspace\nclass metadata\nnative memory"]
@@ -3965,9 +3986,9 @@ public class Dog extends Animal {
 ```mermaid
 flowchart TB
   subgraph Visibility["Visibility — Widest to Narrowest"]
-    PUB["public\nEveryone can access\n(Cross-|package| cross-module)"]
+    PUB["public\nEveryone can access\n(Cross-package cross-module)"]
     PROT["protected\nSame package + Subclasses\n(Even in different packages)"]
-    PKG["package-|private| (default)\nSame package only\nNo keyword needed"]
+    PKG["package-private (default)\nSame package only\nNo keyword needed"]
     PRIV["private\nSame class only\nMost restrictive"]
     PUB --> PROT --> PKG --> PRIV
   end
@@ -4088,7 +4109,7 @@ DatabaseConnection conn = DatabaseConnection.forProduction();
 flowchart TB
   subgraph List["📋 List — Ordered, Duplicates OK"]
     AL["ArrayList\nO(1) get, O(n) add-middle\nBest for: READ-heavy"]
-    LL["LinkedList\nO(n) get, O(1) add-ends\nBest for: WRITE-|heavy| ends"]
+    LL["LinkedList\nO(n) get, O(1) add-ends\nBest for: WRITE-heavy ends"]
     VL["Vector\nSynchronized ArrayList\nLegacy, avoid"]
   end
   subgraph Set["🎯 Set — No Duplicates"]
@@ -4096,7 +4117,7 @@ flowchart TB
     LS["LinkedHashSet\nO(1) add/contains\nInsertion-ordered\nBest for: ordered unique"]
     TS["TreeSet\nO(log n)\nSorted (natural/custom)\nBest for: sorted unique"]
   end
-  subgraph Map["🗺️ Map — Key-|Value| Pairs"]
+  subgraph Map["🗺️ Map — Key-Value Pairs"]
     HM["HashMap\nO(1) avg\nUnordered\nBest for: fast lookup"]
     LHM["LinkedHashMap\nO(1)\nInsertion-ordered\nBest for: LRU cache, ordered"]
     TM["TreeMap\nO(log n)\nKey-sorted\nBest for: range queries"]
@@ -4173,7 +4194,7 @@ flowchart TB
     O3["finally { if(conn != null) conn.close(); }"]
     O1 --> O2 --> O3
   end
-  subgraph New["✅ try-|with-resources| — automatic close"]
+  subgraph New["✅ try-with-resources — automatic close"]
     N1["try (Connection conn = getConn()) { ... }"]
     N2["// conn.close() called AUTOMATICALLY\n// even if exception thrown"]
     N1 --> N2
@@ -4330,7 +4351,7 @@ long sum3 = IntStream.range(0, 1_000_000).asLongStream().sum();
 
 ```mermaid
 flowchart TB
-  subgraph Old["❌ Old way — error-|prone| constants"]
+  subgraph Old["❌ Old way — error-prone constants"]
     I1["public static final int PENDING = 1"]
     I2["public static final int CONFIRMED = 2"]
     I3["String status = 5 // compiler allows it — BUG!"]
@@ -4498,13 +4519,13 @@ text.isBlank();         // false
 
 ```mermaid
 flowchart LR
-  subgraph Human["Human-|readable| (use in APIs/Display)"]
+  subgraph Human["Human-readable (use in APIs/Display)"]
     LD["LocalDate\n2024-03-25\nDate only"]
     LT["LocalTime\n14:30:00\nTime only"]
     LDT["LocalDateTime\n2024-03-25T14:30:00\nNo timezone"]
     ZDT["ZonedDateTime\n2024-03-25T14:30:00+05:30[Asia/Kolkata]\nFull timezone"]
   end
-  subgraph Machine["Machine-|readable| (use in DB/Audit)"]
+  subgraph Machine["Machine-readable (use in DB/Audit)"]
     INS["Instant\n1711369800000\nEpoch millis — timezone-free"]
   end
   ZDT -.toInstant().-> INS
@@ -6175,7 +6196,7 @@ auth.handle(request, response);
 
 ```mermaid
 flowchart TB
-  S1["Step 1 — Clarify requirements 5 min\nAsk functional and non-|functional| questions"]
+  S1["Step 1 — Clarify requirements 5 min\nAsk functional and non-functional questions"]
   S2["Step 2 — Identify entities 5 min\nNouns become classes, verbs become methods"]
   S3["Step 3 — Define relationships 5 min\nIS-A vs HAS-A vs USES-A"]
   S4["Step 4 — Choose patterns 5 min\nWhich pattern solves which problem"]
@@ -6474,14 +6495,14 @@ Imagine a **restaurant kitchen**:
 
 ```mermaid
 flowchart TB
-    subgraph Single["🍽️ Single-|Threaded| App (1 Chef)"]
+    subgraph Single["🍽️ Single-Threaded App (1 Chef)"]
         direction LR
         C1["🧑 Customer 1\nwaiting..."] --> Chef1["👨‍🍳 Chef cooks Order 1"]
         Chef1 --> C2["🧑 Customer 2\nstill waiting..."]
         C2 --> Chef2["👨‍🍳 Chef cooks Order 2"]
         Chef2 --> C3["🧑 Customer 3\nstill waiting..."]
     end
-    subgraph Multi["⚡ Multi-|Threaded| App (3 Chefs)"]
+    subgraph Multi["⚡ Multi-Threaded App (3 Chefs)"]
         direction TB
         ChefA["👨‍🍳 Chef A\ncooks Order 1"]
         ChefB["👨‍🍳 Chef B\ncooks Order 2"]
@@ -7002,7 +7023,7 @@ flowchart LR
         C1["L1 Cache\nrunning=false"]
     end
     subgraph CPU2["CPU 2 (Thread 2)"]
-        C2["L1 Cache\nrunning=|true| ❌\n(stale cache!)"]
+        C2["L1 Cache\nrunning=true ❌\n(stale cache!)"]
     end
     MainMem["💾 Main Memory\nrunning=false"]
     CPU1 -->|write| MainMem
@@ -7080,7 +7101,7 @@ try {
 
 ```mermaid
 flowchart LR
-    B1["🟢 BEGINNER\n▸ Thread, Runnable\n▸ start() vs run()\n▸ synchronized\n▸ volatile\n▸ Race Condition\n▸ Deadlock"] -->|understand| B2["🔵 INTERMEDIATE\n▸ ExecutorService\n▸ Callable + Future\n▸ AtomicInteger\n▸ CompletableFuture\n▸ BlockingQueue\n▸ CountDownLatch"] -->|master| B3["🔴 ADVANCED\n▸ ForkJoinPool\n▸ ReentrantLock\n▸ Virtual Threads\n▸ Java Memory Model\n▸ Lock-|free| algorithms\n▸ StampedLock"]
+    B1["🟢 BEGINNER\n▸ Thread, Runnable\n▸ start() vs run()\n▸ synchronized\n▸ volatile\n▸ Race Condition\n▸ Deadlock"] -->|understand| B2["🔵 INTERMEDIATE\n▸ ExecutorService\n▸ Callable + Future\n▸ AtomicInteger\n▸ CompletableFuture\n▸ BlockingQueue\n▸ CountDownLatch"] -->|master| B3["🔴 ADVANCED\n▸ ForkJoinPool\n▸ ReentrantLock\n▸ Virtual Threads\n▸ Java Memory Model\n▸ Lock-free algorithms\n▸ StampedLock"]
 ```
 
 > ✅ **Foundation complete!** The Q&A below builds on everything above with production-grade scenarios and deeper explanations.
@@ -8188,14 +8209,14 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-  subgraph OppEnds["Opposite-|End| (sorted array, find pair sum = 17)"]
+  subgraph OppEnds["Opposite-End (sorted array, find pair sum = 17)"]
     A1["Array: [1]  [3]  [5]  [8]  [14]  [15]   target=17"]
-    A2["Step 1: L→1  R→15  sum=|16|  too small → move L right"]
-    A3["Step 2: L→3  R→15  sum=|18|  too big   → move R left"]
-    A4["Step 3: L→3  R→14  sum=|17|  FOUND! ✅  indices 1 and 4"]
+    A2["Step 1: L→1  R→15  sum=16  too small → move L right"]
+    A3["Step 2: L→3  R→15  sum=18  too big   → move R left"]
+    A4["Step 3: L→3  R→14  sum=17  FOUND! ✅  indices 1 and 4"]
     A1 --> A2 --> A3 --> A4
   end
-  subgraph SameDir["Same-|Direction| (fast+slow, remove duplicates)"]
+  subgraph SameDir["Same-Direction (fast+slow, remove duplicates)"]
     S1["slow = write position for unique values"]
     S2["fast = read scanner moving through all elements"]
     S3["When fast finds a new value → slow++ then copy it"]
@@ -8381,10 +8402,10 @@ DECISION FLOW:
 
 ```mermaid
 flowchart TB
-  subgraph Fixed["Fixed Window k=|3| on array 2-1-5-1-3-2"]
+  subgraph Fixed["Fixed Window k=3 on array 2-1-5-1-3-2"]
     F1["Init window: [2,1,5]  sum=8"]
     F2["Slide: remove 2 add 1 → [1,5,1]  sum=7"]
-    F3["Slide: remove 1 add 3 → [5,1,3]  sum=|9|  ← max"]
+    F3["Slide: remove 1 add 3 → [5,1,3]  sum=9  ← max"]
     F4["Slide: remove 5 add 2 → [1,3,2]  sum=6"]
     F1 --> F2 --> F3 --> F4
   end
@@ -8620,7 +8641,7 @@ Trigger words: "Multiple queries", "for each query", "count subarrays" → prefi
 flowchart TD
   subgraph BruteForce["Without Prefix Sum — O(n) per query"]
     A1["Query: sum of arr[1..3]"]
-    A2["Loop from i=|1| to i=3"]
+    A2["Loop from i=1 to i=3"]
     A3["Add arr[1]+arr[2]+arr[3] manually every time"]
     A4["For Q queries: repeat O(n) work each time"]
     A5["Total cost = O(n x Q) — SLOW"]
@@ -8664,7 +8685,7 @@ flowchart TB
         B1["arr:    [ 3 ][ 1 ][ 4 ][ 1 ][ 5 ]"]
         B2["index:    0    1    2    3    4"]
         B3["prefix: [0][ 3 ][ 4 ][ 8 ][ 9 ][14]"]
-        B4["prefix[0]=|0| (empty prefix), prefix[i+1] = prefix[i] + arr[i]"]
+        B4["prefix[0]=0 (empty prefix), prefix[i+1] = prefix[i] + arr[i]"]
         B1 --> B3
         B4 -.explains.-> B3
     end
@@ -8836,24 +8857,24 @@ p[i][j] = p[i-1][j] + p[i][j-1] - p[i-1][j-1] + grid[i-1][j-1];
 ```mermaid
 flowchart TB
   subgraph Trace["Binary Search Trace: find 7 in [1,3,5,7,9,11,13]"]
-    T1["lo=|0|  hi=|6|  mid=|3|  arr[3]=|7|  FOUND! ✅"]
+    T1["lo=0  hi=6  mid=3  arr[3]=7  FOUND! ✅"]
     T2["(lucky hit — let's trace a harder one)"]
     T1 --> T2
   end
   subgraph Trace2["Find 9 in [1,3,5,7,9,11,13]"]
-    S1["lo=|0|  hi=|6|  mid=|3|  arr[3]=|7|  7 < 9  → lo=mid+1=4"]
-    S2["lo=|4|  hi=|6|  mid=|5|  arr[5]=|11|  11 > 9 → hi=mid-1=4"]
-    S3["lo=|4|  hi=|4|  mid=|4|  arr[4]=|9|  FOUND! ✅  3 steps total"]
+    S1["lo=0  hi=6  mid=3  arr[3]=7  7 < 9  → lo=mid+1=4"]
+    S2["lo=4  hi=6  mid=5  arr[5]=11  11 > 9 → hi=mid-1=4"]
+    S3["lo=4  hi=4  mid=4  arr[4]=9  FOUND! ✅  3 steps total"]
     S1 --> S2 --> S3
   end
   subgraph Algorithm["The Algorithm"]
-    BS1["Set lo=|0| and hi=n-1"]
-    BS2["Compute mid = lo + (hi-|lo-2|  avoids integer overflow"]
+    BS1["Set lo=0 and hi=n-1"]
+    BS2["Compute mid = lo + (hi-lo-2  avoids integer overflow"]
     BS3["Compare arr[mid] with target"]
     BS4["arr[mid] < target → lo = mid+1  discard left half"]
-    BS5["arr[mid] > target → hi = mid-|1|  discard right half"]
+    BS5["arr[mid] > target → hi = mid-1  discard right half"]
     BS6["arr[mid] == target → return mid  FOUND"]
-    BS7["lo > hi → return -|1|  NOT FOUND"]
+    BS7["lo > hi → return -1  NOT FOUND"]
     BS1 --> BS2 --> BS3
     BS3 -->|smaller| BS4 --> BS2
     BS3 -->|larger| BS5 --> BS2
@@ -8992,7 +9013,7 @@ if (nums == null || nums.length == 0) return -1;  // ✅ always check this first
 flowchart LR
   subgraph TwoSum["Two Sum O(n) with Map"]
     T1["Scan array left to right"]
-    T2["At each element x: check if target-|x| is in map"]
+    T2["At each element x: check if target-x is in map"]
     T3["Found in map → return both indices"]
     T4["Not found → store x with its index in map"]
     T1 --> T2 --> T3
@@ -9091,7 +9112,7 @@ flowchart TB
   end
   subgraph Java8["Java 8 Plus Improvement"]
     J1["Chain length 8 or less: Linked List O(n) worst case"]
-    J2["Chain length more than 8: Red-|Black| Tree O(log n) worst case"]
+    J2["Chain length more than 8: Red-Black Tree O(log n) worst case"]
     J1 --> J2
   end
 ```
@@ -9174,10 +9195,10 @@ flowchart LR
     C5 --> C3
   end
   subgraph CycleSteps["Step trace in cycle: 1→2→3→4→5→3..."]
-    S1["Start: slow=|1|  fast=1"]
-    S2["Step 1: slow=|2|  fast=3"]
-    S3["Step 2: slow=|3|  fast=5"]
-    S4["Step 3: slow=|4|  fast=|4|  MEET! ✅"]
+    S1["Start: slow=1  fast=1"]
+    S2["Step 1: slow=2  fast=3"]
+    S3["Step 2: slow=3  fast=5"]
+    S4["Step 3: slow=4  fast=4  MEET! ✅"]
     S1 --> S2 --> S3 --> S4
   end
 ```
@@ -9314,14 +9335,14 @@ flowchart TB
     push1 --> push2 --> push3 --> pop1 --> peek1
   end
   subgraph MonoStack["Monotonic Stack — Next Greater Element for [2,1,5,6,2,3]"]
-    MS1["i=|0| val=|2:| stack empty push index 0.  Stack=[0]"]
-    MS2["i=|1| val=|1:| 1 less than arr[0]=|2| push index 1.  Stack=[0,1]"]
-    MS3["i=|2| val=|5:| 5 > arr[1]=|1| pop 1 result[1]=|5.|  5 > arr[0]=|2| pop 0 result[0]=|5.|  push 2.  Stack=[2]"]
-    MS4["i=|3| val=|6:| 6 > arr[2]=|5| pop 2 result[2]=|6.|  push 3.  Stack=[3]"]
-    MS5["i=|4| val=|2:| 2 < arr[3]=|6| push 4.  Stack=[3,4]"]
-    MS6["i=|5| val=|3:| 3 > arr[4]=|2| pop 4 result[4]=|3.|  3 < arr[3]=|6| push 5.  Stack=[3,5]"]
+    MS1["i=0 val=2: stack empty push index 0.  Stack=[0]"]
+    MS2["i=1 val=1: 1 less than arr[0]=2 push index 1.  Stack=[0,1]"]
+    MS3["i=2 val=5: 5 > arr[1]=1 pop 1 result[1]=5.  5 > arr[0]=2 pop 0 result[0]=5.  push 2.  Stack=[2]"]
+    MS4["i=3 val=6: 6 > arr[2]=5 pop 2 result[2]=6.  push 3.  Stack=[3]"]
+    MS5["i=4 val=2: 2 < arr[3]=6 push 4.  Stack=[3,4]"]
+    MS6["i=5 val=3: 3 > arr[4]=2 pop 4 result[4]=3.  3 < arr[3]=6 push 5.  Stack=[3,5]"]
     MS7["End: stack [3,5] have no next greater → result=-1"]
-    MS8["Result: [5, 5, 6, -|1| 3, -1] ✅"]
+    MS8["Result: [5, 5, 6, -1 3, -1] ✅"]
     MS1 --> MS2 --> MS3 --> MS4 --> MS5 --> MS6 --> MS7 --> MS8
   end
 ```
@@ -9463,12 +9484,12 @@ while (!stack.isEmpty() && nums[stack.peek()] > nums[i]) stack.pop();
 ```mermaid
 flowchart TB
   subgraph BFSTree["BFS explores level by level — guarantees shortest path"]
-    L0["Source Node  level-|0|  visited first"]
-    L1a["Neighbour A  level-|1|  distance=1"]
-    L1b["Neighbour B  level-|1|  distance=1"]
-    L2a["A's neighbour C  level-|2|  distance=2"]
-    L2b["A's neighbour D  level-|2|  distance=2"]
-    L2c["B's neighbour E  GOAL!  level-|2|  shortest distance=2"]
+    L0["Source Node  level-0  visited first"]
+    L1a["Neighbour A  level-1  distance=1"]
+    L1b["Neighbour B  level-1  distance=1"]
+    L2a["A's neighbour C  level-2  distance=2"]
+    L2b["A's neighbour D  level-2  distance=2"]
+    L2c["B's neighbour E  GOAL!  level-2  shortest distance=2"]
     L0 --> L1a
     L0 --> L1b
     L1a --> L2a
@@ -9624,9 +9645,9 @@ flowchart TB
   end
   subgraph DFSGrid["DFS on 2D Grid (Number of Islands)"]
     G1["Find unvisited land cell (grid=1)"]
-    G2["Mark it as visited (grid=|0| — sink it)"]
+    G2["Mark it as visited (grid=0 — sink it)"]
     G3["Recurse in 4 directions: up down left right"]
-    G4["Each direction: if in bounds and grid=|1| recurse"]
+    G4["Each direction: if in bounds and grid=1 recurse"]
     G5["When all 4 directions exhausted: return to caller"]
     G6["Back in outer loop: increment island count"]
     G1 --> G2 --> G3 --> G4 --> G5 --> G6
@@ -9634,7 +9655,7 @@ flowchart TB
   subgraph DFSOrder["DFS Tree Traversal Orders"]
     O1["Preorder:  root first  then left  then right  — serialize tree"]
     O2["Inorder:   left first  then root  then right  — BST sorted output"]
-    O3["Postorder: left first  then right  then root  — bottom-|up:| height/delete"]
+    O3["Postorder: left first  then right  then root  — bottom-up: height/delete"]
     O1 --> O2 --> O3
   end
 ```
@@ -9750,9 +9771,9 @@ flowchart TB
   end
   subgraph MergePass["Step 2 — Single pass merge  O(n)"]
     M1["Take [1,3]:   result = [[1,3]]"]
-    M2["[2,6]: start=|2| <= last.end=|3|  OVERLAP → extend: result = [[1,6]]"]
-    M3["[8,10]: start=|8| > last.end=|6|  NO overlap → add: result = [[1,6],[8,10]]"]
-    M4["[15,18]: start=|15| > last.end=|10|  NO overlap → add: result = [[1,6],[8,10],[15,18]]"]
+    M2["[2,6]: start=2 <= last.end=3  OVERLAP → extend: result = [[1,6]]"]
+    M3["[8,10]: start=8 > last.end=6  NO overlap → add: result = [[1,6],[8,10]]"]
+    M4["[15,18]: start=15 > last.end=10  NO overlap → add: result = [[1,6],[8,10],[15,18]]"]
     M1 --> M2 --> M3 --> M4
   end
   subgraph Visual["Overlap Visualised on Number Line"]
@@ -9873,8 +9894,8 @@ flowchart TB
     J -->|skip-3| N["[] ✅ ADD"]
   end
   subgraph Pruning["Pruning = Skip Invalid Branches Early"]
-    P1["Combination Sum target=|7|  candidates=[2,3,6,7]"]
-    P2["At some point current=[3,6]  sum=|9| > 7"]
+    P1["Combination Sum target=7  candidates=[2,3,6,7]"]
+    P2["At some point current=[3,6]  sum=9 > 7"]
     P3["PRUNE: no need to add more — any addition makes sum even larger"]
     P4["Backtrack immediately — saves exploring whole subtree"]
     P1 --> P2 --> P3 --> P4
@@ -10032,20 +10053,20 @@ flowchart TB
     F2["fib(5) with memo: 5 unique calls  O(n)"]
     F1 --> F2
   end
-  subgraph CoinDP["Coin Change dp-|table| for coins 1-|2-5| amount=6"]
-    D0["dp[0]=|0|  base: 0 coins for amount 0"]
-    D1["dp[1]=|1|  use coin 1"]
-    D2["dp[2]=|1|  use coin 2"]
-    D3["dp[3]=|2|  best: coin2+coin1  or  coin1+coin1+coin1"]
-    D4["dp[4]=|2|  best: coin2+coin2"]
-    D5["dp[5]=|1|  use coin 5"]
-    D6["dp[6]=|2|  use coin5+coin1"]
+  subgraph CoinDP["Coin Change dp-table for coins 1-2-5 amount=6"]
+    D0["dp[0]=0  base: 0 coins for amount 0"]
+    D1["dp[1]=1  use coin 1"]
+    D2["dp[2]=1  use coin 2"]
+    D3["dp[3]=2  best: coin2+coin1  or  coin1+coin1+coin1"]
+    D4["dp[4]=2  best: coin2+coin2"]
+    D5["dp[5]=1  use coin 5"]
+    D6["dp[6]=2  use coin5+coin1"]
     D0 --> D1 --> D2 --> D3 --> D4 --> D5 --> D6
   end
 
-  subgraph Approaches["Top-|down| vs Bottom-up"]
-    TD["Top-|down| memoisation: recurse from target, cache subproblems"]
-    BU["Bottom-|up| tabulation: fill dp from base case upward"]
+  subgraph Approaches["Top-down vs Bottom-up"]
+    TD["Top-down memoisation: recurse from target, cache subproblems"]
+    BU["Bottom-up tabulation: fill dp from base case upward"]
     TD -.|same| complexity.-> BU
   end
 ```
@@ -10279,12 +10300,12 @@ flowchart TB
     C1 --> C3
     C2 --> C3
   end
-  subgraph Kahn["Kahn's BFS-|based| Topological Sort"]
-    K1["Start: queue = nodes with in-|degree| 0 = Course 0"]
-    K2["Process 0: reduce in-|degree| of 1 and 2 by 1"]
-    K3["Both reach in-|degree| 0: add 1 and 2 to queue"]
-    K4["Process 1: reduce in-|degree| of 3 by 1  now in-degree=1"]
-    K5["Process 2: reduce in-|degree| of 3 by 1  now in-degree=0"]
+  subgraph Kahn["Kahn's BFS-based Topological Sort"]
+    K1["Start: queue = nodes with in-degree 0 = Course 0"]
+    K2["Process 0: reduce in-degree of 1 and 2 by 1"]
+    K3["Both reach in-degree 0: add 1 and 2 to queue"]
+    K4["Process 1: reduce in-degree of 3 by 1  now in-degree=1"]
+    K5["Process 2: reduce in-degree of 3 by 1  now in-degree=0"]
     K6["Process 3: done. Order = 0 1 2 3 or 0 2 1 3"]
     K1 --> K2 --> K3 --> K4 --> K5 --> K6
   end
@@ -10396,7 +10417,7 @@ public int[] dijkstra(int n, int[][] edges, int src) {
 
 ```mermaid
 flowchart TB
-  subgraph HeapStructure["Min-|Heap| Internal Structure (Array-backed)"]
+  subgraph HeapStructure["Min-Heap Internal Structure (Array-backed)"]
     H0["Index 0: 1 (ROOT = always minimum)"]
     H1["Index 1: 3  (left child of root)"]
     H2["Index 2: 5  (right child of root)"]
@@ -10410,17 +10431,17 @@ flowchart TB
     H2 --> H5
   end
   subgraph HeapRule["Heap Property"]
-    R1["Min-|heap:| parent ALWAYS less-|than-or-equal| to children"]
+    R1["Min-heap: parent ALWAYS less-than-or-equal to children"]
     R2["Root is always the MINIMUM element  O(1) access"]
     R3["Add: insert at end, bubble UP  O(log n)"]
     R4["Remove root: swap root with last, remove last, bubble DOWN  O(log n)"]
     R1 --> R2 --> R3 --> R4
   end
-  subgraph KthLargest["K-|th| Largest Trick with min-|heap| of size k"]
+  subgraph KthLargest["K-th Largest Trick with min-heap of size k"]
     L1["For each new number: add it to min-heap"]
     L2["If heap size > k: poll() to remove the minimum"]
-    L3["The root (minimum of heap) = the k-|th| largest overall"]
-    L4["Why? Heap holds the k largest seen. Smallest of those = k-|th| largest."]
+    L3["The root (minimum of heap) = the k-th largest overall"]
+    L4["Why? Heap holds the k largest seen. Smallest of those = k-th largest."]
     L1 --> L2 --> L3 --> L4
   end
 ```
@@ -10547,7 +10568,7 @@ flowchart TB
   end
   subgraph PathCompression["Path Compression — flatten tree on find()"]
     PC1["find(4): path is 4→3→1"]
-    PC2["After compression: parent[4]=|1|  parent[3]=1"]
+    PC2["After compression: parent[4]=1  parent[3]=1"]
     PC3["Next find(4): 4→1 directly  O(1)!"]
     PC1 --> PC2 --> PC3
   end
@@ -10699,15 +10720,15 @@ flowchart TB
     ROOT --> RC["'c'"]
     ROOT --> RD["'d'"]
     RC --> RCA["'a'"]
-    RCA --> RCAR["'r'  isEnd=|true|  ← 'car'"]
-    RCA --> RCAT["'t'  isEnd=|true|  ← 'cat'"]
-    RD --> RDO["'o'  isEnd=|true|  ← 'do'"]
-    RDO --> RDOG["'g'  isEnd=|true|  ← 'dog'"]
+    RCA --> RCAR["'r'  isEnd=true  ← 'car'"]
+    RCA --> RCAT["'t'  isEnd=true  ← 'cat'"]
+    RD --> RDO["'o'  isEnd=true  ← 'do'"]
+    RDO --> RDOG["'g'  isEnd=true  ← 'dog'"]
   end
   subgraph Ops["Operations — all O(L) where L = word length"]
     I1["insert('car'): root→c→a→r  set r.isEnd=true"]
-    S1["search('car'): root→c→a→r  return r.isEnd=|true| ✅"]
-    S2["search('ca'): root→c→a  return a.isEnd=|false| ❌ not a full word"]
+    S1["search('car'): root→c→a→r  return r.isEnd=true ✅"]
+    S2["search('ca'): root→c→a  return a.isEnd=false ❌ not a full word"]
     P1["startsWith('ca'): root→c→a  return true ✅ path exists"]
     P2["startsWith('cb'): root→c→? 'b' node is null  return false ❌"]
     I1 --> S1 --> S2 --> P1 --> P2
@@ -10838,7 +10859,7 @@ flowchart LR
   Q -->|Yes| G["Greedy\nO(n log n) or O(n)"]
   Q -->|No| D["Dynamic Programming\nO(n^2) or O(nW)"]
   G --> GEx["Activity selection\nJump Game\nCoin change standard coins\nHuffman coding"]
-  D --> DEx["0-|1| Knapsack\nLongest Increasing Subsequence\nEdit distance\nCoin change arbitrary coins"]
+  D --> DEx["0-1 Knapsack\nLongest Increasing Subsequence\nEdit distance\nCoin change arbitrary coins"]
 ```
 
 **Classic Greedy Problems:**
@@ -10997,15 +11018,15 @@ x ^ 0 = x       → XOR with 0 leaves unchanged
 flowchart LR
   subgraph BitTricks["Core Bit Tricks"]
     B1["x AND 1: check odd or even"]
-    B2["x AND x-|1:| remove lowest set bit"]
+    B2["x AND x-1: remove lowest set bit"]
     B3["x XOR x = 0: pairs cancel each other"]
     B4["x XOR 0 = x: lone value survives XOR"]
     B1 --> B2 --> B3 --> B4
   end
   subgraph UseCases["When to use bit manipulation"]
-    U1["Find single non-|duplicate| in pairs: XOR all elements"]
-    U2["Count set bits: loop n = n AND n-|1| until zero"]
-    U3["Check power of 2: n > 0 AND n AND n-|1| equals zero"]
+    U1["Find single non-duplicate in pairs: XOR all elements"]
+    U2["Count set bits: loop n = n AND n-1 until zero"]
+    U3["Check power of 2: n > 0 AND n AND n-1 equals zero"]
     U4["Missing number: XOR all indices with all values"]
     U1 --> U2 --> U3 --> U4
   end
@@ -11134,10 +11155,10 @@ flowchart TB
     T6 --> T7["7"]
   end
   subgraph Orders["Traversal results"]
-    PR["Preorder root-|left-right:| 4 2 1 3 6 5 7"]
-    IN["Inorder left-|root-right:| 1 2 3 4 5 6 7  sorted for BST!"]
-    PO["Postorder left-|right-root:| 1 3 2 5 7 6 4"]
-    LO["Level-o|rder| BFS: 4 then 2-|6| then 1-3-5-7"]
+    PR["Preorder root-left-right: 4 2 1 3 6 5 7"]
+    IN["Inorder left-root-right: 1 2 3 4 5 6 7  sorted for BST!"]
+    PO["Postorder left-right-root: 1 3 2 5 7 6 4"]
+    LO["Level-order BFS: 4 then 2-6 then 1-3-5-7"]
     PR --> IN --> PO --> LO
   end
 ```
@@ -11214,7 +11235,7 @@ flowchart TB
   Q{"What are you computing?"}
   Q --> H["Height or depth from leaves up\n→ Postorder DFS"]
   Q --> P["Path sum from root down\n→ Preorder DFS accumulate"]
-  Q --> L["Level-|by-level| result\n→ BFS with queue"]
+  Q --> L["Level-by-level result\n→ BFS with queue"]
   Q --> S["Sorted order or BST property\n→ Inorder DFS"]
   Q --> A["LCA or path between two nodes\n→ Postorder with upward return"]
   Q --> SER["Serialize or reconstruct\n→ Preorder with null markers"]
@@ -11296,10 +11317,10 @@ Rule: ListNode dummy = new ListNode(0); dummy.next = head;
 ```mermaid
 flowchart TB
   subgraph Reverse["Reverse 1 to 2 to 3 to null"]
-    R1["prev=|null|  curr=|1|  save next=2"]
-    R2["set curr.next=|null|  prev=|1|  curr=|2|  save next=3"]
-    R3["set curr.next=|1|  prev=|2|  curr=|3|  save next=null"]
-    R4["set curr.next=|2|  prev=|3|  curr=|null|  DONE"]
+    R1["prev=null  curr=1  save next=2"]
+    R2["set curr.next=null  prev=1  curr=2  save next=3"]
+    R3["set curr.next=1  prev=2  curr=3  save next=null"]
+    R4["set curr.next=2  prev=3  curr=null  DONE"]
     R5["return prev which is 3  new head: 3 to 2 to 1"]
     R1 --> R2 --> R3 --> R4 --> R5
   end
@@ -12540,8 +12561,8 @@ private boolean dfs(List<List<Integer>> adj, int[] state, int node) {
 ```mermaid
 flowchart TB
   DP["Dynamic Programming"]
-  DP --> M["Memoization\nTop-|down\nRecursion| + cache"]
-  DP --> T["Tabulation\nBottom-|up\nIterative| table"]
+  DP --> M["Memoization\nTop-down\nRecursion + cache"]
+  DP --> T["Tabulation\nBottom-up\nIterative table"]
   M --> F["Fibonacci\nKnapsack\nLCS"]
   T --> F
 ```
@@ -12839,9 +12860,9 @@ flowchart TB
 
   A --> B --> C --> D --> E
   C --> DS["DataSourceAutoConfiguration\n(postgresql.jar present)"]
-  C --> Redis["RedisAutoConfiguration\n(spring-|data-redis.jar| present)"]
-  C --> Kafka["KafkaAutoConfiguration\n(spring-|kafka.jar| present)"]
-  C --> Web["WebMvcAutoConfiguration\n(spring-|web.jar| present)"]
+  C --> Redis["RedisAutoConfiguration\n(spring-data-redis.jar present)"]
+  C --> Kafka["KafkaAutoConfiguration\n(spring-kafka.jar present)"]
+  C --> Web["WebMvcAutoConfiguration\n(spring-web.jar present)"]
 ```
 
 **Step-by-step**
@@ -13549,7 +13570,7 @@ public record ErrorResponse(int status, String message, List<String> errors) {}
 
 ```mermaid
 flowchart LR
-  App["App Threads"] --> Pool["HikariCP Pool\nmax=|20| connections"]
+  App["App Threads"] --> Pool["HikariCP Pool\nmax=20 connections"]
   Pool --> C1["DB Conn 1"]
   Pool --> C2["DB Conn 2"]
   Pool --> C3["DB Conn ..."]
@@ -14111,7 +14132,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 flowchart TB
   subgraph Flows["OAuth2 Grant Types"]
     AC["Authorization Code\n+ PKCE\nBest for web/mobile apps\nUser logs in via IdP"]
-    CC["Client Credentials\nService-|to-service\nNo| user involved\nM2M authentication"]
+    CC["Client Credentials\nService-to-service\nNo user involved\nM2M authentication"]
     DEV["Device Code\nTV / CLI apps\nNo browser available"]
     ROPC["Resource Owner Password\nLegacy — avoid\nApp handles user creds directly"]
   end
@@ -14849,11 +14870,11 @@ public void inner() { ... }
 ```mermaid
 flowchart TB
   subgraph Types["Index Types"]
-    BTree["B-|Tree| (default)\nEquality + Range\nORDER BY\nMost common"]
+    BTree["B-Tree (default)\nEquality + Range\nORDER BY\nMost common"]
     Hash["Hash Index\nEquality only\n=, IN\nCannot range query"]
-    Composite["Composite Index\nMultiple columns\nLeft-|prefix| rule"]
+    Composite["Composite Index\nMultiple columns\nLeft-prefix rule"]
     Partial["Partial Index\nWHERE condition\nSmaller, faster"]
-    Full["Full-|Text| Index\nText search\nGIN/GiST in PG"]
+    Full["Full-Text Index\nText search\nGIN/GiST in PG"]
   end
 ```
 
@@ -15216,7 +15237,7 @@ WHERE o.user_id = 1;
 ```mermaid
 flowchart TB
   subgraph Partitioning["Table Partitioning — Split one large table into smaller physical partitions"]
-    Range["Range Partitioning\norders_2024_01\norders_2024_02\nBest for time-|series| data"]
+    Range["Range Partitioning\norders_2024_01\norders_2024_02\nBest for time-series data"]
     List["List Partitioning\norders_IN\norders_US\nBest for known categories"]
     Hash["Hash Partitioning\norders_0 to orders_3\nBest for even distribution"]
   end
@@ -15366,7 +15387,7 @@ flowchart TB
     T["Table -> Collection"]
     R["Row -> Document"]
     C["Column -> Field"]
-    J["JOIN -> dollar-|lookup| or embedded doc"]
+    J["JOIN -> dollar-lookup or embedded doc"]
     I["Index -> Index (same concept)"]
   end
 ```
@@ -15508,7 +15529,7 @@ flowchart LR
   end
   subgraph Ref["Reference (Normalized)\nDocuments link by ID"]
       direction LR
-    R1["Order document\nhas userId field\n-> dollar-|lookup| needed\n-> Best for 1:many or many:many"]
+    R1["Order document\nhas userId field\n-> dollar-lookup needed\n-> Best for 1:many or many:many"]
   end
 ```
 
@@ -15996,9 +16017,9 @@ COMMIT;
 ```mermaid
 flowchart TB
   subgraph IndexTypes["Index Types"]
-    BT["B-|Tree| Index\nDefault for most columns\nRange and equality queries\nORDER BY optimization"]
-    Comp["Composite Index\nMultiple columns\nLeft-|prefix| rule applies\nCovers most query patterns"]
-    Full["Full-|Text| Index\nText search\nMySQL FULLTEXT\nPostgres GIN or GiST"]
+    BT["B-Tree Index\nDefault for most columns\nRange and equality queries\nORDER BY optimization"]
+    Comp["Composite Index\nMultiple columns\nLeft-prefix rule applies\nCovers most query patterns"]
+    Full["Full-Text Index\nText search\nMySQL FULLTEXT\nPostgres GIN or GiST"]
     Part["Partial Index PostgreSQL\nIndex subset of rows\nWHERE condition on index\nSmaller and faster scans"]
     Cover["Covering Index\nIncludes all SELECT columns\nNo heap access needed\nFastest read pattern"]
   end
@@ -16136,10 +16157,10 @@ WHERE status = 'PENDING';
 flowchart TB
   subgraph Partitioning["PostgreSQL Range Partitioning"]
     Parent["orders parent table\nNo data stored here directly"]
-    P1["orders_2024_q1\nJan-|Mar| 2024"]
-    P2["orders_2024_q2\nApr-|Jun| 2024"]
-    P3["orders_2024_q3\nJul-|Sep| 2024"]
-    P4["orders_2024_q4\nOct-|Dec| 2024"]
+    P1["orders_2024_q1\nJan-Mar 2024"]
+    P2["orders_2024_q2\nApr-Jun 2024"]
+    P3["orders_2024_q3\nJul-Sep 2024"]
+    P4["orders_2024_q4\nOct-Dec 2024"]
     Parent --> P1
     Parent --> P2
     Parent --> P3
@@ -16192,7 +16213,7 @@ flowchart LR
     R2["Replica 2\nRead replica"]
     WAL -->|stream| R1
     WAL -->|stream| R2
-    ReadApp["Application\nread-o|nly| queries"] -->|reads| R1
+    ReadApp["Application\nread-only queries"] -->|reads| R1
     ReadApp -->|reads| R2
   end
 ```
@@ -16487,13 +16508,13 @@ db.inventory.bulkWrite([
 flowchart TB
   subgraph IndexTypes["MongoDB Index Types"]
     SI["Single Field\n{userId: 1}\nEquality + Range + Sort"]
-    CI["Compound Index\n{userId:1, status:1}\nLeft-|prefix| rule"]
+    CI["Compound Index\n{userId:1, status:1}\nLeft-prefix rule"]
     MI["Multikey Index\nAuto on array fields\nOne array field max in compound"]
-    TI["Text Index\nFull-|text| search\n$text operator"]
+    TI["Text Index\nFull-text search\n$text operator"]
     GI["Geospatial\n2dsphere for lat/lon\n$near, $geoWithin"]
     PI["Partial Index\nfilterExpression\nSmaller, faster"]
-    TTL["TTL Index\nexpireAfterSeconds\nAuto-|delete| old docs"]
-    WI["Wildcard Index\nAll-|fields| pattern\nDynamic schemas"]
+    TTL["TTL Index\nexpireAfterSeconds\nAuto-delete old docs"]
+    WI["Wildcard Index\nAll-fields pattern\nDynamic schemas"]
   end
 ```
 
@@ -16639,10 +16660,10 @@ db.orders.aggregate([...], { allowDiskUse: true });
 ```mermaid
 flowchart TB
   subgraph Patterns["MongoDB Schema Design Patterns"]
-    Bucket["Bucket Pattern\nGroup time-|series| data\ninto buckets\nReduces document count"]
-    Computed["Computed Pattern\nPre-|compute| and cache\naggregated values\nFast reads"]
+    Bucket["Bucket Pattern\nGroup time-series data\ninto buckets\nReduces document count"]
+    Computed["Computed Pattern\nPre-compute and cache\naggregated values\nFast reads"]
     Outlier["Outlier Pattern\nMain doc + overflow doc\nfor unusually large arrays"]
-    Extended["Extended Reference\nEmbed frequently-|read| fields\nReference rest\nBest of both worlds"]
+    Extended["Extended Reference\nEmbed frequently-read fields\nReference rest\nBest of both worlds"]
     Subset["Subset Pattern\nEmbed top N items\nReference full list\nPage size optimization"]
   end
 ```
@@ -17580,7 +17601,7 @@ flowchart TB
 
   subgraph Data["Data Layer"]
     PG["PostgreSQL\nPrimary + Read Replica\nFlyway migrations"]
-    REDIS["Redis Cluster\nCache-|aside| + TTL\nRate limiter"]
+    REDIS["Redis Cluster\nCache-aside + TTL\nRate limiter"]
     KAFKA["Kafka\nClick events\nUser events"]
   end
 
@@ -18062,14 +18083,14 @@ CREATE-TABLE-orders-
 -total_amount-DECIMAL12-2-
 -created_at-TIMESTAMP-WITH-TIME-ZONE-DEFAULT-NOW
 ;
--Always-index-the-FK-column-—-full-table-scans-on-un-indexed-FKs-are-a-common-production-issue
-CREATE-INDEX-idx_orders_user_id-ON-ordersuser_id;
-CREATE-INDEX-idx_orders_user_id_status-ON-ordersuser_id-status;-compound-for-filtered-queries
--Query:-all-pending-orders-for-a-user
-SELECT-*-FROM-orders-WHERE-user_id-eq-42-AND-status-eq-'PENDING';
--Uses-idx_orders_user_id_status-→-Index-Scan-not-Seq-Scan
+-- Always index the FK column — full table scans on un-indexed FKs are a common production issue
+CREATE INDEX idx_orders_user_id ON orders(user_id);
+CREATE INDEX idx_orders_user_id_status ON orders(user_id, status); -- compound for filtered queries
+-- Query: all pending orders for a user
+SELECT * FROM orders WHERE user_id = 42 AND status = 'PENDING';
+-- Uses idx_orders_user_id_status -> Index Scan not Seq Scan
 ```
-###-Many-to-Many-M:N-—-via-Junction-Table
+### Many-to-Many (M:N) — via Junction Table
 ```sql
 -Students-can-enrol-in-many-courses;-courses-have-many-students
 CREATE-TABLE-students-
@@ -18097,61 +18118,59 @@ SELECT-c-title-e-grade
 FROM-enrolments-e
 JOIN-courses-c-ON-c-id-eq-e-course_id
 WHERE-e-student_id-eq-7;
-```
--gt-💡-**Interview-Tip:**-"How-do-you-model-a-many-to-many-relationship-in-SQL?"
--gt-Answer:-Always-use-a-**junction-table**-with-a-composite-primary-key-Never-store-CSV-IDs-in-a-column-—-that-violates-1NF-and-makes-querying-a-nightmare-
--
-##-SD-4:-ER-Diagrams-—-How-to-Read-and-Draw-Them
+> 💡 **Interview Tip:** "How do you model a many-to-many relationship in SQL?"
+> Answer: Always use a **junction table** with a composite primary key. Never store CSV IDs in a column — that violates 1NF and makes querying a nightmare.
+
+## SD-4: ER Diagrams — How to Read and Draw Them
 ```mermaid
 erDiagram
--USERS-{
--bigint-id-PK
--varchar-email-UK
--varchar-password_hash
--timestamp-created_at
--}
--USER_PROFILES-{
--bigint-user_id-PK-FK
--varchar-first_name
--varchar-last_name
--text-bio
--}
--ORDERS-{
--bigint-id-PK
--bigint-user_id-FK
--varchar-status
--decimal-total_amount
--timestamp-ordered_at
--}
--ORDER_ITEMS-{
--bigint-order_id-PK-FK
--bigint-product_id-PK-FK
--int-quantity
--decimal-unit_price
--}
--PRODUCTS-{
--bigint-id-PK
--varchar-sku-UK
--varchar-name
--decimal-price
--int-stock
--}
--CATEGORIES-{
--bigint-id-PK
--varchar-name-UK
--bigint-parent_id-FK
--}
--PRODUCT_CATEGORIES-{
--bigint-product_id-PK-FK
--bigint-category_id-PK-FK
--}
--USERS||--|| USER_PROFILES : "has profile"
+    USERS {
+        bigint id PK
+        varchar email UK
+        varchar password_hash
+        timestamp created_at
+    }
+    USER_PROFILES {
+        bigint user_id PK FK
+        varchar first_name
+        varchar last_name
+        text bio
+    }
+    ORDERS {
+        bigint id PK
+        bigint user_id FK
+        varchar status
+        decimal total_amount
+        timestamp ordered_at
+    }
+    ORDER_ITEMS {
+        bigint order_id PK FK
+        bigint product_id PK FK
+        int quantity
+        decimal unit_price
+    }
+    PRODUCTS {
+        bigint id PK
+        varchar sku UK
+        varchar name
+        decimal price
+        int stock
+    }
+    CATEGORIES {
+        bigint id PK
+        varchar name UK
+        bigint parent_id FK
+    }
+    PRODUCT_CATEGORIES {
+        bigint product_id PK FK
+        bigint category_id PK FK
+    }
+    USERS ||--|| USER_PROFILES : "has profile"
     USERS ||--o{ ORDERS : "places"
-    ORDERS ||--|{-ORDER_ITEMS-:-|contains|
--PRODUCTS||--|{-ORDER_ITEMS-:-|ordered-in|
--PRODUCTS-}o-o{-CATEGORIES-:-|categorised-by|
--CATEGORIES-}o-o{-PRODUCTS-:-|groups|
--CATEGORIES||--o{ CATEGORIES : "parent of"
+    ORDERS ||--|{ ORDER_ITEMS : "contains"
+    PRODUCTS ||--|{ ORDER_ITEMS : "ordered in"
+    PRODUCTS }o--o{ CATEGORIES : "categorised by"
+    CATEGORIES ||--o{ CATEGORIES : "parent of"
 ```
 ### Crow's Foot Notation — Quick Reference
 | Symbol | Meaning |
@@ -18193,9 +18212,9 @@ Step 6: NORMALISE
 ```mermaid
 flowchart LR
   subgraph Surrogate["Surrogate Keys (Generated)"]
-    Auto["BIGSERIAL / AUTO_INCREMENT\n✅ Small (8 bytes)\n✅ Sequential = fast B-|Tree| inserts\n✅ Simple JOINs\n❌ Exposes row count\n❌ Not safe in URLs\n❌ Not distributed-friendly"]
-    UUID["UUID v4 (random)\n✅ Safe in URLs/APIs\n✅ Globally unique\n✅ Distributed-|safe-n❌| 16 bytes (larger indexes)\n❌ Random = B-|Tree| fragmentation\n❌ Not human-readable"]
-    UUIDv7["UUID v7 (time-o|rdered-n✅| Safe in URLs\n✅ Globally unique\n✅ Sequential → less fragmentation\n✅ Sortable by creation time\n🏆 Best of both worlds"]
+    Auto["BIGSERIAL / AUTO_INCREMENT\n✅ Small (8 bytes)\n✅ Sequential = fast B-Tree inserts\n✅ Simple JOINs\n❌ Exposes row count\n❌ Not safe in URLs\n❌ Not distributed-friendly"]
+    UUID["UUID v4 (random)\n✅ Safe in URLs/APIs\n✅ Globally unique\n✅ Distributed-safe-n❌ 16 bytes (larger indexes)\n❌ Random = B-Tree fragmentation\n❌ Not human-readable"]
+    UUIDv7["UUID v7 (time-ordered-n✅ Safe in URLs\n✅ Globally unique\n✅ Sequential → less fragmentation\n✅ Sortable by creation time\n🏆 Best of both worlds"]
   end
   subgraph Natural["Natural Keys (Business Data)"]
     NK["Email, SSN, SKU, ISBN\n✅ Meaningful to business\n✅ No surrogate needed\n❌ Can change (email change)\n❌ Long — bad for FKs\n❌ Coupling to external data"]
@@ -18356,10 +18375,10 @@ WHERE id = 42 AND version = 3;   -- fails if someone else already updated to v4
 ```mermaid
 flowchart TB
   N1["1NF\nAtomic values\nNo repeating groups\nEach row uniquely identifiable"]
-  N2["2NF\nIn 1NF +\nNo partial dependency\n(non-|key| attrs depend on WHOLE PK)"]
-  N3["3NF\nIn 2NF +\nNo transitive dependency\n(non-|key| attrs depend only on PK)"]
+  N2["2NF\nIn 1NF +\nNo partial dependency\n(non-key attrs depend on WHOLE PK)"]
+  N3["3NF\nIn 2NF +\nNo transitive dependency\n(non-key attrs depend only on PK)"]
   BCNF["BCNF (3.5NF)\nIn 3NF +\nEvery determinant is a candidate key\nHandles overlapping composite keys"]
-  N4["4NF\nIn BCNF +\nNo multi-|valued| dependencies\n(independent repeating attributes)"]
+  N4["4NF\nIn BCNF +\nNo multi-valued dependencies\n(independent repeating attributes)"]
   N1 --> N2 --> N3 --> BCNF --> N4
 ```
 ```sql
@@ -18440,15 +18459,15 @@ spring:
 ```mermaid
 %%{init: {"flowchart": {"subGraphTitleMargin": {"top": 12, "bottom": 0}}}}%%
 flowchart TB
-  subgraph P1["Pattern 1: Shared Table\n(Row-|Level| Tenancy)"]
+  subgraph P1["Pattern 1: Shared Table\n(Row-Level Tenancy)"]
       direction TB
-    ST["Single DB, single table\ntenant_id column on every table\nRow-|Level| Security (RLS) in PostgreSQL"]
+    ST["Single DB, single table\ntenant_id column on every table\nRow-Level Security (RLS) in PostgreSQL"]
   end
-  subgraph P2["Pattern 2: Schema-|Per-Tenant-n-Schema| Isolation)"]
+  subgraph P2["Pattern 2: Schema-Per-Tenant-n-Schema Isolation)"]
       direction TB
     SS["Single DB\nSeparate schema per tenant\ntenant_a.users, tenant_b.users\nEasy migration, moderate isolation"]
   end
-  subgraph P3["Pattern 3: DB-|Per-Tenant-n-Full| Isolation)"]
+  subgraph P3["Pattern 3: DB-Per-Tenant-n-Full Isolation)"]
       direction TB
     SD["Separate database per tenant\nHighest isolation\nCompliant with data residency laws\nHighest ops overhead"]
   end
@@ -18534,11 +18553,11 @@ CREATE TABLE employee_salaries (
 flowchart LR
   subgraph CRUD["CRUD Schema\n(Current State)"]
       direction LR
-    C1["orders table\nid | status | total\n--- |link| -----\n1  | SHIPPED | 99.00\nMutable rows\nOnly current state"]
+    C1["orders table\nid  status  total\n--- link -----\n1   SHIPPED  99.00\nMutable rows\nOnly current state"]
   end
-  subgraph ES["Event Sourcing Schema\n(Append-|Only| Log)"]
+  subgraph ES["Event Sourcing Schema\n(Append-Only Log)"]
       direction LR
-    E1["order_events table\nid | order_id | type | payload | timestamp\n1  | 1        | ORDER_PLACED | {...} | 2025-|01-01-n2|  | 1        | PAYMENT_CONFIRMED | {...} | 2025-|01-01-n3|  | 1        | ORDER_SHIPPED | {...} | 2025-|01-02-nImmutable| rows\nState = replay all events"]
+    E1["order_events table\nid  order_id  type  payload  timestamp\n1   1         ORDER_PLACED  {...}  2025-01-01-n2   1         PAYMENT_CONFIRMED  {...}  2025-01-01-n3   1         ORDER_SHIPPED  {...}  2025-01-02-nImmutable rows\nState = replay all events"]
   end
 ```
 ```sql
@@ -18928,11 +18947,11 @@ CREATE TABLE messages_by_user_month (
 flowchart TB
   subgraph Structures["Redis Data Structures → Use Cases"]
     String["STRING\nSimple value\nSessions, counters,\nfeature flags, config"]
-    Hash["HASH\nField-|value| map\nUser profiles,\nproduct details"]
+    Hash["HASH\nField-value map\nUser profiles,\nproduct details"]
     List["LIST\nOrdered sequence\nActivity feeds,\ntask queues, logs"]
     Set["SET\nUnique values\nTags, user groups,\nfriends list"]
     ZSet["SORTED SET (ZSET)\nScored members\nLeaderboards,\nrate limiting,\nranked feeds"]
-    Stream["STREAM\nAppend-o|nly| log\nEvent sourcing,\nIoT data, audit"]
+    Stream["STREAM\nAppend-only log\nEvent sourcing,\nIoT data, audit"]
   end
 ```
 ```redis
@@ -18983,12 +19002,12 @@ flowchart TB
   subgraph DDB["DynamoDB Single Table: e-commerce"]
     PK["PK (Partition Key)\nGroups related items"]
     SK["SK (Sort Key)\nFilters & sorts within partition"]
-    PK --> E1["PK=|USER-42-nSK-METADATA|  → user record"]
-    PK --> E2["PK=|USER-42-nSK-ORDER-2025-03-01-ord-1|  → user's order"]
-    PK --> E3["PK=|USER-42-nSK-ORDER-2025-03-27-ord-2|  → user's order"]
-    PK --> E4["PK=|ORDER-ord-1-nSK-METADATA|  → order record"]
-    PK --> E5["PK=|ORDER-ord-1-nSK-ITEM-prod-10|  → order line item"]
-    PK --> E6["PK=|PRODUCT-prod-10-nSK-METADATA|  → product record"]
+    PK --> E1["PK=USER-42-nSK-METADATA  → user record"]
+    PK --> E2["PK=USER-42-nSK-ORDER-2025-03-01-ord-1  → user's order"]
+    PK --> E3["PK=USER-42-nSK-ORDER-2025-03-27-ord-2  → user's order"]
+    PK --> E4["PK=ORDER-ord-1-nSK-METADATA  → order record"]
+    PK --> E5["PK=ORDER-ord-1-nSK-ITEM-prod-10  → order line item"]
+    PK --> E6["PK=PRODUCT-prod-10-nSK-METADATA  → product record"]
   end
 ```
 ```javascript
@@ -19105,11 +19124,11 @@ ORDER BY frequency DESC LIMIT 10;
 flowchart TB
   subgraph AntiPatterns["Cassandra Anti-Patterns"]
     AP1["❌ Unbounded Partitions\nOne user with 100M rows\n→ Memory pressure, slow reads\n✅ Bucket by time period"]
-    AP2["❌ Secondary Indexes on High Cardinality\nINDEX ON user_id (millions of users)\n→ Full cluster scatter-|gather-n✅| Materialise access pattern as separate table"]
+    AP2["❌ Secondary Indexes on High Cardinality\nINDEX ON user_id (millions of users)\n→ Full cluster scatter-gather-n✅ Materialise access pattern as separate table"]
     AP3["❌ ALLOW FILTERING\nSELECT * WHERE non_key_col = x ALLOW FILTERING\n→ Full partition scan\n✅ Redesign table for this query"]
     AP4["❌ Tombstone Accumulation\nFrequent DELETEs on same partition\n→ Read amplification (tombstones scanned)\n✅ Use TTL instead of manual deletes"]
-    AP5["❌ Large Batch Writes\nbatch across many partitions\n→ Coordinator memory pressure\n✅ Async writes or partition-|scoped| batches only"]
-    AP6["❌ Skinny Tables\n1 row per partition (key-|value| style)\n→ High overhead per partition\n✅ Group related data in wide rows"]
+    AP5["❌ Large Batch Writes\nbatch across many partitions\n→ Coordinator memory pressure\n✅ Async writes or partition-scoped batches only"]
+    AP6["❌ Skinny Tables\n1 row per partition (key-value style)\n→ High overhead per partition\n✅ Group related data in wide rows"]
   end
 ```
 ```cql
@@ -19163,9 +19182,9 @@ flowchart TB
     US["User Service\n→ PostgreSQL\nACID, auth, sessions\ncomplex queries"]
     OS["Order Service\n→ PostgreSQL\nACID transactions\nfinancial integrity"]
     PS["Product Service\n→ MongoDB\nFlexible schema\npolymorphic products"]
-    CS["Cart Service\n→ Redis\nTTL-|based| expiry\nsub-|ms| reads/writes"]
-    SS["Search Service\n→ Elasticsearch\nFull-|text| search\nfaceted filtering"]
-    NS["Notification Service\n→ Cassandra\nHigh write throughput\ntime-|series| append-only"]
+    CS["Cart Service\n→ Redis\nTTL-based expiry\nsub-ms reads/writes"]
+    SS["Search Service\n→ Elasticsearch\nFull-text search\nfaceted filtering"]
+    NS["Notification Service\n→ Cassandra\nHigh write throughput\ntime-series append-only"]
     GraphSvc["Recommendation Service\n→ Neo4j\nGraph traversal\n'users also bought'"]
     Analytics["Analytics Service\n→ ClickHouse / Redshift\nOLAP, columnar\nBI queries"]
   end
@@ -19446,11 +19465,11 @@ must be justified by clear performance or capability gains."
 flowchart TB
   subgraph Structures["Redis Data Structures"]
     String["String\nSimplest KV\ncounters, cache, sessions, flags"]
-    Hash["Hash\nField-|value| pairs\nUser profile, product attributes"]
+    Hash["Hash\nField-value pairs\nUser profile, product attributes"]
     List["List\nOrdered linked list\nJob queues, activity feeds"]
     Set["Set\nUnordered unique members\nTags, unique visitors"]
     SortedSet["Sorted Set (ZSet)\nMembers with scores\nLeaderboards, rate limiting"]
-    Stream["Stream\nAppend-o|nly| log\nEvent sourcing, message queue"]
+    Stream["Stream\nAppend-only log\nEvent sourcing, message queue"]
     HyperLogLog["HyperLogLog\nProbabilistic unique count\n~0.81% error, 12KB max"]
     Bitmap["Bitmap\nBit operations on strings\nUser activity, feature flags"]
   end
@@ -19496,7 +19515,7 @@ long approxUniqueCount = redisTemplate.opsForHyperLogLog().size("unique_visitors
 
 ```mermaid
 flowchart TB
-  subgraph CacheAside["Cache-|Aside| (Lazy Loading) — Most Common"]
+  subgraph CacheAside["Cache-Aside (Lazy Loading) — Most Common"]
     CA1["Read: check cache"]
     CA2{Cache hit?}
     CA3["Return cached value"]
@@ -19512,7 +19531,7 @@ flowchart TB
     WT1["Write to cache AND DB\nsynchronously on every write"]
   end
 
-  subgraph WriteBehind["Write-|Behind| (Write-Back)"]
+  subgraph WriteBehind["Write-Behind (Write-Back)"]
     WB1["Write to cache immediately\nAsync flush to DB"]
     WB2["Risk: data loss if cache fails\nbefore flush"]
   end
@@ -20330,7 +20349,7 @@ flowchart LR
   App["Application"] --> Prod["Kafka Producer"]
   Prod --> Ser["Serializer\n(String/JSON/Avro)"]
   Ser --> Part["Partitioner\nWhich partition?\nkey hash % num_partitions"]
-  Part --> Buf["RecordAccumulator\n(in-|memory| buffer)"]
+  Part --> Buf["RecordAccumulator\n(in-memory buffer)"]
   Buf -->|batch-size-or-linger-ms| Send["Network send\nto Broker Leader"]
   Send --> Acks["Acknowledgement\nacks=0/1/all"]
 ```
@@ -20534,9 +20553,9 @@ public void onOrder(OrderCreatedEvent event, Acknowledgment ack) {
 ```mermaid
 flowchart TB
   subgraph Guarantees["Kafka Delivery Semantics"]
-    AL["At-|most-once\nMessages| may be lost\nAck before processing\nNever retry\nFast but unreliable"]
-    ALO["At-|least-once| (default)\nMessages may be duplicated\nAck after processing\nRetry on failure\nConsumer must be idempotent"]
-    EO["Exactly-o|nce\nNo| loss, no duplicates\nKafka Transactions\nComplex, slight overhead\nFinancial use cases"]
+    AL["At-most-once\nMessages may be lost\nAck before processing\nNever retry\nFast but unreliable"]
+    ALO["At-least-once (default)\nMessages may be duplicated\nAck after processing\nRetry on failure\nConsumer must be idempotent"]
+    EO["Exactly-once\nNo loss, no duplicates\nKafka Transactions\nComplex, slight overhead\nFinancial use cases"]
   end
 ```
 
@@ -20745,7 +20764,7 @@ public class PaymentConsumer {
 flowchart TB
   subgraph Reliability["Reliability Guarantees"]
     Durable["Durable Queue + Persistent Messages\nSurvive broker restart"]
-    Ack["Manual Acknowledgement\nMessage re-|queued| if consumer fails"]
+    Ack["Manual Acknowledgement\nMessage re-queued if consumer fails"]
     DLX["Dead Letter Exchange\nFailed messages routed to DLX"]
     Confirm["Publisher Confirms\nBroker confirms message persisted"]
   end
@@ -20805,7 +20824,7 @@ public RabbitTemplate rabbitTemplate(ConnectionFactory factory) {
 flowchart TB
   subgraph KafkaStrengths["Kafka — Choose when"]
     K1["High throughput\n(millions msg/sec)"]
-    K2["Message replay needed\n(consumers can re-|read| history)"]
+    K2["Message replay needed\n(consumers can re-read history)"]
     K3["Event sourcing\n(immutable log of facts)"]
     K4["Multiple independent consumers\n(each gets all messages)"]
     K5["Stream processing\n(Kafka Streams / Flink)"]
@@ -20814,10 +20833,10 @@ flowchart TB
   subgraph RabbitStrengths["RabbitMQ — Choose when"]
     R1["Complex routing logic\n(direct/topic/fanout/headers)"]
     R2["Task queues\n(workers compete for tasks)"]
-    R3["Low latency\n(sub-|ms| delivery)"]
+    R3["Low latency\n(sub-ms delivery)"]
     R4["Message priority queues"]
-    R5["Request-|reply| pattern\n(RPC over messaging)"]
-    R6["Per-|message| TTL\nand flexible policies"]
+    R5["Request-reply pattern\n(RPC over messaging)"]
+    R6["Per-message TTL\nand flexible policies"]
   end
 ```
 
@@ -21404,7 +21423,7 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-  subgraph AtMostOnce["At-|Most-Once| (acks=0)"]
+  subgraph AtMostOnce["At-Most-Once (acks=0)"]
     P1["Producer\nFire and forget\nNo ack waited"]
     K1["Kafka Broker"]
     C1["Consumer\nCommit offset BEFORE processing"]
@@ -21412,7 +21431,7 @@ flowchart TB
     note1["✅ Fastest\n❌ Message lost if broker crashes after receive\n❌ Message lost if consumer crashes after offset commit\nUse: metrics, analytics (losing a few datapoints OK)"]
   end
 
-  subgraph AtLeastOnce["At-|Least-Once| (acks=|all| default)"]
+  subgraph AtLeastOnce["At-Least-Once (acks=all default)"]
     P2["Producer\nRetries on failure\nacks=all"]
     K2["Kafka Broker\n(acks from all replicas)"]
     C2["Consumer\nCommit offset AFTER processing"]
@@ -21420,7 +21439,7 @@ flowchart TB
     note2["✅ No message loss\n❌ Duplicate if consumer crashes AFTER processing but BEFORE committing offset\nUse: most use cases — make consumer idempotent"]
   end
 
-  subgraph ExactlyOnce["Exactly-|Once| (Transactions)"]
+  subgraph ExactlyOnce["Exactly-Once (Transactions)"]
     P3["Producer\nTransactional producer"]
     K3["Kafka Broker\nTransactional coordinator"]
     C3["Consumer\nisolation.level=read_committed"]
@@ -21601,9 +21620,9 @@ flowchart TB
   subgraph Topic["Topic Exchange — wildcard matching"]
     TP["Producer\nrouting_key=order.eu.payment"]
     TE["Topic Exchange"]
-    TQ1["Queue: eu-o|rders-n-bound| to 'order.eu.*')"]
-    TQ2["Queue: all-|payments-n-bound| to '*.*.payment')"]
-    TQ3["Queue: all-o|rders-n-bound| to 'order.#')"]
+    TQ1["Queue: eu-orders-n-bound to 'order.eu.*')"]
+    TQ2["Queue: all-payments-n-bound to '*.*.payment')"]
+    TQ3["Queue: all-orders-n-bound to 'order.#')"]
     TP --> TE
     TE --> TQ1 & TQ2 & TQ3
   end
@@ -21967,7 +21986,7 @@ flowchart LR
 ```mermaid
 flowchart TB
   subgraph Pyramid["Testing Pyramid — Cost vs Confidence"]
-    E2E["E2E Tests\n10% of tests\nSlowest, most brittle\nSelenium, Cypress, REST-|assured| full flow"]
+    E2E["E2E Tests\n10% of tests\nSlowest, most brittle\nSelenium, Cypress, REST-assured full flow"]
     INT["Integration Tests\n30% of tests\nMedium speed\nTestContainers, @SpringBootTest\nReal DB + real Spring context"]
     UNIT["Unit Tests\n60% of tests\nFastest, most isolated\nJUnit 5 + Mockito\nBusiness logic only"]
     UNIT --> INT --> E2E
@@ -22396,7 +22415,7 @@ flowchart TB
 flowchart LR
   subgraph Bad["❌ Stateful App — Breaks with Horizontal Scaling"]
     U["User"] --> LB1["Load Balancer"]
-    LB1 -->|request-1-—-login| S1["Server 1\nsession: user=|Alice| ✅"]
+    LB1 -->|request-1-—-login| S1["Server 1\nsession: user=Alice ✅"]
     LB1 -->|request-2-—-dashboard| S2["Server 2\nsession: empty ❌\nUser logged out!"]
   end
 
@@ -22404,7 +22423,7 @@ flowchart LR
     U2["User"] --> LB2["Load Balancer"]
     LB2 --> S3["Server 1\nno local state"]
     LB2 --> S4["Server 2\nno local state"]
-    S3 --> R["Redis\nsession: user=|Alice| ✅"]
+    S3 --> R["Redis\nsession: user=Alice ✅"]
     S4 --> R
   end
 ```
@@ -23651,14 +23670,14 @@ Used by: Redis Cluster, Cassandra, DynamoDB, Memcached, Kafka partition assignme
 
 ```mermaid
 flowchart TB
-  subgraph AMO["At-|Most-Once| — 'Fire and Forget'"]
+  subgraph AMO["At-Most-Once — 'Fire and Forget'"]
     A1["1. Commit offset (mark as done)"]
     A2["2. Process message"]
     A3["If crash between 1 and 2: message is LOST forever"]
     A1 --> A2 --> A3
   end
 
-  subgraph ALO["At-|Least-Once| — 'Process then Acknowledge'"]
+  subgraph ALO["At-Least-Once — 'Process then Acknowledge'"]
     B1["1. Process message"]
     B2["2. Commit offset (mark as done)"]
     B3["If crash between 1 and 2: message is REDELIVERED"]
@@ -23666,7 +23685,7 @@ flowchart TB
     B1 --> B2 --> B3 --> B4
   end
 
-  subgraph EO["Exactly-|Once| — 'Kafka Transactions'"]
+  subgraph EO["Exactly-Once — 'Kafka Transactions'"]
     C1["Kafka transaction wraps consume + produce"]
     C2["Either both commit or both rollback — atomically"]
     C3["Works within Kafka ecosystem only"]
@@ -24698,7 +24717,7 @@ public ConcurrentKafkaListenerContainerFactory kafkaFactory() {
 
 ```mermaid
 flowchart TB
-  subgraph Push["Fan-o|ut| on Write (Push Model)"]
+  subgraph Push["Fan-out on Write (Push Model)"]
     W1["Alice posts photo"] --> W2["Find Alice's 500 followers"]
     W2 --> W3["Write to 500 feed tables simultaneously"]
     W3 --> W4["Feed read: instant O(1) Redis lookup"]
@@ -24707,7 +24726,7 @@ flowchart TB
 → Kafka lag, Redis memory explosion"]
   end
 
-  subgraph Pull["Fan-o|ut| on Read (Pull Model)"]
+  subgraph Pull["Fan-out on Read (Pull Model)"]
     R1["Alice posts photo"] --> R2["Write to Alice's OWN post store only"]
     R2 --> R3["Feed read: merge last 20 posts from each followed user"]
     R4["❌ Problem: User follows 500 people
@@ -26052,7 +26071,7 @@ public class PaymentConsumer {
 
 ```mermaid
 flowchart TB
-  subgraph CacheAside["Cache-|aside| (lazy loading)"]
+  subgraph CacheAside["Cache-aside (lazy loading)"]
     CA1["Read: cache -> miss -> DB -> cache -> return"]
     CA2["Write: DB update -> cache invalidate"]
   end
@@ -26062,7 +26081,7 @@ flowchart TB
   subgraph WriteThrough["Write-through"]
     WT1["App -> Cache -> DB (sync)"]
   end
-  subgraph WriteBehind["Write-|behind| (write-back)"]
+  subgraph WriteBehind["Write-behind (write-back)"]
     WB1["App -> Cache -> DB (async)"]
   end
 ```
@@ -26395,9 +26414,9 @@ public List<Order> getOrders(String userId) {
 
 ```mermaid
 flowchart TB
-  JVM["JVM"] --> Heap["Heap\n-X|ms| -Xmx"]
+  JVM["JVM"] --> Heap["Heap\n-Xms -Xmx"]
   JVM --> GC["GC\n-XX:+UseG1GC"]
-  JVM --> Thread["Threads\n-X|ss| (stack size)"]
+  JVM --> Thread["Threads\n-Xss (stack size)"]
   JVM --> JIT["JIT\nC1+C2 compiler"]
   Heap --> Young["Young Gen\n-XX:NewRatio"]
   Heap --> Old["Old Gen\npromotion threshold"]
@@ -26488,9 +26507,9 @@ flowchart TB
     RateLimit["Rate limiting"]
   end
   subgraph Auth["Authentication & Authorization"]
-    JWT2["Short-|lived| JWT\n15 min access token"]
+    JWT2["Short-lived JWT\n15 min access token"]
     Refresh["Refresh token rotation"]
-    RBAC["Role-|based| access\n@PreAuthorize"]
+    RBAC["Role-based access\n@PreAuthorize"]
   end
   subgraph Data["Data Protection"]
     Hash["BCrypt passwords"]
@@ -27116,7 +27135,7 @@ GET /doctors/123
 
 ```mermaid
 flowchart LR
-    subgraph CodeFirst["❌ Code-|First| (Old Way)"]
+    subgraph CodeFirst["❌ Code-First (Old Way)"]
         direction TB
         CF1["Backend devs write code"] --> CF2["Add Swagger annotations
 after the fact"]
@@ -27125,7 +27144,7 @@ after the fact"]
 Blocked for weeks"]
     end
 
-    subgraph APIFirst["✅ API-|First| (Modern Way)"]
+    subgraph APIFirst["✅ API-First (Modern Way)"]
         direction TB
         AF1["Design OpenAPI spec
 (openapi.yaml)"] --> AF2["Team reviews and
@@ -30115,7 +30134,7 @@ Toggle off in LaunchDarkly / AppConfig
 No redeploy needed!"]
     RES["✅ Service Restored"]
     RCA["📝 30 min: Root Cause Analysis written"]
-    PM["📋 1 week: Post-|mortem| + Prevention Measures"]
+    PM["📋 1 week: Post-mortem + Prevention Measures"]
     ALERT --> E1 & E2 & E3
     E1 & E2 & E3 --> DEC
     DEC --> OA & OB & OC
@@ -30720,14 +30739,14 @@ flowchart TB
     ECS["ECS Fargate\nServerless containers\nNo EC2 management"]
     EKS["EKS\nManaged Kubernetes\nMax control"]
     EC2["EC2 + ASG\nFull VM control\nCustom setups"]
-    Lambda["Lambda\nEvent-|driven\nShort| functions"]
+    Lambda["Lambda\nEvent-driven\nShort functions"]
   end
   subgraph Data["Data"]
-    RDS["RDS PostgreSQL\nManaged PostgreSQL\nMulti-|AZ| read replicas"]
+    RDS["RDS PostgreSQL\nManaged PostgreSQL\nMulti-AZ read replicas"]
     Elasticache["ElastiCache Redis\nManaged Redis\nCluster mode"]
-    MSK["MSK\nManaged Kafka\nAuto-|scaling| brokers"]
+    MSK["MSK\nManaged Kafka\nAuto-scaling brokers"]
     S3["S3\nObject storage\nStatic assets, backups"]
-    DDB["DynamoDB\nServerless NoSQL\nSingle-|digit| ms at any scale"]
+    DDB["DynamoDB\nServerless NoSQL\nSingle-digit ms at any scale"]
   end
   subgraph Network["Network & Edge"]
     ALB["ALB\nLayer 7 LB\nPath/host routing"]
@@ -30738,7 +30757,7 @@ flowchart TB
   subgraph Ops["Operations"]
     CW["CloudWatch\nMetrics + Logs + Alarms"]
     SM["Secrets Manager\nRotating secrets\nDB passwords, API keys"]
-    IAM["IAM\nFine-|grained| permissions\nIRSA for pods"]
+    IAM["IAM\nFine-grained permissions\nIRSA for pods"]
     ECR["ECR\nPrivate Docker registry\nVulnerability scanning"]
   end
 ```
@@ -31021,7 +31040,7 @@ management:
 ```mermaid
 flowchart LR
   subgraph Flow["Interview Question Flow"]
-    I["Introduction\n& Career Story"] --> P["Project Deep-|Dive-n-Comviva| + VMware)"]
+    I["Introduction\n& Career Story"] --> P["Project Deep-Dive-n-Comviva + VMware)"]
     P --> T["Technical Skill\nDeep-Dives"]
     T --> A["Architecture &\nDesign Decisions"]
     A --> L["Leadership &\nTeam Management"]
@@ -31065,7 +31084,7 @@ flowchart TB
   Root --> Fix1["Fix 1: JOIN FETCH\nreduced DB queries\n1 query instead of N+1"]
   Root --> Fix2["Fix 2: Async Salesforce sync\nvia Kafka event\nnot in request path"]
   Root --> Fix3["Fix 3: Redis cache\nquote lookups TTL=5min"]
-  Fix1 & Fix2 & Fix3 --> Result["P99: 800ms -> 590ms\n(-|26| in 2 weeks"]
+  Fix1 & Fix2 & Fix3 --> Result["P99: 800ms -> 590ms\n(-26 in 2 weeks"]
 ```
 
 **Best Answer**:
@@ -31114,7 +31133,7 @@ flowchart LR
   Strategy --> DB["PostgreSQL\nRead replica for reports\nPartitioned billing tables by month"]
   Strategy --> Cache["Redis\nCache invoice status\nTTL 30min"]
   Strategy --> Async["Kafka\nDecouple billing events\nfrom invoice generation"]
-  Strategy --> Pool["HikariCP\nmax=|20| per pod\n3 pods = 60 DB conns"]
+  Strategy --> Pool["HikariCP\nmax=20 per pod\n3 pods = 60 DB conns"]
   Strategy --> HPA["K8s HPA\nScale pods at 70% CPU"]
 ```
 
@@ -31186,7 +31205,7 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-  P["Producer\nSpring Boot Service\nacks=|all| idempotent=true"] --> K["Kafka Cluster\n3 brokers\n12 partitions/topic\nreplication-factor=3"]
+  P["Producer\nSpring Boot Service\nacks=all idempotent=true"] --> K["Kafka Cluster\n3 brokers\n12 partitions/topic\nreplication-factor=3"]
   K --> CG1["Consumer Group 1\nPayment Processing\n3 instances x 4 partitions"]
   K --> CG2["Consumer Group 2\nAudit/Analytics\n2 instances"]
   K --> DLQ["DLQ topic\n(after 3 retries)"]
@@ -31560,7 +31579,7 @@ flowchart LR
   POST["POST /orders\n201 Created\nLocation header"] --> GET["GET /orders/{id}\n200 OK\n404 Not Found"]
   GET --> PUT["PUT /orders/{id}\n200 OK\n204 No Content"]
   PUT --> DELETE["DELETE /orders/{id}\n204 No Content\n404 Not Found"]
-  GET --> LIST["GET /orders?page=|0-size-20-n200| OK with pagination"]
+  GET --> LIST["GET /orders?page=0-size-20-n200 OK with pagination"]
 ```
 
 ```java
@@ -31711,7 +31730,7 @@ public class JwtFilter extends OncePerRequestFilter {
 ```mermaid
 flowchart TB
   subgraph NPlus1["N+1 Problem"]
-    Q1["SELECT * FROM orders -- 1 query"] --> QN["SELECT * FROM items WHERE order_id=|1-nSELECT| * FROM items WHERE order_id=|2-n...| N more queries"]
+    Q1["SELECT * FROM orders -- 1 query"] --> QN["SELECT * FROM items WHERE order_id=1-nSELECT * FROM items WHERE order_id=2-n... N more queries"]
   end
   subgraph Fix["Fix with JOIN FETCH"]
     JF["SELECT o FROM Order o LEFT JOIN FETCH o.items\n-- 1 query returns everything"]
@@ -31874,11 +31893,11 @@ public class InventoryService {
 ```mermaid
 flowchart LR
   G1["G1GC\nDefault Java 9+\nBalanced\nHeap 4GB–32GB\nPause ~200ms"]
-  ZGC["ZGC\nJava 17+\nSub-|ms| pauses\nTB heaps\nLatency critical"]
+  ZGC["ZGC\nJava 17+\nSub-ms pauses\nTB heaps\nLatency critical"]
   Parallel["ParallelGC\nBatch/throughput\nLarger pauses OK\nHigh throughput"]
 
   UseCase1["Web API\nlatency SLA"] --> G1
-  UseCase2["Real-|time-nsub-ms| SLA"] --> ZGC
+  UseCase2["Real-time-nsub-ms SLA"] --> ZGC
   UseCase3["Batch job\nthroughput"] --> Parallel
 ```
 
@@ -31907,7 +31926,7 @@ flowchart LR
 flowchart LR
   Prompt["Scenario prompt"] --> Clarify["Clarify\nSLA + scale + constraints"]
   Clarify --> Diagnose["Diagnose\nFind root cause"]
-  Diagnose --> Options["State 2-|3| options\n+ trade-offs"]
+  Diagnose --> Options["State 2-3 options\n+ trade-offs"]
   Options --> Decide["Choose + justify"]
   Decide --> Rollback["Rollback plan"]
   Rollback --> Prevent["Prevent recurrence"]
@@ -31945,7 +31964,7 @@ flowchart LR
   Write["Update DB"] -->|cache-evict-fails| Stale["Cache still has old value"]
   Stale --> User["User reads stale data"]
   Fix1["Fix: Shorter TTL\n(eventual consistency)"]
-  Fix2["Fix: Write-|through-n-sync| cache+DB)"]
+  Fix2["Fix: Write-through-n-sync cache+DB)"]
   Fix3["Fix: Versioned keys\nv1:product:123"]
 ```
 
@@ -32238,12 +32257,12 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-  Traffic["High read traffic"] --> Cache["Add Redis cache\nCache-|aside| TTL"]
+  Traffic["High read traffic"] --> Cache["Add Redis cache\nCache-aside TTL"]
   Traffic2["High write traffic"] --> Queue["Add Kafka queue\nAsync processing"]
   Latency["P99 latency high"] --> Trace["Trace with Zipkin\nFind slow span\nFix N+1 or add index"]
   Scale["Need auto-scale"] --> HPA["K8s HPA\nCPU or custom metric"]
   Fail["Cascading failures"] --> CB["Circuit Breaker\nResilience4j"]
-  Stale["Stale cache"] --> TTL["Shorter TTL or\nEvent-|driven| invalidation"]
+  Stale["Stale cache"] --> TTL["Shorter TTL or\nEvent-driven invalidation"]
 ```
 
 ---
@@ -32711,10 +32730,10 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-  S1["1 Clarify Requirements\n2–3 min\nFunctional + Non-|Functional\nScale| estimates"] --> S2["2 Capacity Estimation\n2–3 min\nQPS, Storage, Bandwidth"]
-  S2 --> S3["3 High-|Level| Design\n5–10 min\nCore components diagram\nData flow"]
+  S1["1 Clarify Requirements\n2–3 min\nFunctional + Non-Functional\nScale estimates"] --> S2["2 Capacity Estimation\n2–3 min\nQPS, Storage, Bandwidth"]
+  S2 --> S3["3 High-Level Design\n5–10 min\nCore components diagram\nData flow"]
   S3 --> S4["4 Deep Dive\n15–20 min\nDB schema, API design\nKey algorithm\nBottlenecks"]
-  S4 --> S5["5 Trade-o|ffs| & Improvements\n5 min\nScaling plan\nFailure modes\nWhat you'd change"]
+  S4 --> S5["5 Trade-offs & Improvements\n5 min\nScaling plan\nFailure modes\nWhat you'd change"]
 ```
 
 **Step 1 — Clarify (always do this first)**
@@ -34718,7 +34737,424 @@ public class LRUCache<K, V> {
 
 ---
 
-## 📋 Section 10: SocGen Behavioral & Craftsmanship Questions
+### SG-TRICKY6. HashMap with mutable key — What happens?
+```java
+public class MutableKeyTrap {
+    static class Employee {
+        String name;
+        Employee(String name) { this.name = name; }
+        @Override
+        public int hashCode() { return name.hashCode(); }
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof Employee e && e.name.equals(this.name);
+        }
+    }
+    public static void main(String[] args) {
+        Map<Employee, String> map = new HashMap<>();
+        Employee emp = new Employee("John");
+        map.put(emp, "Developer");
+        System.out.println(map.get(emp));    // ?
+        emp.name = "Jane";  // ⚠️ Mutate the key!
+        System.out.println(map.get(emp));    // ?
+        System.out.println(map.size());      // ?
+    }
+}
+```
+**Output:**
+```
+Developer
+null        ← Can't find it anymore!
+1           ← But the entry is still there!
+```
+**Why?** When you mutate `emp.name`, the `hashCode()` changes. The entry is stored in the bucket for `"John".hashCode()`, but now we're looking in the bucket for `"Jane".hashCode()`. The entry is **orphaned** — it exists but can never be found.
+**The Rule:** Never use mutable objects as HashMap keys. Use immutable types (String, Integer, records) or make your key fields `final`.
+---
+### SG-TRICKY7. Method overloading with null — Which method is called?
+```java
+public class NullOverload {
+    public static void print(Object obj) {
+        System.out.println("Object version");
+    }
+    public static void print(String str) {
+        System.out.println("String version");
+    }
+    public static void main(String[] args) {
+        print(null);  // ?
+    }
+}
+```
+**Answer: `String version`**
+**Why?** Java picks the **most specific** method. `String` is more specific than `Object` (String extends Object). So `print(String)` wins.
+```java
+// But what if we add:
+public static void print(Integer num) {
+    System.out.println("Integer version");
+}
+print(null);  // ❌ COMPILATION ERROR!
+// "reference to print is ambiguous"
+// String and Integer are both equally specific (neither extends the other)
+```
+**The Rule:** When multiple overloaded methods match `null`, Java picks the most specific type. If two are equally specific (siblings in hierarchy), it's a **compile error**.
+---
+### SG-TRICKY8. Ternary operator with autoboxing — NullPointerException!
+```java
+public static void main(String[] args) {
+    Integer a = null;
+    int b = 10;
+    // What happens here?
+    int result = true ? a : b;  // ?
+}
+```
+**Answer: `NullPointerException`!**
+**Why?**
+```
+1. Ternary expression: true ? a : b
+2. a is Integer (null), b is int
+3. Java auto-unboxes 'a' (Integer → int) to match the int type
+4. Unboxing null → NullPointerException!
+```
+**The Rule:** Ternary operator with mixed `Integer`/`int` types forces auto-unboxing. If the Integer is null → NPE.
+---
+### SG-TRICKY9. equals() and hashCode() contract violation
+```java
+public class BadEquals {
+    int id;
+    BadEquals(int id) { this.id = id; }
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof BadEquals b && b.id == this.id;
+    }
+    // ⚠️ hashCode() NOT overridden!
+    public static void main(String[] args) {
+        Set<BadEquals> set = new HashSet<>();
+        set.add(new BadEquals(1));
+        set.add(new BadEquals(1));
+        System.out.println(set.size());  // ?
+        BadEquals obj = new BadEquals(1);
+        set.add(obj);
+        System.out.println(set.contains(obj));            // ?
+        System.out.println(set.contains(new BadEquals(1))); // ?
+    }
+}
+```
+**Output:**
+```
+3       ← Should be 1! But each "new" object has different hashCode
+true    ← Same object reference, same hashCode → found
+false   ← Different object, different hashCode → NOT found!
+```
+**Why?** `HashSet` uses `hashCode()` first to find the bucket. Since `hashCode()` is inherited from `Object` (based on memory address), each `new BadEquals(1)` goes to a different bucket. `equals()` is never even called!
+**The Rule:** If you override `equals()`, you MUST override `hashCode()`. Objects that are `.equals()` MUST have the same `hashCode()`.
+---
+### SG-TRICKY10. ConcurrentModificationException — The hidden trap
+```java
+List<String> list = new ArrayList<>(List.of("A", "B", "C", "D"));
+for (String s : list) {
+    if (s.equals("B")) {
+        list.remove(s);  // ⚠️ What happens?
+    }
+}
+```
+**Answer: `ConcurrentModificationException`!**
+**Why?** The enhanced for-loop uses an Iterator internally. Modifying the list directly (not through the iterator) while iterating triggers this exception.
+**Correct ways to remove during iteration:**
+```java
+// ✅ Way 1: Use Iterator.remove()
+Iterator<String> it = list.iterator();
+while (it.hasNext()) {
+    if (it.next().equals("B")) {
+        it.remove();  // Safe!
+    }
+}
+// ✅ Way 2: Use removeIf() (Java 8+) — BEST
+list.removeIf(s -> s.equals("B"));
+// ✅ Way 3: Use CopyOnWriteArrayList (thread-safe)
+List<String> safeList = new CopyOnWriteArrayList<>(list);
+for (String s : safeList) {
+    if (s.equals("B")) safeList.remove(s);  // Safe but slow
+}
+```
+---
+### SG-TRICKY11. static block execution order
+```java
+public class StaticOrder {
+    static { System.out.println("Static block 1"); }
+    static int x = initX();
+    static int initX() {
+        System.out.println("initX called");
+        return 10;
+    }
+    static { System.out.println("Static block 2"); }
+    public static void main(String[] args) {
+        System.out.println("main, x = " + x);
+    }
+}
+```
+**Output:**
+```
+Static block 1
+initX called
+Static block 2
+main, x = 10
+```
+**The Rule:** Static blocks and static field initializers execute in **order of appearance** in the source code, before `main()` runs.
+---
+### SG-TRICKY12. Generics type erasure — What's the output?
+```java
+List<String> strings = new ArrayList<>();
+List<Integer> integers = new ArrayList<>();
+System.out.println(strings.getClass() == integers.getClass());  // ?
+System.out.println(strings.getClass().getName());               // ?
+```
+**Output:**
+```
+true                    ← Same class at runtime!
+java.util.ArrayList     ← No generic type info
+```
+**Why?** Java generics use **type erasure**. At runtime, both are just `ArrayList`. The generic type `<String>` and `<Integer>` exist only at **compile time** for type checking, then they're erased.
+**Implication:**
+```java
+// ❌ This does NOT compile
+if (list instanceof List<String>) { }  // Cannot check generic type at runtime
+// ✅ This works
+if (list instanceof List<?>) { }  // Unbounded wildcard
+```
+---
+### SG-TRICKY13. try-with-resources — Close order
+```java
+public class CloseOrder implements AutoCloseable {
+    String name;
+    CloseOrder(String name) { 
+        this.name = name;
+        System.out.println("Opening " + name);
+    }
+    public void close() { 
+        System.out.println("Closing " + name);
+    }
+    public static void main(String[] args) {
+        try (CloseOrder a = new CloseOrder("A");
+             CloseOrder b = new CloseOrder("B");
+             CloseOrder c = new CloseOrder("C")) {
+            System.out.println("Inside try");
+        }
+    }
+}
+```
+**Output:**
+```
+Opening A
+Opening B
+Opening C
+Inside try
+Closing C
+Closing B
+Closing A
+```
+**The Rule:** Resources in try-with-resources are closed in **REVERSE order** (LIFO — like a stack). Last opened = first closed. This makes sense because later resources might depend on earlier ones.
+---
+### SG-TRICKY14. Covariant return type and method hiding
+```java
+class Animal {
+    static String type() { return "Animal"; }
+    Animal create() { return new Animal(); }
+}
+class Dog extends Animal {
+    static String type() { return "Dog"; }    // Method HIDING (not overriding!)
+    @Override
+    Dog create() { return new Dog(); }        // Covariant return (overriding)
+}
+public static void main(String[] args) {
+    Animal a = new Dog();
+    System.out.println(a.type());     // ?
+    System.out.println(a.create().getClass().getSimpleName());  // ?
+}
+```
+**Output:**
+```
+Animal    ← Static methods are resolved by REFERENCE TYPE, not runtime type
+Dog       ← Instance methods are resolved by RUNTIME TYPE (polymorphism)
+```
+**The Rule:**
+- **Static methods:** resolved at compile time based on reference type → **hiding**, not overriding
+- **Instance methods:** resolved at runtime based on actual object → **overriding** (polymorphism)
+---
+### SG-TRICKY15. Immutable class trap — Are you really immutable?
+```java
+public final class Person {
+    private final String name;
+    private final List<String> hobbies;
+    public Person(String name, List<String> hobbies) {
+        this.name = name;
+        this.hobbies = hobbies;  // ⚠️ Bug!
+    }
+    public List<String> getHobbies() { return hobbies; }  // ⚠️ Bug!
+}
+public static void main(String[] args) {
+    List<String> hobbies = new ArrayList<>(List.of("Reading", "Coding"));
+    Person p = new Person("John", hobbies);
+    System.out.println(p.getHobbies());  // [Reading, Coding]
+    hobbies.add("Hacking");  // Modify original list
+    System.out.println(p.getHobbies());  // ?
+    p.getHobbies().add("Breaking");  // Modify via getter
+    System.out.println(p.getHobbies());  // ?
+}
+```
+**Output:**
+```
+[Reading, Coding]
+[Reading, Coding, Hacking]         ← Mutated via original reference!
+[Reading, Coding, Hacking, Breaking] ← Mutated via getter!
+```
+**Fix — Truly Immutable:**
+```java
+public final class Person {
+    private final String name;
+    private final List<String> hobbies;
+    public Person(String name, List<String> hobbies) {
+        this.name = name;
+        this.hobbies = List.copyOf(hobbies);  // ✅ Defensive COPY
+    }
+    public List<String> getHobbies() { 
+        return Collections.unmodifiableList(hobbies);  // ✅ Unmodifiable view
+        // Or just return hobbies since List.copyOf already returns unmodifiable
+    }
+}
+```
+---
+### SG-TRICKY16. Diamond problem with default methods
+```java
+interface A {
+    default void greet() { System.out.println("Hello from A"); }
+}
+interface B {
+    default void greet() { System.out.println("Hello from B"); }
+}
+class C implements A, B {
+    // What happens if we DON'T override greet()? → COMPILE ERROR!
+    // Must resolve the conflict:
+    @Override
+    public void greet() {
+        A.super.greet();  // Explicitly choose A's version
+        // or B.super.greet();
+        // or your own implementation
+    }
+}
+```
+**The Rule:** If a class implements two interfaces with the same default method, it MUST override and resolve the conflict. Otherwise: **compile error**.
+---
+### SG-TRICKY17. What does this print? (Varargs trap)
+```java
+public static void test(int... nums) {
+    System.out.println(nums.length);
+}
+public static void main(String[] args) {
+    test();           // ?
+    test(1, 2, 3);    // ?
+    test(null);       // ?
+}
+```
+**Output:**
+```
+0           ← Empty varargs → array of length 0
+3           ← Three elements
+Exception!  ← NullPointerException on nums.length (nums is null!)
+```
+**Why?** `test(null)` passes `null` as the array itself (not an element). `null.length` → NPE.
+**Fix:** Always null-check varargs:
+```java
+public static void test(int... nums) {
+    if (nums == null) { System.out.println("null array"); return; }
+    System.out.println(nums.length);
+}
+```
+---
+### SG-TRICKY18. finally vs System.exit()
+```java
+try {
+    System.out.println("try");
+    System.exit(0);     // ⚠️
+} finally {
+    System.out.println("finally");  // Does this run?
+}
+```
+**Answer: `finally` does NOT run!**
+```
+Output:
+try
+```
+**The only ways `finally` doesn't execute:**
+1. `System.exit()` — JVM shuts down immediately
+2. JVM crash (OutOfMemoryError, StackOverflowError in some cases)
+3. Thread killed by `Thread.stop()` (deprecated)
+4. Infinite loop/deadlock in try block
+---
+### SG-TRICKY19. Enum comparison — == vs equals()
+```java
+enum Status { ACTIVE, INACTIVE }
+Status s1 = Status.ACTIVE;
+Status s2 = Status.ACTIVE;
+System.out.println(s1 == s2);       // ?
+System.out.println(s1.equals(s2));  // ?
+System.out.println(s1 == Status.ACTIVE);  // ?
+```
+**Output:**
+```
+true     ← Same reference (enums are singletons!)
+true     ← equals() works too
+true     ← Direct comparison works
+```
+**The Rule:** For enums, `==` is **preferred** over `.equals()` because:
+1. Enums are guaranteed singletons — `==` is safe
+2. `==` is null-safe (`null == Status.ACTIVE` → false, no NPE)
+3. `.equals(null)` also works, but `null.equals(Status.ACTIVE)` → NPE!
+---
+### SG-TRICKY20. Sneaky: What is printed?
+```java
+public static void main(String[] args) {
+    System.out.println(1 + 2 + " hello " + 3 + 4);
+}
+```
+**Answer: `3 hello 34`**
+```
+Step by step (left to right):
+  1 + 2       = 3          (int + int = int addition)
+  3 + " hello" = "3 hello" (int + String = String concatenation)
+  "3 hello " + 3 = "3 hello 3"  (String + int = concatenation)
+  "3 hello 3" + 4 = "3 hello 34" (String + int = concatenation)
+```
+**The Rule:** `+` is addition when both sides are numbers. The moment one side is a String, everything becomes **concatenation** from that point onward.
+```java
+// More examples:
+System.out.println("result: " + 1 + 2);  // "result: 12" (concatenation)
+System.out.println("result: " + (1 + 2)); // "result: 3"  (parentheses force addition first)
+System.out.println(1 + 2 + "result");     // "3result"    (addition first, then concat)
+```
+---
+### 📋 Tricky Questions Quick Reference:
+| # | Trap | Key Rule |
+|---|---|---|
+| 1 | finally with return | finally return OVERRIDES try/catch return |
+| 2 | `i++ + i++` | post: USE then increment; pre: INCREMENT then use |
+| 3 | `a = a++` | Result is unchanged! (saves old value, overwrites increment) |
+| 4 | String `==` | `==` compares reference; `.equals()` compares content |
+| 5 | Integer cache | -128 to 127 cached; `==` fails for larger values |
+| 6 | Mutable HashMap key | Mutating key orphans the entry forever |
+| 7 | null overloading | Java picks most specific type; siblings = compile error |
+| 8 | Ternary autoboxing | Mixed Integer/int → auto-unbox → possible NPE |
+| 9 | equals without hashCode | HashSet/HashMap won't work correctly |
+| 10 | Remove during foreach | ConcurrentModificationException; use removeIf() |
+| 11 | Static block order | Executes top-to-bottom before main() |
+| 12 | Generic type erasure | `List<String>` and `List<Integer>` are same class at runtime |
+| 13 | try-with-resources close | Closed in REVERSE order (LIFO) |
+| 14 | Static vs instance methods | Static = reference type; Instance = runtime type |
+| 15 | Fake immutability | Must defensive copy in constructor AND getter |
+| 16 | Diamond problem | Must override conflicting default methods |
+| 17 | Varargs null | `test(null)` passes null array, not null element |
+| 18 | finally vs System.exit | System.exit kills JVM — finally doesn't run |
+| 19 | Enum == | `==` is preferred for enums (null-safe, singleton) |
+| 20 | String + int | Left-to-right: numbers add, then String concatenates |
+---## 📋 Section 10: SocGen Behavioral & Craftsmanship Questions
 
 ### SG-BEH1. "What does Software Craftsmanship mean to you?"
 
@@ -38986,4 +39422,2638 @@ public ResponseEntity<?> handleError(Exception e, HttpServletRequest req) {
 
 > **"Security at HLD is about architecture — zero-trust, network segmentation, encryption strategy, and secrets management. Security at LLD is about code — input validation, SQL injection prevention, PII masking, IDOR prevention, and secure error handling. Both levels are non-negotiable. I use a security checklist of 27 items that every microservice MUST pass before going to production."**
 
+------
+# 🚀 Phase 13: Deep-Dive Technical Mastery — The 2026 Edition
+> **This section covers cutting-edge topics that separate a Senior Tech Lead from a Senior Developer in 2026 interviews. These are the gaps that modern interviewers probe to test your architectural depth.**
+---
+## 🟢 DT-1. The Concurrency Revolution: Virtual Threads, Scoped Values & Structured Concurrency
+### Why This Matters for a Tech Lead:
+Traditional Java threads are wrappers around **OS threads** (1:1 mapping). Each OS thread costs **~1MB of stack memory** and requires an expensive **kernel context switch**. This is why we used thread pools (`ExecutorService`) to limit concurrency — but it also limited throughput.
+**Java 21+ Project Loom** changes everything.
+### The M:N Scheduling Model:
+```mermaid
+flowchart LR
+    subgraph Old["Traditional Threading"]
+        T["10K Threads x 1MB = 10GB RAM"] --> OS["Each Java Thread = 1 OS Thread"]
+    end
+    subgraph New["Virtual Threads (Loom)"]
+        VT["1M+ Virtual Threads x KB"] --> CT["Mounted on few Carrier OS Threads"]
+    end
+    style Old fill:#8b0000,stroke:#ff0000,color:#fff
+    style New fill:#006400,stroke:#00ff00,color:#fff
+```
+### How Virtual Thread Unmounting Works:
+```mermaid
+sequenceDiagram
+    participant VT as Virtual Thread
+    participant CT as Carrier OS Thread
+    participant DB as Database (I/O)
+    VT->>CT: Mounted on carrier thread
+    CT->>DB: Execute SQL query (blocking I/O)
+    Note over VT,CT: JVM UNMOUNTS virtual thread<br/>Carrier thread is FREE
+    CT->>CT: Carrier picks up another<br/>virtual thread to run
+    DB-->>VT: Query result ready
+    Note over VT,CT: JVM RE-MOUNTS virtual thread<br/>on any available carrier
+    VT->>VT: Continue processing
+```
+### Enable Virtual Threads in Spring Boot:
+```yaml
+# application.yml — One line to enable!
+spring:
+  threads:
+    virtual:
+      enabled: true
+# That's it! Tomcat now uses virtual threads instead of platform threads
+# Before: 200 threads handling 200 concurrent requests
+# After: 1,000,000+ virtual threads handling 1,000,000+ concurrent requests
+```
+### Scoped Values vs ThreadLocal — The Architectural Shift:
+| Feature | ThreadLocal ❌ | ScopedValue ✅ |
+|---------|---------------|----------------|
+| **Mutability** | Mutable — can be changed anywhere | **Immutable** — set once per scope |
+| **Lifetime** | Lives as long as the thread (in pool = forever) | **Bound to scope** — auto-released |
+| **Memory** | Leaks if you forget `.remove()` | **No leaks** — garbage collected with scope |
+| **Virtual Threads** | Dangerous — 1M threads = 1M ThreadLocal copies | **Designed for** virtual threads |
+| **Inheritance** | InheritableThreadLocal is fragile | **Explicit sharing** via `run()` |
+```java
+// ❌ OLD WAY — ThreadLocal (Memory Leak Risk)
+private static final ThreadLocal<String> USER_ID = new ThreadLocal<>();
+public void handleRequest(String userId) {
+    USER_ID.set(userId);        // Set
+    processOrder();
+    USER_ID.remove();           // MUST remove! Forget = memory leak
+}
+// ✅ NEW WAY — ScopedValue (Java 21+)
+private static final ScopedValue<String> USER_ID = ScopedValue.newInstance();
+public void handleRequest(String userId) {
+    ScopedValue.where(USER_ID, userId)
+               .run(() -> processOrder());
+    // Automatically released when run() completes!
+    // No .remove() needed, no memory leak possible
+}
+```
+### Structured Concurrency — No More Orphan Threads:
+```mermaid
+flowchart LR
+    subgraph Legacy["Legacy: Orphan Problem"]
+        P1[Parent Fails] --> O1["Child threads keep running wastefully"]
+    end
+    subgraph SC["Structured Concurrency"]
+        P2[Any fork fails] --> C1["All other forks auto-cancelled"]
+    end
+    style Legacy fill:#8b0000,stroke:#ff0000,color:#fff
+    style SC fill:#006400,stroke:#00ff00,color:#fff
+```
+```java
+// ✅ Structured Concurrency — Travel Booking Engine
+try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+    // Fork all three in parallel
+    Subtask<Flight> flightTask = scope.fork(() -> flightService.search(query));
+    Subtask<Hotel>  hotelTask  = scope.fork(() -> hotelService.search(query));
+    Subtask<Car>    carTask    = scope.fork(() -> carService.search(query));
+    scope.join();            // Wait for all to complete
+    scope.throwIfFailed();   // If ANY fails, all others are auto-cancelled
+    // All succeeded — combine results
+    return new TravelPackage(
+        flightTask.get(),
+        hotelTask.get(),
+        carTask.get()
+    );
+}
+// When scope closes: all threads are guaranteed to be done
+// No orphan threads, no resource leaks, no fire-and-forget
+```
+### Interview One-Liner:
+> **"Virtual Threads give us the scalability of async code with the simplicity of synchronous code. Scoped Values eliminate ThreadLocal memory leaks in high-concurrency systems. Structured Concurrency guarantees no orphan threads — when the parent scope ends, all child tasks are done or cancelled. For a system handling 100K+ concurrent connections, this is the difference between stability and OutOfMemoryError."**
+---
+## 🔵 DT-2. AI-Ready Backends — Spring AI & RAG Architecture
+### Why This Matters for a Tech Lead:
+Every enterprise is integrating LLMs (Large Language Models) into their systems. As a Tech Lead, you need to know how to build AI-powered features **without** sending proprietary data to external APIs, and how to prevent **hallucinations**.
+### What is RAG (Retrieval-Augmented Generation)?
+```mermaid
+flowchart LR
+    U["User Question"] --> EMB["Embed Question"] --> VDB["Vector DB Search"] --> CTX["Top Chunks"] --> LLM["LLM + Context"] --> A["Grounded Answer"]
+    style A fill:#006400,stroke:#00ff00,color:#fff
+```
+### RAG Architecture — Step by Step:
+```mermaid
+flowchart TB
+    subgraph Ingestion["📥 Step 1: Document Ingestion (One-time)"]
+        direction LR
+        PDF["HR PDFs<br/>Wiki Pages<br/>Confluence"] --> CHUNK["Chunk into<br/>small paragraphs"]
+        CHUNK --> EMBED["Generate Embeddings<br/>(OpenAI/Ollama)"]
+        EMBED --> STORE["Store in Vector DB<br/>(PGVector)"]
+    end
+    subgraph Query["🔍 Step 2: Query Time (Every request)"]
+        direction LR
+        USER["User Question"] --> QEMB["Embed the<br/>question"]
+        QEMB --> SEARCH["Semantic Search<br/>in Vector DB"]
+        SEARCH --> TOP3["Top 3 relevant<br/>document chunks"]
+        TOP3 --> PROMPT["Build prompt:<br/>Context + Question"]
+        PROMPT --> LLM["Send to LLM"]
+        LLM --> ANSWER["Grounded Answer"]
+    end
+    Ingestion --> Query
+```
+### Spring AI Code Example:
+```java
+// Spring AI — RAG Implementation
+@Service
+public class HRAssistantService {
+    private final ChatClient chatClient;
+    private final VectorStore vectorStore;
+    public HRAssistantService(ChatClient.Builder builder, VectorStore vectorStore) {
+        this.chatClient = builder.build();
+        this.vectorStore = vectorStore;
+    }
+    public String askHRQuestion(String userQuestion) {
+        // Step 1: Semantic search in Vector DB
+        List<Document> relevantDocs = vectorStore.similaritySearch(
+            SearchRequest.query(userQuestion).withTopK(3)
+        );
+        // Step 2: Build context from retrieved documents
+        String context = relevantDocs.stream()
+            .map(Document::getContent)
+            .collect(Collectors.joining("\n\n"));
+        // Step 3: Send to LLM with context (RAG)
+        return chatClient.prompt()
+            .system("You are an HR assistant. Answer ONLY based on the provided context. "
+                   + "If the answer is not in the context, say 'I don't know.'")
+            .user(u -> u.text("Context: {context}\n\nQuestion: {question}")
+                        .param("context", context)
+                        .param("question", userQuestion))
+            .call()
+            .content();
+    }
+}
+```
+### What is a Vector Database?
+| Traditional DB | Vector DB |
+|---|---|
+| Stores rows and columns | Stores **mathematical vectors** (embeddings) |
+| Search by exact keyword: `WHERE name = 'Dog'` | Search by **meaning**: "find everything related to pets" |
+| Uses B-Tree / Hash indexes | Uses **ANN (Approximate Nearest Neighbor)** indexes |
+| Examples: PostgreSQL, MySQL | Examples: **PGVector**, Milvus, Pinecone, Weaviate |
+### Interview One-Liner:
+> **"To prevent LLM hallucinations about internal data, I implement RAG using Spring AI. I chunk company documents, generate embeddings, store them in PGVector, and at query time, I retrieve the top-K relevant chunks as context for the LLM. This grounds the AI in real data. The LLM generates language — the Vector DB provides truth."**
+---
+## 🟠 DT-3. Transactional Outbox Pattern & Debezium — Solving Dual Writes
+### The Problem: Dual Writes
+```mermaid
+flowchart TB
+    subgraph DualWrite["❌ Dual Write Problem"]
+        direction TB
+        SVC["Order Service"] --> DB1["1. Save to DB ✅"]
+        SVC --> KAFKA1["2. Send to Kafka ❌<br/>Network failure!"]
+        RESULT1["💀 DB updated but event LOST<br/>Stock never decremented<br/>System INCONSISTENT"]
+    end
+    subgraph Outbox["✅ Transactional Outbox Pattern"]
+        direction TB
+        SVC2["Order Service"] --> TX["Single DB Transaction"]
+        TX --> DB2["1. Save Order ✅"]
+        TX --> OUTBOX["2. Save Event to<br/>OUTBOX table ✅"]
+        DEB["Debezium (CDC)"] --> OUTBOX
+        DEB --> KAFKA2["3. Push to Kafka ✅"]
+        RESULT2["✅ DB + Event are ATOMIC<br/>Even if service crashes,<br/>Debezium will pick it up"]
+    end
+    style RESULT1 fill:#8b0000,stroke:#ff0000,color:#fff
+    style RESULT2 fill:#006400,stroke:#00ff00,color:#fff
+```
+### How It Works — Step by Step:
+```mermaid
+sequenceDiagram
+    participant OS as Order Service
+    participant DB as PostgreSQL
+    participant OT as Outbox Table
+    participant DEB as Debezium (CDC)
+    participant K as Kafka
+    participant SS as Stock Service
+    OS->>DB: BEGIN TRANSACTION
+    OS->>DB: INSERT INTO orders (id, items, total)
+    OS->>OT: INSERT INTO outbox (event_type, payload)
+    OS->>DB: COMMIT ✅ (Both in same TX!)
+    Note over DEB: Debezium tails DB WAL<br/>(Write-Ahead Log)
+    DEB->>OT: Detect new row in outbox
+    DEB->>K: Publish StockDecrementEvent
+    K->>SS: Consume event
+    SS->>SS: Decrease stock
+    Note over OS,SS: Even if Order Service CRASHES<br/>after commit, Debezium will<br/>still pick up the event!
+```
+### Outbox Table Schema:
+```sql
+-- Outbox table — lives in the SAME database as your business data
+CREATE TABLE outbox_events (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    aggregate_type  VARCHAR(255) NOT NULL,    -- e.g., 'Order'
+    aggregate_id    VARCHAR(255) NOT NULL,    -- e.g., order ID
+    event_type      VARCHAR(255) NOT NULL,    -- e.g., 'OrderCreated'
+    payload         JSONB NOT NULL,           -- event data
+    created_at      TIMESTAMP DEFAULT NOW(),
+    published       BOOLEAN DEFAULT FALSE     -- Debezium marks as published
+);
+```
+### Spring Boot Implementation:
+```java
+@Service
+@Transactional
+public class OrderService {
+    private final OrderRepository orderRepo;
+    private final OutboxRepository outboxRepo;
+    public Order placeOrder(OrderRequest request) {
+        // Step 1: Save the order
+        Order order = orderRepo.save(new Order(request));
+        // Step 2: Save event to outbox (SAME transaction!)
+        OutboxEvent event = OutboxEvent.builder()
+            .aggregateType("Order")
+            .aggregateId(order.getId().toString())
+            .eventType("OrderCreated")
+            .payload(toJson(new OrderCreatedEvent(order.getId(), order.getItems())))
+            .build();
+        outboxRepo.save(event);
+        // Both succeed or both fail — ATOMIC!
+        return order;
+    }
+    // Debezium handles the rest: reads outbox → publishes to Kafka
+}
+```
+### Why Not Just Use @TransactionalEventListener?
+| Approach | Problem |
+|---|---|
+| `@TransactionalEventListener` + `KafkaTemplate` | If app crashes AFTER commit but BEFORE Kafka send → event lost |
+| Outbox + Debezium | Debezium reads DB logs → **guaranteed delivery** even if app crashes |
+| 2-Phase Commit (XA) | Too slow, single point of failure, not cloud-native |
+### Interview One-Liner:
+> **"I never do dual writes. I use the Transactional Outbox pattern: save the business data AND the event in the same database transaction. Debezium tails the WAL (Write-Ahead Log) and publishes to Kafka. This gives us atomicity without distributed transactions and guarantees at-least-once delivery even if the service crashes mid-way."**
+---
+## 🔴 DT-4. FinOps & Cost Optimization — The Tech Lead's Business Impact
+### Why This Matters:
+A Senior Tech Lead is not just a coder — you're expected to **optimize cloud costs**. Interviewers at banks (like Societe Generale) care about this because infrastructure is a major expense.
+### Cost Optimization Strategies:
+```mermaid
+flowchart TB
+    subgraph Compute["💰 Compute Optimization"]
+        direction TB
+        C1["ARM64 / Graviton3<br/>40% better price-performance"] 
+        C2["Right-sizing pods<br/>Analyze actual CPU/RAM usage"]
+        C3["Spot/Preemptible instances<br/>for batch & non-critical"]
+        C4["Scale-to-zero<br/>for dev/staging environments"]
+    end
+    subgraph Scaling["📈 Smart Scaling"]
+        direction TB
+        S1["HPA on Custom Metrics<br/>e.g., Kafka consumer lag"]
+        S2["KEDA for event-driven<br/>scale-to-zero"]
+        S3["VPA for right-sizing<br/>pod resource requests"]
+    end
+    subgraph Infra["🏗 Infrastructure"]
+        direction TB
+        I1["Sidecarless Service Mesh<br/>Cilium/eBPF saves ~50MB/pod"]
+        I2["Scheduled shutdown<br/>Dev/QA off on weekends"]
+        I3["Reserved Instances<br/>for predictable production load"]
+    end
+    style C1 fill:#264f78,stroke:#569cd6,color:#fff
+    style I1 fill:#264f78,stroke:#569cd6,color:#fff
+```
+### eBPF & Sidecarless Service Mesh:
+| Feature | Istio/Envoy (Sidecar) ❌ | Cilium/eBPF (Sidecarless) ✅ |
+|---|---|---|
+| **Architecture** | Sidecar proxy in every pod | Runs in **Linux kernel** |
+| **RAM overhead** | ~50MB per pod | ~0 per pod |
+| **Network hops** | App → Sidecar → Network (2 extra hops) | App → Kernel → Network (direct) |
+| **200 microservices** | 200 extra containers = ~10GB RAM wasted | **No extra containers** |
+| **mTLS** | Yes (via Envoy) | Yes (via eBPF/kernel) |
+| **Observability** | Yes (via Envoy metrics) | Yes (via eBPF tracing) |
+| **Latency impact** | Adds 1-3ms per hop | **Near-zero** overhead |
+### Cost Estimation Example:
+```
+Scenario: 200 microservices in production
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+With Istio sidecars:
+  200 pods × 50MB RAM = 10GB extra RAM
+  200 pods × 0.1 vCPU = 20 vCPU extra
+  Monthly cost: ~$800-1200/month JUST for sidecars
+With Cilium (eBPF):
+  0 extra containers
+  Monthly savings: ~$800-1200/month
+  Annual savings: ~$10,000-15,000
+With ARM64 (Graviton3):
+  Same workload, 40% less cost
+  If current compute = $50,000/month
+  Savings: ~$20,000/month = $240,000/year
+Weekend shutdown (Dev/QA):
+  If Dev+QA costs $10,000/month
+  Running only Mon-Fri 8am-8pm = 36% of the time
+  Savings: ~$6,400/month = $76,800/year
+```
+### Interview One-Liner:
+> **"As a Tech Lead, I treat cloud cost as a first-class architectural concern. I migrated our compute to Graviton3 for 40% savings, replaced Istio sidecars with Cilium eBPF to eliminate 10GB of wasted RAM, and automated Dev/QA shutdown on weekends using Terraform. Total annual savings: ~$300K. Cost optimization isn't ops — it's architecture."**
+---
+## 🟣 DT-5. High-Performance Observability — Micrometer Observation API
+### The Problem with Traditional Monitoring:
+```mermaid
+flowchart LR
+    subgraph Old["Old: Separate APIs"]
+        C1[Code] --> L[Logger] & M[Metrics] & T[Tracer]
+    end
+    subgraph New["New: @Observed"]
+        C2[Code] --> OBS["@Observed"] --> A[Auto: Log + Metric + Trace]
+    end
+    style Old fill:#8b0000,stroke:#ff0000,color:#fff
+    style New fill:#006400,stroke:#00ff00,color:#fff
+```
+### Micrometer Observation — One Annotation, Three Signals:
+```java
+// ✅ One annotation generates: Log + Metric + Trace
+@Observed(
+    name = "order.checkout",
+    contextualName = "checkout-process",
+    lowCardinalityKeyValues = {"payment.method", "credit-card"}
+)
+public OrderResult checkout(CheckoutRequest request) {
+    // Your business logic
+    // Micrometer auto-generates:
+    //   📊 Metric: order.checkout.duration (histogram)
+    //   📋 Log: START/STOP with duration and context
+    //   🔗 Trace: Span with parent propagation
+    return processPayment(request);
+}
+```
+### Finding the Real Problem — p99 vs Average:
+| Metric | Value | What It Tells You |
+|---|---|---|
+| **Average latency** | 120ms | "Everything looks fine" ❌ |
+| **p50 (median)** | 80ms | 50% of requests are fast |
+| **p95** | 200ms | 5% of requests are slow |
+| **p99** | 2,500ms | 1% of requests are **extremely slow** |
+| **Trace Exemplar** | CustomerID: 12345 | The EXACT slow request path |
+> **"The customer complains checkout is slow. Average looks fine at 120ms. But p99 is 2.5 seconds — that's their experience. I use Trace Exemplars via the Micrometer Observation API to find that specific customer's trace, which reveals a slow DB query hitting a partition without an index."**
+### Interview One-Liner:
+> **"I use the Micrometer Observation API to unify logging, metrics, and tracing into a single `@Observed` annotation. This ensures we never have a metric without a trace or a log without context. When debugging production issues, I look at p99 latency with Trace Exemplars — not misleading averages — to find the exact request path causing problems."**
+---
+## 🧪 DT-6. GraalVM & Native Images — Solving Cold Start
+### The Problem in Serverless/Cloud:
+```mermaid
+flowchart LR
+    subgraph JVM["❌ Traditional JVM"]
+        direction TB
+        START1["Cold Start"] --> LOAD["Load Classes<br/>~2000+ classes"] --> JIT["JIT Compile<br/>Hotspot optimization"] --> READY1["Ready!<br/>⏱️ 3-8 seconds"]
+    end
+    subgraph Native["✅ GraalVM Native Image"]
+        direction TB
+        START2["Cold Start"] --> READY2["Ready!<br/>⏱️ 50-100ms"]
+    end
+    style READY1 fill:#8b0000,stroke:#ff0000,color:#fff
+    style READY2 fill:#006400,stroke:#00ff00,color:#fff
+```
+| Feature | JVM (HotSpot) | GraalVM Native Image |
+|---|---|---|
+| **Startup time** | 3-8 seconds | **50-100ms** |
+| **Memory usage** | 200-500MB | **30-80MB** |
+| **Peak throughput** | Higher (JIT optimized over time) | Slightly lower (AOT compiled) |
+| **Best for** | Long-running services | **Serverless, Functions, CLI tools** |
+| **Spring Boot support** | Default | `spring-boot-starter-parent` 3.x+ |
+```bash
+# Build a native image with Spring Boot 3.x
+./mvnw -Pnative native:compile
+# Or with Gradle
+./gradlew nativeCompile
+# Result: a standalone binary, no JVM needed!
+# Startup: ~80ms vs ~4 seconds
+# Memory: ~50MB vs ~300MB
+```
+### When to Use What:
+```mermaid
+flowchart TB
+    Q["Should I use Native Image?"] --> LONG{"Long-running<br/>service?"}
+    LONG -->|Yes| JVM["Use JVM<br/>JIT optimizes over time<br/>Better peak throughput"]
+    LONG -->|No| SHORT{"Serverless /<br/>Lambda / CLI?"}
+    SHORT -->|Yes| NATIVE["Use Native Image<br/>50ms startup<br/>50MB memory"]
+    SHORT -->|No| SCALE{"Need to scale<br/>to zero?"}
+    SCALE -->|Yes| NATIVE
+    SCALE -->|No| JVM
+    style JVM fill:#264f78,stroke:#569cd6,color:#fff
+    style NATIVE fill:#006400,stroke:#00ff00,color:#fff
+```
+### Interview One-Liner:
+> **"For serverless functions and scale-to-zero scenarios, I use GraalVM Native Image with Spring Boot 3.x for 50ms startup and 50MB memory. For long-running production microservices, I stick with the JVM because JIT compilation gives better peak throughput over time. The choice is an architectural decision based on the deployment model."**
+---
+## 🏗 DT-7. Platform Engineering & Internal Developer Platforms (IDP)
+### What is Platform Engineering?
+As a Senior Tech Lead, you're not just building features — you're building the **platform** that other teams use to ship faster.
+```mermaid
+flowchart TB
+    subgraph Before["❌ Before Platform Engineering"]
+        direction TB
+        DEV1["Developer"] --> TICKET["Raise Jira ticket<br/>for infra team"]
+        TICKET --> WAIT["Wait 2 weeks<br/>for K8s namespace"]
+        WAIT --> TICKET2["Another ticket<br/>for DB setup"]
+        TICKET2 --> WAIT2["Wait 1 week"]
+    end
+    subgraph After["✅ With IDP (Backstage)"]
+        direction TB
+        DEV2["Developer"] --> PORTAL["Self-service portal<br/>(Backstage)"]
+        PORTAL --> TEMPLATE["Pick template:<br/>Spring Boot + PostgreSQL"]
+        TEMPLATE --> AUTO["Auto-creates:<br/>Repo + CI/CD + K8s + DB<br/>⏱️ 5 minutes"]
+    end
+    style WAIT fill:#8b0000,stroke:#ff0000,color:#fff
+    style WAIT2 fill:#8b0000,stroke:#ff0000,color:#fff
+    style AUTO fill:#006400,stroke:#00ff00,color:#fff
+```
+### Key IDP Components:
+| Component | Tool | Purpose |
+|---|---|---|
+| **Service Catalog** | Backstage | Track all microservices, owners, APIs |
+| **Templates** | Backstage Software Templates | One-click new service creation |
+| **CI/CD** | Jenkins / GitHub Actions | Automated build, test, deploy |
+| **Infrastructure** | Terraform / Crossplane | Self-service infra provisioning |
+| **Docs** | TechDocs (Backstage) | Docs live with code, auto-published |
+| **Scorecards** | Backstage Scorecards | Track service maturity (tests, docs, security) |
+### Interview One-Liner:
+> **"As a Tech Lead, I built an Internal Developer Platform using Backstage. Developers can spin up a fully configured microservice — with repo, CI/CD pipeline, K8s namespace, and database — in 5 minutes instead of 3 weeks of Jira tickets. This reduced our time-to-first-deploy from weeks to hours and improved developer satisfaction scores by 40%."**
+---
+## 📉 DT-8. The Tech Lead's Estimation Cheat Sheet
+### Latency Benchmarks (Know These by Heart):
+| Operation | Latency | Notes |
+|---|---|---|
+| L1 Cache hit | ~0.5 ns | Fastest possible |
+| L2 Cache hit | ~7 ns | |
+| Main Memory reference | ~100 ns | |
+| SSD Random Read | ~16 µs | 16,000 ns |
+| Network round trip (same datacenter) | ~0.5 ms | 500,000 ns |
+| Network round trip (cross-region) | ~50-100 ms | |
+| Java GC Pause (ZGC/Shenandoah) | < 1 ms | Target for 2026 |
+| Java GC Pause (G1GC) | 10-200 ms | Default, acceptable |
+| DB query (indexed) | 1-5 ms | |
+| DB query (full table scan) | 100ms - 10s | **Red flag!** |
+| Kafka produce (acks=1) | ~2 ms | |
+| Kafka produce (acks=all) | ~10 ms | Safer |
+| REST API call (internal) | 5-50 ms | |
+| REST API call (external) | 100-500 ms | |
+### Availability Math:
+| Level | Uptime | Downtime/Year | Typical Use |
+|---|---|---|---|
+| 99% (Two 9s) | 3.65 days down | Dev/Staging | |
+| 99.9% (Three 9s) | 8.76 hours down | Most SaaS | |
+| 99.99% (Four 9s) | 52.6 minutes down | Banks, Trading | |
+| 99.999% (Five 9s) | 5.26 minutes down | FAANG Gold Standard | |
+### Quick Capacity Estimation:
+```
+Daily Active Users:     1,000,000
+Requests per user/day:  10
+Total daily requests:   10,000,000
+QPS (avg):             10M / 86400 ≈ 115 QPS
+QPS (peak, 10x):       ~1,150 QPS
+Storage per record:     1 KB
+Daily storage:          10M × 1KB = 10 GB/day
+Monthly storage:        300 GB/month
+Yearly storage:         3.6 TB/year (+ 30% overhead = ~4.7 TB)
+Each server handles:    ~1,000 QPS (with connection pooling)
+Servers needed (peak):  2 (+ 1 for redundancy = 3)
+```
+### Interview One-Liner:
+> **"For back-of-envelope estimation, I start with DAU × actions/day to get total requests, divide by 86,400 for average QPS, multiply by 10 for peak QPS. For storage, I multiply record size × daily records × 365 and add 30% for indexes. For availability, four nines means less than 53 minutes downtime per year — which means we need multi-AZ, automated failover, and zero-downtime deployments."**
+---
+## ✅ Phase 13 Summary — What Sets Apart a 2026 Tech Lead:
+| Topic | Key Takeaway | Interview Signal |
+|---|---|---|
+| Virtual Threads | M:N scheduling, unmounting on I/O, 1M+ threads | "I understand JVM internals" |
+| Scoped Values | Immutable, scope-bound, no memory leaks | "I think about scale" |
+| Structured Concurrency | No orphan threads, auto-cancellation | "I write reliable code" |
+| Spring AI & RAG | Vector DB + LLM = grounded answers | "I'm building for the future" |
+| Transactional Outbox | Atomic DB + event, Debezium CDC | "I solve distributed consistency" |
+| FinOps | Graviton, eBPF, weekend shutdown | "I care about business impact" |
+| Micrometer Observation | One annotation = log + metric + trace | "I debug production effectively" |
+| GraalVM Native | 50ms startup, 50MB memory | "I pick the right tool" |
+| Platform Engineering | Self-service IDP, 5-min new service | "I enable team productivity" |
+| Estimation | QPS, storage, availability math | "I can design at scale" |
+---
+---
+# 📖 Phase 13 — Beginner-Friendly Deep Dives (The "Explain Like I'm New" Edition)
+> **This section takes every Phase 13 topic and explains it from absolute basics to advanced. If you understood the summaries above, this section gives you the FULL story — with real-world analogies, step-by-step reasoning, and "why should I care?" context.**
+---
+## 📖 DT-1 Deep Dive: Virtual Threads — The Full Story
+### 🧒 The Restaurant Analogy (Start Here):
+Imagine a restaurant:
+**Old Model (Platform Threads = Waiters):**
+- Each customer gets their **own dedicated waiter**
+- When the kitchen is cooking (I/O wait), the waiter just **stands there doing nothing**
+- You have 200 waiters → you can serve 200 customers max
+- Want 10,000 customers? You need 10,000 waiters → **impossible to hire!**
+**New Model (Virtual Threads = Smart Waiters):**
+- When the kitchen is cooking, the waiter **goes to serve another table**
+- When food is ready, **any available waiter** picks it up and delivers it
+- You only need 10 waiters to serve 10,000 customers
+- The **restaurant manager (JVM)** coordinates which waiter goes where
+```mermaid
+flowchart TB
+    subgraph Old["🍽️ Old Restaurant (Platform Threads)"]
+        direction TB
+        W1["Waiter 1 → Customer 1<br/>⏳ Waiting for kitchen..."] 
+        W2["Waiter 2 → Customer 2<br/>⏳ Waiting for kitchen..."]
+        W3["Waiter 3 → Customer 3<br/>⏳ Waiting for kitchen..."]
+        W4["❌ Customer 4 arrives<br/>No free waiters!<br/>MUST WAIT IN QUEUE"]
+    end
+    subgraph New["🍽️ Smart Restaurant (Virtual Threads)"]
+        direction TB
+        SW1["Waiter 1: Takes order from C1<br/>→ Kitchen cooking<br/>→ Goes to C4, takes order<br/>→ C1 food ready, delivers"]
+        SW2["Waiter 2: Serves C2, C5, C8<br/>simultaneously"]
+        RESULT["✅ 2 waiters serving<br/>thousands of customers!"]
+    end
+    style W4 fill:#8b0000,stroke:#ff0000,color:#fff
+    style RESULT fill:#006400,stroke:#00ff00,color:#fff
+```
+### 🔧 The Technical Reality (Step by Step):
+**Step 1: What is a Thread?**
+A thread is a unit of execution. Your CPU runs instructions one by one on a thread.
+```
+Thread = A worker that executes your code, one instruction at a time
+```
+**Step 2: What is a Platform Thread?**
+A platform thread is a Java thread that maps directly to an **Operating System thread**.
+```
+Java Platform Thread  ←→  OS Thread  ←→  CPU Core
+     (your code)         (1MB RAM)      (execution)
+```
+- OS threads are **expensive**: each one reserves ~1MB of stack memory
+- OS threads require **kernel context switching**: the CPU must save/restore state
+- Your OS limits how many threads you can create (usually a few thousand)
+**Step 3: Why is this a problem?**
+```java
+// Typical Spring Boot web server (Tomcat)
+// Default: 200 platform threads in the thread pool
+// If you get 200 requests simultaneously:
+// - All 200 threads are busy
+// - Request #201 must WAIT in a queue
+// - If each request takes 500ms (DB call)...
+// - Thread is BLOCKED for 500ms doing NOTHING
+// 200 threads × 1MB = 200MB just for thread stacks
+// Want 10,000 concurrent users? 10,000 × 1MB = 10GB just for threads!
+```
+**Step 4: How Virtual Threads Fix This**
+Virtual threads are **managed by the JVM**, not the OS. They are:
+- **Cheap**: ~few KB each (vs 1MB for platform threads)
+- **Abundant**: you can create millions of them
+- **Smart**: when they hit blocking I/O, the JVM "parks" them and reuses the underlying OS thread
+```java
+// Creating 1,000,000 virtual threads — this actually works!
+try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+    for (int i = 0; i < 1_000_000; i++) {
+        executor.submit(() -> {
+            // Each virtual thread handles one request
+            // When it hits a DB call, the JVM unmounts it
+            // The carrier OS thread picks up another virtual thread
+            String result = callDatabase(); // blocking call
+            return process(result);
+        });
+    }
+}
+// Memory usage: ~few GB (instead of 1TB with platform threads!)
+```
+**Step 5: The Unmounting Magic (The Key Innovation)**
+```mermaid
+sequenceDiagram
+    participant VT1 as Virtual Thread 1
+    participant VT2 as Virtual Thread 2
+    participant CT as Carrier OS Thread
+    participant DB as Database
+    Note over CT: Only 1 OS thread!
+    VT1->>CT: Mount VT1 on carrier
+    CT->>DB: VT1 calls database (blocking)
+    Note over VT1,CT: 🔄 JVM detects blocking I/O<br/>UNMOUNTS VT1 from carrier<br/>VT1 goes to sleep (few KB in heap)
+    VT2->>CT: Mount VT2 on same carrier
+    CT->>CT: VT2 does CPU work
+    DB-->>VT1: Database responds
+    Note over VT1,CT: 🔄 JVM wakes up VT1<br/>MOUNTS it on available carrier
+    VT1->>CT: Continue VT1 processing
+```
+**The key insight:** When your code does `Thread.sleep()`, database calls, HTTP calls, or any blocking I/O — the JVM **automatically** unmounts the virtual thread. You don't change your code at all!
+### 🔧 Scoped Values — The Full Explanation:
+**What problem does ThreadLocal solve?**
+Sometimes you need to pass data through many method calls without adding it as a parameter everywhere:
+```java
+// WITHOUT ThreadLocal — you'd need to pass userId everywhere:
+public void handleRequest(String userId) {
+    validateOrder(userId);    // pass userId
+    processPayment(userId);   // pass userId  
+    sendEmail(userId);        // pass userId
+    auditLog(userId);         // pass userId — ANNOYING!
+}
+// WITH ThreadLocal — set once, read anywhere:
+private static final ThreadLocal<String> CURRENT_USER = new ThreadLocal<>();
+public void handleRequest(String userId) {
+    CURRENT_USER.set(userId);   // Set once
+    validateOrder();             // reads CURRENT_USER.get() internally
+    processPayment();            // reads CURRENT_USER.get() internally
+    sendEmail();                 // reads CURRENT_USER.get() internally
+    CURRENT_USER.remove();       // MUST clean up!
+}
+```
+**Why is ThreadLocal dangerous with Virtual Threads?**
+```java
+// With platform threads (200 threads):
+// 200 × ThreadLocal copy = 200 copies → OK
+// With virtual threads (1,000,000 threads):
+// 1,000,000 × ThreadLocal copy = 1,000,000 copies → OUT OF MEMORY!
+// Also: if you forget .remove() in a thread pool:
+// The SAME thread handles the NEXT request
+// That request sees the PREVIOUS user's data → SECURITY BUG!
+```
+**ScopedValue solves both problems:**
+```java
+private static final ScopedValue<String> CURRENT_USER = ScopedValue.newInstance();
+public void handleRequest(String userId) {
+    ScopedValue.where(CURRENT_USER, userId).run(() -> {
+        // Inside this block: CURRENT_USER.get() returns userId
+        validateOrder();
+        processPayment();
+        sendEmail();
+    });
+    // Outside this block: CURRENT_USER is automatically gone
+    // No .remove() needed
+    // No memory leak possible
+    // Immutable — nobody can change it mid-request
+}
+```
+### 🔧 Structured Concurrency — The Full Explanation:
+**The Problem — Explained Simply:**
+```java
+// You call 3 services in parallel:
+CompletableFuture<Flight> flight = CompletableFuture.supplyAsync(() -> searchFlights());
+CompletableFuture<Hotel> hotel = CompletableFuture.supplyAsync(() -> searchHotels());
+CompletableFuture<Car> car = CompletableFuture.supplyAsync(() -> searchCars());
+// What if searchFlights() throws an exception?
+// searchHotels() and searchCars() keep running in the background!
+// They waste CPU, memory, and network calls
+// They might even succeed and charge the customer's credit card
+// But we can't use the results because flights failed!
+// This is the "ORPHAN THREAD" problem
+```
+**The Solution — StructuredTaskScope:**
+Think of it like a **team leader** in a meeting:
+- Leader says: "Everyone research your topic. If ANYONE finds a blocker, EVERYONE stops."
+- If the flight researcher says "flights sold out" — the leader immediately tells hotel and car researchers to stop
+- Nobody wastes time on work that will be thrown away
+```java
+// StructuredTaskScope.ShutdownOnFailure = "Stop everyone if anyone fails"
+try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+    var flight = scope.fork(() -> searchFlights());  // Start in parallel
+    var hotel  = scope.fork(() -> searchHotels());   // Start in parallel  
+    var car    = scope.fork(() -> searchCars());      // Start in parallel
+    scope.join();           // Wait for all
+    scope.throwIfFailed();  // If ANY failed → throw exception
+                            // AND cancel the other tasks automatically!
+    // Only reaches here if ALL three succeeded
+    return new TravelPackage(flight.get(), hotel.get(), car.get());
+}
+// When this block ends: GUARANTEED no orphan threads
+```
+```java
+// There's also ShutdownOnSuccess = "Stop everyone when FIRST one succeeds"
+// Use case: "Find the cheapest flight from ANY of 3 providers"
+try (var scope = new StructuredTaskScope.ShutdownOnSuccess<Flight>()) {
+    scope.fork(() -> searchProvider1()); // Might take 500ms
+    scope.fork(() -> searchProvider2()); // Might take 200ms ← wins!
+    scope.fork(() -> searchProvider3()); // Might take 800ms
+    scope.join();
+    // Returns the FIRST successful result
+    // The other two are automatically cancelled!
+    return scope.result();
+}
+```
+---
+## 📖 DT-2 Deep Dive: Spring AI & RAG — The Full Story
+### 🧒 The Library Analogy (Start Here):
+**Without RAG (Asking a random person on the street):**
+- You: "What's our company's leave policy?"
+- Random person: "Umm... I think it's 20 days?" (MADE UP — hallucination!)
+**With RAG (Asking a librarian who checks the book first):**
+- You: "What's our company's leave policy?"
+- Librarian: *Opens the HR handbook, finds page 42*
+- Librarian: "According to the handbook, you get 25 days annual leave plus 10 sick days."
+- The librarian NEVER makes things up — they always cite the source
+**RAG = The librarian approach for AI**
+### 🔧 Step-by-Step: How RAG Works Technically
+**Phase A: Ingestion (One-time setup — "Building the library")**
+```mermaid
+flowchart LR
+    D["Documents: PDFs, Wiki, Confluence"] --> CH["Chunk into Paragraphs"] --> EMB["Generate Embeddings (1536-dim vectors)"] --> VDB["Store in PGVector"]
+```
+**What is an Embedding?**
+An embedding converts text into a list of numbers (a vector) that captures its **meaning**:
+```
+"Leave policy"     → [0.23, -0.45, 0.78, 0.12, ...]  (1536 numbers)
+"Vacation days"    → [0.21, -0.44, 0.76, 0.11, ...]  (SIMILAR numbers!)
+"Database indexing" → [-0.89, 0.33, -0.56, 0.91, ...] (DIFFERENT numbers)
+```
+- "Leave policy" and "Vacation days" have **similar** vectors (close in space)
+- "Database indexing" has a **different** vector (far away in space)
+- This is why we can search by **meaning**, not just keywords!
+**Phase B: Query (Every user question)**
+```mermaid
+flowchart LR
+    Q["User: How many vacation days?"] --> QE["Embed Question"] --> S["Vector DB: Find Similar Chunks"] --> P["Build Prompt: Context + Question"] --> A["LLM: Grounded Answer"]
+```
+### Why Not Just Send All Documents to the LLM?
+| Approach | Problem |
+|---|---|
+| Send ALL docs to LLM | Documents too large — exceeds token limit (128K tokens) |
+| Send ALL docs to LLM | Expensive — you pay per token |
+| Send ALL docs to LLM | Slow — LLM reads everything for every question |
+| **RAG: Send only relevant chunks** | ✅ Fast, cheap, within token limits, accurate |
+### Spring AI Dependencies:
+```xml
+<!-- pom.xml -->
+<dependency>
+    <groupId>org.springframework.ai</groupId>
+    <artifactId>spring-ai-openai-spring-boot-starter</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.ai</groupId>
+    <artifactId>spring-ai-pgvector-store-spring-boot-starter</artifactId>
+</dependency>
+```
+```yaml
+# application.yml
+spring:
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        model: gpt-4o
+    vectorstore:
+      pgvector:
+        dimensions: 1536
+```
+### Full RAG Service — Step by Step with Comments:
+```java
+@Service
+public class CompanyAssistant {
+    private final ChatClient chatClient;
+    private final VectorStore vectorStore;
+    // Step 0: Spring Boot auto-configures these from application.yml
+    public CompanyAssistant(ChatClient.Builder builder, VectorStore vectorStore) {
+        this.chatClient = builder.build();
+        this.vectorStore = vectorStore;
+    }
+    // === INGESTION: Call this once to load your documents ===
+    public void ingestDocuments(List<String> filePaths) {
+        for (String path : filePaths) {
+            // Step 1: Read the document
+            String content = readFile(path);
+            // Step 2: Split into small chunks (500 chars each)
+            // Why? Because LLMs work better with focused context
+            List<String> chunks = splitIntoChunks(content, 500);
+            // Step 3: Create Document objects
+            List<Document> documents = chunks.stream()
+                .map(chunk -> new Document(chunk, Map.of("source", path)))
+                .toList();
+            // Step 4: Add to Vector Store
+            // Spring AI AUTOMATICALLY:
+            //   a) Converts each chunk to an embedding (calls OpenAI)
+            //   b) Stores the embedding + text in PGVector
+            vectorStore.add(documents);
+        }
+    }
+    // === QUERY: Call this for every user question ===
+    public String askQuestion(String userQuestion) {
+        // Step 1: Find relevant chunks
+        // Spring AI AUTOMATICALLY:
+        //   a) Converts the question to an embedding
+        //   b) Finds the 5 most similar chunks in PGVector
+        List<Document> relevant = vectorStore.similaritySearch(
+            SearchRequest.query(userQuestion)
+                .withTopK(5)              // Return top 5 matches
+                .withSimilarityThreshold(0.7) // Only if >70% similar
+        );
+        // Step 2: Build context string from chunks
+        String context = relevant.stream()
+            .map(Document::getContent)
+            .collect(Collectors.joining("\n---\n"));
+        // Step 3: Ask the LLM with context
+        return chatClient.prompt()
+            .system("""
+                You are a helpful company assistant.
+                Answer questions ONLY based on the provided context.
+                If the answer is not in the context, say: 
+                "I don't have information about that in our documents."
+                Always cite which document the answer came from.
+                """)
+            .user(u -> u.text("""
+                Context from company documents:
+                {context}
+                Employee's question: {question}
+                """)
+                .param("context", context)
+                .param("question", userQuestion))
+            .call()
+            .content();
+    }
+}
+```
+---
+## 📖 DT-3 Deep Dive: Transactional Outbox — The Full Story
+### 🧒 The Post Office Analogy (Start Here):
+**Dual Write Problem (Sending a letter AND updating your address book):**
+- You write a letter AND update your address book at the same time
+- The letter gets lost in the mail (network failure)
+- Your address book says "letter sent" but the recipient never got it!
+- **System is now INCONSISTENT**
+**Outbox Pattern (Write everything in your diary, let the postman check later):**
+- You write in your diary: "Need to send letter to Bob" AND update your address book — **same action, same moment**
+- The postman comes every minute, checks your diary for unsent letters
+- Even if you fall asleep (service crashes), the postman still picks up the letter
+- **Guaranteed delivery!**
+### 🔧 Why Dual Writes Fail — Detailed Explanation:
+```java
+@Service
+public class OrderService {
+    @Transactional
+    public void placeOrder(OrderRequest request) {
+        // Step 1: Save to database
+        orderRepository.save(new Order(request));  // ✅ SUCCESS
+        // Step 2: Send event to Kafka
+        kafkaTemplate.send("order-events", new OrderCreatedEvent(request)); // ❌ FAILS!
+        // Network timeout, Kafka broker down, anything...
+        // PROBLEM:
+        // - Database has the order ✅
+        // - Kafka never got the event ❌
+        // - Stock Service never decreases stock
+        // - Customer can buy items that are out of stock!
+    }
+}
+```
+**"But can't I just put both in a @Transactional?"**
+No! `@Transactional` only covers **database operations**. Kafka is a separate system. You can't have a single transaction spanning both PostgreSQL AND Kafka (that would be XA/2-Phase Commit, which is extremely slow and fragile).
+### 🔧 The Outbox Solution — Detailed Walkthrough:
+```java
+@Service
+public class OrderService {
+    @Transactional  // This covers BOTH inserts below (same DB!)
+    public void placeOrder(OrderRequest request) {
+        // Step 1: Save the order (business data)
+        Order order = orderRepository.save(new Order(request));
+        // Step 2: Save the EVENT in the SAME database
+        OutboxEvent event = new OutboxEvent();
+        event.setAggregateType("Order");
+        event.setAggregateId(order.getId().toString());
+        event.setEventType("OrderCreated");
+        event.setPayload(toJson(Map.of(
+            "orderId", order.getId(),
+            "items", order.getItems(),
+            "total", order.getTotal()
+        )));
+        outboxRepository.save(event);  // Same DB, same transaction!
+        // Both succeed together or both fail together = ATOMIC
+        // We're NOT talking to Kafka at all here!
+    }
+}
+// WHO sends to Kafka then? → DEBEZIUM!
+```
+### 🔧 What is Debezium? (Change Data Capture — CDC)
+```mermaid
+flowchart LR
+    SVC["Order Service"] --> DB["PostgreSQL: orders + outbox tables"]
+    DB --> WAL["WAL Log"]
+    WAL --> DEB["Debezium reads WAL"]
+    DEB --> K["Kafka: order-events"]
+    K --> STOCK["Stock Service: Decrease stock"]
+    style WAL fill:#264f78,stroke:#569cd6,color:#fff
+```
+**Why is Debezium reliable?**
+- It reads the **database WAL** (Write-Ahead Log) — the same mechanism PostgreSQL uses for crash recovery
+- Even if your application crashes, the WAL still has the data
+- Even if Debezium crashes, it remembers where it left off (offset tracking)
+- **Guarantee: if it's in the database, it WILL reach Kafka**
+### 🔧 Complete Setup — Docker Compose:
+```yaml
+# docker-compose.yml
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: orderdb
+    command: ["postgres", "-c", "wal_level=logical"]  # Required for Debezium!
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+  debezium:
+    image: debezium/connect:2.4
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: debezium-group
+```
+```json
+// Debezium connector configuration (POST to Debezium REST API)
+{
+  "name": "outbox-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.dbname": "orderdb",
+    "table.include.list": "public.outbox_events",
+    "transforms": "outbox",
+    "transforms.outbox.type": "io.debezium.transforms.outbox.EventRouter",
+    "transforms.outbox.table.field.event.key": "aggregate_id",
+    "transforms.outbox.table.field.event.type": "event_type",
+    "transforms.outbox.table.field.event.payload": "payload",
+    "transforms.outbox.route.topic.replacement": "${routedByValue}",
+    "transforms.outbox.table.fields.additional.placement": "aggregate_type:header"
+  }
+}
+```
+### 🔧 Idempotency — Handling Duplicate Events:
+Debezium guarantees **at-least-once** delivery. This means the Stock Service might receive the same event twice. How to handle it?
+```java
+@Service
+public class StockConsumer {
+    @KafkaListener(topics = "OrderCreated")
+    public void handleOrderCreated(OrderCreatedEvent event) {
+        // IDEMPOTENCY CHECK: Have we already processed this event?
+        if (processedEventRepository.existsByEventId(event.getEventId())) {
+            log.info("Event {} already processed, skipping", event.getEventId());
+            return;  // Skip duplicate!
+        }
+        // Process the event
+        stockRepository.decreaseStock(event.getProductId(), event.getQuantity());
+        // Mark as processed
+        processedEventRepository.save(new ProcessedEvent(event.getEventId()));
+    }
+}
+```
+---
+## 📖 DT-4 Deep Dive: FinOps — The Full Story
+### 🧒 The Electricity Bill Analogy (Start Here):
+Your cloud bill is like an electricity bill:
+- **Leaving lights on in empty rooms** = Running Dev/QA servers on weekends
+- **Using old inefficient bulbs** = Using x86 instances instead of ARM64 (Graviton)
+- **Having a security guard at every door** = Running Istio sidecars in every pod
+As a Tech Lead, your job is to **turn off unused lights, upgrade to LED bulbs, and use security cameras instead of guards**.
+### 🔧 ARM64/Graviton — Why 40% Cheaper?
+```
+x86 (Intel/AMD):
+  - General purpose, runs everything
+  - Higher power consumption
+  - More expensive instances
+ARM64 (AWS Graviton3):
+  - Designed for cloud workloads
+  - 60% less energy per core
+  - AWS passes the savings to you: ~40% cheaper
+Example:
+  m6i.xlarge  (x86):    $0.192/hour = $140/month
+  m7g.xlarge  (ARM64):  $0.116/hour = $85/month
+  Savings: $55/month per instance × 50 instances = $2,750/month = $33,000/year
+```
+**Does Java work on ARM64?** YES! Since Java 9, the JVM runs natively on ARM64. Spring Boot works perfectly. The only issue is if you use native libraries (JNI) compiled for x86 — those need recompilation.
+### 🔧 HPA with Custom Metrics — Beyond CPU:
+```yaml
+# Default HPA: scales on CPU (not always useful)
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: order-service-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: order-service
+  minReplicas: 2
+  maxReplicas: 20
+  metrics:
+    # ❌ Basic: Scale on CPU (but what if CPU is low and Kafka lag is high?)
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    # ✅ Advanced: Scale on Kafka consumer lag!
+    - type: External
+      external:
+        metric:
+          name: kafka_consumer_lag
+          selector:
+            matchLabels:
+              topic: order-events
+        target:
+          type: AverageValue
+          averageValue: "1000"  # Scale up if lag > 1000 messages
+```
+### 🔧 KEDA — Scale to Zero:
+```yaml
+# KEDA: Kubernetes Event-Driven Autoscaler
+# Can scale your pods to ZERO when there's no work!
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: order-processor
+spec:
+  scaleTargetRef:
+    name: order-processor
+  minReplicaCount: 0    # Scale to ZERO when no messages!
+  maxReplicaCount: 50
+  triggers:
+    - type: kafka
+      metadata:
+        bootstrapServers: kafka:9092
+        consumerGroup: order-processor
+        topic: order-events
+        lagThreshold: "10"  # Scale up when lag > 10
+```
+### 🔧 Weekend Shutdown with Terraform:
+```hcl
+# Terraform scheduled action — stop Dev/QA on Friday 8PM
+resource "aws_autoscaling_schedule" "scale_down_weekend" {
+  scheduled_action_name  = "scale-down-weekend"
+  autoscaling_group_name = aws_autoscaling_group.dev_asg.name
+  min_size               = 0
+  max_size               = 0
+  desired_capacity       = 0
+  recurrence             = "0 20 * * FRI"  # Every Friday at 8PM
+}
+# Start Dev/QA on Monday 7AM
+resource "aws_autoscaling_schedule" "scale_up_monday" {
+  scheduled_action_name  = "scale-up-monday"
+  autoscaling_group_name = aws_autoscaling_group.dev_asg.name
+  min_size               = 2
+  max_size               = 10
+  desired_capacity       = 3
+  recurrence             = "0 7 * * MON"  # Every Monday at 7AM
+}
+```
+---
+## 📖 DT-5 Deep Dive: Observability — The Full Story
+### 🧒 The Doctor Analogy (Start Here):
+**Old Way (Separate specialists):**
+- Blood test doctor gives you numbers (= **Metrics**)
+- X-ray doctor gives you images (= **Traces**)
+- Symptom diary gives you history (= **Logs**)
+- You have to visit 3 doctors and connect the dots yourself!
+**New Way (Micrometer Observation = One doctor who does everything):**
+- One examination gives you blood test + X-ray + symptom analysis
+- All connected, all in context, nothing missed
+### 🔧 The Three Pillars of Observability:
+```mermaid
+flowchart TB
+    subgraph Metrics["📊 Metrics (Numbers)"]
+        M1["CPU: 75%"]
+        M2["Request count: 1,532/sec"]
+        M3["Latency p99: 250ms"]
+        M4["Error rate: 0.1%"]
+        MQ["ANSWERS: How much? How many?"]
+    end
+    subgraph Logs["📋 Logs (Events)"]
+        L1["2026-04-23 10:15:32 INFO OrderService: Order created id=12345"]
+        L2["2026-04-23 10:15:33 ERROR PaymentService: Timeout calling bank API"]
+        LQ["ANSWERS: What happened?"]
+    end
+    subgraph Traces["🔗 Traces (Request Journey)"]
+        T1["Request → API Gateway (2ms)"]
+        T2["→ Order Service (15ms)"]
+        T3["→ Payment Service (200ms) ⚠️ SLOW"]
+        T4["→ Notification Service (5ms)"]
+        TQ["ANSWERS: Where did it happen?<br/>Why was it slow?"]
+    end
+    style MQ fill:#264f78,stroke:#569cd6,color:#fff
+    style LQ fill:#264f78,stroke:#569cd6,color:#fff
+    style TQ fill:#264f78,stroke:#569cd6,color:#fff
+```
+### 🔧 Why p99 Matters More Than Average:
+```
+Imagine 100 requests:
+  - 99 requests complete in 50ms (fast!)
+  - 1 request takes 5,000ms (5 seconds!)
+Average latency: (99 × 50 + 1 × 5000) / 100 = 99.5ms
+  → "Everything looks fine!" ❌ MISLEADING
+p99 latency: 5,000ms
+  → "1% of users wait 5 seconds!" ✅ THIS IS THE REAL PROBLEM
+In a system with 1M requests/day:
+  1% = 10,000 users having a terrible experience!
+```
+### 🔧 Setting Up Observability Stack:
+```yaml
+# application.yml — Spring Boot 3.x Observability
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus
+  tracing:
+    sampling:
+      probability: 1.0  # Sample 100% of traces (use 0.1 in prod)
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true  # Enable p50, p95, p99
+# Dependencies needed:
+# spring-boot-starter-actuator
+# micrometer-tracing-bridge-otel (OpenTelemetry bridge)
+# opentelemetry-exporter-otlp (send to Jaeger/Tempo)
+# micrometer-registry-prometheus (expose metrics for Grafana)
+```
+---
+## 📖 DT-6 Deep Dive: GraalVM Native — The Full Story
+### 🧒 The Cooking Analogy (Start Here):
+**JVM (HotSpot) = Cooking from scratch every time:**
+- You open the recipe book (class loading)
+- You read each step (interpreting bytecode)
+- After cooking the dish 100 times, you memorize it (JIT compilation)
+- First meal takes 10 minutes, but meal #100 takes only 2 minutes
+- **Best for: restaurants that cook all day (long-running servers)**
+**GraalVM Native Image = Pre-made frozen meals:**
+- Everything is pre-cooked and flash-frozen at build time (AOT compilation)
+- Just microwave and serve in 30 seconds
+- Every meal takes the same time (no warm-up needed)
+- **Best for: food trucks that need to serve fast on demand (serverless)**
+### 🔧 How Native Image Works (Technical):
+```mermaid
+flowchart LR
+    subgraph JVM["JVM (Normal)"]
+        S1[Source] --> B1[Bytecode] --> I[Interpreter] --> JIT["JIT optimizes hot methods"]
+    end
+    subgraph Native["GraalVM Native"]
+        S2[Source] --> B2[Bytecode] --> AOT["AOT Compile at build"] --> BIN["Binary: 50ms startup"]
+    end
+    style I fill:#8b0000,stroke:#ff0000,color:#fff
+    style BIN fill:#006400,stroke:#00ff00,color:#fff
+```
+### When Native Image Does NOT Work Well:
+```java
+// ❌ Reflection-heavy code (Native Image can't see it at build time)
+Class<?> clazz = Class.forName("com.example.MyService");  // Dynamic!
+Object obj = clazz.getDeclaredConstructor().newInstance();
+// ✅ Solution: Register reflection hints
+@RegisterReflectionForBinding(MyService.class)  // Tell GraalVM about it
+// ❌ Dynamic proxies (JPA lazy loading, Spring AOP)
+// These create classes at RUNTIME — GraalVM needs hints
+// ✅ Spring Boot 3.x handles most of this automatically!
+// It generates reflection hints during build
+```
+---
+## 📖 DT-7 Deep Dive: Platform Engineering — The Full Story
+### 🧒 The Factory Analogy (Start Here):
+**Without Platform Engineering:**
+- Every worker (developer) must build their own tools from scratch
+- "I need a hammer" → fill out a form → wait 2 weeks → receive hammer
+- Each worker's hammer is slightly different
+- New workers take months to become productive
+**With Platform Engineering (IDP):**
+- There's a tool shop (self-service portal) in the factory
+- "I need a hammer" → walk to the shop → pick one up → start working in 5 minutes
+- All hammers are standardized and maintained by the shop
+- New workers are productive on day one
+### 🔧 What a Backstage Service Template Creates:
+When a developer clicks "Create New Service" in Backstage:
+```
+Automatically created in 5 minutes:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. GitHub Repository
+   ├── Spring Boot project (from company template)
+   ├── Dockerfile (multi-stage, non-root)
+   ├── Jenkinsfile (CI/CD pipeline)
+   ├── Helm chart (K8s deployment)
+   ├── README.md (auto-generated docs)
+   └── .github/CODEOWNERS (team ownership)
+2. CI/CD Pipeline
+   ├── Build → Test → Security Scan → Docker Build → Deploy
+   └── Auto-configured in Jenkins/GitHub Actions
+3. Kubernetes Resources
+   ├── Namespace (team-specific)
+   ├── Deployment + Service + Ingress
+   ├── HPA (auto-scaling)
+   ├── NetworkPolicy (security)
+   └── ServiceMonitor (Prometheus metrics)
+4. Database
+   ├── PostgreSQL instance (via Crossplane)
+   ├── Connection string → K8s Secret
+   └── Flyway migrations folder
+5. Monitoring
+   ├── Grafana dashboard (pre-built)
+   ├── AlertManager rules (p99 > 500ms → alert)
+   └── PagerDuty integration
+```
+### 🔧 Why This Matters for a Tech Lead Interview:
+| Without IDP | With IDP |
+|---|---|
+| 3 weeks to deploy first service | **5 minutes** |
+| Each team configures CI/CD differently | **Standardized golden paths** |
+| Security holes from manual setup | **Security built into templates** |
+| New hire productive in 2 months | **Day 1 productivity** |
+| "Works on my machine" problems | **Identical environments** |
+---
+## 📖 DT-8 Deep Dive: Estimation — The Full Story
+### 🧒 The Pizza Shop Analogy (Start Here):
+You're opening a pizza shop. How many ovens do you need?
+```
+Step 1: How many customers?
+  - 1000 customers/day
+  - But they don't come evenly — peak is lunch (12-1 PM)
+  - Peak: 300 customers in 1 hour = 5 customers/minute
+Step 2: How fast is one oven?
+  - One pizza takes 10 minutes
+  - One oven makes 6 pizzas/hour
+Step 3: How many ovens for peak?
+  - Need: 300 pizzas/hour at peak
+  - Each oven: 6 pizzas/hour
+  - Ovens needed: 300/6 = 50 ovens
+Step 4: Add buffer (things go wrong!)
+  - Add 50% buffer: 50 × 1.5 = 75 ovens
+  - But that's too many for non-peak hours
+  - Solution: 50 permanent ovens + rent 25 temporary (auto-scaling!)
+```
+**This is EXACTLY how we estimate servers, databases, and storage!**
+### 🔧 Real System Design Estimation — Twitter-like System:
+```
+📊 Given:
+  - 500M users total
+  - 200M Daily Active Users (DAU)
+  - Each user reads 100 tweets/day
+  - Each user writes 2 tweets/day
+  - Average tweet size: 500 bytes (text + metadata)
+  - 10% of tweets have images: 500KB each
+📊 Calculate QPS (Queries Per Second):
+  READ QPS:
+    200M users × 100 reads/day = 20B reads/day
+    20B / 86,400 seconds = ~231,000 QPS (average)
+    Peak (3x): ~700,000 QPS
+  WRITE QPS:
+    200M users × 2 writes/day = 400M writes/day
+    400M / 86,400 = ~4,600 QPS (average)
+    Peak (3x): ~14,000 QPS
+  READ:WRITE ratio = 231K : 4.6K = 50:1 (READ HEAVY!)
+  → Use caching heavily (Redis), read replicas
+📊 Calculate Storage:
+  Tweets per day: 400M × 500 bytes = 200 GB/day
+  Images per day: 40M × 500KB = 20 TB/day
+  Yearly:
+    Text: 200 GB × 365 = 73 TB/year
+    Images: 20 TB × 365 = 7.3 PB/year (use S3/CDN!)
+  5-year projection:
+    Text: ~365 TB (fits in a DB cluster)
+    Images: ~36.5 PB (definitely need object storage + CDN)
+📊 Calculate Servers:
+  If each server handles ~10,000 QPS:
+    Read servers: 700,000 / 10,000 = 70 servers
+    Write servers: 14,000 / 10,000 = 2 servers
+    + Cache layer (Redis): 10 nodes for hot data
+    + Load balancers: 2 (active-passive)
+    + Database: 5 nodes (1 primary + 4 read replicas)
+    Total: ~90 servers + managed services
+📊 Cost Estimate (AWS):
+    90 × m7g.xlarge = 90 × $85/month = $7,650/month
+    S3 storage: 20 TB/month × $0.023/GB = $460/month
+    Redis: r7g.xlarge × 10 = $2,500/month
+    RDS: db.r7g.2xlarge × 5 = $4,000/month
+    Total: ~$15,000/month = ~$180,000/year
+```
+### 🔧 Quick Reference — Numbers to Memorize:
+```
+MEMORY:
+  1 Character (ASCII)  = 1 byte
+  1 Character (UTF-8)  = 1-4 bytes
+  1 Integer            = 4 bytes
+  1 Long               = 8 bytes
+  1 UUID               = 16 bytes
+  1 Tweet (~140 chars)  = ~500 bytes (with metadata)
+  1 Image (compressed)  = 100KB - 1MB
+  1 Video (1 min, 720p) = ~50MB
+SCALE:
+  1 KB = 1,000 bytes (a short email)
+  1 MB = 1,000 KB (a photo)
+  1 GB = 1,000 MB (a movie)
+  1 TB = 1,000 GB (a large database)
+  1 PB = 1,000 TB (Netflix's video library)
+TIME:
+  1 second   = 1,000 milliseconds (ms)
+  1 ms       = 1,000 microseconds (µs)
+  1 µs       = 1,000 nanoseconds (ns)
+  86,400 seconds/day (memorize this!)
+  ~2.5M seconds/month
+  ~31.5M seconds/year
+```
+---
+## ✅ Phase 13 Beginner Deep Dive Complete!
+> **You now have both the quick-reference summaries (Phase 13 main) AND the full beginner-to-advanced explanations (this section). Use the summaries for quick revision and the deep dives for thorough understanding.**
+---
+
+---
+# 🔥 THE NIGHT-BEFORE CHEAT SHEET — Top 30 Power Answers
+> **Print this. Read it the night before. Read it in the morning. Read it in the car. These are the 30 most likely questions and your power answers.**
+---
+## ⚡ Java Core (5 min)
+**1. HashMap internals?**
+→ Array of linked lists (buckets). Key.hashCode() → bucket index. Java 8+: bucket becomes red-black tree at 8 nodes. Load factor 0.75 → resize at 75% capacity. O(1) avg, O(log n) worst.
+
+**2. == vs .equals()?**
+→ `==` compares references (memory address). `.equals()` compares content. Always use `.equals()` for objects. For enums, `==` is preferred (null-safe, singleton).
+
+**3. finally override return?**
+→ YES. `finally return 2` overrides `try return 1`. Java saves return value to temp var before finally — but finally's own return replaces it entirely.
+
+**4. i++ + i++ (i=5)?**
+→ Post-increment: USE then increment. First i++ uses 5 (i→6), second uses 6 (i→7). Result: 5+6=11.
+
+**5. String immutability why?**
+→ Security (used in class loading, network connections), thread-safety (no synchronization needed), String Pool caching, hashCode caching. `String s = "hi"` reuses pool object.
+---
+## ⚡ Spring Boot (5 min)
+**6. How auto-configuration works?**
+→ `@SpringBootApplication` = `@EnableAutoConfiguration`. Spring reads `META-INF/spring/AutoConfiguration.imports`. Each class has `@ConditionalOnClass`, `@ConditionalOnMissingBean`. If Tomcat jar present → auto-configures Tomcat. You can override any bean.
+
+**7. @Transactional internals?**
+→ Spring creates a proxy (CGLIB/JDK dynamic proxy). Proxy intercepts method call → opens transaction → calls real method → commits on success, rollbacks on RuntimeException. CAVEAT: self-invocation bypasses proxy!
+
+**8. Circuit Breaker pattern?**
+→ Resilience4j. States: CLOSED (normal) → OPEN (failures > threshold, fast-fail) → HALF-OPEN (test requests). Prevents cascade failures. Config: failureRateThreshold=50%, waitDurationInOpenState=60s, slidingWindowSize=10.
+
+**9. API versioning strategy?**
+→ URI versioning (`/api/v1/users`) for external APIs. Header versioning (`Accept: application/vnd.company.v2+json`) for internal. Never break existing contracts. Sunset old versions with deprecation headers.
+
+**10. How do you handle distributed transactions?**
+→ NEVER use 2PC (too slow). Use SAGA pattern — choreography (events) or orchestration (central coordinator). Each service does local TX + publishes event. Compensating transactions for rollback. Transactional Outbox + Debezium for reliability.
+---
+## ⚡ Microservices & Architecture (5 min)
+**11. CQRS?**
+→ Separate read model (denormalized, fast — Redis/ES) from write model (normalized, ACID — PostgreSQL). Sync via Kafka events. Use when read:write ratio > 50:1. Banking: writes to PostgreSQL, reads from Redis dashboard.
+
+**12. Transactional Outbox?**
+→ Save business data + event in SAME DB transaction. Debezium tails WAL → publishes to Kafka. Solves dual-write problem. Guarantees at-least-once delivery even if service crashes.
+
+**13. Service discovery?**
+→ Eureka/Consul. Services register on startup, send heartbeats. Clients query registry for instance list. Spring Cloud: `@EnableDiscoveryClient` + `@LoadBalanced RestTemplate`. K8s: built-in DNS-based discovery.
+
+**14. How to handle 1M requests/sec?**
+→ CDN → Load Balancer → API Gateway (rate limiting) → Microservices (HPA auto-scale) → Redis cache (hot data) → DB read replicas. Async processing via Kafka for non-critical paths. Connection pooling (HikariCP).
+
+**15. CAP theorem — your choice?**
+→ For banking: CP (Consistency + Partition tolerance) — we CANNOT show wrong balance. AP systems (eventual consistency) for recommendations, notifications. In practice: tune per service — strong consistency for money, eventual for analytics.
+---
+## ⚡ Kafka & Messaging (3 min)
+**16. Kafka delivery guarantees?**
+→ At-most-once (fire & forget), At-least-once (acks=all + consumer retry — handle duplicates with idempotency key), Exactly-once (idempotent producer + transactional consumer). I use at-least-once + idempotency for banking.
+
+**17. Consumer lag spike — what do you do?**
+→ 1) Check Grafana for lag trend. 2) Is consumer stuck in GC? Check JVM metrics. 3) Increase partitions + consumers (max = partitions). 4) Check if consumer is doing heavy processing — offload to async. 5) Check for poison pill messages.
+
+**18. Kafka vs RabbitMQ?**
+→ Kafka: high throughput, log-based, replay-able, good for event streaming/CDC. RabbitMQ: traditional message broker, flexible routing, better for task queues. Banking: Kafka for event sourcing, RabbitMQ for notification queues.
+---
+## ⚡ Database (3 min)
+**19. Index — when NOT to use?**
+→ Small tables (<1000 rows), columns with low cardinality (boolean), frequently updated columns (index rebuild overhead), columns rarely in WHERE/JOIN. Too many indexes slow down writes.
+
+**20. N+1 query problem?**
+→ Fetching parent + N children = N+1 queries. Fix: `JOIN FETCH` in JPQL, `@EntityGraph`, or `@BatchSize`. Always check Hibernate SQL logs in dev.
+
+**21. PostgreSQL vs MongoDB — when which?**
+→ PostgreSQL: ACID transactions, complex joins, financial data, relational. MongoDB: flexible schema, document-oriented, rapid prototyping, hierarchical data. Banking core: PostgreSQL. Product catalog: MongoDB.
+---
+## ⚡ Docker & K8s (3 min)
+**22. Pod vs Container?**
+→ Pod = smallest K8s unit, can have 1+ containers sharing network/storage. Container = single process (your app). Pod = "apartment", Container = "room". Usually 1 container per pod. Sidecar pattern = 2 containers in 1 pod.
+
+**23. Zero-downtime deployment?**
+→ Rolling update (default in K8s). Set `maxUnavailable=0, maxSurge=1`. Readiness probe must be configured. Blue-Green or Canary for critical services. Helm rollback if health checks fail.
+
+**24. HPA autoscaling?**
+→ Scale pods based on CPU/memory or custom metrics (Kafka lag). `minReplicas=2, maxReplicas=20, targetCPUUtilization=70%`. KEDA for event-driven scale-to-zero.
+---
+## ⚡ Security (2 min)
+**25. OAuth2 + JWT flow?**
+→ Client → Auth Server (Keycloak) → gets JWT access token. Client sends JWT in `Authorization: Bearer` header. Resource server validates JWT signature (public key) + expiry + claims. Refresh token for re-authentication without password.
+
+**26. How do you prevent OWASP Top 10?**
+→ SQL Injection: parameterized queries (JPA default). XSS: output encoding + CSP headers. IDOR: `@PreAuthorize` check user owns resource. Secrets: Vault, never env vars. Dependencies: OWASP scan in CI. Rate limiting per user per endpoint.
+---
+## ⚡ Leadership & Behavioral (3 min)
+**27. How do you handle a production incident?**
+→ STAR: Situation (service down at 2AM), Task (restore service), Action (checked dashboards → found memory leak via heap dump → identified unbounded cache → deployed fix with rolling update → added alerts), Result (MTTR 45 min, added runbook, no recurrence).
+
+**28. How do you decide microservice boundaries?**
+→ Domain-Driven Design. Identify bounded contexts. Each microservice owns its data. Rule: if two features change together, they're one service. If they scale independently, separate them. Start monolith → extract when clear boundaries emerge.
+
+**29. How do you mentor junior developers?**
+→ Code reviews with explanations (not just approvals). Pair programming on complex features. Architecture Decision Records (ADRs) for knowledge sharing. Weekly tech talks. Create golden path templates so they start with best practices.
+
+**30. What's your biggest technical mistake?**
+→ "Early in my career, I used a shared database across microservices. It created tight coupling — schema changes broke 3 services. I learned to enforce database-per-service, communicate via APIs/events. Now I treat data ownership as the #1 microservice rule."
+---
+## 📋 30-Second Quick Fire (Memorize These)
+| Question | One-Line Answer |
+|---|---|
+| Singleton thread-safe? | Double-checked locking or enum singleton |
+| REST vs gRPC? | REST for external (human-readable), gRPC for internal (fast, binary) |
+| Redis eviction? | LRU (Least Recently Used) default; allkeys-lru for cache |
+| Docker multi-stage build? | Build stage has JDK + Maven; Runtime stage has only JRE + JAR |
+| Helm chart? | K8s package manager — templated YAML, versioned, rollback |
+| 12-Factor App? | Config in env vars, stateless processes, port binding, disposability |
+| Idempotency? | Same request N times = same result. Use idempotency key in DB |
+| Blue-Green deploy? | Two identical envs; switch traffic; instant rollback |
+| Canary deploy? | Route 5% traffic to new version; monitor; gradually increase |
+| GitOps? | Git = single source of truth for infra; ArgoCD syncs K8s from Git |
+------
+---
+# 🏢 TCS — Sr. Tech Lead Interview Prep (10+ Years)
+> **About Tata Consultancy Services (TCS):** India's largest IT services company and a global leader in consulting, technology, and digital transformation. TCS serves Fortune 500 clients across **BFSI, Telecom, Retail, Healthcare, and Manufacturing** domains. Their Sr. Tech Lead / Architect roles demand deep expertise in **Java ecosystem, enterprise architecture, large-scale migration, and client-facing leadership**. TCS values **delivery excellence, agile transformation, and innovation** (they follow TCS Pace™ innovation framework).
+```mermaid
+flowchart LR
+    subgraph TCS["TCS — Sr. Tech Lead Interview Flow"]
+        R1["Round 1\nTechnical Screening\nJava + Spring Boot\n+ System Design"] --> R2["Round 2\nArchitecture Deep-Dive\nMicroservices + Cloud\n+ Design Patterns"]
+        R2 --> R3["Round 3\nProject Discussion\nPast Experience + STAR\n+ Domain Knowledge"]
+        R3 --> R4["Round 4\nManagerial / VP\nLeadership + Estimation\n+ Client Handling"]
+        R4 --> R5["Round 5\nHR\nCTC + Band + Location"]
+    end
+```
+---
+## 🏢 Why TCS Sr. Tech Lead Interviews Are Different
+| Aspect | What TCS Emphasizes | How It Differs From Product Companies |
+|--------|---------------------|--------------------------------------|
+| **Enterprise Scale** | 500+ microservices, multi-geography deployments, 10M+ users | Not just "how it works" — "how it works at MASSIVE scale" |
+| **Legacy Modernization** | Migrating monolith/mainframe to cloud-native Java — they LOVE migration stories | Your modernization experience is the #1 differentiator |
+| **Client Delivery** | On-time delivery, SLA management, stakeholder communication | Tech leads must balance tech AND business |
+| **Agile at Scale** | SAFe, PI Planning, Release Trains — not just Scrum for 1 team | Multi-team coordination experience is critical |
+| **Multi-Domain** | BFSI, Telecom, Retail, Insurance — domain knowledge across verticals | Breadth of domain experience matters |
+| **Cost Optimization** | Cloud cost management, resource optimization, build vs buy decisions | ROI thinking is expected from Sr. Tech Leads |
+---
+## 📋 Section 1: Core Java — TCS Deep-Dive Questions
+### TCS-J1. Explain the internal working of ConcurrentHashMap. How is it different from Collections.synchronizedMap()?
+> **Why TCS asks this:** Enterprise applications handle massive concurrent traffic. Understanding thread-safe collections at the internals level separates senior engineers from mid-level.
+**Answer:**
+```java
+// ── Collections.synchronizedMap ──
+// Wraps entire map with a single lock (mutex)
+// EVERY operation (get, put, remove) acquires the SAME lock
+Map<String, String> syncMap = Collections.synchronizedMap(new HashMap<>());
+// Thread-1 doing get() BLOCKS Thread-2 doing put() — terrible for throughput!
+// ── ConcurrentHashMap (Java 8+) ──
+// Uses CAS (Compare-And-Swap) + synchronized on individual BINS (nodes)
+// NO single global lock — multiple threads can read/write different buckets simultaneously
+ConcurrentHashMap<String, String> concMap = new ConcurrentHashMap<>();
+```
+**Internal Structure (Java 8+):**
+- Array of **Nodes** (bins/buckets), default size 16
+- Each bin is independently synchronized — **lock striping** at bin level
+- **Read operations (get)** — NEVER lock, use volatile reads
+- **Write operations (put)** — synchronized only on the specific bin's head node
+- When a bin grows beyond **8 nodes** → converts from linked list to **Red-Black Tree** (O(log n) instead of O(n))
+- When a bin shrinks below **6 nodes** → converts back to linked list
+- **CAS operations** for size counting (using baseCount + CounterCell[] to avoid contention)
+**Key Differences:**
+
+| Feature | synchronizedMap | ConcurrentHashMap |
+|---------|----------------|-------------------|
+| Lock granularity | Entire map (1 lock) | Per-bin (thousands of locks) |
+| Read performance | Blocks on any write | Never blocks (volatile reads) |
+| Null keys/values | Allowed | ❌ NOT allowed |
+| Iteration | Fail-fast (ConcurrentModificationException) | Weakly consistent (no exception) |
+| Throughput at scale | Poor (1 thread at a time) | Excellent (parallel access) |
+**Production Rule:** Always use ConcurrentHashMap for shared caches. Use synchronizedMap only if you need null keys or external iteration consistency.
+---
+### TCS-J2. Explain Java Memory Model (JMM), happens-before relationship, and how volatile/synchronized provide visibility guarantees.
+> **Why TCS asks this:** At enterprise scale, subtle concurrency bugs cause production incidents. Sr. Tech Leads must understand memory visibility at the JMM level.
+**Answer:**
+The Java Memory Model defines how threads interact through memory and what behaviors are allowed in concurrent execution.
+**The Problem:**
+```java
+// Thread-1:
+flag = true;
+data = 42;
+// Thread-2:
+if (flag) {
+    System.out.println(data);  // Might print 0! Not guaranteed to see 42
+}
+```
+**Why?** Without synchronization, the JVM/CPU can:
+1. **Reorder instructions** — data = 42 might execute AFTER flag = true
+2. **Cache locally** — Thread-2 might read a stale flag from CPU cache
+3. **Optimize away** — JIT compiler might decide Thread-2 never sees the update
+**Happens-Before Rules (The Contract):**
+
+| Rule | Guarantee |
+|------|-----------|
+| **Program order** | Within a single thread, each action happens-before the next |
+| **Monitor lock** | unlock() on a monitor happens-before every subsequent lock() on that monitor |
+| **Volatile** | A write to a volatile field happens-before every subsequent read of that field |
+| **Thread start** | 	hread.start() happens-before any action in the started thread |
+| **Thread join** | All actions in a thread happen-before join() returns |
+| **Transitivity** | If A happens-before B, and B happens-before C, then A happens-before C |
+**Fix with volatile:**
+```java
+private volatile boolean flag = false;  // volatile = memory barrier
+private int data = 0;
+// Thread-1:
+data = 42;         // Step 1: write data
+flag = true;       // Step 2: volatile write — FLUSHES all previous writes to main memory
+// Thread-2:
+if (flag) {        // volatile read — READS from main memory (not cache)
+    System.out.println(data);  // GUARANTEED to print 42 (happens-before!)
+}
+```
+**When to use what:**
+- volatile → single variable visibility, no compound operations
+- synchronized → compound operations (check-then-act, read-modify-write)
+- java.util.concurrent.atomic → single variable + CAS (lock-free)
+- java.util.concurrent.locks → advanced scenarios (read-write locks, tryLock with timeout)
+---
+### TCS-J3. What are Virtual Threads (Project Loom)? How do they change the way we build enterprise applications?
+> **Why TCS asks this:** TCS is modernizing legacy systems to Java 21. Virtual threads are a game-changer for I/O-heavy enterprise workloads.
+**Answer:**
+```java
+// ── Traditional Platform Threads (pre-Java 21) ──
+// Each thread = 1 OS thread = ~1MB stack = expensive
+// Typical server: 200-500 threads max → 200-500 concurrent requests
+ExecutorService executor = Executors.newFixedThreadPool(200);
+// ── Virtual Threads (Java 21+) ──
+// Lightweight, managed by JVM, ~1KB each
+// Can create MILLIONS of them
+ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+// Or in Spring Boot 3.2+:
+// application.yml
+// spring.threads.virtual.enabled: true
+// That's it! Tomcat now uses virtual threads automatically
+```
+**How Virtual Threads Work:**
+- **M:N scheduling** — M virtual threads mapped to N carrier (platform) threads
+- When a virtual thread hits a **blocking I/O** (DB query, HTTP call, file read), it is **unmounted** from the carrier thread
+- The carrier thread picks up another virtual thread — **no idle waiting**
+- When I/O completes, the virtual thread is **remounted** on any available carrier
+**Enterprise Impact:**
+
+| Scenario | Platform Threads | Virtual Threads |
+|----------|-----------------|-----------------|
+| 10,000 concurrent DB queries | Need 10,000 OS threads (impossible) | 10,000 virtual threads on 8 carriers |
+| Thread pool exhaustion | Common cause of outages | Virtually eliminated |
+| Thread-per-request model | Limited by pool size | Scales to millions |
+| Memory per thread | ~1MB | ~1KB |
+**Caveats (Interview Gold):**
+1. **Don't pool virtual threads** — create-per-task, they're cheap
+2. **synchronized blocks pin the carrier** — prefer ReentrantLock
+3. **CPU-bound tasks** get NO benefit — virtual threads help only with I/O blocking
+4. **ThreadLocal** is expensive per virtual thread — prefer ScopedValue (preview)
+---
+### TCS-J4. Explain the Garbage Collection algorithms in Java. When would you choose G1GC vs ZGC vs Shenandoah?
+> **Why TCS asks this:** Enterprise apps with 32GB+ heaps need GC tuning. Sr. Tech Leads must make informed GC decisions for production.
+**Answer:**
+**GC Algorithm Comparison:**
+
+| GC | Best For | Max Pause | Heap Size | Java Version |
+|----|----------|-----------|-----------|-------------|
+| **G1GC** | General purpose, balanced throughput/latency | 200ms target | 4GB–32GB | Java 9+ (default) |
+| **ZGC** | Ultra-low latency, large heaps | <1ms | Up to 16TB | Java 17+ (production-ready) |
+| **Shenandoah** | Low latency (Red Hat) | <10ms | Up to 4TB | Java 12+ |
+| **Parallel GC** | Batch processing, max throughput | High (seconds) | Any | Java 8 default |
+```bash
+# G1GC — balanced (most common for web services)
+java -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xmx8g -jar app.jar
+# ZGC — latency-critical (Java 17+, payments, trading)
+java -XX:+UseZGC -Xmx32g -jar app.jar
+# Shenandoah — alternative low-latency
+java -XX:+UseShenandoahGC -Xmx16g -jar app.jar
+```
+**G1GC Internals (Most Asked):**
+- Divides heap into **equal-sized regions** (~2048 regions)
+- Regions can be Eden, Survivor, Old, or Humongous
+- **Mixed collections** — collects both young and old regions together
+- Prioritizes regions with most garbage first ("Garbage First")
+- -XX:MaxGCPauseMillis=200 → G1 adjusts region count to meet target
+**When I Choose What (Real Decision Framework):**
+- **REST API (p99 < 100ms):** ZGC — sub-millisecond pauses
+- **Batch processing (throughput matters):** Parallel GC
+- **General microservice (8GB heap):** G1GC — good default
+- **Real-time trading (p99 < 5ms):** ZGC with -XX:+UseZGC -XX:ZAllocationSpikeTolerance=5
+---
+### TCS-J5. What is the difference between CompletableFuture, RxJava, and Project Reactor? When do you use each?
+> **Why TCS asks this:** TCS projects use reactive patterns for high-throughput APIs. Sr. Tech Leads must choose the right async model.
+**Answer:**
+
+| Feature | CompletableFuture | RxJava | Project Reactor |
+|---------|------------------|--------|-----------------|
+| **Type** | Single async result | Observable streams | Mono (0-1) / Flux (0-N) |
+| **Backpressure** | ❌ No | ✅ Flowable | ✅ Built-in |
+| **Spring Integration** | Manual | Third-party | Native (WebFlux) |
+| **Learning Curve** | Low | High | Medium |
+| **Best For** | Simple async calls | Android, legacy | Spring Boot reactive APIs |
+```java
+// ── CompletableFuture — simple async orchestration ──
+CompletableFuture<User> userFuture = CompletableFuture.supplyAsync(() -> userService.getUser(id));
+CompletableFuture<List<Order>> ordersFuture = CompletableFuture.supplyAsync(() -> orderService.getOrders(id));
+// Combine both results (parallel execution!)
+CompletableFuture<UserProfile> profile = userFuture.thenCombine(ordersFuture,
+    (user, orders) -> new UserProfile(user, orders));
+// ── Project Reactor — reactive streams with backpressure ──
+Mono<User> user = webClient.get().uri("/users/{id}", id).retrieve().bodyToMono(User.class);
+Flux<Order> orders = webClient.get().uri("/orders?userId={id}", id).retrieve().bodyToFlux(Order.class);
+// Combine reactively
+Mono<UserProfile> profile = Mono.zip(user, orders.collectList())
+    .map(tuple -> new UserProfile(tuple.getT1(), tuple.getT2()));
+```
+**Decision Framework:**
+- **Simple async (2-3 parallel calls):** CompletableFuture — straightforward, everyone knows it
+- **High-throughput streaming (10K+ req/sec):** Project Reactor with Spring WebFlux
+- **Legacy Android/RxJava codebase:** Continue with RxJava, don't migrate for no reason
+- **Mixed (most enterprise apps):** Spring MVC + CompletableFuture for parallel calls, no need for full reactive
+---
+## 📋 Section 2: Spring Boot & Microservices — TCS Enterprise Questions
+### TCS-S1. How do you design a microservices architecture for a large enterprise system? Walk through your approach.
+> **Why TCS asks this:** TCS Sr. Tech Leads architect systems for Fortune 500 clients. This is THE most important question.
+**Answer:**
+```mermaid
+flowchart TB
+    subgraph Client["Client Layer"]
+        WEB[Web App] 
+        MOB[Mobile App]
+        PART[Partner API]
+    end
+    subgraph Gateway["API Gateway Layer"]
+        GW[Spring Cloud Gateway\nRate Limiting + Auth + Routing]
+    end
+    subgraph Services["Microservices Layer"]
+        US[User Service\nJava 21 + Spring Boot 3]
+        OS[Order Service\nJava 21 + Spring Boot 3]
+        PS[Payment Service\nJava 21 + Spring Boot 3]
+        NS[Notification Service\nJava 21 + Spring Boot 3]
+        IS[Inventory Service\nJava 21 + Spring Boot 3]
+    end
+    subgraph Data["Data Layer"]
+        PG1[(PostgreSQL\nUsers)]
+        PG2[(PostgreSQL\nOrders)]
+        PG3[(PostgreSQL\nPayments)]
+        MONGO[(MongoDB\nNotifications)]
+        REDIS[(Redis\nCache + Sessions)]
+    end
+    subgraph Infra["Infrastructure"]
+        KAFKA[Apache Kafka\nEvent Bus]
+        VAULT[HashiCorp Vault\nSecrets]
+        K8S[Kubernetes\nOrchestration]
+    end
+    Client --> Gateway
+    Gateway --> Services
+    US --> PG1
+    OS --> PG2
+    PS --> PG3
+    NS --> MONGO
+    Services --> REDIS
+    Services --> KAFKA
+```
+**My Step-by-Step Approach:**
+**Step 1: Domain-Driven Design (DDD)**
+- Conduct **Event Storming** workshops with business stakeholders
+- Identify **Bounded Contexts** → each becomes a microservice candidate
+- Define **Aggregates** (consistency boundaries) and **Domain Events**
+**Step 2: Service Boundaries (The Rules I Follow)**
+1. Each service owns its **database** (Database-per-Service pattern)
+2. Services communicate via **async events** (Kafka) for loose coupling
+3. Sync calls (REST/gRPC) only when the caller NEEDS the response immediately
+4. If two things always change together → same service. If they scale independently → separate services
+**Step 3: Cross-Cutting Concerns**
+- **API Gateway:** Spring Cloud Gateway — routing, rate limiting, JWT validation
+- **Service Discovery:** Kubernetes DNS (or Eureka for non-K8s)
+- **Config Management:** Spring Cloud Config Server + Vault
+- **Observability:** Micrometer + Prometheus + Grafana + Jaeger (distributed tracing)
+- **Circuit Breaker:** Resilience4j — prevent cascade failures
+**Step 4: Data Consistency Strategy**
+- **Within a service:** ACID transactions (Spring @Transactional)
+- **Across services:** Saga pattern (choreography with Kafka events)
+- **Reads across services:** CQRS — materialized views for query optimization
+**Step 5: Deployment Strategy**
+- **CI/CD:** Jenkins/GitHub Actions → Docker → Kubernetes
+- **Blue-Green deployment** for critical services
+- **Canary releases** with Istio traffic splitting
+- **Helm charts** for environment-specific configuration
+---
+### TCS-S2. Explain the SAGA pattern with a real-world example. How do you handle failures in distributed transactions?
+> **Why TCS asks this:** Every enterprise system has distributed transactions. This is asked in EVERY TCS architect interview.
+**Answer:**
+**The Problem:** In a monolith, you wrap everything in one DB transaction. In microservices, each service has its own DB — you can't do a distributed @Transactional.
+**Example: E-Commerce Order Placement**
+```mermaid
+sequenceDiagram
+    participant OS as Order Service
+    participant PS as Payment Service
+    participant IS as Inventory Service
+    participant NS as Notification Service
+    Note over OS,NS: SAGA — Happy Path
+    OS->>OS: Create Order (PENDING)
+    OS->>PS: OrderCreated event
+    PS->>PS: Debit Payment
+    PS->>IS: PaymentCompleted event
+    IS->>IS: Reserve Inventory
+    IS->>NS: InventoryReserved event
+    NS->>NS: Send Confirmation Email
+    NS->>OS: OrderCompleted event
+    OS->>OS: Update Order (CONFIRMED)
+    Note over OS,NS: SAGA — Compensation (Payment Fails)
+    OS->>OS: Create Order (PENDING)
+    OS->>PS: OrderCreated event
+    PS->>PS: Payment FAILS
+    PS->>OS: PaymentFailed event
+    OS->>OS: Update Order (CANCELLED) ← Compensating Transaction
+```
+**Two SAGA Types:**
+
+| Type | How It Works | Pros | Cons |
+|------|-------------|------|------|
+| **Choreography** | Each service listens to events and reacts | Simple, no central coordinator, loosely coupled | Hard to track, complex flows become spaghetti |
+| **Orchestration** | Central orchestrator service directs the saga | Easy to understand, centralized logic | Single point of failure, tighter coupling |
+**Implementation (Choreography with Kafka):**
+```java
+// ── Order Service — starts the saga ──
+@Service
+public class OrderService {
+    @Transactional
+    public Order createOrder(OrderRequest request) {
+        Order order = orderRepository.save(new Order(request, OrderStatus.PENDING));
+        // Publish event to Kafka → triggers Payment Service
+        kafkaTemplate.send("order-events", new OrderCreatedEvent(order.getId(), request.getAmount()));
+        return order;
+    }
+    // Compensating transaction — called when payment fails
+    @KafkaListener(topics = "payment-events", groupId = "order-service")
+    public void handlePaymentEvent(PaymentEvent event) {
+        if (event.getStatus() == PaymentStatus.FAILED) {
+            orderRepository.updateStatus(event.getOrderId(), OrderStatus.CANCELLED);
+            // Optionally publish OrderCancelled event for other services
+        }
+    }
+}
+// ── Payment Service — step 2 of the saga ──
+@Service
+public class PaymentService {
+    @KafkaListener(topics = "order-events", groupId = "payment-service")
+    public void handleOrderCreated(OrderCreatedEvent event) {
+        try {
+            paymentGateway.charge(event.getAmount());
+            kafkaTemplate.send("payment-events",
+                new PaymentEvent(event.getOrderId(), PaymentStatus.COMPLETED));
+        } catch (PaymentException e) {
+            kafkaTemplate.send("payment-events",
+                new PaymentEvent(event.getOrderId(), PaymentStatus.FAILED));
+        }
+    }
+}
+```
+**Key Design Decisions (Interview Gold):**
+1. **Idempotency** — Every event handler must be idempotent (use eventId + dedup table)
+2. **Timeout handling** — If Payment Service doesn't respond in 30s → auto-cancel order
+3. **Dead Letter Queue** — Failed events go to DLQ for manual investigation
+4. **Correlation ID** — Every event carries orderId for end-to-end tracing
+---
+### TCS-S3. How do you handle API versioning in a large enterprise with 100+ microservices?
+> **Why TCS asks this:** TCS manages APIs for large clients. Breaking changes in APIs can bring down dependent systems.
+**Answer:**
+**4 Strategies (Ranked by Preference):**
+
+| Strategy | Example | When to Use |
+|----------|---------|-------------|
+| **URI versioning** | /api/v1/users, /api/v2/users | Simple, most common, TCS default |
+| **Header versioning** | Accept: application/vnd.company.v2+json | Clean URIs, harder to test |
+| **Query param** | /api/users?version=2 | Easy, but pollutes query string |
+| **Content negotiation** | Accept: application/json; version=2 | REST purist approach |
+**My Enterprise Approach:**
+```java
+// ── Strategy 1: URI Versioning (TCS Recommended) ──
+@RestController
+@RequestMapping("/api/v1/users")
+public class UserControllerV1 {
+    @GetMapping("/{id}")
+    public UserDtoV1 getUser(@PathVariable Long id) { ... }
+}
+@RestController
+@RequestMapping("/api/v2/users")
+public class UserControllerV2 {
+    @GetMapping("/{id}")
+    public UserDtoV2 getUser(@PathVariable Long id) {
+        // V2 adds address, phone — non-breaking additions
+        return userService.getUserV2(id);
+    }
+}
+```
+**Enterprise API Lifecycle:**
+1. **Deprecation policy:** Announce deprecation 6 months before removal
+2. **Sunset header:** Sunset: Sat, 01 Jan 2027 00:00:00 GMT in response
+3. **Consumer registry:** Track which clients use which version
+4. **Gateway routing:** API Gateway routes /v1/* and /v2/* to appropriate service versions
+5. **Contract testing:** Pact tests ensure backward compatibility
+---
+### TCS-S4. Explain Circuit Breaker, Bulkhead, and Rate Limiter patterns. How do you implement them together?
+> **Why TCS asks this:** Enterprise systems have hundreds of downstream dependencies. Resilience patterns prevent cascade failures.
+**Answer:**
+```java
+// ── Circuit Breaker (Resilience4j) ──
+// Prevents calling a failing service repeatedly
+@CircuitBreaker(name = "paymentService", fallbackMethod = "paymentFallback")
+public PaymentResponse processPayment(PaymentRequest request) {
+    return paymentClient.charge(request);  // calls external payment gateway
+}
+public PaymentResponse paymentFallback(PaymentRequest request, Exception ex) {
+    // Queue for retry, return pending status
+    kafkaTemplate.send("payment-retry", request);
+    return new PaymentResponse(Status.PENDING, "Payment queued for retry");
+}
+// application.yml
+// resilience4j.circuitbreaker.instances.paymentService:
+//   slidingWindowSize: 10
+//   failureRateThreshold: 50         # Open after 50% failures
+//   waitDurationInOpenState: 30s     # Wait 30s before half-open
+//   permittedNumberOfCallsInHalfOpenState: 3
+// ── Bulkhead — isolate thread pools per dependency ──
+@Bulkhead(name = "paymentService", type = Bulkhead.Type.THREADPOOL)
+public PaymentResponse processPayment(PaymentRequest request) {
+    return paymentClient.charge(request);
+}
+// resilience4j.bulkhead.instances.paymentService:
+//   maxConcurrentCalls: 20           # Max 20 parallel calls to payment service
+//   maxWaitDuration: 500ms           # Wait max 500ms for a slot
+// ── Rate Limiter — protect your own API from abuse ──
+@RateLimiter(name = "apiRateLimit")
+public ResponseEntity<User> getUser(@PathVariable Long id) {
+    return ResponseEntity.ok(userService.getUser(id));
+}
+// resilience4j.ratelimiter.instances.apiRateLimit:
+//   limitForPeriod: 100              # 100 requests per cycle
+//   limitRefreshPeriod: 1s           # per second
+//   timeoutDuration: 0               # fail immediately if limit exceeded
+```
+**How They Work Together:**
+
+| Pattern | Protects | Against | Analogy |
+|---------|----------|---------|---------|
+| **Circuit Breaker** | You from a failing dependency | Cascade failure | Electrical circuit breaker |
+| **Bulkhead** | Your other features from one slow dependency | Thread pool exhaustion | Ship compartments |
+| **Rate Limiter** | Your service from too many requests | DDoS / noisy neighbor | Nightclub bouncer |
+**Production Config I Use:**
+- Circuit Breaker on every **external HTTP call** (payment gateway, third-party APIs)
+- Bulkhead on **each downstream service** (separate thread pools)
+- Rate Limiter at **API Gateway level** (per client/API key)
+- **Retry** with exponential backoff for transient failures (network blips)
+---
+### TCS-S5. How do you implement distributed caching in a microservices architecture?
+> **Why TCS asks this:** Enterprise systems serve millions of users. Caching strategy directly impacts performance and cost.
+**Answer:**
+```java
+// ── Level 1: Local Cache (Caffeine) — fastest, per-instance ──
+@Configuration
+public class CacheConfig {
+    @Bean
+    public CacheManager cacheManager() {
+        CaffeineCacheManager manager = new CaffeineCacheManager("users", "products");
+        manager.setCaffeine(Caffeine.newBuilder()
+            .maximumSize(10_000)
+            .expireAfterWrite(Duration.ofMinutes(10))
+            .recordStats());  // expose metrics via Micrometer
+        return manager;
+    }
+}
+@Cacheable(value = "users", key = "#id")
+public User getUser(Long id) {
+    return userRepository.findById(id).orElseThrow();
+}
+// ── Level 2: Distributed Cache (Redis) — shared across instances ──
+@Configuration
+public class RedisCacheConfig {
+    @Bean
+    public RedisCacheManager cacheManager(RedisConnectionFactory factory) {
+        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+            .entryTtl(Duration.ofMinutes(30))
+            .serializeValuesWith(SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
+            .disableCachingNullValues();
+        return RedisCacheManager.builder(factory)
+            .cacheDefaults(config)
+            .build();
+    }
+}
+// ── Level 3: Multi-Tier Cache (Local + Redis) ──
+// Check local cache first → if miss, check Redis → if miss, hit DB
+@Service
+public class UserService {
+    private final Cache<Long, User> localCache = Caffeine.newBuilder()
+        .maximumSize(1000).expireAfterWrite(Duration.ofMinutes(5)).build();
+    private final RedisTemplate<String, User> redisTemplate;
+    public User getUser(Long id) {
+        // Tier 1: Local cache (< 1ms)
+        User user = localCache.getIfPresent(id);
+        if (user != null) return user;
+        // Tier 2: Redis (< 5ms)
+        user = redisTemplate.opsForValue().get("user:" + id);
+        if (user != null) {
+            localCache.put(id, user);
+            return user;
+        }
+        // Tier 3: Database (50-200ms)
+        user = userRepository.findById(id).orElseThrow();
+        redisTemplate.opsForValue().set("user:" + id, user, Duration.ofMinutes(30));
+        localCache.put(id, user);
+        return user;
+    }
+}
+```
+**Cache Invalidation Strategies:**
+
+| Strategy | How | When |
+|----------|-----|------|
+| **TTL-based** | Cache expires after N minutes | Good for data that changes infrequently |
+| **Event-driven** | Kafka event triggers cache invalidation | Real-time consistency across services |
+| **Write-through** | Update cache AND DB together | Strong consistency, slower writes |
+| **Write-behind** | Update cache immediately, DB asynchronously | Fast writes, risk of data loss |
+---
+## 📋 Section 3: Database & SQL — TCS Enterprise Questions
+### TCS-D1. How do you handle database migration in a microservices environment with zero downtime?
+> **Why TCS asks this:** Enterprise clients demand 99.99% uptime. Schema migrations cannot cause downtime.
+**Answer:**
+**The Golden Rule: Expand-and-Contract Pattern**
+```sql
+-- ── Phase 1: EXPAND — Add new column (backward compatible) ──
+-- Flyway: V2__add_email_column.sql
+ALTER TABLE users ADD COLUMN email_new VARCHAR(255);
+-- Old code still works! It doesn't know about email_new.
+-- ── Phase 2: MIGRATE DATA ──
+-- Flyway: V3__migrate_email_data.sql
+UPDATE users SET email_new = email WHERE email_new IS NULL;
+-- Run in batches for large tables:
+-- UPDATE users SET email_new = email WHERE email_new IS NULL LIMIT 10000;
+-- ── Phase 3: DEPLOY NEW CODE ──
+-- New application version reads/writes email_new
+-- Old version still reads/writes email (both work simultaneously!)
+-- ── Phase 4: CONTRACT — Remove old column (after all instances upgraded) ──
+-- Flyway: V4__drop_old_email_column.sql
+ALTER TABLE users DROP COLUMN email;
+ALTER TABLE users RENAME COLUMN email_new TO email;
+```
+**Tools I Use:**
+- **Flyway** — version-controlled SQL migrations (preferred for Spring Boot)
+- **Liquibase** — XML/YAML changelog format (preferred for complex enterprise setups)
+**Rules for Zero-Downtime Migrations:**
+1. **Never rename a column** in one step — use expand-and-contract
+2. **Never drop a column** until ALL service instances use the new code
+3. **Add indexes CONCURRENTLY** — CREATE INDEX CONCURRENTLY in PostgreSQL
+4. **Large data migrations** — use background jobs, not Flyway scripts
+5. **Always have a rollback plan** — reverse migration script ready
+---
+### TCS-D2. Explain database sharding. When would you use it vs. read replicas vs. partitioning?
+> **Why TCS asks this:** TCS handles billion-row databases for BFSI clients. Data scaling strategy is a Sr. Tech Lead decision.
+**Answer:**
+> 
+| Strategy | What It Does | When to Use | Complexity |
+|----------|-------------|-------------|------------|
+| **Read Replicas** | Copy data to read-only instances | Read-heavy workloads (80/20 read/write) | Low |
+| **Partitioning** | Split one table into partitions (same DB) | Large tables (>100M rows), range/time queries | Medium |
+| **Sharding** | Split data across multiple DB servers | Write-heavy, >1TB data, multi-region | High |
+```sql
+-- ── Partitioning (PostgreSQL) — single DB, multiple partitions ──
+CREATE TABLE orders (
+    id BIGSERIAL,
+    created_at TIMESTAMP NOT NULL,
+    customer_id BIGINT,
+    amount DECIMAL(10,2)
+) PARTITION BY RANGE (created_at);
+CREATE TABLE orders_2025_q1 PARTITION OF orders
+    FOR VALUES FROM ('2025-01-01') TO ('2025-04-01');
+CREATE TABLE orders_2025_q2 PARTITION OF orders
+    FOR VALUES FROM ('2025-04-01') TO ('2025-07-01');
+-- Query: SELECT * FROM orders WHERE created_at = '2025-03-15'
+-- PostgreSQL automatically routes to orders_2025_q1 — only scans that partition!
+```
+**Sharding Strategies:**
+
+| Strategy | Example | Pros | Cons |
+|----------|---------|------|------|
+| **Range-based** | Users A-M → Shard 1, N-Z → Shard 2 | Simple, range queries work | Hotspots (more users with 'S' names) |
+| **Hash-based** | hash(userId) % numShards | Even distribution | Range queries hit all shards |
+| **Geography-based** | India users → Mumbai shard, US → Virginia | Data locality, compliance | Cross-region queries complex |
+**My Decision Framework:**
+1. **First:** Optimize queries + add indexes (cheapest fix)
+2. **Second:** Add read replicas (handle read scaling)
+3. **Third:** Partition large tables (handle single-table growth)
+4. **Last resort:** Shard (when single DB cannot handle writes)
+---
+### TCS-D3. How do you optimize a slow SQL query in production? Walk through your debugging process.
+> **Why TCS asks this:** Performance tuning is a daily task for enterprise applications.
+**Answer:**
+**Step-by-Step Process:**
+```sql
+-- Step 1: Find the slow query (pg_stat_statements)
+SELECT query, calls, mean_exec_time, total_exec_time
+FROM pg_stat_statements
+ORDER BY mean_exec_time DESC
+LIMIT 10;
+-- Step 2: EXPLAIN ANALYZE the query
+EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
+SELECT o.*, u.name 
+FROM orders o 
+JOIN users u ON o.user_id = u.id 
+WHERE o.created_at > '2025-01-01' 
+  AND o.status = 'COMPLETED';
+-- Look for:
+-- ❌ Seq Scan on orders (no index being used)
+-- ❌ Nested Loop with high rows
+-- ❌ Sort with high memory usage
+-- Step 3: Add appropriate index
+CREATE INDEX CONCURRENTLY idx_orders_status_created 
+ON orders (status, created_at) 
+WHERE status = 'COMPLETED';  -- Partial index! Only indexes completed orders.
+-- Step 4: Re-run EXPLAIN — verify Index Scan instead of Seq Scan
+```
+**Common Optimizations:**
+
+| Problem | Solution |
+|---------|----------|
+| Missing index | Add composite index (leftmost prefix rule) |
+| N+1 queries | JOIN FETCH in JPA or @EntityGraph |
+| Large result set | Pagination with keyset (cursor-based, not OFFSET) |
+| Expensive JOIN | Denormalize or use materialized views |
+| Full table scan | Partial indexes, covering indexes |
+| Lock contention | SELECT ... FOR UPDATE SKIP LOCKED |
+---
+## 📋 Section 4: Kafka & Event-Driven Architecture — TCS Questions
+### TCS-K1. How do you design an event-driven architecture for an enterprise system? What are the pitfalls?
+> **Why TCS asks this:** TCS is moving clients from synchronous REST to event-driven architectures using Kafka.
+**Answer:**
+```java
+// ── Event Design (follow CloudEvents spec) ──
+public record OrderCreatedEvent(
+    String eventId,          // UUID — for idempotency
+    String eventType,        // "order.created"
+    Instant timestamp,       // when it happened
+    String correlationId,    // trace across services
+    int version,             // schema version
+    OrderPayload payload     // actual data
+) {}
+// ── Producer — Transactional Outbox Pattern (prevents dual-write) ──
+@Service
+@Transactional
+public class OrderService {
+    public Order createOrder(OrderRequest request) {
+        Order order = orderRepository.save(new Order(request));
+        // Save event to outbox table in SAME transaction as order
+        outboxRepository.save(new OutboxEvent("order.created", objectMapper.writeValueAsString(order)));
+        return order;
+        // Debezium CDC reads outbox table → publishes to Kafka
+        // NO dual-write problem!
+    }
+}
+// ── Consumer — Idempotent processing ──
+@KafkaListener(topics = "order-events", groupId = "payment-service")
+public void handleOrderCreated(OrderCreatedEvent event) {
+    // Idempotency check — have we processed this event already?
+    if (processedEventRepository.existsByEventId(event.eventId())) {
+        log.info("Duplicate event {}, skipping", event.eventId());
+        return;
+    }
+    processPayment(event.payload());
+    processedEventRepository.save(new ProcessedEvent(event.eventId()));
+}
+```
+**Common Pitfalls & Solutions:**
+
+| Pitfall | Problem | Solution |
+|---------|---------|----------|
+| **Dual Write** | Save to DB + publish to Kafka — one can fail | Transactional Outbox + CDC (Debezium) |
+| **Ordering** | Events processed out of order | Partition by entity ID (all events for order-123 go to same partition) |
+| **Duplicate delivery** | Kafka delivers at-least-once | Idempotent consumers (dedup table with eventId) |
+| **Schema evolution** | Event schema changes break consumers | Schema Registry + backward-compatible changes only |
+| **Event storms** | One event triggers cascade of events | Circuit breaker on consumers, backpressure with max.poll.records |
+| **Lost events** | Consumer crashes before processing | enable.auto.commit=false + manual commit after processing |
+---
+### TCS-K2. Explain Kafka consumer group rebalancing. How do you minimize its impact in production?
+> **Why TCS asks this:** Rebalancing causes processing pauses. At enterprise scale, this means delayed transactions.
+**Answer:**
+**What Happens During Rebalancing:**
+1. A consumer joins/leaves the group (or crashes)
+2. Kafka **revokes all partitions** from all consumers
+3. **Stop-the-world pause** — no messages processed during rebalance
+4. Kafka reassigns partitions to available consumers
+5. Consumers resume from last committed offset
+**The Problem:** Rebalance can take **seconds to minutes** for large consumer groups.
+**Solutions:**
+```yaml
+# ── Cooperative Rebalancing (Kafka 2.4+) ──
+# Only revokes partitions that need to move — NOT all partitions
+spring:
+  kafka:
+    consumer:
+      properties:
+        partition.assignment.strategy: org.apache.kafka.clients.consumer.CooperativeStickyAssignor
+      # Consumers keep their assigned partitions during rebalance!
+      # Only the partitions being moved experience a brief pause.
+# ── Static Group Membership — prevent unnecessary rebalances ──
+      properties:
+        group.instance.id: payment-consumer-1  # unique per instance
+        session.timeout.ms: 300000              # 5 min — tolerate brief outages without rebalance
+      # During rolling deployment: consumer disconnects for 30s
+      # Without static membership: FULL rebalance (bad!)
+      # With static membership: Kafka waits 5 min — consumer comes back, no rebalance!
+```
+**Production Best Practices:**
+1. Use **CooperativeStickyAssignor** — incremental rebalance
+2. Use **static group membership** — avoid rebalance during deployments
+3. Set session.timeout.ms higher than deployment time
+4. Use max.poll.interval.ms > processing time (avoid false "dead consumer" detection)
+5. Monitor **consumer lag** — alert when lag > threshold
+---
+## 📋 Section 5: Docker & Kubernetes — TCS Enterprise Questions
+### TCS-K3. How do you design a Kubernetes deployment for a large-scale enterprise application?
+> **Why TCS asks this:** TCS manages K8s clusters for enterprise clients. Sr. Tech Leads design deployment strategies.
+**Answer:**
+```yaml
+# ── Production-Grade Deployment ──
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service
+  namespace: production
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0        # Never take down a healthy pod during deploy
+      maxSurge: 1              # Create 1 extra pod, then remove old one
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+    metadata:
+      labels:
+        app: order-service
+        version: v2.1.0
+    spec:
+      # ── Resource Management ──
+      containers:
+      - name: order-service
+        image: registry.company.com/order-service:2.1.0
+        resources:
+          requests:
+            cpu: 500m            # Guaranteed CPU
+            memory: 512Mi        # Guaranteed memory
+          limits:
+            cpu: 1000m           # Max CPU
+            memory: 1Gi          # Max memory (OOMKilled if exceeded)
+        # ── Health Checks ──
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        # ── Graceful Shutdown ──
+        lifecycle:
+          preStop:
+            exec:
+              command: ["sh", "-c", "sleep 10"]  # Allow in-flight requests to complete
+      terminationGracePeriodSeconds: 60
+---
+# ── Horizontal Pod Autoscaler ──
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: order-service-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: order-service
+  minReplicas: 3
+  maxReplicas: 20
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+```
+**Enterprise K8s Best Practices:**
+1. **Namespace isolation** — production, staging, qa namespaces with resource quotas
+2. **Network Policies** — restrict pod-to-pod communication (zero-trust)
+3. **Pod Disruption Budgets** — minAvailable: 2 ensures HA during node upgrades
+4. **Node affinity** — schedule critical services on dedicated node pools
+5. **Pod anti-affinity** — spread replicas across different nodes/zones
+---
+## 📋 Section 6: Security — TCS Enterprise Questions
+### TCS-SEC1. How do you implement OAuth2 + JWT authentication in a microservices architecture?
+> **Why TCS asks this:** Every enterprise system needs secure authentication. This is a must-know for Sr. Tech Leads.
+**Answer:**
+```mermaid
+sequenceDiagram
+    participant C as Client (React/Mobile)
+    participant GW as API Gateway
+    participant KC as Keycloak (Auth Server)
+    participant MS as Microservice
+    C->>KC: POST /auth/token (username + password)
+    KC->>C: JWT Access Token + Refresh Token
+    C->>GW: GET /api/orders (Authorization: Bearer <JWT>)
+    GW->>GW: Validate JWT signature (public key from Keycloak)
+    GW->>MS: Forward request + JWT claims (userId, roles)
+    MS->>MS: @PreAuthorize("hasRole('ADMIN')") — method-level security
+    MS->>C: 200 OK + response
+```
+```java
+// ── Spring Security Configuration (Resource Server) ──
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+public class SecurityConfig {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
+            .oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/actuator/health/**").permitAll()
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/**").authenticated()
+                .anyRequest().denyAll())
+            .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .csrf(csrf -> csrf.disable())  // Stateless JWT — CSRF not needed
+            .build();
+    }
+    private JwtAuthenticationConverter jwtAuthConverter() {
+        JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
+        converter.setAuthoritiesClaimName("roles");   // Keycloak puts roles here
+        converter.setAuthorityPrefix("ROLE_");
+        JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
+        jwtConverter.setJwtGrantedAuthoritiesConverter(converter);
+        return jwtConverter;
+    }
+}
+// ── Method-Level Security ──
+@RestController
+@RequestMapping("/api/orders")
+public class OrderController {
+    @GetMapping("/{id}")
+    @PreAuthorize("@orderSecurity.isOwner(#id, authentication)")
+    public Order getOrder(@PathVariable Long id) {
+        return orderService.getOrder(id);
+    }
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteOrder(@PathVariable Long id) {
+        orderService.deleteOrder(id);
+    }
+}
+```
+**Enterprise Security Checklist:**
+
+| Layer | What | How |
+|-------|------|-----|
+| **Transport** | Encrypt all traffic | mTLS between services (Istio), HTTPS externally |
+| **Authentication** | Verify identity | OAuth2 + JWT via Keycloak/Okta |
+| **Authorization** | Check permissions | RBAC at gateway + method-level @PreAuthorize |
+| **Data** | Protect sensitive data | Encryption at rest (AES-256), PII masking in logs |
+| **Secrets** | Manage credentials | HashiCorp Vault, never in env vars or ConfigMaps |
+| **Audit** | Track who did what | Audit log table, immutable, retained 7 years |
+| **API Security** | Prevent abuse | Rate limiting, input validation, CORS policy |
+---
+## 📋 Section 7: System Design & Architecture — TCS Questions
+### TCS-ARCH1. How would you design a system that handles 10 million notifications per day?
+> **Why TCS asks this:** TCS builds notification systems for banks, telecom, and retail clients at massive scale.
+**Answer:**
+**Requirements:**
+- 10M notifications/day ≈ ~115 messages/second average, ~500/sec peak
+- Multi-channel: Email, SMS, Push, In-App
+- Delivery guarantees: at-least-once
+- Priority support: OTP > transaction alerts > marketing
+**Architecture:**
+```mermaid
+flowchart LR
+    OS[Order Svc] & PS[Payment Svc] & AUTH[Auth-OTP] -->|produce| T1[high: OTP] & T2[med: Txn] & T3[low: Mktg]
+    T1 & T2 & T3 -->|consume| W1[Email] & W2[SMS] & W3[Push] & W4[InApp]
+    W1 & W2 & W3 & W4 --> PG[(Postgres Log)] & RD[(Redis Dedup)]
+```
+**Key Design Decisions:**
+1. **Priority queues:** Separate Kafka topics per priority — high-priority consumers get more instances
+2. **Template engine:** Notification templates stored in DB — business can update without deployment
+3. **Deduplication:** Redis SET with TTL — prevent sending same notification twice
+4. **Rate limiting:** Per-user rate limit (max 5 SMS/hour) — prevent spam complaints
+5. **Retry with backoff:** Failed sends → retry queue with exponential backoff → DLQ after 3 attempts
+6. **User preferences:** Check user's channel preferences before sending (opt-out support)
+---
+### TCS-ARCH2. How do you migrate a monolith to microservices? What's your strategy?
+> **Why TCS asks this:** This is TCS's bread and butter. 50% of TCS projects involve legacy modernization.
+**Answer:**
+**The Strangler Fig Pattern (My Go-To Approach):**
+```mermaid
+flowchart TB
+    subgraph P1["Phase 1: Strangler Facade"]
+        direction LR
+        GW[Gateway] --> MONO[Monolith]
+        GW -.-> MS1[New Svc 1]
+    end
+    subgraph P2["Phase 2: Gradual Migration"]
+        direction LR
+        GW2[Gateway] --> MONO2[Monolith shrinking]
+        GW2 --> MS2[Svc 1] & MS3[Svc 2] & MS4[Svc 3]
+    end
+    subgraph P3["Phase 3: Complete"]
+        direction LR
+        GW3[Gateway] --> MS5[Svc 1] & MS6[Svc 2] & MS7[Svc 3] & MS8[Svc 4]
+    end
+    P1 --> P2 --> P3
+```
+**Step-by-Step Migration Plan:**
+
+| Phase | Action | Duration | Risk |
+|-------|--------|----------|------|
+| **1. Assess** | Map monolith modules, identify bounded contexts, prioritize by business value | 2-4 weeks | Low |
+| **2. API Gateway** | Place API Gateway in front of monolith — route ALL traffic through it | 1-2 weeks | Low |
+| **3. Extract first service** | Pick the LEAST coupled module (e.g., Notification) — extract to microservice | 4-6 weeks | Medium |
+| **4. Data split** | Create separate DB for new service, sync data during transition | 2-4 weeks | High |
+| **5. Iterate** | Extract next service (increasing complexity) — Order, Payment, User | Ongoing | Medium |
+| **6. Decommission** | Remove empty monolith modules, retire old DB tables | 2-4 weeks | Low |
+**Rules I Follow:**
+1. **Start with the easiest** — build confidence and tooling
+2. **Never big-bang rewrite** — extract incrementally
+3. **Run old and new in parallel** — shadow traffic comparison
+4. **Feature flags** — toggle between monolith and microservice per feature
+5. **Shared database phase** — temporarily okay, then split data ownership
+---
+## 📋 Section 8: Leadership & Behavioral — TCS Sr. Tech Lead Questions
+### TCS-LEAD1. How do you estimate effort for a large-scale project?
+> **Why TCS asks this:** TCS Sr. Tech Leads provide estimates for client proposals. Accurate estimation = profitability.
+**Answer:**
+**My Estimation Framework:**
+> 
+| Technique | When to Use | Accuracy |
+|-----------|-------------|----------|
+| **T-Shirt Sizing** | Initial scoping (XS, S, M, L, XL) | ±50% |
+| **Story Points (Fibonacci)** | Sprint planning | ±30% |
+| **Three-Point Estimation** | Detailed planning: (Optimistic + 4×Likely + Pessimistic) / 6 | ±15% |
+| **Historical Data** | After 3+ sprints — use velocity trends | ±10% |
+**How I Estimate a New Microservice:**
+```
+Component Breakdown:
+├── API Layer (Controllers, DTOs, Validation)       →  3 days
+├── Service Layer (Business Logic)                   →  5 days
+├── Repository Layer (JPA, Queries)                  →  2 days
+├── Kafka Integration (Producer/Consumer)            →  3 days
+├── Security (OAuth2, Role-based)                    →  2 days
+├── Unit Tests (80% coverage target)                 →  3 days
+├── Integration Tests (TestContainers)               →  2 days
+├── CI/CD Pipeline (Jenkinsfile, Helm)               →  2 days
+├── Documentation (API docs, ADR)                    →  1 day
+├── Code Review + Bug Fixes                          →  2 days
+├── Buffer (20% for unknowns)                        →  5 days
+                                            TOTAL:     30 person-days
+```
+**Key Rules:**
+1. **Always add 20% buffer** — unknowns always exist
+2. **Break down to < 3 day tasks** — anything larger is too vague
+3. **Include non-coding work** — reviews, testing, documentation, meetings
+4. **Track actuals** — compare estimates vs. actuals to improve over time
+---
+### TCS-LEAD2. How do you handle a production incident at 2 AM?
+> **Why TCS asks this:** TCS has 24/7 SLA commitments to enterprise clients. Incident management is critical.
+**Answer (STAR Format):**
+**Situation:** Payment service returning 500 errors at 2 AM. 15% of transactions failing. PagerDuty alert triggered.
+**Task:** Restore payment processing within SLA (30 min MTTR for P1 incidents).
+**Action:**
+```
+Timeline:
+2:00 AM — PagerDuty alert received. Acknowledged within 5 min.
+2:05 AM — Checked Grafana dashboard:
+          - Payment service CPU: normal
+          - Payment service memory: normal
+          - Downstream payment gateway: 30% timeout rate ← ROOT CAUSE
+2:10 AM — Checked payment gateway status page: partial outage confirmed
+2:12 AM — Enabled circuit breaker fallback:
+          - Queued failed payments to Kafka retry topic
+          - Returned "Payment Processing" status to users instead of error
+2:15 AM — Communicated to incident channel:
+          "Payment gateway partial outage. Fallback enabled. Payments queued for retry."
+2:45 AM — Payment gateway recovered. Retry consumer processed queued payments.
+3:00 AM — All queued payments processed. Error rate back to 0%.
+```
+**Result:**
+- User-facing errors reduced from 15% to 0.5% within 12 minutes (fallback activation)
+- Zero payment loss — all queued payments processed successfully
+- Created runbook: "Payment Gateway Outage Playbook"
+- Added proactive alert: "Alert when gateway p99 > 2s" (catches degradation before failures)
+---
+### TCS-LEAD3. How do you mentor a team of junior/mid-level developers?
+> **Why TCS asks this:** TCS Sr. Tech Leads manage teams of 8-15 developers. Mentoring is a key responsibility.
+**Answer:**
+**My Mentoring Framework:**
+> 
+| Activity | Frequency | Purpose |
+|----------|-----------|---------|
+| **Code Reviews (with explanations)** | Every PR | Teach WHY, not just what's wrong |
+| **Pair Programming** | 2x/week on complex features | Transfer architectural thinking |
+| **Tech Talks** | Weekly 30-min session | Share knowledge (design patterns, new tech) |
+| **Architecture Decision Records (ADRs)** | Per major decision | Document reasoning for future reference |
+| **Golden Path Templates** | One-time setup | Starter templates with best practices baked in |
+| **1:1 Career Conversations** | Monthly | Understand growth goals, assign stretch tasks |
+**Concrete Example:**
+> "A mid-level developer was writing N+1 query patterns in every service. Instead of just fixing it in code review, I scheduled a 30-min session where we ran EXPLAIN ANALYZE together, showed the 200 queries being fired, then refactored to JOIN FETCH. I created a Confluence page 'JPA Performance Pitfalls' and added a Checkstyle rule to flag lazy-loaded collections in loops. The team's average query count per API dropped 40% in one sprint."
+---
+### TCS-LEAD4. How do you handle disagreements with a client on technical decisions?
+> **Why TCS asks this:** TCS is a services company. Client relationship management is as important as technical skill.
+**Answer:**
+**My Approach — "Data Over Opinions":**
+1. **Listen first** — Understand the client's concern completely. Often they have business context you don't.
+2. **Validate their perspective** — "I understand why you prefer X, because..."
+3. **Present data** — POC, benchmark results, industry case studies. Not opinions.
+4. **Offer options** — "Here are 3 approaches with trade-offs. I recommend option B because..."
+5. **Document the decision** — ADR with rationale. If client overrides, document their reasoning too.
+**Real Example:**
+> "A client insisted on using Oracle for a new microservice (they had an enterprise license). I ran a POC showing PostgreSQL handled their workload with 3x better performance and zero licensing cost. I presented a comparison document: feature parity, performance benchmarks, migration path, and TCO analysis over 3 years. The client agreed to PostgreSQL for new services while keeping Oracle for legacy. This saved them \/year in licensing."
+---
+### TCS-LEAD5. "Tell me about yourself" — TCS Sr. Tech Lead Version
+> **The Formula:** Current Role + Years + Key Tech + Biggest Achievement + Why This Role
+**Answer Template:**
+> "I'm a Senior Technology Lead with [X]+ years of experience building enterprise-grade distributed systems using **Java 17/21, Spring Boot 3, Microservices, Kafka, and Kubernetes**. Currently at [Company], I lead a team of [N] engineers building [system description] that handles [scale metric — users/TPS/data volume].
+>
+> My key strengths are **legacy modernization** — I led the migration of a monolithic [technology] application to a microservices architecture, reducing deployment time from 2 weeks to 30 minutes and improving system reliability to 99.95% uptime. I've also designed and implemented **event-driven architectures** using Kafka processing [N]M+ events/day with zero data loss.
+>
+> I'm looking for a Sr. Tech Lead role at TCS because I want to work on **large-scale enterprise transformations** across domains, leverage TCS's global delivery model, and contribute to **innovation and digital transformation** initiatives for Fortune 500 clients."
+---
+### TCS-LEAD6. "Why TCS?" — Best Answer
+> **Tip:** Show you've researched TCS. Mention specific things.
+**Answer:**
+> "Three reasons:
+>
+> **1. Scale and Impact:** TCS serves 1,200+ enterprise clients across 150+ countries. The scale of problems you solve here — migrating banking systems, building telecom platforms, digitizing healthcare — is unmatched. I want my work to impact millions of users.
+>
+> **2. Technology Leadership:** TCS Pace™ innovation labs, TCS BaNCS for financial services, and investments in AI/ML and cloud-native architecture show a commitment to technology leadership, not just services.
+>
+> **3. Growth and Learning:** The breadth of domains (BFSI, Telecom, Retail, Healthcare) means continuous learning. As a Sr. Tech Lead, I want to build expertise across verticals, not just one niche."
+---
+## 📋 Section 9: Coding Questions Frequently Asked at TCS
+### TCS-CODE1. Implement a thread-safe Singleton (5 approaches)
+```java
+// ── Approach 1: Enum Singleton (RECOMMENDED — Joshua Bloch) ──
+public enum ConfigManager {
+    INSTANCE;
+    private final Map<String, String> config = new ConcurrentHashMap<>();
+    public String getConfig(String key) { return config.get(key); }
+    public void setConfig(String key, String value) { config.put(key, value); }
+}
+// Usage: ConfigManager.INSTANCE.getConfig("db.url");
+// ── Approach 2: Double-Checked Locking ──
+public class DbConnectionPool {
+    private static volatile DbConnectionPool instance;
+    private DbConnectionPool() { /* init pool */ }
+    public static DbConnectionPool getInstance() {
+        if (instance == null) {                    // First check (no lock)
+            synchronized (DbConnectionPool.class) {
+                if (instance == null) {            // Second check (with lock)
+                    instance = new DbConnectionPool();
+                }
+            }
+        }
+        return instance;
+    }
+}
+// ── Approach 3: Bill Pugh (Initialization-on-Demand Holder) ──
+public class CacheManager {
+    private CacheManager() {}
+    private static class Holder {
+        static final CacheManager INSTANCE = new CacheManager();  // Loaded on first access
+    }
+    public static CacheManager getInstance() { return Holder.INSTANCE; }
+}
+```
+---
+### TCS-CODE2. Find the first non-repeating character in a string
+```java
+public char firstNonRepeating(String s) {
+    // LinkedHashMap preserves insertion order
+    Map<Character, Integer> countMap = new LinkedHashMap<>();
+    for (char c : s.toCharArray()) {
+        countMap.merge(c, 1, Integer::sum);
+    }
+    return countMap.entrySet().stream()
+        .filter(e -> e.getValue() == 1)
+        .map(Map.Entry::getKey)
+        .findFirst()
+        .orElse('\0');
+}
+// "aabcbd" → 'c' (first char with count 1)
+// Java 8 Streams approach:
+public char firstNonRepeatingStream(String s) {
+    return s.chars()
+        .mapToObj(c -> (char) c)
+        .collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()))
+        .entrySet().stream()
+        .filter(e -> e.getValue() == 1)
+        .map(Map.Entry::getKey)
+        .findFirst()
+        .orElse('\0');
+}
+```
+---
+### TCS-CODE3. Implement a simple Rate Limiter (Sliding Window)
+```java
+public class SlidingWindowRateLimiter {
+    private final int maxRequests;
+    private final long windowSizeMs;
+    private final ConcurrentHashMap<String, Deque<Long>> userRequests = new ConcurrentHashMap<>();
+    public SlidingWindowRateLimiter(int maxRequests, long windowSizeMs) {
+        this.maxRequests = maxRequests;
+        this.windowSizeMs = windowSizeMs;
+    }
+    public synchronized boolean allowRequest(String userId) {
+        long now = System.currentTimeMillis();
+        Deque<Long> timestamps = userRequests.computeIfAbsent(userId, k -> new ArrayDeque<>());
+        // Remove expired timestamps
+        while (!timestamps.isEmpty() && timestamps.peekFirst() <= now - windowSizeMs) {
+            timestamps.pollFirst();
+        }
+        if (timestamps.size() < maxRequests) {
+            timestamps.addLast(now);
+            return true;   // Allowed
+        }
+        return false;      // Rate limited
+    }
+}
+// Usage: RateLimiter limiter = new SlidingWindowRateLimiter(100, 60_000); // 100 req/min
+// if (limiter.allowRequest("user-123")) { process(); } else { return 429; }
+```
+---
+### TCS-CODE4. Implement Producer-Consumer with Virtual Threads (Java 21)
+```java
+public class VirtualThreadProducerConsumer {
+    private final BlockingQueue<String> queue = new LinkedBlockingQueue<>(100);
+    public void start() {
+        // Producer — virtual thread
+        Thread.startVirtualThread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                try {
+                    queue.put("Message-" + i);
+                    System.out.println("Produced: Message-" + i);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        });
+        // 5 Consumer virtual threads
+        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+            for (int i = 0; i < 5; i++) {
+                executor.submit(() -> {
+                    while (true) {
+                        try {
+                            String msg = queue.take();
+                            System.out.println(Thread.currentThread() + " consumed: " + msg);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                            break;
+                        }
+                    }
+                });
+            }
+        }
+    }
+}
+```
+---
+### TCS-CODE5. Flatten a nested JSON structure using recursion
+```java
+public class JsonFlattener {
+    public Map<String, Object> flatten(Map<String, Object> nested) {
+        Map<String, Object> result = new LinkedHashMap<>();
+        flattenHelper("", nested, result);
+        return result;
+    }
+    private void flattenHelper(String prefix, Map<String, Object> map, Map<String, Object> result) {
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            String key = prefix.isEmpty() ? entry.getKey() : prefix + "." + entry.getKey();
+            if (entry.getValue() instanceof Map) {
+                flattenHelper(key, (Map<String, Object>) entry.getValue(), result);
+            } else {
+                result.put(key, entry.getValue());
+            }
+        }
+    }
+}
+// Input:  {"user": {"name": "John", "address": {"city": "Mumbai"}}}
+// Output: {"user.name": "John", "user.address.city": "Mumbai"}
+```
+---
+## 📋 Section 10: Quick-Fire Answers — TCS Edition (30 Seconds Each)
+| # | Question | Power Answer |
+|---|----------|-------------|
+| 1 | Monolith vs Microservices? | Monolith: simple, single deploy. Microservices: independent scaling, team autonomy, but distributed complexity. Start monolith → extract when boundaries are clear. |
+| 2 | REST vs gRPC? | REST for external APIs (human-readable, browser-friendly). gRPC for internal service-to-service (binary protobuf, 10x faster, streaming). |
+| 3 | Kafka vs RabbitMQ? | Kafka: event streaming, replay, high throughput (millions/sec). RabbitMQ: message queue, routing, lower throughput but richer patterns. |
+| 4 | Spring MVC vs WebFlux? | MVC: thread-per-request, blocking I/O, simple. WebFlux: non-blocking, reactive, high concurrency. Use MVC unless you need 10K+ concurrent connections. |
+| 5 | Docker vs Kubernetes? | Docker: package app in container. Kubernetes: orchestrate containers (scaling, healing, networking). Docker = shipping container, K8s = the port. |
+| 6 | SQL vs NoSQL? | SQL: ACID, joins, relational data (financial). NoSQL: flexible schema, horizontal scale, document/key-value (catalogs, logs). |
+| 7 | Horizontal vs Vertical scaling? | Vertical: bigger machine (has ceiling). Horizontal: more machines (no ceiling). Microservices enable horizontal scaling per service. |
+| 8 | Blue-Green vs Canary? | Blue-Green: switch 100% traffic instantly, instant rollback. Canary: route 5% → 25% → 100% gradually, safer for large scale. |
+| 9 | CQRS pattern? | Separate read and write models. Write to normalized DB, read from denormalized view/cache. Perfect for read-heavy enterprise apps. |
+| 10 | 12-Factor App? | Config in env vars, stateless processes, port binding, disposability, dev/prod parity. Cloud-native design principles. |
+| 11 | Idempotency? | Same request N times = same result. Use idempotency key (UUID) stored in DB. Critical for payment/order APIs. |
+| 12 | CAP Theorem? | Distributed system can guarantee only 2 of 3: Consistency, Availability, Partition tolerance. Banking = CP, Social media = AP. |
+| 13 | OAuth2 grant types? | Authorization Code (web), Client Credentials (service-to-service), PKCE (mobile/SPA). Never use Implicit (deprecated). |
+| 14 | Database connection pooling? | HikariCP (Spring Boot default). Size = CPU cores × 2 + effective spindle count. Too many connections = context switching overhead. |
+| 15 | What is a Service Mesh? | Infrastructure layer for service-to-service communication. Istio/Linkerd handle mTLS, retries, circuit breaking, observability — no code changes. |
 ---
