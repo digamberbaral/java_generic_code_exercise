@@ -97,9 +97,10 @@
 | 22 | [🎓 Interview Cheat Sheet](#-interview-cheat-sheet) | Top 10 Questions, Quick-Fire Answers, HTTP Codes, Anti-Patterns | 🟢 All Levels |
 | 23 | [🏦 Societe Generale — Company-Specific Interview Prep](#-societe-generale--company-specific-interview-prep) | Banking Domain, SocGen Tech Stack, Java/Spring/SQL/Docker/K8s Q&A | 🟢 All Levels |
 
----
 
 ---
+
+
 ### 🏆 Phase 8 — Senior Tech Lead (10+ Years) *(Advanced Depth)*
 | # | Section | Key Topics | Level |
 |---|---|---|---|
@@ -120,7 +121,7 @@
 | 34 | [🧪 DT-6: GraalVM & Native Images](#-dt-6-graalvm--native-images--solving-cold-start) | AOT vs JIT, 50ms Startup, When to Use, Spring Boot 3.x Native | 🟢 Beginner to Advanced |
 | 35 | [🏗 DT-7: Platform Engineering & IDP](#-dt-7-platform-engineering--internal-developer-platforms-idp) | Backstage, Self-Service Portal, Golden Paths, Service Templates | 🟢 Beginner to Advanced |
 | 36 | [📉 DT-8: Estimation Cheat Sheet](#-dt-8-the-tech-leads-estimation-cheat-sheet) | Latency Benchmarks, Availability Math, QPS/Storage/Server Estimation | 🟢 Beginner to Advanced |
----> **⚡ Quick Jump:**
+**⚡ Quick Jump:**
 > [Core Java](#-core-java-mastery) • [DSA](#-dsa--problem-solving--complete-interview-guide) • [Spring Boot](#-spring-boot--data-architecture) • [Database](#-database-interview-questions--mysqlpostgresql--mongodb) • [Microservices](#-microservices--cloud-native) • [Kafka](#-messaging--kafka--rabbitmq-interview-questions) • [System Design](#-system-design--url-shortener) • [Docker/K8s](#-docker--kubernetes-basics-to-advanced) • [CI/CD](#-cicd-pipeline--jenkins-docker-kubernetes-aws--gcp) • [Interview Prep](#-interview-cheat-sheet)
 
 ---
@@ -4495,8 +4496,8 @@ text.isBlank();         // false
 "abc".repeat(3);        // "abcabcabc"
 ```
 
-| String | StringBuilder | StringBuffer |
-|---|---|---|
+| Feature | String | StringBuilder | StringBuffer |
+|---|---|---|---|
 | Mutable | ❌ No | ✅ Yes | ✅ Yes |
 | Thread-safe | ✅ (immutable) | ❌ No | ✅ Yes |
 | Performance | ❌ Slow for concat | ✅ Fast | Slower than SB |
@@ -8028,7 +8029,7 @@ O(n!)       Factorial   — generate all permutations
 ```
 
 ```mermaid
-graph LR
+flowchart LR
     O1["O(1)\nArray index access\nHash map get/put"] --> OlogN["O(log n)\nBinary search\nBalanced BST lookup"]
     OlogN --> ON["O(n)\nLinear scan\nArray traversal"]
     ON --> ONlogN["O(n log n)\nMerge sort\nHeap sort"]
@@ -8362,7 +8363,7 @@ if (sum == target) {
 ### 📋 Two Pointers — One-Page Cheat Card
 
 | Type | When to Use | Direction | Key Code |
-|---|---|
+|---|---|---|---|
 | **Opposite ends** | Sorted array, pair/triplet sum | L→ ←R converging | `left++` or `right--` |
 | **Same direction** | Remove duplicates, partition | slow→ fast→ | `if new: slow++; arr[slow]=arr[fast]` |
 | **Fast/slow** | Cycle detection, find middle | 1-step & 2-step | `slow=slow.next; fast=fast.next.next` |
@@ -10203,7 +10204,7 @@ public int longestPalindromeSubseq(String s) {
 
 **DP Decision Tree:**
 ```mermaid
-graph TD
+flowchart TD
   Q["Is it a DP problem?\n(optimal value + overlapping subproblems)"]
   Q --> F["Is it on a 1D sequence?"]
   Q --> G["Is it on 2 sequences?"]
@@ -12831,7 +12832,8 @@ participant DB as Database
 ### Key Starter Packages
 
 | Starter | Adds | Use When |
-|----------||-----------|| spring-boot-starter-web | Tomcat + MVC + Jackson | Every REST API |
+| --- | --- | --- |
+| spring-boot-starter-web | Tomcat + MVC + Jackson | Every REST API |
 | spring-boot-starter-data-jpa | Hibernate + JDBC | SQL databases |
 | spring-boot-starter-security | Spring Security | Auth/authz |
 | spring-boot-starter-test | JUnit 5 + Mockito | Testing |
@@ -14826,7 +14828,8 @@ COMMIT;
 ### How Each ACID Property Is Implemented
 
 | Property | Implementation | What breaks if violated |
-|-----------||-------------------------|| **Atomicity** | Undo log: on rollback, every change reversed | Account debited but never credited |
+| --- | --- | --- |
+| **Atomicity** | Undo log: on rollback, every change reversed | Account debited but never credited |
 | **Consistency** | Constraints (FK, UNIQUE, CHECK) at COMMIT time | Order with non-existent user_id |
 | **Isolation** | MVCC: each TX sees its own snapshot | Dirty read: acting on uncommitted data |
 | **Durability** | WAL: changes journaled before data pages updated | Lost COMMIT: data confirmed but missing after crash |
@@ -15089,8 +15092,8 @@ SELECT * FROM tickets WHERE id = 1 FOR UPDATE;
 
 ### Optimistic vs Pessimistic Locking — When to Use Which
 
-| Optimistic | Pessimistic |
-|---|-------------|
+| Aspect | Optimistic | Pessimistic |
+|---|---|---|
 | How | `@Version` check at UPDATE time | `SELECT FOR UPDATE` locks row immediately |
 | When to use | Low contention (most CRUD ops) | High contention (tickets, inventory) |
 | On conflict | `OptimisticLockException` → retry | Other TX waits or fails with NOWAIT |
@@ -16848,7 +16851,8 @@ rs.printReplicationInfo()  // shows oplog size and coverage window
 
 **Common replica set issues**:
 | Issue | Symptom | Fix |
-|----||----|| Replication lag | Secondary optime far behind primary | Increase network bandwidth, reduce write load |
+| --- | --- | --- |
+| Replication lag | Secondary optime far behind primary | Increase network bandwidth, reduce write load |
 | Split brain | Two primaries elected | Check network partition; ensure odd number of votes |
 | Elections slow | App sees 10–30s downtime | Tune `electionTimeoutMillis` (default 10s) |
 
@@ -16958,7 +16962,8 @@ const clusterStream = client.watch();
 
 **Change Stream use cases**:
 | Use Case | What to watch | What to do |
-|----||----|| Cache invalidation | `orders` collection updates | Evict Redis keys matching updated document |
+| --- | --- | --- |
+| Cache invalidation | `orders` collection updates | Evict Redis keys matching updated document |
 | Search sync | `products` collection | Re-index document in Elasticsearch |
 | Audit log | All collections | Write change events to audit table |
 | Event-driven microservices | `orders` inserts | Publish to Kafka as alternative to Outbox |
@@ -17567,7 +17572,8 @@ RIGHT with Spring Data MongoDB:
 **Change Streams vs Polling — which to use:**
 
 |---| Change Streams | Polling (SELECT WHERE updated_at > last_check) |
-|----||----|| Latency | Real-time (milliseconds) | Depends on poll interval (seconds to minutes) |
+| --- | --- | --- |
+| Latency | Real-time (milliseconds) | Depends on poll interval (seconds to minutes) |
 | DB load | Low (tailing the oplog) | Higher (repeated full or index scans) |
 | Missed events | Never (oplog is durable) | Can miss events if row is updated and deleted between polls |
 | Setup complexity | Medium | Low |
@@ -17679,7 +17685,8 @@ sequenceDiagram
 ### Production SLO Targets
 
 | Metric | Target | Alert threshold |
-|----||----|| Redirect P99 latency | < 50ms | > 200ms |
+| --- | --- | --- |
+| Redirect P99 latency | < 50ms | > 200ms |
 | API availability | 99.9% | < 99.5% over 5 min |
 | Cache hit ratio | > 90% | < 70% |
 | DB connection pool usage | < 70% | > 85% |
@@ -17782,7 +17789,8 @@ flowchart LR
 ```
 
 | Layer | Technology | Purpose |
-|--------||----------|| Application | Spring Boot 3.x, Java 17 | Business logic, REST APIs |
+| --- | --- | --- |
+| Application | Spring Boot 3.x, Java 17 | Business logic, REST APIs |
 | Database | PostgreSQL + Flyway | ACID storage, schema migrations |
 | Cache | Redis Cluster | Sub-ms reads, rate limiting, TTL |
 | Messaging | Kafka | Async events, analytics, replay |
@@ -17819,7 +17827,8 @@ flowchart LR
 ### 🔰 BEGINNER — SQL
 
 | Section | What it is (plain English) | Why it matters |
-|----------||-----------------|| **SD-1: What is a Schema?** | A schema is the *blueprint* of your database. Before storing any data, you define: what tables exist, what columns they have, and what type of data goes in each column (number, text, date, etc.). Like designing a form before printing it. | Every interview starts here. If you can't explain what a schema is and pick the right data types, you'll lose credibility immediately. |
+| --- | --- | --- |
+| **SD-1: What is a Schema?** | A schema is the *blueprint* of your database. Before storing any data, you define: what tables exist, what columns they have, and what type of data goes in each column (number, text, date, etc.). Like designing a form before printing it. | Every interview starts here. If you can't explain what a schema is and pick the right data types, you'll lose credibility immediately. |
 | **SD-2: Constraints** | Rules that protect your data quality. `PRIMARY KEY` = every row has a unique ID. `FOREIGN KEY` = a column must point to a real row in another table. `NOT NULL` = the column can never be empty. `CHECK` = the value must pass a custom rule (e.g. price must be > 0). | Without constraints, bad data gets in silently and causes bugs weeks later. Interviewers check if you instinctively add constraints. |
 | **SD-3: Relationships** | How tables connect to each other. **One-to-One** (one user has one profile). **One-to-Many** (one user has many orders). **Many-to-Many** (one order has many products, one product is in many orders — needs a middle "junction" table). | This is the most common whiteboard question: "design a schema for X". If you can model relationships correctly, you pass. |
 | **SD-4: ER Diagrams** | A visual drawing/diagram that shows tables as boxes and relationships as lines. The crow's foot symbols on the lines tell you if it's 1:1, 1:N or M:N. Used on whiteboards in system design rounds. | Interviewers ask you to "draw the schema" on a whiteboard. You need to read these diagrams and draw them confidently. |
@@ -17829,7 +17838,8 @@ flowchart LR
 ### 🟡 INTERMEDIATE — SQL
 
 | Section | What it is (plain English) | Why it matters |
-|----------||-----------------|| **SD-5: Surrogate vs Natural Keys** | Every table needs a Primary Key. A **surrogate key** is a made-up ID the DB generates (like `1, 2, 3...` or a UUID like `a1b2-c3d4`). A **natural key** is a real-world identifier (like email or passport number). The question is: which one should be your PK? | UUID is safer for public APIs (hides row count, works across distributed systems). BIGSERIAL (auto-increment number) is faster for internal tables. UUID v7 is the new best-of-both. Interviewers ask this trade-off. |
+| --- | --- | --- |
+| **SD-5: Surrogate vs Natural Keys** | Every table needs a Primary Key. A **surrogate key** is a made-up ID the DB generates (like `1, 2, 3...` or a UUID like `a1b2-c3d4`). A **natural key** is a real-world identifier (like email or passport number). The question is: which one should be your PK? | UUID is safer for public APIs (hides row count, works across distributed systems). BIGSERIAL (auto-increment number) is faster for internal tables. UUID v7 is the new best-of-both. Interviewers ask this trade-off. |
 | **SD-6: Junction Tables** | When you have a Many-to-Many relationship, you can't store it in just two tables. You need a **third "bridge" table** in the middle. E.g., `order_items` sits between `orders` and `products`. This table has two foreign keys and often additional columns (like `quantity`, `price`). | Junction tables appear in almost every real schema. A candidate who doesn't know this pattern is a red flag in interviews. |
 | **SD-7: Naming Conventions** | Agreed rules for naming things consistently: tables use plural snake_case (`orders`, `order_items`), primary keys are always called `id`, foreign keys end in `_id` (`user_id`), boolean columns start with `is_` (`is_active`), timestamps end in `_at` (`created_at`). | Messy naming causes confusion in teams. Interviewers check that you follow industry conventions and can read existing schemas. |
 | **SD-8: Soft Delete & Audit Columns** | **Hard delete** = `DELETE FROM table WHERE id = 1` — row is gone forever. **Soft delete** = add a `deleted_at` column — when you "delete", you just set `deleted_at = now()`. The row stays in the DB for audit. **Audit columns** = every table gets `created_at`, `updated_at`, `created_by` columns automatically. | In any financial or compliance system, you must know *who* deleted *what* and *when*. Hard deletes are dangerous in production. |
@@ -17841,7 +17851,8 @@ flowchart LR
 ### 🔴 ADVANCED — SQL
 
 | Section | What it is (plain English) | Why it matters |
-|----------||-----------------|| **SD-11: Multi-Tenancy** | A **multi-tenant** system serves multiple companies/customers (tenants) from one application. You need to make sure Tenant A can never see Tenant B's data. There are 3 approaches: (1) one table with a `tenant_id` column + Row Level Security, (2) a separate database schema per tenant, (3) a completely separate database per tenant. | SaaS applications are always multi-tenant. Interviewers ask which pattern you'd pick and why (cost vs isolation trade-off). |
+| --- | --- | --- |
+| **SD-11: Multi-Tenancy** | A **multi-tenant** system serves multiple companies/customers (tenants) from one application. You need to make sure Tenant A can never see Tenant B's data. There are 3 approaches: (1) one table with a `tenant_id` column + Row Level Security, (2) a separate database schema per tenant, (3) a completely separate database per tenant. | SaaS applications are always multi-tenant. Interviewers ask which pattern you'd pick and why (cost vs isolation trade-off). |
 | **SD-12: Temporal Tables** | A **temporal table** keeps a full history of every change. Instead of overwriting a row when data changes, you keep old rows with `valid_from` / `valid_to` date columns. Now you can answer "what was the price on January 1st?" by looking at historical rows. **SCD Type 2** is the data warehouse version of this. | Compliance, finance, and healthcare systems all need this. Also comes up in "how would you track price history?" interview questions. |
 | **SD-13: Event Sourcing** | Instead of storing the *current state* of an object (like `order status = SHIPPED`), you store every *event that happened* (`ORDER_PLACED`, `PAYMENT_CONFIRMED`, `ORDER_SHIPPED`). The current state is reconstructed by replaying all events from the beginning. | Gives you a full audit trail, ability to replay history, and decoupled consumers. Trade-off: complex queries, harder to query current state. Used in systems that need full history. |
 | **SD-14: CQRS** | **Command Query Responsibility Segregation** = split your database into two: a **write model** (normalised, 3NF, ACID — for commands that change data) and a **read model** (denormalised, fast, no JOINs — pre-built views for queries). Kafka or events keep them in sync. | Solves the problem of "writes need ACID but reads need to be super fast". The read model can be in Redis, Elasticsearch, or a denormalised PostgreSQL table. Very common in microservices. |
@@ -17852,7 +17863,8 @@ flowchart LR
 ### 🔰 BEGINNER — NoSQL
 
 | Section | What it is (plain English) | Why it matters |
-|----------||-----------------|| **SD-16: Access-Patterns-First** | In SQL you design tables based on *what data you have* and trust the query engine. In NoSQL (MongoDB, Cassandra, DynamoDB), you must first list *every query your app will run* and then design the data structure to perfectly answer those queries. If you forget an access pattern, you'll face expensive full-collection scans. | The **#1 mistake** people make with NoSQL is designing like it's SQL. Write down all access patterns first, then design. This is the single most important NoSQL concept. |
+| --- | --- | --- |
+| **SD-16: Access-Patterns-First** | In SQL you design tables based on *what data you have* and trust the query engine. In NoSQL (MongoDB, Cassandra, DynamoDB), you must first list *every query your app will run* and then design the data structure to perfectly answer those queries. If you forget an access pattern, you'll face expensive full-collection scans. | The **#1 mistake** people make with NoSQL is designing like it's SQL. Write down all access patterns first, then design. This is the single most important NoSQL concept. |
 | **SD-17: Polymorphic Documents** | In MongoDB, documents in the same collection can have different fields. A `products` collection can store electronics (with `cpu`, `ram` fields), clothing (with `size`, `material`), and food (with `calories`, `allergens`) — all in the same collection, each document only having fields relevant to its type. In SQL this is very messy (200 nullable columns or complex table-per-type inheritance). | Product catalogues, content management systems, and any domain with varied entity types benefit hugely from this. Much simpler than SQL alternatives. |
 | **SD-18: Document Size Limits** | MongoDB documents have a hard **16MB limit**. The most common mistake is embedding an ever-growing array in a document (like putting all comments inside a blog post document). As comments grow, eventually the document hits 16MB and writes start failing. The fix is to move the array to a separate collection and reference it. | A real production gotcha. Every MongoDB developer hits this at some point. Always ask: "will this array grow unboundedly?" |
 
@@ -17861,7 +17873,8 @@ flowchart LR
 ### 🟡 INTERMEDIATE — NoSQL
 
 | Section | What it is (plain English) | Why it matters |
-|----------||-----------------|| **SD-19: MongoDB Schema Versioning** | When your app is live and you need to change the shape of your MongoDB documents (e.g., split `name` into `firstName` + `lastName`), you can't change all existing documents instantly. The solution: add a `schemaVersion` field to every document. Your code checks the version and handles both old and new shapes gracefully, migrating documents lazily or in background batches. | Unlike SQL (where `ALTER TABLE` changes all rows at once), MongoDB requires you to manage schema evolution yourself. This pattern is the correct way to do it. |
+| --- | --- | --- |
+| **SD-19: MongoDB Schema Versioning** | When your app is live and you need to change the shape of your MongoDB documents (e.g., split `name` into `firstName` + `lastName`), you can't change all existing documents instantly. The solution: add a `schemaVersion` field to every document. Your code checks the version and handles both old and new shapes gracefully, migrating documents lazily or in background batches. | Unlike SQL (where `ALTER TABLE` changes all rows at once), MongoDB requires you to manage schema evolution yourself. This pattern is the correct way to do it. |
 | **SD-20: Cassandra Data Modeling** | Cassandra is a distributed database that can handle millions of writes per second. But it has strict rules: every query **must** include the **partition key** (= the first part of `PRIMARY KEY`). You cannot do JOINs or `WHERE` on non-key columns. The solution: create a **separate table for each query pattern**. Yes, data duplication is intentional and expected. | Used by Netflix, Discord, Uber for massive write workloads. The Cassandra mindset is completely different from SQL. Interviewers test whether you understand this. |
 | **SD-21: Redis Data Structures** | Redis is not just a cache — it's a full data store with 6 types: **String** (simple key-value), **Hash** (object with fields, like a user profile), **List** (ordered list, great for activity feeds), **Set** (unique values, like tags), **Sorted Set** (scored members, perfect for leaderboards and rate limiting), **Stream** (append-only log for events). | Redis is used in almost every production system. Knowing which data structure to pick for which use case (e.g., Sorted Set for leaderboards) is a frequent interview question. |
 
@@ -17870,7 +17883,8 @@ flowchart LR
 ### 🔴 ADVANCED — NoSQL
 
 | Section | What it is (plain English) | Why it matters |
-|----------||-----------------|| **SD-22: DynamoDB Single-Table** | DynamoDB is AWS's managed NoSQL. Its best practice is to put **all entity types in one table** and use `pk` (partition key) and `sk` (sort key) cleverly to represent Users, Orders, Products, etc. in the same table. Prefix values like `USER#42`, `ORDER#ord-1` to distinguish types. A GSI (Global Secondary Index) is a second index for queries not covered by the main table. | AWS interviews specifically test this. A DynamoDB multi-table design is considered a beginners mistake. Single-table is the correct approach. |
+| --- | --- | --- |
+| **SD-22: DynamoDB Single-Table** | DynamoDB is AWS's managed NoSQL. Its best practice is to put **all entity types in one table** and use `pk` (partition key) and `sk` (sort key) cleverly to represent Users, Orders, Products, etc. in the same table. Prefix values like `USER#42`, `ORDER#ord-1` to distinguish types. A GSI (Global Secondary Index) is a second index for queries not covered by the main table. | AWS interviews specifically test this. A DynamoDB multi-table design is considered a beginners mistake. Single-table is the correct approach. |
 | **SD-23: Graph Database (Neo4j)** | A graph database stores **nodes** (like Users, Products) and **relationships** between them (FOLLOWS, PURCHASED, REVIEWED). Queries like "friends of friends", "users who bought X also bought Y", or "find fraud rings" are trivial in graph but require many expensive JOINs in SQL. Neo4j uses a query language called Cypher (not SQL). | Social networks, fraud detection, recommendation engines — if the relationships *between* entities are what matters most, use a graph DB. |
 | **SD-24: Cassandra Anti-Patterns** | Common mistakes to avoid in Cassandra: (1) letting a partition grow unboundedly — bucket by time instead. (2) Using `ALLOW FILTERING` in queries — it scans the entire table, never do this in production. (3) Creating secondary indexes on high-cardinality columns (millions of unique values) — causes scatter-gather across all nodes. (4) Frequent manual DELETEs — they leave tombstones that slow down reads. | Knowing what NOT to do demonstrates real Cassandra experience. These are the mistakes that cause production outages. |
 | **SD-25: Polyglot Persistence** | Using **multiple different databases** in the same system, each chosen for what it does best: PostgreSQL for users/orders (ACID), MongoDB for products (flexible schema), Redis for cart/sessions (fast+TTL), Elasticsearch for search, Cassandra for logs (high write throughput), Neo4j for recommendations (graph). Each microservice owns its own database. | This is the architecture of every large-scale modern system. The interview question is "what database would you use for X and why?" — this section teaches you the complete answer. |
@@ -18023,7 +18037,8 @@ CREATE TABLE order_items (
 ```
 ### FK CASCADE Options — Which to Use When
 | Option | Behaviour | Use Case |
-|---------||-----------|| `ON DELETE CASCADE` | Delete children when parent deleted | `order_items` when `order` deleted |
+| --- | --- | --- |
+| `ON DELETE CASCADE` | Delete children when parent deleted | `order_items` when `order` deleted |
 | `ON DELETE RESTRICT` | Prevent parent deletion if children exist | `users` with `orders` — don't lose history |
 | `ON DELETE SET NULL` | Set FK to NULL when parent deleted | `posts.category_id` — orphan is acceptable |
 | `ON DELETE NO ACTION` | Same as RESTRICT (deferred check) | Default PostgreSQL |
@@ -18292,7 +18307,8 @@ CREATE TABLE user_roles (
 ---
 ## SD-7: Naming Conventions & Best Practices
 | Convention | Rule | Example |
-|------------||----------|| Table names | **Plural, snake_case** | `users`, `order_items`, `product_categories` |
+| --- | --- | --- |
+| Table names | **Plural, snake_case** | `users`, `order_items`, `product_categories` |
 | Column names | **Singular, snake_case** | `user_id`, `created_at`, `total_amount` |
 | Primary keys | `id` (always) | `id BIGSERIAL PRIMARY KEY` |
 | Foreign keys | `{table_singular}_id` | `user_id`, `product_id`, `category_id` |
@@ -18498,7 +18514,8 @@ SELECT * FROM users;  -- resolves to tenant_acme.users
 -- session.enableFilter("tenantFilter").setParameter("tenantId", getTenantId());
 ```
 | Pattern | Tenants | Data isolation | Compliance | Cost |
-|----------||----------------||-------|| Shared table (RLS) | Thousands | Logical (RLS) | Requires care | Lowest |
+| --- | --- | --- | --- | --- |
+| Shared table (RLS) | Thousands | Logical (RLS) | Requires care | Lowest |
 | Schema-per-tenant | Hundreds | Schema boundary | Moderate | Medium |
 | DB-per-tenant | Tens | Physical | Best (GDPR, HIPAA) | Highest |
 ---
@@ -18685,7 +18702,8 @@ GROUP BY d.year, d.month, d.month_name, p.category
 ORDER BY d.month, total_revenue DESC;
 ```
 | Aspect | Star Schema | Snowflake Schema |
-|---------||------------------|| Dimension tables | Denormalised (flat) | Normalised (sub-dimensions) |
+| --- | --- | --- |
+| Dimension tables | Denormalised (flat) | Normalised (sub-dimensions) |
 | Query complexity | Simple JOINs (2 tables) | More JOINs (3+ tables) |
 | Query speed | Faster (fewer JOINs) | Slightly slower |
 | Storage | More redundancy | Less redundancy |
@@ -19053,7 +19071,8 @@ flowchart TB
 // Rule 7: Item size limit: 400KB per item
 ```
 | Concept | Description | When to Use |
-|----------||--------------|| **Single-table** | All entity types in one table | Always in DynamoDB (except reporting) |
+| --- | --- | --- |
+| **Single-table** | All entity types in one table | Always in DynamoDB (except reporting) |
 | **GSI (Global Secondary Index)** | Alternative PK+SK on same data | Query by different attribute (e.g., email → user) |
 | **LSI (Local Secondary Index)** | Same PK, different SK | Range queries with alternate sort order |
 | **Sparse index** | GSI only on items that have the attribute | Efficiently query a subset of items |
@@ -19061,7 +19080,7 @@ flowchart TB
 ## SD-23: Graph Database Schema — Neo4j
 > **Use when:** Relationships between entities ARE the data — social networks, fraud detection, recommendation engines, knowledge graphs.
 ```mermaid
-graph LR
+flowchart LR
   Alice["(Alice:User)"] -->|FOLLOWS| Bob["(Bob:User)"]
   Alice -->|PLACED| O1["(Order#1:Order)"]
   O1 -->|CONTAINS| P1["(Laptop:Product)"]
@@ -19190,7 +19209,8 @@ flowchart TB
   end
 ```
 | Microservice | Database | Reason |
-|--------------||---------|| **User / Auth** | PostgreSQL | ACID, complex queries, OAuth relationships |
+| --- | --- | --- |
+| **User / Auth** | PostgreSQL | ACID, complex queries, OAuth relationships |
 | **Orders / Payments** | PostgreSQL | Full ACID, foreign keys, financial integrity |
 | **Product Catalogue** | MongoDB | Polymorphic product attributes, flexible schema |
 | **Shopping Cart** | Redis | TTL (auto-expire abandoned carts), sub-ms latency |
@@ -19538,7 +19558,8 @@ flowchart TB
 ```
 
 | Pattern | Read latency | Write latency | Data freshness | Risk |
-|----------||---------------||-------|| **Cache-Aside** | Fast (cache hit) / Slow (miss) | DB only — normal | May be stale until TTL | Cache miss stampede |
+| --- | --- | --- | --- | --- |
+| **Cache-Aside** | Fast (cache hit) / Slow (miss) | DB only — normal | May be stale until TTL | Cache miss stampede |
 | **Write-Through** | Fast (always cached) | Slow (DB + cache) | Always fresh | Write overhead |
 | **Write-Behind** | Fast (always cached) | Fast (cache only) | May be stale briefly | Data loss on crash |
 | **Read-Through** | Fast (cache handles miss) | DB only | May be stale | Cache library complexity |
@@ -19659,7 +19680,8 @@ spring:
 ### Q6. Redis Persistence — RDB vs AOF
 
 | Feature | RDB (Snapshot) | AOF (Append-Only File) |
-|----------||-----------------------|| Mechanism | Point-in-time snapshot via `BGSAVE` | Append every write command to log |
+| --- | --- | --- |
+| Mechanism | Point-in-time snapshot via `BGSAVE` | Append every write command to log |
 | Recovery speed | Fast (load snapshot) | Slow (replay log) |
 | Data loss on crash | Up to last snapshot (minutes) | At most 1 second (with `fsync=everysec`) |
 | File size | Compact (binary) | Larger (grows over time, rewrite with `BGREWRITEAOF`) |
@@ -20251,7 +20273,8 @@ Payment, Inventory, Email, Warehouse each consume independently — failures iso
 ### Core Concepts — Mental Model
 
 | Concept | Meaning | Analogy |
-|----------||----------|| **Topic/Queue** | Named channel for messages | A mailbox |
+| --- | --- | --- |
+| **Topic/Queue** | Named channel for messages | A mailbox |
 | **Producer** | Sends messages | Package sender |
 | **Consumer** | Reads and processes messages | Recipient |
 | **Broker** | Server that stores/routes messages | Post office |
@@ -20310,7 +20333,8 @@ flowchart TB
 **Core concepts explained simply**
 
 | Concept | What it is | Analogy |
-|----||----|| **Topic** | Named stream of messages | YouTube channel |
+| --- | --- | --- |
+| **Topic** | Named stream of messages | YouTube channel |
 | **Partition** | Ordered, immutable log within a topic | YouTube playlist (ordered) |
 | **Offset** | Position of a message in a partition | Page number in a book |
 | **Broker** | Kafka server that stores partitions | Server in a data centre |
@@ -20560,7 +20584,8 @@ flowchart TB
 ```
 
 | Guarantee | How to achieve | Use when |
-|----||----|| **At-most-once** | `acks=0`, commit before processing | Metrics, non-critical events |
+| --- | --- | --- |
+| **At-most-once** | `acks=0`, commit before processing | Metrics, non-critical events |
 | **At-least-once** | `acks=all`, commit after processing, idempotent consumer | Most business events |
 | **Exactly-once** | Kafka Transactions + `isolation.level=read_committed` | Payments, inventory |
 
@@ -20657,7 +20682,8 @@ flowchart LR
 **Core concepts**
 
 | Concept | What it is | Analogy |
-|----||----|| **Exchange** | Receives messages, routes to queues | Post office sorting room |
+| --- | --- | --- |
+| **Exchange** | Receives messages, routes to queues | Post office sorting room |
 | **Queue** | Stores messages until consumed | Post box |
 | **Binding** | Rule connecting exchange to queue | Delivery route |
 | **Routing key** | Label on message used by exchange | Address on envelope |
@@ -20843,7 +20869,8 @@ flowchart TB
 **Detailed Comparison Table**
 
 | Feature | Kafka | RabbitMQ |
-|----||----|| **Message ordering** | Per partition | Per queue |
+| --- | --- | --- |
+| **Message ordering** | Per partition | Per queue |
 | **Message retention** | Configurable (days/forever) | Deleted after consumption |
 | **Replay** | Yes — seek to any offset | No — once consumed, gone |
 | **Throughput** | Millions/sec | Hundreds of thousands/sec |
@@ -20857,7 +20884,8 @@ flowchart TB
 **Real-world decision examples**:
 
 | Scenario | Choice | Reason |
-|----||----|| Click analytics pipeline | Kafka | High volume, replay for reprocessing |
+| --- | --- | --- |
+| Click analytics pipeline | Kafka | High volume, replay for reprocessing |
 | Payment notifications | RabbitMQ | Complex routing (email/SMS/push), low latency |
 | Order processing SAGA | Kafka | Multiple independent consumers, event replay |
 | Background jobs (resize image) | RabbitMQ | Competing workers, simple task queue |
@@ -21067,7 +21095,8 @@ config.put("specific.avro.reader", "true");  // use generated class, not Generic
 **Schema compatibility modes**
 
 | Mode | Rule | Use when |
-|----||----|| **BACKWARD** (default) | New schema can read data written by old schema | Adding new fields with defaults |
+| --- | --- | --- |
+| **BACKWARD** (default) | New schema can read data written by old schema | Adding new fields with defaults |
 | **FORWARD** | Old schema can read data written by new schema | Removing optional fields |
 | **FULL** | Both backward AND forward compatible | Stable public APIs |
 | **NONE** | No compatibility check | Internal topics, rapid development |
@@ -21159,7 +21188,8 @@ public void onOrderChange(OrderCdcEvent event) {
 **Why CDC over Outbox Pattern?**
 
 | Aspect | Debezium CDC | Outbox Pattern |
-|----||----|| App code change | None — reads DB log directly | Requires outbox table + publisher |
+| --- | --- | --- |
+| App code change | None — reads DB log directly | Requires outbox table + publisher |
 | Latency | Near real-time (ms) | Polling interval (1–5s) |
 | Works with legacy apps | Yes — no code change needed | No — app must write outbox events |
 | Event schema | Reflects DB schema changes | Controlled by application |
@@ -21216,7 +21246,8 @@ spring:
 **Key production metrics to alert on:**
 
 | Metric | Alert Threshold | Meaning |
-|----||----|| `kafka_consumer_group_lag` | > 10,000 msgs | Consumers can't keep up — scale up |
+| --- | --- | --- |
+| `kafka_consumer_group_lag` | > 10,000 msgs | Consumers can't keep up — scale up |
 | `kafka_topic_partition_under_replicated` | > 0 | Replica not in sync — broker issue |
 | `kafka_controller_active_count` | != 1 | Controller election issue |
 | `kafka_network_request_total` (produce errors) | Spike | Producer rejections — check quotas |
@@ -21882,7 +21913,8 @@ Real-World Examples:
 **Kafka Beginner to Advanced Ladder:**
 
 | Level | Concept | Key Point |
-|--------||------------|| 🟢 Beginner | What is Kafka | Distributed log; durable; messages retained after consumption |
+| --- | --- | --- |
+| 🟢 Beginner | What is Kafka | Distributed log; durable; messages retained after consumption |
 | 🟢 Beginner | Topic and partition | Topic = category; partition = ordered shard; more partitions = more parallelism |
 | 🟡 Intermediate | Consumer groups | Group shares work; 1 partition → 1 consumer; multiple groups each get all messages |
 | 🟡 Intermediate | Delivery semantics | at-most-once / at-least-once / exactly-once; use at-least-once + idempotent consumer |
@@ -21896,7 +21928,8 @@ Real-World Examples:
 **RabbitMQ Beginner to Advanced Ladder:**
 
 | Level | Concept | Key Point |
-|--------||------------|| 🟢 Beginner | Exchange types | Direct (exact key), Fanout (broadcast), Topic (wildcard `*`/`#`), Headers |
+| --- | --- | --- |
+| 🟢 Beginner | Exchange types | Direct (exact key), Fanout (broadcast), Topic (wildcard `*`/`#`), Headers |
 | 🟢 Beginner | Queue durability | Durable queue + persistent message = survives broker restart |
 | 🟡 Intermediate | Manual ACK | `basicAck` after success; `basicNack+requeue=true` for transient; `requeue=false` → DLX |
 | 🟡 Intermediate | Dead letter exchange | `x-dead-letter-exchange` on queue; failed/expired messages route there automatically |
@@ -21925,7 +21958,8 @@ flowchart BT
     UNIT --> INT --> E2E
 `${crlf}
 | Level | Tests | DB? | Speed | Tool |
-|--------||------||-------|| Unit | Single method/class | ❌ Mocked | ⚡ ms | JUnit 5 + Mockito |
+| --- | --- | --- | --- | --- |
+| Unit | Single method/class | ❌ Mocked | ⚡ ms | JUnit 5 + Mockito |
 | Integration | Service + DB layers | ✅ Real (Docker) | 🕐 secs | TestContainers |
 | E2E | Full user journey | ✅ Real | 🕐 mins | Selenium |
 
@@ -22224,7 +22258,7 @@ class ClickEventConsumerTest {
 ### 🎯 Part 12 — Testing Quick Reference
 
 | Type | Annotation | Speed | What it tests |
-|---|---|
+|---|---|---|---|
 | Unit | `@ExtendWith(MockitoExtension.class)` | Fastest | Pure business logic, no Spring |
 | Controller Slice | `@WebMvcTest` | Fast | HTTP, validation, serialisation |
 | JPA Slice | `@DataJpaTest` | Medium | SQL, mappings, custom queries |
@@ -22232,7 +22266,7 @@ class ClickEventConsumerTest {
 | Embedded Kafka | `@EmbeddedKafka` | Medium | Kafka producer/consumer |
 
 | Anti-Pattern | Better approach |
-|---|
+|---|---|
 | Mock everything including `String`, `List` | Only mock infrastructure (DB, HTTP, cache) |
 | Test implementation details | Test observable behaviour (inputs and outputs) |
 | Share mutable state between tests | Each test creates its own data |
@@ -22265,7 +22299,8 @@ flowchart LR
 ```
 
 | Step | What to do | URL Shortener example |
-|-------||-----------------------|| **1. Clarify** | Ask functional + non-functional requirements | "Do we need analytics? Custom aliases? Expiry?" |
+| --- | --- | --- |
+| **1. Clarify** | Ask functional + non-functional requirements | "Do we need analytics? Custom aliases? Expiry?" |
 | **2. Estimate** | Calculate QPS, storage, bandwidth, cache | "5M req/day = 58 QPS average" |
 | **3. API** | List REST endpoints with contracts | `POST /shorten`, `GET /{code}` |
 | **4. High-Level** | Draw client → LB → service → DB → cache | Box diagram with arrows |
@@ -22278,7 +22313,8 @@ flowchart LR
 ### 📐 Core System Design Concepts — Simplified
 
 | Concept | Definition | URL Shortener example |
-|----------||-----------------------|| **Latency** | Time for one request to complete | Redirect must complete in < 50ms |
+| --- | --- | --- |
+| **Latency** | Time for one request to complete | Redirect must complete in < 50ms |
 | **Throughput** | Requests handled per second (QPS) | 58 QPS average, 580 QPS peak |
 | **Availability** | % of time the system is up | 99.99% = max 52 min downtime per year |
 | **Scalability** | Can it handle 10x more load? | Add more pods behind the load balancer |
@@ -22308,7 +22344,8 @@ flowchart TB
 ### 🧱 Common Building Blocks — Memorise These
 
 | Block | Purpose | When to add it |
-|--------||-----------------|| **Load Balancer** | Spread traffic; no single point of failure | Always |
+| --- | --- | --- |
+| **Load Balancer** | Spread traffic; no single point of failure | Always |
 | **CDN** | Serve static assets from edge locations | Images, JS, cacheable responses |
 | **Cache (Redis)** | Sub-ms reads for hot data | When DB latency > SLA |
 | **Message Queue** | Decouple slow/async work | Analytics, emails, notifications |
@@ -22321,7 +22358,8 @@ flowchart TB
 ### 📏 Numbers Every Engineer Should Memorise
 
 | Operation | Latency | Notes |
-|------------||--------|| L1 cache read | 0.5 ns | Instant |
+| --- | --- | --- |
+| L1 cache read | 0.5 ns | Instant |
 | RAM read | 100 ns | 200x slower than L1 |
 | Redis GET | 0.5-1 ms | ~1,000,000x slower than L1 |
 | SSD read | 0.1 ms | Fast disk |
@@ -22355,7 +22393,8 @@ flowchart TB
 > - **Horizontal scaling** = open more branches (add more servers behind a load balancer).
 
 | Dimension | Vertical (Scale Up) | Horizontal (Scale Out) |
-|------------||------------------------|| How | Upgrade one machine's CPU/RAM/SSD | Add more machines behind a load balancer |
+| --- | --- | --- |
+| How | Upgrade one machine's CPU/RAM/SSD | Add more machines behind a load balancer |
 | Limit | Hardware ceiling (~128-core max) | Theoretically unlimited |
 | Cost | Exponential (high-end hardware costly) | Linear (commodity servers) |
 | Downtime to scale | Yes — usually requires reboot | No — add pods at runtime |
@@ -22394,7 +22433,8 @@ flowchart TB
 **Side-by-side comparison — memorise this table:**
 
 |---| Vertical Scaling (Scale Up) | Horizontal Scaling (Scale Out) |
-|----||----|| **What you do** | Replace server with a bigger one | Add more servers |
+| --- | --- | --- |
+| **What you do** | Replace server with a bigger one | Add more servers |
 | **Analogy** | Upgrade your laptop RAM | Buy more laptops |
 | **Cost** | Exponentially expensive at high end | Linear — each extra server costs the same |
 | **Limit** | Hard hardware ceiling | Practically unlimited |
@@ -22860,7 +22900,8 @@ Your quarterly DR drill checklist:
 **Load Balancing Algorithms:**
 
 | Algorithm | How | Best for |
-|------------||----------|| **Round Robin** | Each server takes turns: 1, 2, 3, 1, 2... | Equal-capacity servers |
+| --- | --- | --- |
+| **Round Robin** | Each server takes turns: 1, 2, 3, 1, 2... | Equal-capacity servers |
 | **Weighted Round Robin** | Server A gets 3× more than B | Different-capacity servers |
 | **Least Connections** | Route to server with fewest active connections | Long-lived connections (WebSocket) |
 | **IP Hash** | Same client IP → always same server | Sessions that can't be externalised |
@@ -22868,7 +22909,8 @@ Your quarterly DR drill checklist:
 **Layer 4 vs Layer 7:**
 
 |---| Layer 4 (Transport) | Layer 7 (Application) |
-|----||----|| Reads | TCP/UDP — IPs and ports only | Full HTTP — headers, URL, cookies |
+| --- | --- | --- |
+| Reads | TCP/UDP — IPs and ports only | Full HTTP — headers, URL, cookies |
 | Routing rules | IP:Port only | Path, header, cookie, query param |
 | SSL termination | No | Yes |
 | Example | AWS NLB | AWS ALB, Nginx, Spring Cloud Gateway |
@@ -23012,7 +23054,8 @@ Good ratio: > 90% — meaning < 10% of requests hit the DB
 **Cache eviction policies:**
 
 | Policy | Evicts | Best for |
-|---------||----------|| **LRU** (Least Recently Used) | Not accessed for longest time | General purpose — most common |
+| --- | --- | --- |
+| **LRU** (Least Recently Used) | Not accessed for longest time | General purpose — most common |
 | **LFU** (Least Frequently Used) | Accessed fewest times | Frequency matters more than recency |
 | **TTL** (Time To Live) | After fixed time period | Data with known freshness window |
 
@@ -23125,7 +23168,8 @@ public void refreshPopularProducts() {
 **Quick decision table:**
 
 | Strategy | Complexity | Best for |
-|----||----|| TTL Jitter | Very low — 1 line change | Always apply as baseline |
+| --- | --- | --- |
+| TTL Jitter | Very low — 1 line change | Always apply as baseline |
 | Mutex per key | Medium | Single-instance or Redis lock |
 | Background refresh | Medium | Known hot keys (top products, trending posts) |
 | Redis SETNX lock | Medium | Distributed mutex across multiple pods |
@@ -23220,7 +23264,8 @@ public class ProductService {
 **Cache TTL guide by data type:**
 
 | Data Type | Suggested TTL | Reason |
-|----||----|| Product catalogue | 5-10 min | Changes infrequently |
+| --- | --- | --- |
+| Product catalogue | 5-10 min | Changes infrequently |
 | User profile | 15-30 min | Changes on user action only |
 | Search results | 1-5 min | New products/content added |
 | Config/flags | Until deploy | Only changes on release |
@@ -23236,7 +23281,8 @@ public class ProductService {
 > **Real-world analogy:** SQL = a filing cabinet with strict labelled folders and cross-references. NoSQL = a shoebox where you throw anything in any shape.
 
 | Dimension | SQL (Relational) | NoSQL |
-|------------||--------|| Schema | Fixed — define columns upfront | Flexible — each document can differ |
+| --- | --- | --- |
+| Schema | Fixed — define columns upfront | Flexible — each document can differ |
 | Transactions | Full ACID | Varies (MongoDB ACID; Cassandra eventual) |
 | Joins | Native, powerful | Embed in document or application-level |
 | Scaling | Vertical primary, horizontal via replicas | Horizontal by design (sharding built-in) |
@@ -23245,7 +23291,8 @@ public class ProductService {
 **NoSQL types:**
 
 | Type | Examples | Best for |
-|-------||----------|| **Document** | MongoDB, Firestore | Product catalogs, user profiles |
+| --- | --- | --- |
+| **Document** | MongoDB, Firestore | Product catalogs, user profiles |
 | **Key-Value** | Redis, DynamoDB | Sessions, cache, leaderboards |
 | **Wide-Column** | Cassandra, HBase | Time-series, logs, write-heavy analytics |
 | **Graph** | Neo4j, Neptune | Social networks, fraud detection |
@@ -23392,7 +23439,8 @@ Same thing in MongoDB — single document read:
 **Cheat sheet — which database for which use case:**
 
 | Use Case | Best Choice | Why |
-|----||----|| Banking, payments | PostgreSQL | ACID, JOINs, complex queries |
+| --- | --- | --- |
+| Banking, payments | PostgreSQL | ACID, JOINs, complex queries |
 | Product catalogue | MongoDB | Flexible schema, rich queries |
 | User sessions | Redis | In-memory key-value, TTL |
 | IoT sensor data | Cassandra / InfluxDB | Massive write throughput |
@@ -23639,7 +23687,8 @@ Used by: Redis Cluster, Cassandra, DynamoDB, Memcached, Kafka partition assignme
 **When to use a queue:**
 
 | Scenario | Without Queue | With Queue |
-|-----------||------------|| Send welcome email on signup | API waits 500ms for email | API returns 200ms instantly; email sent async |
+| --- | --- | --- |
+| Send welcome email on signup | API waits 500ms for email | API returns 200ms instantly; email sent async |
 | Payment → inventory → notify | One big transaction, one failure rolls all back | Decoupled steps, each retries independently |
 | 1,000 image uploads/sec | API server overwhelmed | Queue absorbs spikes; resizer works at its own pace |
 | Multiple teams need order events | Each adds code to order service | Publish once; each team subscribes independently |
@@ -23647,7 +23696,8 @@ Used by: Redis Cluster, Cassandra, DynamoDB, Memcached, Kafka partition assignme
 **Kafka vs RabbitMQ:**
 
 | Feature | Kafka | RabbitMQ |
-|----------||----------|| Message retention | Days/weeks — replayable | Deleted after consumer acks |
+| --- | --- | --- |
+| Message retention | Days/weeks — replayable | Deleted after consumer acks |
 | Throughput | Millions/sec | Thousands to hundreds of thousands/sec |
 | Consumer model | Pull-based — consumers control pace | Push-based — broker pushes |
 | Use case | Event streaming, analytics, replay | Task queues, complex per-user routing |
@@ -23791,7 +23841,8 @@ Tools: Debezium CDC reads the outbox table from PostgreSQL WAL and publishes to 
 **Which guarantee to choose:**
 
 | Scenario | Use | Reason |
-|----||----|| Log analytics, metrics | At-most-once | Losing a few log lines is fine |
+| --- | --- | --- |
+| Log analytics, metrics | At-most-once | Losing a few log lines is fine |
 | Email notifications | At-least-once + idempotency | Cannot send 2 emails; check by userId+eventId |
 | Payment processing | At-least-once + idempotency | MUST NOT charge twice; idempotency key = orderId |
 | Stream processing (Kafka→Kafka) | Kafka exactly-once transactions | Pure Kafka pipeline |
@@ -23822,7 +23873,8 @@ Tools: Debezium CDC reads the outbox table from PostgreSQL WAL and publishes to 
 > **Real-world analogy:** A hotel concierge — verifies identity (auth), checks access level (authorisation), limits room service calls (rate limiting), directs to right department (routing).
 
 | Responsibility | Without Gateway | With Gateway |
-|----------------||--------------|| Authentication | Every service implements its own | One place — gateway validates JWT |
+| --- | --- | --- |
+| Authentication | Every service implements its own | One place — gateway validates JWT |
 | Rate limiting | Every service implements its own | One place — per client/endpoint |
 | SSL termination | Every service handles TLS | Gateway handles TLS; internal HTTP |
 | Routing | Client knows all service URLs | Client knows only one gateway URL |
@@ -24066,7 +24118,8 @@ flowchart LR
 ```
 
 | Scenario | Without CQRS | With CQRS |
-|-----------||-----------|| Complex dashboard queries | Slow JOINs on transactional DB | Pre-materialised read model — instant |
+| --- | --- | --- |
+| Complex dashboard queries | Slow JOINs on transactional DB | Pre-materialised read model — instant |
 | Different scaling needs | Both reads+writes scale together | Read side scales independently |
 | Audit trail | Hard to reconstruct | Every command = immutable event (Event Sourcing) |
 
@@ -24162,7 +24215,8 @@ Index on (A, B, C):
 **Index types:**
 
 | Index | Best for | Example |
-|--------||----------|| **B-Tree** (default) | Equality + ranges + ORDER BY | `INDEX ON orders(user_id)` |
+| --- | --- | --- |
+| **B-Tree** (default) | Equality + ranges + ORDER BY | `INDEX ON orders(user_id)` |
 | **Composite** | Multi-column queries | `INDEX ON orders(user_id, status)` |
 | **Partial** | Subset of rows | `INDEX ON orders(status) WHERE status='ACTIVE'` |
 | **Covering** | All query columns in index — no table access | `INDEX ON orders(user_id) INCLUDE (status, amount)` |
@@ -24315,7 +24369,8 @@ SELECT pg_terminate_backend(pid_of_blocking_query);
 > **Real-world analogy:** Monolith = one big Swiss Army knife (easy to carry, lose one = lose all). Microservices = a full toolbox with specialised tools (more powerful, but need a bag to carry them all).
 
 | Dimension | Monolith | Microservices |
-|------------||---------------|| Deployment | One unit | Independent per service |
+| --- | --- | --- |
+| Deployment | One unit | Independent per service |
 | Scaling | Scale everything together | Scale each independently |
 | Failures | One bug can crash everything | Failure isolated to one service |
 | Data | One shared DB (simple) | Each service owns its data (complex) |
@@ -24403,7 +24458,8 @@ Distributed lock with Redisson (Java):
 **The trade-off vocabulary every senior engineer uses:**
 
 | Trade-off | Option A | Option B |
-|------------||----------|| Consistency vs Availability | Reject during partition | Serve stale data |
+| --- | --- | --- |
+| Consistency vs Availability | Reject during partition | Serve stale data |
 | Latency vs Durability | Async write (fast, risk loss) | Sync write (slow, guaranteed) |
 | Read speed vs Write speed | Heavy indexes (fast reads, slow writes) | Few indexes (fast writes, slower reads) |
 | Flexibility vs Performance | NoSQL (flexible) | SQL (rigid, powerful queries) |
@@ -24428,7 +24484,8 @@ Example:
 ### 3.12 — System Design Anti-Patterns (What NOT to Design)
 
 | Anti-Pattern | Why It's Bad | Fix |
-|----||----|| **Distributed monolith** | Microservices with shared DB — worst of both worlds | Each service owns its data (shared-nothing) |
+| --- | --- | --- |
+| **Distributed monolith** | Microservices with shared DB — worst of both worlds | Each service owns its data (shared-nothing) |
 | **Synchronous chain** | ServiceA → B → C → D all sync — one slow step kills all | Async events for non-critical path steps |
 | **God service** | One service does auth + orders + payments + inventory | Single responsibility per bounded context |
 | **Chatty services** | Service A makes 100 calls to B per user request | Batch API, aggregator service, GraphQL |
@@ -25270,7 +25327,8 @@ Read replica strategy:
 ### ✅ Requirements
 
 | Type | Feature | Target |
-|-------||---------|| **Functional** | Long URL → Short Code (Base62) | 500K URLs/day |
+| --- | --- | --- |
+| **Functional** | Long URL → Short Code (Base62) | 500K URLs/day |
 | **Functional** | Short URL → Redirect (302) | < 50ms latency |
 | **Functional** | Custom alias, expiry, analytics | — |
 | **Non-Functional** | Availability | 99.99% uptime |
@@ -25683,7 +25741,8 @@ flowchart LR
 ### Why Production is Different
 
 | Aspect | Development | Production |
-|---------||-------------|| Users | Just you | Millions |
+| --- | --- | --- |
+| Users | Just you | Millions |
 | Downtime | Fine | Every minute = lost money |
 | Errors | Expected | Alerts fire, on-call wakes |
 | Performance | Doesn't matter | Must be < 200ms p99 |
@@ -26780,7 +26839,8 @@ spring:
 **Memory Leak Quick Reference:**
 
 | Leak Type | Symptom | Fix |
-|------------||------|| Static unbounded collection | OldGen grows forever | Caffeine with `maximumSize` + `expireAfterAccess` |
+| --- | --- | --- |
+| Static unbounded collection | OldGen grows forever | Caffeine with `maximumSize` + `expireAfterAccess` |
 | ThreadLocal in pool | Wrong user data / memory growth | Always `remove()` in finally |
 | Long Hibernate session | OOM on batch jobs | `entityManager.clear()` every N records |
 | Connection leak | Pool exhaustion | `leakDetectionThreshold` in HikariCP |
@@ -26837,7 +26897,8 @@ Found one Java-level deadlock:
 ```
 
 | Thread Dump Pattern | Symptom | Fix |
-|---------------------||-----|| Pool exhausted | All exec-* threads in WAITING on HikariCP | Increase pool size; fix slow queries |
+| --- | --- | --- |
+| Pool exhausted | All exec-* threads in WAITING on HikariCP | Increase pool size; fix slow queries |
 | Deadlock detected | "Found Java-level deadlock" section | Acquire locks in consistent order; use `tryLock` |
 | Slow external call | Threads stuck in `SocketInputStream.read()` | Add timeouts to HTTP/gRPC clients |
 | Synchronized bottleneck | Many threads BLOCKED on same object | Use `ConcurrentHashMap` or `ReentrantLock` |
@@ -27245,7 +27306,8 @@ Return metadata in response"]
 ```
 
 | Practice | ❌ Bad | ✅ Good |
-|-----------||----------|| URL naming | `GET /getUsers` | `GET /users` |
+| --- | --- | --- |
+| URL naming | `GET /getUsers` | `GET /users` |
 | Plural resources | `GET /user/1` | `GET /users/1` |
 | Nested resources | `GET /getUserOrders?userId=1` | `GET /users/1/orders` |
 | HTTP status codes | Always return 200 with error in body | `404 Not Found`, `201 Created` |
@@ -27339,7 +27401,8 @@ spring:
 ```
 
 | Factor | Meaning | Spring Boot How-To |
-|---------||--------------------|| **3. Config** | Config in ENV, not code | `@Value("${DB_URL}")`, Spring Cloud Config, AWS Secrets Manager |
+| --- | --- | --- |
+| **3. Config** | Config in ENV, not code | `@Value("${DB_URL}")`, Spring Cloud Config, AWS Secrets Manager |
 | **6. Processes** | Stateless — no session on JVM | Store HTTP sessions in Redis (`spring-session-data-redis`) |
 | **9. Disposability** | Graceful shutdown | `server.shutdown=graceful` + K8s `preStop` hook |
 | **10. Dev/Prod Parity** | Same stack everywhere | Docker Compose in dev = Kubernetes in prod |
@@ -27381,7 +27444,8 @@ The 3 pillars"]
 ```
 
 | Principle | ✅ Right way | ❌ Anti-pattern |
-|------------||-----------------|| **Single Responsibility** | Order Service handles orders only | Order Service also handles payments |
+| --- | --- | --- |
+| **Single Responsibility** | Order Service handles orders only | Order Service also handles payments |
 | **Loose Coupling** | Services communicate via REST/events | Services call each other's DB directly |
 | **DB Per Service** | Each service has its own DB/schema | Two services share one PostgreSQL schema |
 | **Design for Failure** | Circuit Breaker + timeout on every external call | No error handling — one failure kills the chain |
@@ -27480,7 +27544,8 @@ sequenceDiagram
 ```
 
 | SAGA Type | How | Use when |
-|------------||-----------|| **Choreography** | Services listen for events and react | Simple flows, few services |
+| --- | --- | --- |
+| **Choreography** | Services listen for events and react | Simple flows, few services |
 | **Orchestration** | Central orchestrator controls the flow | Complex flows, easy to audit and debug |
 
 ---
@@ -27646,7 +27711,8 @@ Health checks"]
 **AWS Load Balancer Types:**
 
 | Type | OSI Layer | Best For |
-|-------||-----------|| **ALB** | L7 (HTTP/HTTPS) | Microservices, path/host routing, WebSocket, gRPC |
+| --- | --- | --- |
+| **ALB** | L7 (HTTP/HTTPS) | Microservices, path/host routing, WebSocket, gRPC |
 | **NLB** | L4 (TCP/UDP) | Ultra-low latency, millions req/sec, static IP needed |
 | **CLB** | L4+L7 | Legacy only — don't use for new projects |
 
@@ -27690,7 +27756,8 @@ Stateful connections"]
 ```
 
 | Criterion | Lambda | Spring Boot ECS/EKS |
-|------------||----------------------|| Cold start | 1–10 sec (Java!) | None (always warm) |
+| --- | --- | --- |
+| Cold start | 1–10 sec (Java!) | None (always warm) |
 | Idle cost | Zero | Pay per running instance |
 | Max duration | 15 minutes | Unlimited |
 | Best for | Event-driven, async, short tasks | REST APIs, streaming, long processes |
@@ -27912,7 +27979,8 @@ Both regions serve live traffic simultaneously"]
 ```
 
 | Strategy | RTO | RPO | Cost | Spring Boot implementation |
-|-----------||------||----------------------------|| **Backup & Restore** | Hours | Hours | $ | RDS automated snapshots to S3 |
+| --- | --- | --- | --- | --- |
+| **Backup & Restore** | Hours | Hours | $ | RDS automated snapshots to S3 |
 | **Pilot Light** | 10–30 min | Minutes | $$ | Aurora Global DB + ECS tasks at 0 replicas |
 | **Warm Standby** | 1–5 min | Seconds | $$$ | Aurora Global + ECS/EKS at min capacity |
 | **Active-Active** | ~0 | ~0 | $$$$ | Route 53 latency routing + Aurora Global |
@@ -27924,7 +27992,8 @@ Both regions serve live traffic simultaneously"]
 ### AWS-6: Key AWS Services Reference for Java Developers
 
 | Service | Purpose | Spring Boot Integration |
-|----------||-------------------------|| **EKS** | Managed Kubernetes | Helm charts, K8s manifests |
+| --- | --- | --- |
+| **EKS** | Managed Kubernetes | Helm charts, K8s manifests |
 | **ECS Fargate** | Serverless containers | Docker containers, no EC2 management |
 | **RDS / Aurora** | Managed PostgreSQL/MySQL | Spring Data JPA, HikariCP |
 | **ElastiCache** | Managed Redis/Memcached | `spring-boot-starter-data-redis` |
@@ -27981,7 +28050,8 @@ Roles not Users, no root"]
 ### Top 10 Architecture Interview Q&A
 
 | # | Question | Best Answer |
-|----||--------------|| 1 | Richardson Level 2 vs Level 3? | L2 = correct HTTP verbs + status codes (industry std); L3 = HATEOAS links in response |
+| --- | --- | --- |
+| 1 | Richardson Level 2 vs Level 3? | L2 = correct HTTP verbs + status codes (industry std); L3 = HATEOAS links in response |
 | 2 | What is 12-Factor App? | 12 best practices: config in env, stateless processes, log stdout, graceful shutdown |
 | 3 | SAGA vs 2PC? | SAGA = eventual consistency with compensation; 2PC = distributed lock (avoid — blocks services) |
 | 4 | When use Lambda vs Spring Boot? | Lambda = event-driven, infrequent, <15 min; Spring Boot = APIs, streaming, always-on |
@@ -28133,7 +28203,8 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 ### Networking Modes
 
 | Mode | Description | When to Use |
-|----||----|| **bridge** | Default; containers on same host can communicate | Local dev |
+| --- | --- | --- |
+| **bridge** | Default; containers on same host can communicate | Local dev |
 | **host** | Container shares host network stack | High-performance needs |
 | **overlay** | Multi-host networking (Swarm/K8s) | Distributed systems |
 | **none** | No networking | Isolated jobs |
@@ -28329,7 +28400,8 @@ readinessProbe:
 ### Environment Comparison
 
 | Aspect | Staging | Production |
-|----||----|| **Purpose** | Validate releases | Serve real users |
+| --- | --- | --- |
+| **Purpose** | Validate releases | Serve real users |
 | **Data** | Anonymized / test data | Real data |
 | **Scale** | Reduced replicas | Full scale |
 | **Access** | Developers / QA | Ops / SRE only |
@@ -28565,7 +28637,8 @@ flowchart TB
 ## 8) When to Use What and Why
 
 | Scenario | Docker Only | Docker + Kubernetes |
-|----||----|| Local development | Yes | Optional |
+| --- | --- | --- |
+| Local development | Yes | Optional |
 | Single-service app | Yes | Optional |
 | CI/CD pipelines | Yes | Yes |
 | Multiple microservices | No | Yes |
@@ -28582,7 +28655,8 @@ flowchart TB
 ### Docker Issues
 
 | Issue | Cause | Resolution |
-|----||----|| Large image size | Too many layers, full JDK | Multi-stage builds, slim base images |
+| --- | --- | --- |
+| Large image size | Too many layers, full JDK | Multi-stage builds, slim base images |
 | Container crashes on start | Wrong entrypoint, missing config | Check logs, validate ENV vars |
 | Port conflicts | Multiple containers on same port | Use distinct host port mappings |
 | Security vulnerabilities | Outdated base image | Scan with Trivy, update regularly |
@@ -28591,7 +28665,8 @@ flowchart TB
 ### Kubernetes Issues
 
 | Issue | Cause | Resolution |
-|----||----|| CrashLoopBackOff | App crash, bad config, missing secret | kubectl logs, kubectl describe pod |
+| --- | --- | --- |
+| CrashLoopBackOff | App crash, bad config, missing secret | kubectl logs, kubectl describe pod |
 | ImagePullBackOff | Wrong image name/tag, no registry auth | Fix image tag, add imagePullSecrets |
 | Pending pods | Insufficient node resources | Scale nodes or reduce resource requests |
 | OOMKilled | Memory limit too low | Increase memory limits or optimize app |
@@ -28676,7 +28751,8 @@ Imagine you and 10 teammates are all writing code on a Java Spring Boot microser
 ---
 ### 🔑 Key Definitions — Plain English
 | Term | What It Means | Real-World Analogy |
-|-------||--------------------|| **CI** (Continuous Integration) | Automatically build & test every code push | Like a spell checker that runs every time you type |
+| --- | --- | --- |
+| **CI** (Continuous Integration) | Automatically build & test every code push | Like a spell checker that runs every time you type |
 | **CD** (Continuous Delivery) | Automatically prepare a release-ready artifact | Like a conveyor belt that packages your product |
 | **CD** (Continuous Deployment) | Automatically deploy to production without human approval | Like a vending machine — press button, get product instantly |
 | **Pipeline** | A series of automated steps (stages) | Like an assembly line in a car factory |
@@ -28735,7 +28811,7 @@ Git Push ──► Jenkins detects change ──► Runs Jenkinsfile ──► B
 ---
 ### 🏗️ Jenkins Architecture (Beginner → Intermediate)
 ```mermaid
-graph TB
+flowchart TB
     subgraph Master[Jenkins Master]
         JQ[Job Queue]
         SCH[Scheduler]
@@ -28746,7 +28822,8 @@ graph TB
     Master -->|Distributes-work| A3[Agent 3<br/>Maven<br/>Runs tests]
 ```
 | Component | Role | Analogy |
-|------------||----------|| **Master** | Orchestrates, schedules jobs | Project Manager |
+| --- | --- | --- |
+| **Master** | Orchestrates, schedules jobs | Project Manager |
 | **Agent/Node** | Actually runs the pipeline steps | Worker bees |
 | **Executor** | Thread on an agent that runs one job | A single worker's hands |
 | **Workspace** | Directory on agent where code lives | Worker's desk |
@@ -29005,7 +29082,7 @@ Without Docker:
   **Docker's Solution:** Package your app + its Java version + all libraries + config into one self-contained **container image**. That image runs identically everywhere.
 
 ```mermaid
-graph LR
+flowchart LR
     subgraph WO["❌ WITHOUT DOCKER — Environment Mismatch"]
         YM["Your Machine
 Java 17  Spring 3.2  MySQL 8.0"]
@@ -29230,7 +29307,7 @@ You have 10 Docker containers running your Spring Boot microservices. Now ask yo
 ---
 ### 🏗️ Kubernetes Architecture — Full Picture
 ```mermaid
-graph TB
+flowchart TB
     subgraph CP[Control Plane Master]
         API[API Server<br/>gateway to cluster]
         SCHED[Scheduler<br/>picks which node to run pod]
@@ -29239,25 +29316,26 @@ graph TB
     end
     subgraph N1[Worker Node 1]
         KB1[kubelet]
-        P1[user-|svc| Pod]
-        P2[order-|svc| Pod]
+        P1["user-svc Pod"]
+        P2["order-svc Pod"]
     end
     subgraph N2[Worker Node 2]
         KB2[kubelet]
-        P3[user-|svc| Pod]
-        P4[pay-|svc| Pod]
+        P3["user-svc Pod"]
+        P4["pay-svc Pod"]
     end
     subgraph N3[Worker Node 3]
         KB3[kubelet]
-        P5[order-|svc| Pod]
-        P6[pay-|svc| Pod]
+        P5["order-svc Pod"]
+        P6["pay-svc Pod"]
     end
     CP -->|schedules-pods| N1
     CP -->|schedules-pods| N2
     CP -->|schedules-pods| N3
 ```
 | Component | What It Does | Analogy |
-|------------||----------|| **Pod** | Smallest unit — wraps 1+ containers | A single shipping container |
+| --- | --- | --- |
+| **Pod** | Smallest unit — wraps 1+ containers | A single shipping container |
 | **Deployment** | Manages N replicas of a Pod, handles updates | Shipping manifest saying "always have 5 containers" |
 | **Service** | Stable network endpoint for pods | The dock number where trucks always pick up |
 | **Ingress** | HTTP routing rules (path-based, host-based) | Front reception desk that directs visitors |
@@ -29453,7 +29531,7 @@ Traffic always served — Zero downtime ✅"]
 ```
 
 ```mermaid
-graph LR
+flowchart LR
     LB["🔀 Load Balancer"]
     subgraph BLUE["🔵 BLUE Cluster — v1  Active  receives 100% traffic"]
         B1["pod-v1"] & B2["pod-v1"] & B3["pod-v1"]
@@ -29582,7 +29660,7 @@ helm rollback user-service 2 -n production
 ## ☁️ Chapter 5 — AWS CI/CD for Java Spring Boot Microservices
 ### 🗺️ AWS Services Map — What Does What
 ```mermaid
-graph LR
+flowchart LR
     subgraph Source
         CC[CodeCommit<br/>Git Repo]
     end
@@ -29606,25 +29684,25 @@ graph LR
 ---
 ### 🏗️ Full AWS Architecture — Spring Boot Microservices on EKS
 ```mermaid
-graph TB
+flowchart TB
     Dev[Developer] -->|git-push| CC[CodeCommit / GitHub]
     CC -->|webhook| CP[CodePipeline]
 
     subgraph CICD[CI/CD Pipeline]
         CP --> CB[CodeBuild<br/>mvn test + docker build]
         CB --> ECR[ECR<br/>Docker Registry]
-        ECR --> STG[Deploy to Staging EKS<br/>helm upgrade --|namespace| staging]
+        ECR --> STG["Deploy to Staging EKS<br/>helm upgrade --namespace staging"]
         STG --> IT[Integration Tests]
         IT --> AP[Manual Approval Gate]
-        AP --> PRD[Deploy to Production EKS<br/>helm upgrade --|namespace| production]
+        AP --> PRD["Deploy to Production EKS<br/>helm upgrade --namespace production"]
     end
 
     subgraph VPC[VPC ap-south-1]
         subgraph EKS[EKS Cluster]
-            U[user-|service| x3]
-            O[order-|service| x3]
-            PA[payment-|service| x5]
-            N[notification-|service| x2]
+            U["user-service x3"]
+            O["order-service x3"]
+            PA["payment-service x5"]
+            N["notification-service x2"]
         end
         ALB[Application Load Balancer]
         R53[Route 53<br/>api.myapp.com]
@@ -29773,11 +29851,11 @@ management:
 ---
 ### 🌍 Multi-Region AWS Deployment (Advanced)
 ```mermaid
-graph TB
-    DNS[Route 53<br/>Latency-|based| routing]
-    DNS --> M[ap-|south-1| Mumbai<br/>PRIMARY<br/>EKS + RDS Primary]
-    DNS --> S[ap-|southeast-1| Singapore<br/>SECONDARY<br/>EKS + RDS Read Replica]
-    DNS --> E[eu-|west-1| Ireland<br/>TERTIARY<br/>EKS + RDS Read Replica]
+flowchart TB
+    DNS["Route 53<br/>Latency-based routing"]
+    DNS --> M["ap-south-1 Mumbai<br/>PRIMARY<br/>EKS + RDS Primary"]
+    DNS --> S["ap-southeast-1 Singapore<br/>SECONDARY<br/>EKS + RDS Read Replica"]
+    DNS --> E["eu-west-1 Ireland<br/>TERTIARY<br/>EKS + RDS Read Replica"]
     M -.->|auto-failover-under-60s| S
     note1[Route 53 Health Check:<br/>If Mumbai fails → routes all traffic<br/>to Singapore automatically]
 ```
@@ -29785,7 +29863,8 @@ graph TB
 ## 🌐 Chapter 6 — GCP CI/CD for Java Spring Boot Microservices
 ### 🗺️ GCP Services Map — AWS Equivalent
 | GCP Service | AWS Equivalent | Purpose |
-|--------------||----------|| **Cloud Build** | CodeBuild | Build and test code |
+| --- | --- | --- |
+| **Cloud Build** | CodeBuild | Build and test code |
 | **Artifact Registry** | ECR | Store Docker images |
 | **GKE** (Google Kubernetes Engine) | EKS | Managed Kubernetes |
 | **Cloud Deploy** | CodeDeploy | Managed deployment pipelines |
@@ -29797,7 +29876,7 @@ graph TB
 ---
 ### 🏗️ Full GCP Architecture — Spring Boot Microservices on GKE
 ```mermaid
-graph TB
+flowchart TB
     Dev[Developer] -->|git-push| CSR[Cloud Source Repositories]
     CSR -->|trigger| CB[Cloud Build<br/>mvn test + docker build<br/>push to Artifact Registry]
     CB --> AR[Artifact Registry<br/>Docker Images]
@@ -29923,11 +30002,11 @@ spring:
 ---
 ### 📊 GCP Monitoring Stack (Cloud Operations Suite)
 ```mermaid
-graph LR
+flowchart LR
     App[Spring Boot App<br/>Micrometer + OpenTelemetry]
     App --> M[Cloud Monitoring<br/>JVM metrics, request rates,<br/>error rates]
-    App --> L[Cloud Logging<br/>Structured JSON logs<br/>log-|based| metrics]
-    App --> T[Cloud Trace<br/>End-|to-end| request<br/>tracing]
+    App --> L["Cloud Logging<br/>Structured JSON logs<br/>log-based metrics"]
+    App --> T["Cloud Trace<br/>End-to-end request<br/>tracing"]
     M --> A[Cloud Monitoring Alerting<br/>PagerDuty / Slack]
     L --> A
     T --> A
@@ -29971,7 +30050,7 @@ gcloud run deploy user-service \
 ## 🏭 Chapter 7 — Staging & Production Deployment Flows (Today's Standard)
 ### 🌿 What is Staging? Why is it Different from Production?
 ```mermaid
-graph LR
+flowchart LR
     DEV["🖥️ DEV
 Developers
 local env
@@ -30144,7 +30223,7 @@ No redeploy needed!"]
 ### 🎯 GitOps — The Modern Way (Advanced, Used at Top Companies)
 Traditional CI/CD pushes deployments. GitOps uses Git as the single source of truth for deployments.
 ```mermaid
-graph LR
+flowchart LR
     subgraph TRAD["Traditional CI/CD — Push Model"]
         T1["Dev PC"] -->|git-push-code| T2["Git Repo"]
         T2 -->|webhook-triggers| T3["Jenkins Pipeline"]
@@ -30160,7 +30239,8 @@ graph LR
 ```
 
 | Aspect | Traditional CI/CD | GitOps |
-|---------||---------|| Deploy trigger | Pipeline pushes to K8s | ArgoCD pulls from Git |
+| --- | --- | --- |
+| Deploy trigger | Pipeline pushes to K8s | ArgoCD pulls from Git |
 | Source of truth | Pipeline scripts | Git repository |
 | Manual K8s changes | Allowed (risky) | Auto-reverted by ArgoCD |
 | Audit trail | CI logs | Git commit history |
@@ -30608,7 +30688,8 @@ At the right moment, flip the flag → no deployment needed!
 ---
 ### 📊 AWS vs GCP Side-by-Side Quick Reference
 | Need | AWS | GCP |
-|-------||------|| Managed Kubernetes | EKS | GKE |
+| --- | --- | --- |
+| Managed Kubernetes | EKS | GKE |
 | Docker image registry | ECR | Artifact Registry |
 | Build service | CodeBuild + buildspec.yml | Cloud Build + cloudbuild.yaml |
 | Pipeline orchestration | CodePipeline | Cloud Deploy |
@@ -30690,7 +30771,8 @@ thanks to helm rollback."
 ### Cloud vs Traditional — Quick Comparison
 
 |---| Traditional | Cloud |
-|-||--------|| **Cost** | High upfront | Pay per use |
+| --- | --- | --- |
+| **Cost** | High upfront | Pay per use |
 | **Scaling** | Weeks to provision | Minutes |
 | **Maintenance** | Your team | Cloud provider |
 | **Reliability** | Single location | Multi-AZ, global |
@@ -30709,7 +30791,8 @@ flowchart LR
 ### Core AWS Services for Java Developers
 
 | Service | What it is | Java Use Case |
-|----------||----------------|| **EC2** | Virtual machine | Run your JAR directly |
+| --- | --- | --- |
+| **EC2** | Virtual machine | Run your JAR directly |
 | **EKS** | Managed Kubernetes | Run microservices |
 | **RDS** | Managed PostgreSQL/MySQL | Your database |
 | **ElastiCache** | Managed Redis | Caching layer |
@@ -31047,7 +31130,6 @@ flowchart LR
     L --> C["Cloud/DevOps\n& Testing"]
   end
 ```
-
 ---
 
 ## 🔴 Hard Questions
@@ -31103,23 +31185,158 @@ flowchart TB
 
 ### H3. Describe the architecture of the Salesforce integration microservice you built.
 
-**Best Answer**:
+**What they want**: System design depth, bidirectional sync, resilience patterns, data consistency under failures.
+
+#### Architecture Overview — Bidirectional Sync
+
+The integration is **fully bidirectional**: data created in Salesforce must be visible in Blue Marble, and data created or changed in Blue Marble must be reflected back in Salesforce.
+
+**Synchronised entities:** Account / Customer name, Location / Site, Opportunity, Quote, Change Order, Terminate Order, Amend Order, Move Order, Create Site.
 
 ```mermaid
 flowchart TB
-  Client["API Client"] --> QMS["Quote Management Service\n(Spring Boot)"]
-  QMS --> DB["PostgreSQL\n(quotes, line items)"]
-  QMS --> OB["Outbox Table\n(same transaction)"]
-  OB --> Poller["Outbox Publisher\n(@Scheduled every 2s)"]
-  Poller --> Kafka["Kafka Topic\nquote.created"]
-  Kafka --> SFC["Salesforce Consumer\n(Spring Boot)"]
-  SFC --> SFAPI["Salesforce REST API\n(OAuth2 client_credentials)"]
-  SFC --> DLQ["DLQ on failure\n(manual retry + alert)"]
+  subgraph SF["Salesforce CRM"]
+    SFCRM["Salesforce Objects\nAccount · Opportunity · Quote\nOrder · Site · Change Order"]
+    PUBSUB["Salesforce Pub/Sub API\n(gRPC streaming, CDC-style\nmanaged by Salesforce)"]
+  end
+
+  subgraph ADAPTER["Adapter Microservice (Spring Boot)"]
+    GRPC["gRPC Subscriber\n(persistent stream,\nreplay-cursor stored in DB)"]
+    MAP["Event Mapper\nSF platform event → BM domain model"]
+    IDEM["Idempotency Guard\nSF replayId stored → skip duplicates"]
+  end
+
+  subgraph BM["Blue Marble Platform"]
+    BMAPI["Blue Marble Service API\nREST endpoints per entity"]
+    BMDB["PostgreSQL\naccounts · quotes · orders · sites"]
+    DEBEZ["Debezium\n(WAL-based CDC connector)"]
+  end
+
+  subgraph OUTBOUND["Outbound Sync — BM → SF"]
+    KAFKA["Kafka Topics\nbm.account.upserted\nbm.quote.created\nbm.order.changed\nbm.site.created\nbm.order.terminated\nbm.order.amended"]
+    SFCONS["SF Sync Consumer\n(Spring Boot, idempotent)"]
+    SFREST["Salesforce REST API\nOAuth2 client_credentials\nComposite API for bulk"]
+    VERIFY["Verify Step\nSF record ID stored in BM DB\ncross-check on next CDC event"]
+    DLQ["Dead Letter Queue\n+ PagerDuty alert\n(manual retry endpoint)"]
+  end
+
+  SFCRM -->|"trigger platform event"| PUBSUB
+  PUBSUB -->|"subscribe via gRPC"| GRPC
+  GRPC --> MAP
+  MAP --> IDEM
+  IDEM -->|"REST call"| BMAPI
+  BMAPI --> BMDB
+  BMDB -->|"WAL stream"| DEBEZ
+  DEBEZ -->|"publish change event"| KAFKA
+  KAFKA -->|"consume"| SFCONS
+  SFCONS -->|"upsert / create"| SFREST
+  SFREST -->|"returns SF record ID"| VERIFY
+  VERIFY -->|"store sf_record_id in BM DB"| BMDB
+  SFCONS -->|"on failure after 3 retries"| DLQ
 ```
 
-> "The Quote Management Service uses the **Outbox pattern** for Salesforce sync. When a quote is created, both the quote entity and an outbox event are written in a single transaction — this guarantees no event is lost even if Kafka goes down. A scheduler polls the outbox and publishes `quote.created` events.
+#### Two-Way Data Flow — Step by Step
+
+**Inbound Path: Salesforce → Blue Marble**
+
+```
+SF Rep creates/updates record
+  → Salesforce fires Platform Event on Pub/Sub API (gRPC topic)
+  → Adapter Microservice (persistent gRPC subscriber) receives event
+  → Checks replayId in DB — skip if already processed (idempotency)
+  → Maps SF platform event payload → Blue Marble domain object
+  → Calls Blue Marble Service REST API (e.g. POST /accounts, PUT /quotes/{id})
+  → Blue Marble persists to PostgreSQL
+```
+
+**Outbound Path: Blue Marble → Salesforce**
+
+```
+Blue Marble creates/updates record (provisioning, order management)
+  → Debezium captures WAL change from PostgreSQL
+  → Publishes to Kafka topic (bm.quote.created, bm.order.changed, etc.)
+  → SF Sync Consumer reads event, checks if sf_record_id already exists
+  → Calls Salesforce REST API (upsert via External ID field)
+  → Stores returned sf_record_id back in BM DB
+  → Next CDC event carries sf_record_id — used as correlation key for future updates
+```
+
+#### Entity Sync Matrix
+
+| Entity | Originating System | Sync Direction | Kafka Topic |
+|--------|-------------------|----------------|-------------|
+| Account / Customer | Either | Bidirectional | `bm.account.upserted` |
+| Location / Site | Blue Marble (provisioning) | BM → SF | `bm.site.created` |
+| Opportunity | Salesforce (sales rep) | SF → BM | Inbound via Pub/Sub |
+| Quote | Either | Bidirectional | `bm.quote.created` |
+| Change Order | Either | Bidirectional | `bm.order.changed` |
+| Terminate Order | Either | Bidirectional | `bm.order.terminated` |
+| Amend Order | Either | Bidirectional | `bm.order.amended` |
+| Move Order | Blue Marble (network ops) | BM → SF | `bm.order.changed` |
+| Create Site | Blue Marble (provisioning) | BM → SF | `bm.site.created` |
+
+#### Key Resilience Patterns
+
+| Problem | Solution |
+|---------|----------|
+| Adapter crashes mid-stream | Replay cursor (replayId) persisted in DB — resume from last processed event on restart |
+| Duplicate inbound events | Idempotency table keyed on SF replayId — processed IDs stored for 7 days |
+| Salesforce REST API down (outbound) | Kafka consumer pauses (no ack) — retries with exponential backoff (1s → 2s → 4s), max 3 retries → DLQ |
+| Blue Marble DB down (inbound) | gRPC subscriber holds events in-flight — Pub/Sub retains up to 72h; replay on recovery |
+| Dual-write conflict (both sides update same record) | External ID field on SF record + `sf_record_id` in BM DB acts as canonical link; last-write-wins with event timestamp comparison |
+| Lost CDC event | Debezium stores WAL LSN offset in Kafka — replay from any offset on restart |
+
+#### Idempotency — Code Sketch
+
+```java
+// Inbound: Adapter checks replayId before calling Blue Marble
+@Transactional
+public void handleSalesforceEvent(PlatformEvent event) {
+    if (processedEventRepo.existsByReplayId(event.getReplayId())) {
+        return; // already processed — skip
+    }
+    BlueMarbleRequest request = mapper.toBlueMarbleRequest(event);
+    blueMarbleClient.upsert(request);
+    processedEventRepo.save(new ProcessedEvent(event.getReplayId(), Instant.now()));
+}
+
+// Outbound: SF Sync Consumer checks sf_record_id before upsert
+@KafkaListener(topics = "bm.quote.created")
+public void syncQuoteToSalesforce(QuoteChangedEvent event) {
+    String externalId = event.getQuoteId(); // BM's UUID used as SF External ID
+    salesforceClient.upsertByExternalId("Quote", "BM_Quote_ID__c", externalId, event);
+    // SF upsert is naturally idempotent via External ID field
+}
+```
+
+#### Conflict Resolution — Dual-Write Scenario
+
+```
+Both SF and BM update the same Quote within seconds of each other:
+
+SF update (t=100ms)  →  Pub/Sub  →  Adapter  →  BM DB (version=2, source=SF)
+BM update (t=150ms)  →  CDC     →  Kafka    →  SF REST upsert (version=2, source=BM)
+
+Resolution:
+  - Each event carries source system + event timestamp
+  - Consumer checks: if BM DB record's updated_at > event timestamp → skip (stale event)
+  - SF upsert uses External ID — overwrites if BM event is newer, skips if older
+  - Net result: last writer wins, no infinite update loop
+```
+
+**Best Answer (verbal)**:
+
+> "The Salesforce integration is a fully bidirectional sync. Let me walk you through both paths.
 >
-> A separate Salesforce consumer service reads from Kafka and calls Salesforce's REST API using OAuth2 client_credentials flow. It's idempotent — we check the Salesforce record ID before inserting. Failures go to a DLQ with alerting. This decoupling means Salesforce downtime doesn't affect quote creation latency."
+> **Inbound — Salesforce to Blue Marble:** When a sales rep creates or updates a record in Salesforce — an Account, Opportunity, Quote, or Order — Salesforce fires a Platform Event onto their Pub/Sub API, which is a gRPC-based streaming service. Our Adapter Microservice maintains a persistent gRPC subscription. It receives those events, checks an idempotency table keyed on the Salesforce replayId to avoid duplicates, maps the payload to our domain model, and calls the Blue Marble Service REST API to persist the data.
+>
+> **Outbound — Blue Marble to Salesforce:** When Blue Marble creates or changes data — for example, provisioning a new Site or creating a Change Order through our order management system — Debezium captures the database WAL change and publishes it to a Kafka topic. A Salesforce Sync Consumer reads from Kafka and calls the Salesforce REST API using an External ID upsert, so it's naturally idempotent. It stores the returned Salesforce record ID back in our database, which becomes the correlation key for all future updates.
+>
+> **Resilience:** If Salesforce REST API goes down, Kafka holds the events — consumers pause and retry with exponential backoff, then route to a DLQ after three retries with a PagerDuty alert. If our Adapter crashes, we resume from the last persisted replayId — Salesforce's Pub/Sub retains events for 72 hours.
+>
+> **Conflict handling:** Both sides can update the same record simultaneously. We resolve this by embedding an event timestamp and source system in every event. The consumer skips any event older than the last known record timestamp, preventing infinite update loops.
+>
+> The outcome: Salesforce data is visible in Blue Marble within ~2 seconds under normal load, and Blue Marble changes land in Salesforce within ~3–5 seconds — well within the SLA."
 
 ---
 
