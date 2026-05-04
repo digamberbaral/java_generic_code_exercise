@@ -96,6 +96,7 @@
 | 21 | [🎓 Resume-Based Q&A — Digamber Singh](#-resume-based-interview-qa--digamber-singh) | Introduction, Projects, Skills, Leadership, Behavioral, STAR | 🟢 All Levels |
 | 22 | [🎓 Interview Cheat Sheet](#-interview-cheat-sheet) | Top 10 Questions, Quick-Fire Answers, HTTP Codes, Anti-Patterns | 🟢 All Levels |
 | 23 | [🏦 Societe Generale — Company-Specific Interview Prep](#-societe-generale--company-specific-interview-prep) | Banking Domain, SocGen Tech Stack, Java/Spring/SQL/Docker/K8s Q&A | 🟢 All Levels |
+| 23a | [🏢 LTIMindtree — AI-First Sr. Tech Lead Interview Prep](#-ltimindtree--ai-first-sr-tech-lead-interview-prep) | Berribot AI, Backend Architecture, Oracle, Saga, Cache, CI/CD, Full-Stack | 🔴 Advanced |
 
 
 ---
@@ -42274,3 +42275,978 @@ public class JsonFlattener {
 | 14 | Database connection pooling? | HikariCP (Spring Boot default). Size = CPU cores × 2 + effective spindle count. Too many connections = context switching overhead. |
 | 15 | What is a Service Mesh? | Infrastructure layer for service-to-service communication. Istio/Linkerd handle mTLS, retries, circuit breaking, observability — no code changes. |
 ---
+
+
+---
+
+# 🏢 LTIMindtree — AI-First Sr. Tech Lead Interview Prep
+
+> **About LTIMindtree:** A $4B+ global technology consulting and digital solutions company formed from the merger of L&T Infotech and Mindtree. LTIMindtree is at the forefront of **AI-First engineering**, cloud modernization, and enterprise digital transformation. Their Sr. Tech Lead roles demand deep expertise in **Java/Spring Boot backend systems, AI integration (Berribot), Oracle optimization, microservices architecture, and full-stack delivery**. LTIMindtree values **innovation, client-centric delivery, and engineering excellence**.
+
+```mermaid
+flowchart LR
+    subgraph LTI["LTIMindtree — Sr. Tech Lead Interview Flow"]
+        R1["Round 1\nBerribot AI Screen\nTone + Confidence\n+ Technical Basics"] --> R2["Round 2\nTechnical Deep-Dive\nJava + Spring Boot\n+ Architecture"]
+        R2 --> R3["Round 3\nSystem Design\nMicroservices + Oracle\n+ Scalability"]
+        R3 --> R4["Round 4\nLeadership + Behavioral\nSTAR + Delivery\n+ Team Management"]
+        R4 --> R5["Round 5\nHR\nCTC + Band + Location"]
+    end
+    style LTI fill:#1a1a2e,stroke:#569cd6,color:#d4d4d4
+```
+
+---
+
+## 🤖 Berribot AI Interview — Tips & Strategy
+
+> **What is Berribot?** LTIMindtree uses an AI-powered video interview platform called Berribot. The AI tracks **facial expressions, tone of voice, eye contact, confidence level, and answer relevance**. It is NOT a human interviewer — it records your video responses for AI + human review.
+
+### Berribot Preparation Checklist
+
+| # | Tip | Why It Matters |
+|---|-----|----------------|
+| 1 | **Look at the camera lens**, not the screen | AI tracks "eye contact" — looking at the screen registers as "looking away" |
+| 2 | **Speak clearly and at moderate pace** | AI analyzes tone stability and confidence — mumbling scores low |
+| 3 | **Use structured answers** (Problem → Solution → Impact) | AI keyword matching rewards structured responses |
+| 4 | **No long pauses** (>5 seconds) | Silence is tracked as "hesitation" — affects confidence score |
+| 5 | **Good lighting, plain background** | AI facial tracking works best with clear face visibility |
+| 6 | **Practice the STAR format** | Situation → Task → Action → Result — AI detects structured storytelling |
+
+```mermaid
+flowchart LR
+    subgraph AI["Berribot AI Evaluation"]
+        V["Video Feed"] --> FE["Facial Expression\nAnalysis"]
+        V --> EC["Eye Contact\nTracking"]
+        V --> TA["Tone & Confidence\nAnalysis"]
+        A["Audio Feed"] --> KW["Keyword\nMatching"]
+        A --> TA
+        KW --> SC["Overall Score"]
+        FE --> SC
+        EC --> SC
+        TA --> SC
+    end
+    style SC fill:#006400,stroke:#00ff00,color:#fff
+```
+
+---
+
+## 📋 Introduction Script — Ready to Deliver
+
+> **Speak this confidently, looking at the camera:**
+
+**"I am Digamber Singh, a Senior Technical Lead with 10 years of industry experience. I specialize in building high-performance, scalable distributed systems using Java, Spring Boot, and Microservices architecture. With a career spanning VMware and Comviva, I have led teams in architecting backend solutions and recently prototyped Spring AI integrations with Kafka. I am eager to bring my 'future-ready' engineering mindset to LTIMindtree's AI-First vision."**
+
+**Key Points to Emphasize:**
+- **10 years** — establishes seniority
+- **VMware + Comviva** — enterprise-grade companies
+- **Spring AI + Kafka** — shows cutting-edge skills
+- **"AI-First vision"** — aligns with LTIMindtree's strategy
+
+---
+
+## 📋 Section 1: Java & Spring Boot Core — Deep Dive
+
+### LTI-1. Explain Synchronous vs. Asynchronous communication. When do you use each?
+
+> **Why LTIMindtree asks this:** Their AI-First services make slow LLM API calls. Understanding async patterns prevents thread exhaustion in production.
+
+**Answer:**
+
+```java
+// ── SYNCHRONOUS (Blocking) ──
+// Thread WAITS for response — blocked until the downstream service replies
+// Good for: Login, Payment validation — user NEEDS immediate feedback
+RestTemplate restTemplate = new RestTemplate();
+String result = restTemplate.getForObject("http://payment-service/validate", String.class);
+// Thread is BLOCKED here — cannot serve other requests!
+
+// ── ASYNCHRONOUS (Non-blocking) ──
+// Thread is RELEASED while waiting — can serve other requests
+// Good for: AI model calls, notifications, audit logs — user doesn't need to wait
+
+// Option 1: CompletableFuture (Java 11+)
+CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+    return callSlowAIService(); // Takes 5 seconds — thread is free during this
+});
+future.thenAccept(result -> processAIResponse(result));
+
+// Option 2: WebFlux (Reactive — Spring Boot)
+WebClient.create("http://ai-service")
+    .get()
+    .retrieve()
+    .bodyToMono(String.class)
+    .subscribe(result -> processAIResponse(result));
+// Thread is NEVER blocked — handles 10x more concurrent requests
+```
+
+```mermaid
+flowchart LR
+    subgraph Sync["Synchronous (Blocking)"]
+        T1["Thread-1"] -->|"Calls AI Service"| W1["WAITS 5 sec"] -->|"Gets Response"| P1["Processes"]
+    end
+    subgraph Async["Asynchronous (Non-blocking)"]
+        T2["Thread-1"] -->|"Calls AI Service"| F["Returns Future"] -->|"Thread freed!"| O["Serves other requests"]
+        CB["Callback"] -->|"When AI responds"| P2["Processes"]
+    end
+    style W1 fill:#8b0000,stroke:#ff0000,color:#fff
+    style O fill:#006400,stroke:#00ff00,color:#fff
+```
+
+**Senior Insight:** In LTIMindtree's AI services, a single LLM call can take 3–10 seconds. With synchronous calls and 200 threads (Tomcat default), you can serve only 200 concurrent AI requests before thread exhaustion. With async/WebFlux, the same 200 threads can handle 10,000+ concurrent AI requests because threads are released during the wait.
+
+| Pattern | Use When | Example |
+|---------|----------|---------|
+| **Synchronous** | User needs immediate response | Login, Payment, Order placement |
+| **Async (CompletableFuture)** | Background processing, fan-out | AI model calls, email, audit logs |
+| **Reactive (WebFlux)** | High concurrency, streaming | SSE for AI response streaming, real-time dashboards |
+
+---
+
+### LTI-2. What are the key benefits of Spring Boot? How do you leverage them at scale?
+
+> **Why LTIMindtree asks this:** They run 500+ Spring Boot microservices. Knowing the "why" behind each feature shows architectural maturity.
+
+**Answer:**
+
+```mermaid
+flowchart LR
+    subgraph SB["Spring Boot — 4 Pillars"]
+        AC["Auto-Configuration\nZero boilerplate\n@EnableAutoConfiguration"] --> ACT["Actuator\n/health /metrics /info\nProduction observability"]
+        ACT --> ES["Embedded Server\nJAR deployment\nNo external Tomcat"]
+        ES --> SC["Spring Cloud\nCircuit Breaker\nConfig Server\nService Discovery"]
+    end
+    style SB fill:#1a1a2e,stroke:#569cd6,color:#d4d4d4
+```
+
+**The Four Pillars (with production depth):**
+
+| Pillar | What It Does | My Production Usage |
+|--------|-------------|---------------------|
+| **Auto-Configuration** | Scans classpath, auto-configures beans (DataSource, JPA, Security) | I use `@ConditionalOnProperty` to toggle features per environment |
+| **Actuator** | Exposes `/health`, `/metrics`, `/info`, `/threaddump` endpoints | I integrate with Prometheus + Grafana for real-time monitoring |
+| **Embedded Server** | JAR with Tomcat/Netty inside — `java -jar app.jar` | Simplifies Docker images — just `FROM eclipse-temurin:21-jre` |
+| **Spring Cloud** | Circuit Breakers (Resilience4j), Config Server, Gateway | I use Resilience4j with fallback methods for downstream failures |
+
+```java
+// ── Auto-Configuration in action ──
+// Just add spring-boot-starter-data-jpa to pom.xml
+// Spring Boot AUTOMATICALLY configures:
+// - DataSource (from application.yml)
+// - EntityManagerFactory
+// - TransactionManager
+// - HikariCP connection pool
+// ZERO manual configuration!
+
+// ── Actuator in production ──
+// application.yml
+// management:
+//   endpoints:
+//     web:
+//       exposure:
+//         include: health, metrics, info, prometheus
+//   endpoint:
+//     health:
+//       show-details: when_authorized
+
+// ── Circuit Breaker with Resilience4j ──
+@CircuitBreaker(name = "aiService", fallbackMethod = "aiFallback")
+public String callAIService(String prompt) {
+    return restTemplate.postForObject("http://ai-service/generate", prompt, String.class);
+}
+
+public String aiFallback(String prompt, Throwable t) {
+    return "AI service is temporarily unavailable. Using cached response.";
+}
+```
+
+---
+
+### LTI-3. Explain Filters vs Interceptors in Spring. When do you use each?
+
+> **Why LTIMindtree asks this:** Understanding the request lifecycle is critical for implementing cross-cutting concerns like security, logging, and CORS in enterprise applications.
+
+**Answer:**
+
+```mermaid
+flowchart LR
+    REQ["HTTP Request"] --> F["Servlet Filter\n(Global Level)\nCORS, Security Headers\nRequest Logging"]
+    F --> DS["DispatcherServlet"]
+    DS --> I["Spring Interceptor\n(Controller Level)\nAuth Checks, Role Validation\nAudit Logging"]
+    I --> C["@Controller\nBusiness Logic"]
+    C --> I2["Interceptor\npostHandle"]
+    I2 --> F2["Filter\nResponse Logging"]
+    F2 --> RES["HTTP Response"]
+    style F fill:#264f78,stroke:#569cd6,color:#fff
+    style I fill:#264f78,stroke:#569cd6,color:#fff
+```
+
+| Aspect | Filter | Interceptor |
+|--------|--------|-------------|
+| **Level** | Servlet container (before Spring) | Spring MVC (after DispatcherServlet) |
+| **Access to** | Raw HttpServletRequest/Response | Handler method, ModelAndView, Spring beans |
+| **Best for** | CORS, compression, global logging, security headers | Authentication checks, role-based access, audit logging |
+| **Can modify?** | Request/Response body (wrapper) | Can prevent handler execution (preHandle returns false) |
+| **Spring context?** | ❌ No access to @Controller info | ✅ Full access to Spring context |
+
+```java
+// ── FILTER: Global request logging (Servlet level) ──
+@Component
+@Order(1)
+public class RequestLoggingFilter implements Filter {
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+            throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) req;
+        log.info("Incoming: {} {}", request.getMethod(), request.getRequestURI());
+        long start = System.currentTimeMillis();
+        chain.doFilter(req, res); // Continue the chain
+        log.info("Completed in {}ms", System.currentTimeMillis() - start);
+    }
+}
+
+// ── INTERCEPTOR: Role-based access (Spring level) ──
+@Component
+public class AdminInterceptor implements HandlerInterceptor {
+    @Override
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response,
+                             Object handler) {
+        String role = request.getHeader("X-User-Role");
+        if (!"ADMIN".equals(role)) {
+            response.setStatus(403);
+            return false; // Block execution — never reaches @Controller
+        }
+        return true; // Allow execution
+    }
+}
+```
+
+---
+
+## 📋 Section 2: Microservices & Advanced Architecture
+
+### LTI-4. How do you build AI backends with Spring? What challenges did you face?
+
+> **Why LTIMindtree asks this:** Their AI-First strategy means every Tech Lead must understand AI integration challenges.
+
+**Answer:**
+
+**Three Core Challenges & Solutions:**
+
+```mermaid
+flowchart LR
+    subgraph C1["Challenge 1: Non-Determinism"]
+        P["Same prompt\ndifferent answer"] --> S1["Fix: Structured prompts\n+ low temperature (0.1)"]
+    end
+    subgraph C2["Challenge 2: Latency"]
+        L["LLM takes 3-10 sec"] --> S2["Fix: SSE streaming\nto React UI"]
+    end
+    subgraph C3["Challenge 3: Token Limits"]
+        T["4K-16K token limit"] --> S3["Fix: RAG with\nVector Database"]
+    end
+    style S1 fill:#006400,stroke:#00ff00,color:#fff
+    style S2 fill:#006400,stroke:#00ff00,color:#fff
+    style S3 fill:#006400,stroke:#00ff00,color:#fff
+```
+
+```java
+// ── Challenge 1: Non-Determinism ──
+// AI gives different answers for the same question!
+// Fix: Use structured prompt templates + low temperature
+
+@Bean
+public ChatClient chatClient(ChatModel model) {
+    return ChatClient.builder(model)
+        .defaultSystem("You are a technical assistant. Answer ONLY from the provided context. "
+                      + "If unsure, say 'I don't have enough information.'")
+        .build();
+}
+
+// ── Challenge 2: Latency — SSE Streaming ──
+// Instead of waiting 10 seconds, stream tokens as they arrive
+@GetMapping(value = "/ai/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+public Flux<String> streamAIResponse(@RequestParam String question) {
+    return chatClient.prompt()
+        .user(question)
+        .stream()
+        .content(); // Streams tokens one-by-one to the React UI
+}
+
+// ── Challenge 3: Token Management — RAG Pipeline ──
+// Retrieval-Augmented Generation: fetch relevant docs FIRST, then ask LLM
+@PostMapping("/ai/ask")
+public String askWithRAG(@RequestBody String question) {
+    // Step 1: Embed the question into a vector
+    // Step 2: Search vector DB for similar document chunks
+    // Step 3: Build prompt with context + question
+    // Step 4: Send to LLM — grounded answer, no hallucination
+    List<Document> relevantDocs = vectorStore.similaritySearch(question);
+    String context = relevantDocs.stream()
+        .map(Document::getContent)
+        .collect(Collectors.joining("\n"));
+
+    return chatClient.prompt()
+        .system("Answer based on this context: " + context)
+        .user(question)
+        .call()
+        .content();
+}
+```
+
+**RAG Architecture:**
+
+```mermaid
+flowchart LR
+    Q["User Question"] --> EMB["Embed Question"] --> VS["Vector DB Search"] --> CTX["Top K Chunks"] --> LLM["LLM + Context"] --> ANS["Grounded Answer"]
+    style ANS fill:#006400,stroke:#00ff00,color:#fff
+```
+
+---
+
+### LTI-5. Explain the Saga Pattern. How do you handle distributed transactions?
+
+> **Why LTIMindtree asks this:** Microservices can't use traditional 2PC. Every Sr. Tech Lead must know how to maintain data consistency across services.
+
+**Answer:**
+
+**The Problem:** In a monolith, one `@Transactional` covers everything. In microservices, each service has its own database — you CAN'T have a single transaction across Order Service + Payment Service + Inventory Service.
+
+```mermaid
+flowchart LR
+    subgraph Problem["Distributed Transaction Problem"]
+        O["Order Service\nMySQL"] -->|"HTTP"| P["Payment Service\nPostgreSQL"]
+        P -->|"HTTP"| I["Inventory Service\nMongoDB"]
+    end
+    X["Single @Transactional?"] -->|"IMPOSSIBLE"| Problem
+    style X fill:#8b0000,stroke:#ff0000,color:#fff
+```
+
+**The Solution — Saga Pattern (Event-Driven Choreography):**
+
+```mermaid
+flowchart LR
+    O["Order Created"] -->|"Kafka"| P["Payment Charged"]
+    P -->|"Kafka"| I["Inventory Reserved"]
+    I -->|"Kafka"| S["Order Confirmed"]
+    P -->|"Payment Failed"| CO["Compensate: Cancel Order"]
+    I -->|"Inventory Failed"| CP["Compensate: Refund Payment"]
+    style S fill:#006400,stroke:#00ff00,color:#fff
+    style CO fill:#8b0000,stroke:#ff0000,color:#fff
+    style CP fill:#8b0000,stroke:#ff0000,color:#fff
+```
+
+```java
+// ── Saga with Kafka Events (Choreography) ──
+
+// ORDER SERVICE: Step 1 — Create order + publish event
+@Transactional
+public Order createOrder(OrderRequest request) {
+    Order order = orderRepository.save(new Order(request, Status.PENDING));
+    // Publish to Kafka — triggers the saga chain
+    kafkaTemplate.send("order-events", new OrderCreatedEvent(
+        order.getId(), request.getUserId(), request.getAmount()
+    ));
+    return order;
+}
+
+// PAYMENT SERVICE: Step 2 — Listen, charge, emit result
+@KafkaListener(topics = "order-events")
+public void handleOrderCreated(OrderCreatedEvent event) {
+    try {
+        paymentService.charge(event.getUserId(), event.getAmount());
+        kafkaTemplate.send("payment-events",
+            new PaymentSuccessEvent(event.getOrderId()));
+    } catch (InsufficientFundsException e) {
+        // COMPENSATING TRANSACTION — tell Order Service to cancel
+        kafkaTemplate.send("payment-events",
+            new PaymentFailedEvent(event.getOrderId(), e.getMessage()));
+    }
+}
+
+// ORDER SERVICE: Compensation listener
+@KafkaListener(topics = "payment-events", groupId = "order-compensation")
+public void handlePaymentFailed(PaymentFailedEvent event) {
+    Order order = orderRepository.findById(event.getOrderId());
+    order.setStatus(Status.CANCELLED);
+    order.setCancellationReason("Payment failed: " + event.getReason());
+    orderRepository.save(order);
+    // Notify user
+    notificationService.sendOrderCancelled(order);
+}
+```
+
+| Pattern | Saga Choreography | Saga Orchestration |
+|---------|-------------------|-------------------|
+| **How** | Services emit events, others react | Central orchestrator calls each service |
+| **Coupling** | Loose (event-driven) | Tighter (orchestrator knows all steps) |
+| **Complexity** | Hard to trace full flow | Easy to trace, single point of control |
+| **Best for** | Simple flows (3-4 steps) | Complex flows (5+ steps with conditions) |
+| **My preference** | Used at Comviva for telecom billing | Would use for LTIMindtree's complex workflows |
+
+---
+
+### LTI-6. How do you prevent a "Retrying Storm" during a service outage?
+
+> **Why LTIMindtree asks this:** Enterprise systems have cascading failures. This tests your resilience engineering knowledge.
+
+**Answer:**
+
+```mermaid
+flowchart LR
+    subgraph CB["Circuit Breaker States"]
+        CL["CLOSED\nAll requests pass\nMonitoring failures"] -->|"Failure rate > 50%"| OP["OPEN\nAll requests rejected\nReturn fallback"]
+        OP -->|"After 30 sec"| HO["HALF-OPEN\nAllow 5 test requests"]
+        HO -->|"Tests succeed"| CL
+        HO -->|"Tests fail"| OP
+    end
+    style CL fill:#006400,stroke:#00ff00,color:#fff
+    style OP fill:#8b0000,stroke:#ff0000,color:#fff
+    style HO fill:#264f78,stroke:#569cd6,color:#fff
+```
+
+```java
+// ── application.yml — Resilience4j Circuit Breaker ──
+// resilience4j:
+//   circuitbreaker:
+//     instances:
+//       paymentService:
+//         slidingWindowSize: 10
+//         failureRateThreshold: 50
+//         waitDurationInOpenState: 30s
+//         permittedNumberOfCallsInHalfOpenState: 5
+
+@Service
+public class OrderService {
+
+    @CircuitBreaker(name = "paymentService", fallbackMethod = "paymentFallback")
+    @Retry(name = "paymentService", fallbackMethod = "paymentFallback")
+    @TimeLimiter(name = "paymentService")
+    public CompletableFuture<PaymentResult> processPayment(Order order) {
+        return CompletableFuture.supplyAsync(() ->
+            paymentClient.charge(order.getAmount())
+        );
+    }
+
+    // Fallback: DON'T fail the order — queue for retry
+    public CompletableFuture<PaymentResult> paymentFallback(Order order, Throwable t) {
+        log.warn("Payment service unavailable: {}. Queuing for retry.", t.getMessage());
+        // Save to outbox for async retry
+        outboxRepository.save(new OutboxEvent("PAYMENT_RETRY", order.getId()));
+        return CompletableFuture.completedFuture(
+            PaymentResult.pending("Payment queued — will process when service recovers")
+        );
+    }
+}
+```
+
+**The Three-Layer Resilience Stack:**
+
+| Layer | Pattern | Implementation |
+|-------|---------|---------------|
+| **Layer 1** | **Timeout** | Don't wait forever — fail fast after 3 seconds |
+| **Layer 2** | **Retry** | Exponential backoff (1s → 2s → 4s) with jitter, max 3 retries |
+| **Layer 3** | **Circuit Breaker** | If 50% of last 10 calls fail → stop calling → return fallback |
+
+**Senior Insight:** Without Circuit Breakers, when Payment Service goes down, Order Service keeps retrying, exhausting its thread pool and Oracle connection pool. This cascade takes down ALL services. The Circuit Breaker immediately returns cached data or a "queued" response, protecting the entire system.
+
+---
+
+## 📋 Section 3: Oracle Database & Data Optimization
+
+### LTI-7. How do you optimize Oracle data flow for high-volume systems?
+
+> **Why LTIMindtree asks this:** Many LTIMindtree clients run Oracle at enterprise scale. Optimization knowledge is critical.
+
+**Answer:**
+
+```mermaid
+flowchart LR
+    subgraph Old["Old: Polling"]
+        APP1["App polls DB\nevery 5 sec"] -->|"SELECT * WHERE updated > ?"| DB1["Oracle DB\nHigh CPU load"]
+    end
+    subgraph New["New: CDC"]
+        DB2["Oracle DB"] -->|"Redo Logs"| CDC["Debezium CDC\nReads WAL/Redo"] -->|"Stream"| K["Kafka\nReal-time events"]
+    end
+    style Old fill:#8b0000,stroke:#ff0000,color:#fff
+    style New fill:#006400,stroke:#00ff00,color:#fff
+```
+
+**Three Optimization Strategies:**
+
+**Strategy 1: Log-Based CDC (Change Data Capture)**
+
+```java
+// ── Instead of polling (SELECT every 5 seconds): ──
+// Move to CDC — read Oracle Redo Logs via Debezium
+// Zero additional load on Oracle — reads the transaction log, not the tables
+
+// docker-compose.yml — Debezium Oracle CDC
+// debezium-connector-oracle:
+//   connector.class: io.debezium.connector.oracle.OracleConnector
+//   database.hostname: oracle-db
+//   database.port: 1521
+//   database.dbname: ORCL
+//   table.include.list: app.orders,app.payments
+//   database.history.kafka.topic: schema-changes
+```
+
+**Strategy 2: Hibernate Entity Graphs (N+1 Problem)**
+
+```java
+// ── WITHOUT Entity Graph — N+1 Problem ──
+// 1 query to fetch 100 orders
+// + 100 queries to fetch each order's items (1 per order)
+// = 101 queries! Destroys Oracle performance
+
+// ── WITH Entity Graph — Single JOIN query ──
+@NamedEntityGraph(
+    name = "Order.withItems",
+    attributeNodes = @NamedAttributeNode("items")
+)
+@Entity
+public class Order {
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    private List<OrderItem> items;
+}
+
+// Usage: Single JOIN query fetches orders + items together
+@EntityGraph("Order.withItems")
+List<Order> findByUserId(Long userId); // 1 query instead of 101!
+```
+
+**Strategy 3: Oracle Monitoring — Key Metrics**
+
+| Metric | Target | Action If Exceeded |
+|--------|--------|--------------------|
+| **I/O Latency** | < 10ms | Check storage, add SSDs |
+| **IOPS** | Within provisioned limits | Scale storage or add read replicas |
+| **Wait Events** | No `db file sequential read` spikes | Tune indexes, check tablespace |
+| **Buffer Cache Hit** | > 95% | Increase SGA if below |
+
+---
+
+## 📋 Section 4: Security, Logging & API Design
+
+### LTI-8. How do you implement a production-grade logging strategy?
+
+> **Why LTIMindtree asks this:** Enterprise clients require PII masking, distributed tracing, and audit logging for compliance.
+
+**Answer:**
+
+```mermaid
+flowchart LR
+    REQ["HTTP Request"] --> MDC["MDC: Set traceId\ncorrelationId, userId"]
+    MDC --> LOG["Zalando Logbook\nLog request/response"]
+    LOG --> MASK["PII Masking\nRedact email, SSN\npassword, phone"]
+    MASK --> ELK["ELK Stack\nElasticsearch\nLogstash\nKibana"]
+    style MASK fill:#264f78,stroke:#569cd6,color:#fff
+```
+
+```java
+// ── MDC (Mapped Diagnostic Context) — Trace across microservices ──
+@Component
+public class CorrelationFilter implements Filter {
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+            throws IOException, ServletException {
+        String correlationId = Optional
+            .ofNullable(((HttpServletRequest) req).getHeader("X-Correlation-Id"))
+            .orElse(UUID.randomUUID().toString());
+
+        MDC.put("correlationId", correlationId);
+        MDC.put("service", "order-service");
+        try {
+            chain.doFilter(req, res);
+        } finally {
+            MDC.clear(); // MUST clean up — prevents memory leak in thread pool
+        }
+    }
+}
+
+// ── PII Masking — Logbook with custom body filter ──
+@Bean
+public Logbook logbook() {
+    return Logbook.builder()
+        .bodyFilter(jsonPath("$.email").replace("***MASKED***"))
+        .bodyFilter(jsonPath("$.password").replace("***MASKED***"))
+        .bodyFilter(jsonPath("$.ssn").replace("***MASKED***"))
+        .headerFilter(authorization().replace("Bearer ***"))
+        .build();
+}
+
+// ── Log output with MDC context ──
+// logback-spring.xml pattern:
+// %d{HH:mm:ss.SSS} [%thread] %-5level [%X{correlationId}] [%X{service}] %logger{36} - %msg%n
+// Output: 14:30:22.445 [nio-8080-1] INFO [abc-123-def] [order-service] OrderController - Order created: #5001
+```
+
+**The Three-Layer Logging Strategy:**
+
+| Layer | What | Tool | Purpose |
+|-------|------|------|---------|
+| **Request/Response** | HTTP body + headers | Zalando Logbook | Debug API issues |
+| **Distributed Trace** | correlationId across services | MDC + Sleuth/Micrometer | Trace request across 10+ services |
+| **PII Masking** | Redact sensitive fields | Custom Logbook filters | GDPR/compliance — never log passwords |
+
+---
+
+### LTI-9. Design a File Upload API with proper validation and error handling.
+
+> **Why LTIMindtree asks this:** Tests your API design skills — validation, error codes, and security awareness.
+
+**Answer:**
+
+```java
+// ── Endpoint: POST /employees/{id}/profile-picture ──
+@PostMapping(value = "/employees/{id}/profile-picture",
+             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+public ResponseEntity<UploadResponse> uploadProfilePicture(
+        @PathVariable Long id,
+        @RequestParam("file") MultipartFile file) {
+
+    // ── Validation Layer ──
+
+    // 1. File size check (2MB limit)
+    if (file.getSize() > 2 * 1024 * 1024) {
+        throw new PayloadTooLargeException("File exceeds 2MB limit");
+    }
+
+    // 2. Media type validation (only JPEG/PNG)
+    String contentType = file.getContentType();
+    if (!List.of("image/jpeg", "image/png").contains(contentType)) {
+        throw new UnsupportedMediaTypeException(
+            "Only JPEG and PNG are supported. Got: " + contentType);
+    }
+
+    // 3. File name sanitization (prevent path traversal)
+    String safeName = StringUtils.cleanPath(file.getOriginalFilename())
+        .replaceAll("[^a-zA-Z0-9._-]", "_");
+
+    // ── Storage Layer ──
+    String storagePath = storageService.store(id, file, safeName);
+
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(new UploadResponse(storagePath, file.getSize()));
+}
+```
+
+**HTTP Status Codes for File Upload:**
+
+| Status | When | Example |
+|--------|------|---------|
+| **201 Created** | File uploaded successfully | `{ "path": "/uploads/emp-42/photo.jpg" }` |
+| **400 Bad Request** | Missing file or invalid request | No file attached |
+| **413 Payload Too Large** | File exceeds 2MB limit | 5MB file rejected |
+| **415 Unsupported Media Type** | Not JPEG/PNG | `.exe` or `.pdf` uploaded |
+| **404 Not Found** | Employee ID doesn't exist | `/employees/999/profile-picture` |
+
+---
+
+## 📋 Section 5: CI/CD, DevOps & Infrastructure
+
+### LTI-10. Why choose GitHub Actions over Jenkins for modern pipelines?
+
+> **Why LTIMindtree asks this:** They are modernizing CI/CD across clients. Understanding the trade-offs shows architectural maturity.
+
+**Answer:**
+
+```mermaid
+flowchart LR
+    subgraph Jenkins["Jenkins (Legacy)"]
+        J1["Plugin hell\n1000+ plugins"] --> J2["Manage hardware\nJenkins agents"] --> J3["Groovy scripts\nnot version-controlled"]
+    end
+    subgraph GHA["GitHub Actions (Modern)"]
+        G1["Workflow as Code\nin .github/workflows/"] --> G2["No infrastructure\nGitHub-hosted runners"] --> G3["Version-aligned\nwith source code"]
+    end
+    style Jenkins fill:#8b0000,stroke:#ff0000,color:#fff
+    style GHA fill:#006400,stroke:#00ff00,color:#fff
+```
+
+```yaml
+# ── .github/workflows/ci.yml — Production-grade pipeline ──
+name: Build & Deploy
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      oracle:
+        image: gvenzl/oracle-xe:21-slim
+        ports: ['1521:1521']
+        env:
+          ORACLE_PASSWORD: testpassword
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Run tests with real Oracle
+        run: mvn verify -Dspring.profiles.active=test
+        # Testcontainers alternative:
+        # Uses REAL Oracle XE — not mocks!
+        # Integration tests run against actual database
+
+      - name: Build Docker image
+        run: docker build -t app:${{ github.sha }} .
+
+      - name: Deploy (Blue-Green)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          kubectl set image deployment/app app=app:${{ github.sha }}
+          kubectl rollout status deployment/app --timeout=300s
+```
+
+| Aspect | Jenkins | GitHub Actions |
+|--------|---------|----------------|
+| **Setup** | Install, maintain, patch server | Zero setup — yaml in repo |
+| **Cost** | Hardware + maintenance | Free for public repos, pay-per-minute for private |
+| **Config** | Groovy scripts, often not in repo | `.github/workflows/` — version controlled |
+| **Testing** | Manual Testcontainers setup | Built-in service containers (Oracle, Postgres, Redis) |
+| **My recommendation** | Legacy projects with complex plugins | All new projects at LTIMindtree |
+
+---
+
+## 📋 Section 6: Coding Challenge — Thread-Safe Cache with TTL
+
+### LTI-11. Implement a Thread-Safe In-Memory Cache with TTL (Time-To-Live).
+
+> **Why LTIMindtree asks this:** Tests data structures, concurrency, and cleanup strategy — core Sr. Tech Lead skills.
+
+**Problem:** Implement `put(key, value, ttl)` and `get(key)`. Expired keys must be removed automatically.
+
+```mermaid
+flowchart LR
+    subgraph Cache["Thread-Safe TTL Cache"]
+        PUT["put(key, val, ttl)"] --> MAP["ConcurrentHashMap\nkey → CacheEntry"]
+        GET["get(key)"] --> CHK["Check expiry"] -->|"Expired"| REM["Remove + return null"]
+        CHK -->|"Valid"| RET["Return value"]
+        BG["Background Janitor\nevery 1 sec"] --> SCAN["Scan all entries"] --> CLN["Remove expired"]
+    end
+    style REM fill:#8b0000,stroke:#ff0000,color:#fff
+    style RET fill:#006400,stroke:#00ff00,color:#fff
+```
+
+```java
+import java.util.concurrent.*;
+
+public class TTLCache<K, V> {
+
+    // ── Inner class: Value + Expiry timestamp ──
+    private record CacheEntry<V>(V value, long expiryTime) {
+        boolean isExpired() {
+            return System.currentTimeMillis() > expiryTime;
+        }
+    }
+
+    // ── Storage: ConcurrentHashMap for thread-safe access without global lock ──
+    private final ConcurrentHashMap<K, CacheEntry<V>> cache = new ConcurrentHashMap<>();
+    private final ScheduledExecutorService janitor = Executors.newSingleThreadScheduledExecutor();
+
+    public TTLCache() {
+        // ── Layer 2: Active Cleanup — Background janitor scans every 1 second ──
+        janitor.scheduleAtFixedRate(() -> {
+            cache.forEach((key, entry) -> {
+                if (entry.isExpired()) {
+                    // Atomic remove: only removes if value hasn't changed
+                    // Prevents race condition: janitor deleting a fresh entry
+                    cache.remove(key, entry);
+                }
+            });
+        }, 1, 1, TimeUnit.SECONDS);
+    }
+
+    // ── PUT: Store value with TTL ──
+    public void put(K key, V value, long ttlMillis) {
+        long expiryTime = System.currentTimeMillis() + ttlMillis;
+        cache.put(key, new CacheEntry<>(value, expiryTime));
+    }
+
+    // ── GET: Layer 1 — Lazy/Passive Deletion ──
+    public V get(K key) {
+        CacheEntry<V> entry = cache.get(key);
+        if (entry == null) return null;
+
+        if (entry.isExpired()) {
+            cache.remove(key, entry); // Atomic: only remove THIS entry
+            return null; // User NEVER sees stale data
+        }
+
+        return entry.value();
+    }
+
+    // ── CLEANUP ──
+    public void shutdown() {
+        janitor.shutdown();
+        cache.clear();
+    }
+
+    public int size() {
+        return cache.size(); // Approximate — some might be expired but not yet cleaned
+    }
+}
+```
+
+**The Three-Layer Cleanup Strategy:**
+
+| Layer | Name | When | Why |
+|-------|------|------|-----|
+| **Layer 1** | Passive/Lazy | On every `get()` call | User NEVER sees expired data |
+| **Layer 2** | Active/Periodic | Background janitor every 1s | Removes keys never accessed again (prevents memory leak) |
+| **Layer 3** | Atomic Safety | `cache.remove(key, entry)` | Prevents race: janitor won't delete a fresh value that replaced an expired one |
+
+---
+
+## 📋 Section 7: Leadership & Delivery
+
+### LTI-12. How do you differentiate between Technical Leadership and Management?
+
+> **Why LTIMindtree asks this:** Sr. Tech Lead is a hybrid role. They want to know you can balance architecture with delivery.
+
+**Answer:**
+
+```mermaid
+flowchart LR
+    subgraph TL["Technical Leadership"]
+        H["Steering the HOW"] --> A1["Architecture decisions"]
+        H --> A2["Code quality standards"]
+        H --> A3["Technology selection"]
+    end
+    subgraph MG["Management"]
+        W["Steering the WHEN"] --> B1["Sprint planning"]
+        W --> B2["Blocker removal"]
+        W --> B3["Resource allocation"]
+    end
+    subgraph LD["True Leadership"]
+        WH["Steering the WHO"] --> C1["Mentoring engineers"]
+        WH --> C2["Building Golden Path"]
+        WH --> C3["Culture of excellence"]
+    end
+    style TL fill:#264f78,stroke:#569cd6,color:#fff
+    style MG fill:#264f78,stroke:#569cd6,color:#fff
+    style LD fill:#006400,stroke:#00ff00,color:#fff
+```
+
+**My Real-World Example (STAR Format):**
+
+> **Situation:** At Comviva, we had 8 microservices with inconsistent error handling, logging, and security headers — each team did it differently.
+>
+> **Task:** Standardize cross-cutting concerns without slowing teams down.
+>
+> **Action:** I created a **"Golden Path"** — a shared Spring Boot starter library (`comviva-boot-starter`) containing:
+> - Standard error response format (RFC 7807 Problem Details)
+> - MDC-based correlation ID propagation
+> - Zalando Logbook with PII masking pre-configured
+> - Resilience4j Circuit Breaker defaults
+> - Teams just added `<dependency>comviva-boot-starter</dependency>` — instant standards!
+>
+> **Result:** Reduced onboarding time from 2 weeks to 2 days. Standardized logging enabled us to trace issues across 8 services in under 5 minutes. Zero PII leaks in production for 18 months.
+
+---
+
+### LTI-13. How do you manage full-stack tasks to meet business deadlines?
+
+> **Why LTIMindtree asks this:** Sr. Tech Leads own delivery end-to-end. This tests prioritization skills.
+
+**Answer:**
+
+**Bottleneck-First Prioritization:**
+
+```mermaid
+flowchart LR
+    subgraph Priority["My Delivery Strategy"]
+        P1["Week 1\nOracle Schema\n+ API Contracts\n(OpenAPI)"] --> P2["Week 2-3\nBackend Logic\nPayment Atomicity\nSaga + Tests"]
+        P2 --> P3["Week 3-4\nFrontend Integration\nPlaywright E2E\nUI Polish"]
+    end
+    style P1 fill:#8b0000,stroke:#ff0000,color:#fff
+    style P2 fill:#264f78,stroke:#569cd6,color:#fff
+    style P3 fill:#006400,stroke:#00ff00,color:#fff
+```
+
+| Priority | What I Finalize First | Why |
+|----------|----------------------|-----|
+| **P0 (Day 1)** | Oracle schema + API contracts (OpenAPI) | Unblocks both frontend and backend teams to work in parallel |
+| **P1 (Must-Have)** | Payment atomicity, data consistency, security | Business-critical — if this fails, nothing else matters |
+| **P2 (Should-Have)** | Error handling, logging, monitoring | Production readiness — needed for go-live |
+| **P3 (Could-Have)** | UI polish, animations, dark mode | Nice to have — can ship without it |
+
+**Contract-First Approach:**
+
+```java
+// ── Define API contract FIRST (OpenAPI/Swagger) ──
+// Frontend and Backend teams agree on the shape of data BEFORE coding
+
+// openapi.yml
+// paths:
+//   /orders:
+//     post:
+//       requestBody:
+//         content:
+//           application/json:
+//             schema:
+//               $ref: '#/components/schemas/OrderRequest'
+//       responses:
+//         '201':
+//           description: Order created
+//           content:
+//             application/json:
+//               schema:
+//                 $ref: '#/components/schemas/OrderResponse'
+
+// Generated Java interface (used by backend):
+@PostMapping("/orders")
+ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody OrderRequest request);
+
+// Generated TypeScript types (used by frontend):
+// interface OrderRequest { userId: number; items: OrderItem[]; }
+// interface OrderResponse { orderId: number; status: string; }
+```
+
+---
+
+## 📋 Section 8: Quick-Fire Answers — LTIMindtree Edition (30 Seconds Each)
+
+| # | Question | Power Answer |
+|---|----------|-------------|
+| 1 | **Sync vs Async?** | Sync for critical paths (login, payment). Async for everything else (AI calls, notifications, audit). Async prevents thread exhaustion. |
+| 2 | **Spring Boot key benefits?** | Auto-Config (zero boilerplate), Actuator (production monitoring), Embedded Server (JAR deploy), Spring Cloud (resilience patterns). |
+| 3 | **Filter vs Interceptor?** | Filter: Servlet-level (CORS, headers, global logging). Interceptor: Spring-level (auth checks, role validation, audit). Filter runs BEFORE Spring context. |
+| 4 | **How to handle AI latency?** | SSE (Server-Sent Events) to stream tokens. Don't make user wait 10s — stream word-by-word. Use RAG to ground answers. |
+| 5 | **Saga Pattern?** | Event-driven compensating transactions via Kafka. Each service emits success/failure events. On failure, previous services roll back. |
+| 6 | **Circuit Breaker states?** | CLOSED (all pass, monitoring) → OPEN (reject all, return fallback) → HALF-OPEN (test 5 requests) → CLOSED if recovered. |
+| 7 | **Oracle optimization?** | CDC with Debezium (reads Redo Logs, not polling). Entity Graphs (solve N+1). Liquibase for schema versioning. |
+| 8 | **PII Masking?** | Zalando Logbook + custom body filters. Never log passwords, emails, SSN. MDC for correlation IDs across services. |
+| 9 | **GitHub Actions vs Jenkins?** | Actions: workflow-as-code, zero infra, version-aligned. Jenkins: plugin hell, hardware management. New projects → always Actions. |
+| 10 | **Thread-safe cache?** | ConcurrentHashMap + CacheEntry(value, expiryTime). Lazy deletion on get(), background janitor every 1s, atomic remove(key, entry). |
+| 11 | **Tech Lead vs Manager?** | Tech Lead: steering the HOW (architecture). Manager: steering the WHEN (sprints). True Leader: steering the WHO (mentoring, Golden Path). |
+| 12 | **Contract-First API?** | Define OpenAPI spec first. Generate Java interfaces + TypeScript types. Both teams work in parallel. Catches integration bugs early. |
+| 13 | **REST vs GraphQL?** | REST: standardized, cached, binary (file uploads). GraphQL: complex UI dashboards, specific data, solves over-fetching N+1. |
+| 14 | **Reactive when?** | When you need 10K+ concurrent connections or parallel API calls. WebFlux with `.zip()` for fan-out. Not for simple CRUD. |
+| 15 | **Blue-Green deploy?** | Two identical environments. Deploy to Green, test, switch Route53/Istio to Green. Instant rollback: switch back to Blue. |
+
+---
+
+## 📋 Summary: Engineering Standards — LTIMindtree Ready
+
+| Category | Standard Tool/Method | Impact |
+|----------|---------------------|--------|
+| **Data Streaming** | CDC / Debezium / Redo Logs | Near-zero latency, zero DB load |
+| **Data Integrity** | Saga Pattern / Kafka / Outbox | Reliable distributed consistency |
+| **Resiliency** | Circuit Breaker / Resilience4j / Fallbacks | Prevents cascading system crashes |
+| **Testing** | Testcontainers + Playwright + Oracle XE | End-to-end "true" environment validation |
+| **Deployment** | Blue-Green / GitHub Actions / K8s | Zero-downtime, reversible releases |
+| **Security** | Spring Security + OAuth2 + PII Masking | GDPR-compliant, zero-trust architecture |
+| **Observability** | Micrometer + Prometheus + Grafana + Jaeger | Real-time metrics, distributed tracing |
+| **AI Integration** | Spring AI + RAG + SSE Streaming | Grounded AI, no hallucination, fast UX |
+
+---
+
+> **🎯 Final Preparation Note:** Practice each answer aloud while looking at your camera lens. Berribot scores confidence through tone stability and eye contact. Use the STAR format for behavioral questions. Speak at a moderate pace — the AI needs to transcribe your answers accurately. Good luck at LTIMindtree! 🚀
+
