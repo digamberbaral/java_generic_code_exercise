@@ -5,7 +5,7 @@
 ![Java](https://img.shields.io/badge/Java-17%2F21-orange?style=for-the-badge&logo=openjdk)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-brightgreen?style=for-the-badge&logo=springboot)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue?style=for-the-badge&logo=postgresql)
-![Redis](https://img.shields.io/badge/Redis-7.x-red?style=for-the-badge&logo=redis)
+![Redis](https://img.shields.io/badge/Redis-7.x-red?style=for-the-badge&logo=redis)React Core Theory — Step-by-Step Foundation
 ![Kafka](https://img.shields.io/badge/Apache_Kafka-3.x-black?style=for-the-badge&logo=apachekafka)
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-1.28-blue?style=for-the-badge&logo=kubernetes)
 ![Docker](https://img.shields.io/badge/Docker-24.x-blue?style=for-the-badge&logo=docker)
@@ -99,6 +99,8 @@
 | 23a | [🏢 LTIMindtree — AI-First Sr. Tech Lead Interview Prep](#-ltimindtree--ai-first-sr-tech-lead-interview-prep) | Berribot AI, Backend Architecture, Oracle, Saga, Cache, CI/CD, Full-Stack | 🔴 Advanced |
 | 23b | [🌐 Fullstack Developer — Java + Spring Boot + Microservices + React.js](#-fullstack-developer--java-springboot-microservices-reactjs) | Basics to Sr. Lead, Component Design, State, Hooks, REST Integration, Auth | 🟢 Beginner → Advanced |
 | 23c | [📘 TypeScript Refresher — Basics to Advanced Interview Guide](#-typescript-refresher--basics-to-advanced-interview-guide) | Types, Interfaces, Generics, Utility Types, Decorators, React+TS Patterns | 🟢 Beginner → Advanced |
+| 23d | [🔥 Fullstack + TypeScript Tricky Interview Questions](#-fullstack-tricky-interview-questions) | Stale Closures, Reconciliation, @Transactional Pitfalls, Type Covariance, CORS | 🔴 Advanced |
+| 23e | [🎯 MUST-KNOW Top 50 Interview Questions](#-must-know-interview-questions) | HashMap, SOLID, @Transactional, Saga, Circuit Breaker, Rate Limiter, Virtual DOM | 🟢 All Levels |
 
 
 ---
@@ -43333,6 +43335,412 @@ export default UserProfile;
 
 ---
 
+### FS-1B. React Core Theory — Step-by-Step Foundation
+
+**Step 1: What is a Component?**
+
+A component is a **reusable, self-contained piece of UI**. Think of it like LEGO blocks — each block (component) has its own appearance and behavior, and you combine them to build complex UIs.
+
+```javascript
+// The simplest component — just a function that returns JSX
+function Greeting() {
+  return <h1>Hello, World!</h1>;
+}
+
+// Component with props (input data from parent)
+function Greeting({ name, role }) {
+  return (
+    <div>
+      <h1>Hello, {name}!</h1>
+      <p>Role: {role}</p>
+    </div>
+  );
+}
+
+// Usage — components are used like HTML tags:
+<Greeting name="Digamber" role="Sr. Tech Lead" />
+```
+
+**Key Rule:** Components MUST start with a capital letter. `<greeting>` = HTML element. `<Greeting>` = React component.
+
+---
+
+**Step 2: JSX — HTML Inside JavaScript**
+
+JSX is syntactic sugar. It looks like HTML but is actually JavaScript function calls.
+
+```javascript
+// What you write (JSX):
+const element = <h1 className="title">Hello {name}</h1>;
+
+// What React sees after Babel transpiles:
+const element = React.createElement('h1', { className: 'title' }, `Hello ${name}`);
+
+// JSX Rules:
+// 1. className (not class) — 'class' is reserved in JS
+// 2. htmlFor (not for) — 'for' is reserved in JS
+// 3. camelCase attributes: onClick, onChange, tabIndex
+// 4. Must return ONE root element (use <> fragment if needed)
+// 5. JavaScript expressions inside {curly braces}
+// 6. Style is an object: style={{ color: 'red', fontSize: '16px' }}
+```
+
+```javascript
+// Conditional rendering (3 patterns):
+// Pattern 1: && (show or hide)
+{isLoggedIn && <LogoutButton />}
+
+// Pattern 2: Ternary (show one OR the other)
+{isAdmin ? <AdminPanel /> : <UserPanel />}
+
+// Pattern 3: Early return (guard clause)
+function Dashboard({ user }) {
+  if (!user) return <LoginPrompt />;
+  if (user.banned) return <BannedMessage />;
+  return <DashboardContent user={user} />;
+}
+```
+
+---
+
+**Step 3: Props — How Data Flows Down**
+
+Props are **read-only inputs** passed from parent to child. They flow ONE direction: top → down.
+
+```javascript
+// Parent passes data DOWN to child via props
+function UserPage() {
+  const user = { name: "Digamber", role: "Lead" };
+  return <UserCard user={user} onEdit={handleEdit} />;
+}
+
+// Child RECEIVES props (read-only — cannot modify!)
+function UserCard({ user, onEdit }) {
+  // user.name = "Other"; // ❌ NEVER modify props!
+  return (
+    <div>
+      <h2>{user.name}</h2>
+      <button onClick={() => onEdit(user.id)}>Edit</button>
+    </div>
+  );
+}
+
+// Props can be:
+// - Primitives: string, number, boolean
+// - Objects/Arrays: { user }, [items]
+// - Functions: callbacks (onClick, onSubmit)
+// - Components: children prop
+// - Anything JavaScript can hold
+```
+
+**Default props:**
+```javascript
+function Button({ variant = "primary", size = "md", children }) {
+  return <button className={`btn btn-${variant} btn-${size}`}>{children}</button>;
+}
+// <Button>Click me</Button> → uses defaults
+// <Button variant="danger" size="lg">Delete</Button> → overrides
+```
+
+---
+
+**Step 4: State — Component's Internal Memory**
+
+State is **mutable data** that belongs to a component. When state changes, the component re-renders.
+
+```javascript
+import { useState } from 'react';
+
+function Counter() {
+  // Declare state: [currentValue, setterFunction] = useState(initialValue)
+  const [count, setCount] = useState(0);
+  const [name, setName] = useState("");
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>+1</button>
+      <button onClick={() => setCount(prev => prev + 1)}>+1 (safer)</button>
+      <button onClick={() => setCount(0)}>Reset</button>
+
+      <input value={name} onChange={e => setName(e.target.value)} />
+    </div>
+  );
+}
+```
+
+**State Rules:**
+1. **Never mutate state directly** — always use setter: `setCount(newValue)`
+2. **State updates are asynchronous** — batched for performance
+3. **Use functional updates** when new state depends on previous: `setCount(prev => prev + 1)`
+4. **State is per-component-instance** — two `<Counter />` have independent state
+5. **State change = re-render** — component function runs again
+
+**State for objects/arrays:**
+```javascript
+// ❌ WRONG — mutating state directly
+const [user, setUser] = useState({ name: "A", age: 30 });
+user.name = "B"; // WRONG! Won't trigger re-render
+
+// ✅ CORRECT — create new object
+setUser({ ...user, name: "B" }); // Spread + override
+setUser(prev => ({ ...prev, name: "B" })); // Functional update
+
+// Arrays:
+const [items, setItems] = useState([1, 2, 3]);
+setItems([...items, 4]);           // Add
+setItems(items.filter(i => i !== 2)); // Remove
+setItems(items.map(i => i === 2 ? 20 : i)); // Update
+```
+
+---
+
+**Step 5: Event Handling — User Interactions**
+
+```javascript
+function EventExamples() {
+  // Button click
+  const handleClick = (event) => {
+    event.preventDefault(); // Prevent default browser behavior
+    console.log("Clicked!", event.currentTarget);
+  };
+
+  // Input change
+  const handleChange = (e) => {
+    console.log("New value:", e.target.value);
+  };
+
+  // Form submit
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent page reload!
+    // Process form data
+  };
+
+  // Passing arguments to handlers
+  const handleDelete = (id) => {
+    console.log("Delete item:", id);
+  };
+
+  return (
+    <div>
+      <button onClick={handleClick}>Click Me</button>
+      <input onChange={handleChange} />
+      <form onSubmit={handleSubmit}>...</form>
+
+      {/* Passing arguments — use arrow function */}
+      <button onClick={() => handleDelete(42)}>Delete #42</button>
+
+      {/* ❌ WRONG: calls function immediately on render! */}
+      {/* <button onClick={handleDelete(42)}>Delete</button> */}
+    </div>
+  );
+}
+```
+
+**Important Events:**
+
+| Event | HTML Equivalent | Use Case |
+|-------|----------------|----------|
+| `onClick` | onclick | Buttons, links, any clickable |
+| `onChange` | onchange | Inputs, selects, checkboxes |
+| `onSubmit` | onsubmit | Forms |
+| `onKeyDown` | onkeydown | Keyboard shortcuts |
+| `onFocus/onBlur` | onfocus/onblur | Focus management |
+| `onMouseEnter/Leave` | onmouseenter | Hover effects |
+
+---
+
+**Step 6: Conditional Rendering & Lists**
+
+```javascript
+// Rendering lists — ALWAYS provide key!
+function TodoList({ items }) {
+  if (items.length === 0) {
+    return <p>No items yet. Add one!</p>;
+  }
+
+  return (
+    <ul>
+      {items.map(item => (
+        <li key={item.id}>  {/* key MUST be unique + stable */}
+          <span style={{ textDecoration: item.done ? 'line-through' : 'none' }}>
+            {item.text}
+          </span>
+          {item.priority === 'high' && <span className="badge">⚡</span>}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+// Conditional rendering patterns summary:
+// 1. if/else (before return) — complex conditions
+// 2. && — show/hide
+// 3. ternary ? : — either/or
+// 4. switch — multiple options (use in separate function)
+```
+
+---
+
+**Step 7: Component Composition — Building Complex UIs**
+
+```javascript
+// Small, focused components composed together
+function App() {
+  return (
+    <Layout>
+      <Header>
+        <Logo />
+        <Navigation />
+        <UserMenu />
+      </Header>
+      <Main>
+        <Sidebar>
+          <FilterPanel />
+        </Sidebar>
+        <Content>
+          <SearchBar />
+          <ProductGrid />
+          <Pagination />
+        </Content>
+      </Main>
+      <Footer />
+    </Layout>
+  );
+}
+
+// Layout component using children prop
+function Layout({ children }) {
+  return <div className="layout">{children}</div>;
+}
+
+// Card component — reusable wrapper
+function Card({ title, children, footer }) {
+  return (
+    <div className="card">
+      {title && <div className="card-header"><h3>{title}</h3></div>}
+      <div className="card-body">{children}</div>
+      {footer && <div className="card-footer">{footer}</div>}
+    </div>
+  );
+}
+
+// Usage:
+<Card title="User Profile" footer={<Button>Save</Button>}>
+  <UserForm />
+</Card>
+```
+
+---
+
+**Step 8: Lifting State Up — Sharing Data Between Siblings**
+
+When two sibling components need the same data, lift state to their **common parent**.
+
+```mermaid
+graph TD
+    A[Parent: SearchPage] --> B["State: { query, results }"]
+    A --> C[Child: SearchInput]
+    A --> D[Child: ResultsList]
+
+    C -->|"onChange → setQuery"| A
+    A -->|"props: results"| D
+
+    style A fill:#61dafb,stroke:#333,color:#000
+    style C fill:#282c34,stroke:#61dafb,color:#fff
+    style D fill:#282c34,stroke:#61dafb,color:#fff
+```
+
+```javascript
+// Parent owns the state, passes down to both children
+function SearchPage() {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
+
+  const handleSearch = async (searchTerm) => {
+    setQuery(searchTerm);
+    const data = await api.get(`/search?q=${searchTerm}`);
+    setResults(data);
+  };
+
+  return (
+    <div>
+      <SearchInput value={query} onSearch={handleSearch} />
+      <ResultsList results={results} />
+    </div>
+  );
+}
+
+// Child 1: Only handles input UI
+function SearchInput({ value, onSearch }) {
+  return (
+    <input
+      value={value}
+      onChange={e => onSearch(e.target.value)}
+      placeholder="Search..."
+    />
+  );
+}
+
+// Child 2: Only handles display
+function ResultsList({ results }) {
+  return (
+    <ul>
+      {results.map(item => <li key={item.id}>{item.name}</li>)}
+    </ul>
+  );
+}
+```
+
+**Rule:** State should live in the **lowest common ancestor** of all components that need it.
+
+---
+
+**Step 9: React Component Lifecycle Summary**
+
+```mermaid
+graph LR
+    A[Mount<br/>Component appears] --> B[Render<br/>JSX → DOM]
+    B --> C[Effect<br/>useEffect runs]
+    C --> D{State/Props Change?}
+    D -->|Yes| B
+    D -->|No| E[Idle<br/>Waiting for events]
+    E --> D
+    B --> F[Unmount<br/>Component removed]
+    F --> G[Cleanup<br/>useEffect return runs]
+
+    style A fill:#15803d,stroke:#333,color:#fff
+    style F fill:#dc2626,stroke:#333,color:#fff
+```
+
+| Phase | What Happens | Hook/Method |
+|-------|-------------|-------------|
+| **Mount** | Component added to DOM | `useState` init, first render, `useEffect(() => {}, [])` |
+| **Update** | Props or state change | Re-render, `useEffect(() => {}, [dep])` |
+| **Unmount** | Component removed from DOM | `useEffect` cleanup function |
+
+---
+
+**Step 10: Thinking in React — How to Build Any UI**
+
+1. **Break UI into component tree** — draw boxes around every piece
+2. **Build static version first** — no state, just props passing data down
+3. **Identify minimal state** — what's the minimum data that changes?
+4. **Decide where state lives** — which component should own it?
+5. **Add interactivity** — wire up event handlers + state updates
+
+```
+Example: Todo App decomposition
+
+TodoApp                    ← state: [todos], filter
+├── AddTodoForm           ← input state (local)
+├── FilterButtons         ← receives filter + setFilter
+└── TodoList              ← receives filtered todos
+    └── TodoItem          ← receives single todo + onToggle + onDelete
+```
+
+---
+
 ### FS-2. React Hooks — useState, useEffect, useContext, useReducer, useMemo, useCallback
 
 **Answer:**
@@ -44263,6 +44671,791 @@ my-fullstack-app/
 
 ---
 
+
+---
+
+## 📋 Section 7B: React.js Deep Theory — Internals & Patterns
+
+### FS-22. React Virtual DOM Deep Dive — How Diffing Actually Works
+
+**Answer:**
+
+The Virtual DOM is a plain JavaScript object representing the UI tree. When state changes:
+
+```mermaid
+graph TD
+    A[State Change] --> B[Create New Virtual DOM Tree]
+    B --> C[Diff with Previous Virtual DOM]
+    C --> D[Calculate Minimum Changes]
+    D --> E[Batch DOM Updates]
+    E --> F[Browser Repaints Once]
+
+    G[Without Virtual DOM] --> H[Direct DOM Manipulation]
+    H --> I[Browser Repaints Each Time]
+    I --> J[Expensive - Layout Thrashing]
+
+    style A fill:#61dafb,stroke:#333,color:#000
+    style G fill:#dc2626,stroke:#333,color:#fff
+```
+
+**How Diffing Works (Step by Step):**
+
+1. **Different Element Types** → Tear down old tree, build new:
+```jsx
+// Old: <div><Counter /></div>
+// New: <span><Counter /></span>
+// React: Unmounts Counter completely (state lost!), remounts fresh
+```
+
+2. **Same Element Type** → Update attributes only:
+```jsx
+// Old: <div className="old" style={{color: 'red'}} />
+// New: <div className="new" style={{color: 'blue'}} />
+// React: Only updates className and color — minimal DOM change
+```
+
+3. **Children Diffing** → Uses keys for efficient reordering:
+```jsx
+// Without keys — inserting at beginning re-renders ALL:
+// Old: [<li>B</li>, <li>C</li>]
+// New: [<li>A</li>, <li>B</li>, <li>C</li>]
+// React thinks B→A (update), C→B (update), null→C (insert) = 3 operations
+
+// With keys — React knows to just INSERT A:
+// Old: [<li key="b">B</li>, <li key="c">C</li>]
+// New: [<li key="a">A</li>, <li key="b">B</li>, <li key="c">C</li>]
+// React: Insert A at beginning, B and C stay unchanged = 1 operation
+```
+
+**Interview-Ready Explanation:**
+> "React maintains two virtual DOM trees. On state change, it creates a new tree, diffs against the old one using a heuristic O(n) algorithm with two assumptions: different types produce different trees, and keys identify stable elements. It then batches the minimum DOM mutations needed."
+
+---
+
+### FS-23. React Component Design Patterns — Composition, HOC, Render Props, Custom Hooks
+
+**Answer:**
+
+```mermaid
+graph TD
+    A[React Design Patterns] --> B[Composition]
+    A --> C[Higher-Order Components]
+    A --> D[Render Props]
+    A --> E[Custom Hooks - PREFERRED]
+    A --> F[Compound Components]
+
+    B --> B1["children prop<br/>Slot-based layout<br/>✅ Simple, flexible"]
+    C --> C1["Function wrapping component<br/>Adds behavior (auth, logging)<br/>⚠️ Wrapper hell, hard to debug"]
+    D --> D1["Pass render function as prop<br/>Share state/logic<br/>⚠️ Callback nesting"]
+    E --> E1["Extract stateful logic<br/>Composable, testable<br/>✅ Modern best practice"]
+    F --> F1["Related components share state<br/>Tabs, Accordion, Select<br/>✅ Flexible API"]
+
+    style A fill:#61dafb,stroke:#333,color:#000
+    style E fill:#15803d,stroke:#333,color:#fff
+```
+
+```javascript
+// === PATTERN 1: Composition (children) ===
+const Card = ({ children, title }) => (
+  <div className="card">
+    <h3>{title}</h3>
+    <div className="card-body">{children}</div>
+  </div>
+);
+// Usage: <Card title="User"><UserInfo /></Card>
+
+// === PATTERN 2: Custom Hook (BEST PRACTICE) ===
+// Extract reusable stateful logic
+function useLocalStorage(key, initialValue) {
+  const [value, setValue] = useState(() => {
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : initialValue;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return [value, setValue];
+}
+
+// Usage in any component:
+const [theme, setTheme] = useLocalStorage('theme', 'dark');
+const [cart, setCart] = useLocalStorage('cart', []);
+
+// === PATTERN 3: Compound Components (advanced UI) ===
+const Tabs = ({ children, defaultIndex = 0 }) => {
+  const [activeIndex, setActiveIndex] = useState(defaultIndex);
+  return (
+    <TabsContext.Provider value={{ activeIndex, setActiveIndex }}>
+      <div className="tabs">{children}</div>
+    </TabsContext.Provider>
+  );
+};
+Tabs.Tab = ({ index, children }) => {
+  const { activeIndex, setActiveIndex } = useContext(TabsContext);
+  return (
+    <button className={activeIndex === index ? 'active' : ''}
+            onClick={() => setActiveIndex(index)}>
+      {children}
+    </button>
+  );
+};
+Tabs.Panel = ({ index, children }) => {
+  const { activeIndex } = useContext(TabsContext);
+  return activeIndex === index ? <div>{children}</div> : null;
+};
+
+// Usage — clean API:
+<Tabs defaultIndex={0}>
+  <Tabs.Tab index={0}>Profile</Tabs.Tab>
+  <Tabs.Tab index={1}>Orders</Tabs.Tab>
+  <Tabs.Panel index={0}><ProfileContent /></Tabs.Panel>
+  <Tabs.Panel index={1}><OrdersList /></Tabs.Panel>
+</Tabs>
+
+// === PATTERN 4: Higher-Order Component (legacy but asked in interviews) ===
+function withAuth(WrappedComponent) {
+  return function AuthenticatedComponent(props) {
+    const { isAuthenticated } = useAuth();
+    if (!isAuthenticated) return <Navigate to="/login" />;
+    return <WrappedComponent {...props} />;
+  };
+}
+const ProtectedDashboard = withAuth(Dashboard);
+```
+
+---
+
+### FS-24. React Forms — Controlled vs Uncontrolled + Validation
+
+**Answer:**
+
+| | Controlled | Uncontrolled |
+|---|-----------|-------------|
+| **State** | React state (`useState`) | DOM state (`useRef`) |
+| **Access value** | `value` prop + `onChange` | `ref.current.value` |
+| **Validation** | On every keystroke possible | On submit only |
+| **When** | Most forms — full control | File inputs, third-party libs |
+
+```javascript
+// === CONTROLLED FORM (recommended) ===
+const LoginForm = () => {
+  const [form, setForm] = useState({ email: '', password: '' });
+  const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+
+  const validate = (values) => {
+    const errs = {};
+    if (!values.email) errs.email = 'Required';
+    else if (!/\S+@\S+\.\S+/.test(values.email)) errs.email = 'Invalid email';
+    if (!values.password) errs.password = 'Required';
+    else if (values.password.length < 8) errs.password = 'Min 8 characters';
+    return errs;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+    // Clear error on change
+    setErrors(prev => ({ ...prev, [name]: '' }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const validationErrors = validate(form);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await api.post('/auth/login', form);
+    } catch (err) {
+      setErrors({ submit: err.response?.data?.message || 'Login failed' });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input name="email" value={form.email} onChange={handleChange} />
+      {errors.email && <span className="error">{errors.email}</span>}
+
+      <input name="password" type="password" value={form.password} onChange={handleChange} />
+      {errors.password && <span className="error">{errors.password}</span>}
+
+      <button type="submit" disabled={submitting}>
+        {submitting ? 'Logging in...' : 'Login'}
+      </button>
+      {errors.submit && <div className="error">{errors.submit}</div>}
+    </form>
+  );
+};
+
+// === React Hook Form (production standard — less code, better performance) ===
+import { useForm } from 'react-hook-form';
+
+const RegisterForm = () => {
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
+
+  const onSubmit = async (data) => {
+    await api.post('/auth/register', data);
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input {...register('email', { required: 'Email required', pattern: { value: /\S+@\S+/, message: 'Invalid' } })} />
+      {errors.email && <span>{errors.email.message}</span>}
+
+      <input type="password" {...register('password', { required: true, minLength: { value: 8, message: 'Min 8 chars' } })} />
+      {errors.password && <span>{errors.password.message}</span>}
+
+      <button disabled={isSubmitting}>Register</button>
+    </form>
+  );
+};
+```
+
+---
+
+### FS-25. Spring Boot REST API Best Practices — Complete Guide
+
+**Answer:**
+
+```mermaid
+graph TD
+    A[REST API Best Practices] --> B[URL Design]
+    A --> C[HTTP Methods]
+    A --> D[Status Codes]
+    A --> E[Error Handling]
+    A --> F[Pagination]
+    A --> G[Versioning]
+
+    B --> B1["Nouns not verbs<br/>/api/users NOT /api/getUsers"]
+    C --> C1["GET=Read POST=Create<br/>PUT=Full Update PATCH=Partial<br/>DELETE=Remove"]
+    D --> D1["200 OK, 201 Created<br/>400 Bad Request, 404 Not Found<br/>409 Conflict, 500 Server Error"]
+    E --> E1["Consistent error format<br/>{ timestamp, status, message, details }"]
+    F --> F1["?page=0&size=20&sort=name,asc<br/>Response: content + totalPages + totalElements"]
+    G --> G1["URL: /api/v1/users<br/>Header: Accept-Version: v1<br/>Query: ?version=1"]
+
+    style A fill:#6db33f,stroke:#333,color:#fff
+```
+
+```java
+// === COMPLETE REST CONTROLLER (Production-Ready) ===
+@RestController
+@RequestMapping("/api/v1/users")
+@Validated
+@Slf4j
+public class UserController {
+
+    private final UserService userService;
+
+    // Constructor injection (best practice — no @Autowired needed)
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    // GET /api/v1/users?page=0&size=20&sort=name,asc&search=john
+    @GetMapping
+    public ResponseEntity<Page<UserResponse>> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "name,asc") String sort,
+            @RequestParam(required = false) String search) {
+
+        Page<UserResponse> users = userService.findAll(page, size, sort, search);
+        return ResponseEntity.ok(users);
+    }
+
+    // GET /api/v1/users/42
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.findById(id));
+    }
+
+    // POST /api/v1/users
+    @PostMapping
+    public ResponseEntity<UserResponse> create(@Valid @RequestBody CreateUserRequest request) {
+        UserResponse created = userService.create(request);
+        URI location = URI.create("/api/v1/users/" + created.getId());
+        return ResponseEntity.created(location).body(created);
+    }
+
+    // PUT /api/v1/users/42 (full update)
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponse> update(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateUserRequest request) {
+        return ResponseEntity.ok(userService.update(id, request));
+    }
+
+    // PATCH /api/v1/users/42 (partial update)
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserResponse> patch(
+            @PathVariable Long id,
+            @RequestBody Map<String, Object> updates) {
+        return ResponseEntity.ok(userService.patch(id, updates));
+    }
+
+    // DELETE /api/v1/users/42
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        userService.delete(id);
+        return ResponseEntity.noContent().build(); // 204
+    }
+}
+
+// === DTO with Validation ===
+public record CreateUserRequest(
+    @NotBlank(message = "Name is required")
+    @Size(min = 2, max = 100, message = "Name must be 2-100 chars")
+    String name,
+
+    @NotBlank @Email(message = "Invalid email format")
+    String email,
+
+    @NotBlank @Size(min = 8, message = "Password min 8 chars")
+    String password
+) {}
+
+// === Global Exception Handler ===
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException ex) {
+        return ResponseEntity.status(404).body(new ErrorResponse(
+            LocalDateTime.now(), 404, "Not Found", ex.getMessage(), null
+        ));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = ex.getBindingResult().getFieldErrors().stream()
+            .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+        return ResponseEntity.badRequest().body(new ErrorResponse(
+            LocalDateTime.now(), 400, "Validation Failed", "Invalid input", errors
+        ));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGeneral(Exception ex) {
+        log.error("Unhandled exception", ex);
+        return ResponseEntity.status(500).body(new ErrorResponse(
+            LocalDateTime.now(), 500, "Internal Server Error", "Something went wrong", null
+        ));
+    }
+}
+
+public record ErrorResponse(
+    LocalDateTime timestamp, int status, String error, String message, Object details
+) {}
+```
+
+---
+
+### FS-26. React + Spring Boot — Complete CRUD Example with Pagination
+
+**Answer:**
+
+```javascript
+// === React: Full CRUD Page with Pagination, Search, Loading, Error ===
+import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
+const UserManagement = () => {
+  const [page, setPage] = useState(0);
+  const [search, setSearch] = useState('');
+  const queryClient = useQueryClient();
+
+  // FETCH — with caching, loading, error states
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['users', page, search],
+    queryFn: () => api.get(`/users?page=${page}&size=10&search=${search}`).then(r => r.data),
+    keepPreviousData: true, // Smooth pagination (don't flash loading)
+  });
+
+  // CREATE
+  const createMutation = useMutation({
+    mutationFn: (user) => api.post('/users', user),
+    onSuccess: () => queryClient.invalidateQueries(['users']),
+  });
+
+  // UPDATE
+  const updateMutation = useMutation({
+    mutationFn: ({ id, ...data }) => api.put(`/users/${id}`, data),
+    onSuccess: () => queryClient.invalidateQueries(['users']),
+  });
+
+  // DELETE
+  const deleteMutation = useMutation({
+    mutationFn: (id) => api.delete(`/users/${id}`),
+    onSuccess: () => queryClient.invalidateQueries(['users']),
+  });
+
+  if (error) return <ErrorMessage message={error.message} />;
+
+  return (
+    <div>
+      {/* SEARCH */}
+      <input
+        placeholder="Search users..."
+        value={search}
+        onChange={e => { setSearch(e.target.value); setPage(0); }}
+      />
+
+      {/* TABLE */}
+      {isLoading ? <Skeleton rows={10} /> : (
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Actions</th></tr></thead>
+          <tbody>
+            {data.content.map(user => (
+              <tr key={user.id}>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>
+                  <button onClick={() => openEditModal(user)}>Edit</button>
+                  <button onClick={() => deleteMutation.mutate(user.id)}>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      {/* PAGINATION */}
+      <div className="pagination">
+        <button disabled={page === 0} onClick={() => setPage(p => p - 1)}>Previous</button>
+        <span>Page {page + 1} of {data?.totalPages}</span>
+        <button disabled={page >= (data?.totalPages - 1)} onClick={() => setPage(p => p + 1)}>Next</button>
+      </div>
+    </div>
+  );
+};
+```
+
+---
+
+### FS-27. Spring Boot Service Layer Pattern — Clean Architecture
+
+**Answer:**
+
+```mermaid
+graph TD
+    subgraph Presentation["Presentation Layer"]
+        C[Controller<br/>HTTP handling only]
+    end
+
+    subgraph Business["Business Layer"]
+        S[Service<br/>Business logic + orchestration]
+        V[Validator<br/>Business rules]
+    end
+
+    subgraph Data["Data Layer"]
+        R[Repository<br/>Data access]
+        M[Mapper<br/>Entity ↔ DTO conversion]
+    end
+
+    subgraph Domain["Domain"]
+        E[Entity<br/>Database mapping]
+        D[DTO<br/>API contract]
+    end
+
+    C -->|"DTO in"| S
+    S --> V
+    S --> R
+    S --> M
+    R --> E
+    M -->|"Entity → DTO"| S
+    S -->|"DTO out"| C
+
+    style Presentation fill:#282c34,stroke:#61dafb,color:#fff
+    style Business fill:#6db33f,stroke:#333,color:#fff
+    style Data fill:#336791,stroke:#333,color:#fff
+```
+
+```java
+// === SERVICE LAYER (business logic lives here) ===
+@Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
+public class UserService {
+
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
+
+    public Page<UserResponse> findAll(int page, int size, String sort, String search) {
+        Pageable pageable = PageRequest.of(page, size, parseSort(sort));
+        Page<User> users = (search != null && !search.isBlank())
+            ? userRepository.findByNameContainingIgnoreCase(search, pageable)
+            : userRepository.findAll(pageable);
+        return users.map(userMapper::toResponse);
+    }
+
+    public UserResponse findById(Long id) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+        return userMapper.toResponse(user);
+    }
+
+    @Transactional
+    public UserResponse create(CreateUserRequest request) {
+        // Business validation
+        if (userRepository.existsByEmail(request.email())) {
+            throw new ConflictException("Email already registered: " + request.email());
+        }
+
+        User user = userMapper.toEntity(request);
+        user.setPassword(passwordEncoder.encode(request.password()));
+        user.setCreatedAt(LocalDateTime.now());
+
+        User saved = userRepository.save(user);
+
+        // Side effect — async notification
+        emailService.sendWelcomeEmail(saved.getEmail(), saved.getName());
+
+        return userMapper.toResponse(saved);
+    }
+
+    @Transactional
+    public UserResponse update(Long id, UpdateUserRequest request) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+
+        userMapper.updateEntity(user, request);
+        user.setUpdatedAt(LocalDateTime.now());
+
+        return userMapper.toResponse(userRepository.save(user));
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new ResourceNotFoundException("User", "id", id);
+        }
+        userRepository.deleteById(id);
+    }
+}
+
+// === MAPPER (keep conversion logic separate) ===
+@Component
+public class UserMapper {
+    public UserResponse toResponse(User user) {
+        return new UserResponse(user.getId(), user.getName(), user.getEmail(),
+                               user.getRole(), user.getCreatedAt());
+    }
+
+    public User toEntity(CreateUserRequest request) {
+        User user = new User();
+        user.setName(request.name());
+        user.setEmail(request.email());
+        user.setRole(Role.USER);
+        return user;
+    }
+
+    public void updateEntity(User user, UpdateUserRequest request) {
+        if (request.name() != null) user.setName(request.name());
+        if (request.email() != null) user.setEmail(request.email());
+    }
+}
+```
+
+---
+
+### FS-28. React State Management Decision Framework
+
+**Answer:**
+
+```mermaid
+graph TD
+    A{What type of state?} --> B{Server data?<br/>API responses}
+    A --> C{Client-only?<br/>UI state}
+
+    B -->|Yes| D["React Query / TanStack Query<br/>✅ Caching, refetch, sync<br/>Best for: API data"]
+
+    C --> E{Shared across many components?}
+    E -->|No| F["useState / useReducer<br/>✅ Local to component<br/>Best for: form inputs, toggles"]
+    E -->|Yes| G{How complex?}
+
+    G -->|Simple: theme, auth, locale| H["Context API<br/>✅ Built-in, simple<br/>⚠️ Re-renders all consumers"]
+    G -->|Complex: cart, multi-step form| I["Zustand or Redux Toolkit<br/>✅ Selective re-renders<br/>✅ DevTools, middleware"]
+
+    style A fill:#61dafb,stroke:#333,color:#000
+    style D fill:#ff4154,stroke:#333,color:#fff
+    style F fill:#15803d,stroke:#333,color:#fff
+    style H fill:#764abc,stroke:#333,color:#fff
+    style I fill:#764abc,stroke:#333,color:#fff
+```
+
+| State Type | Solution | Example |
+|-----------|---------|---------|
+| **Server data** | React Query | User list, order details, search results |
+| **Local UI** | useState | Modal open/close, form inputs, dropdown |
+| **Complex local** | useReducer | Multi-step form, shopping cart |
+| **Global simple** | Context | Theme, auth user, locale |
+| **Global complex** | Zustand/Redux | Cart across pages, notifications, real-time data |
+| **URL state** | React Router | Current page, filters, search query |
+| **Persistent** | localStorage + hook | Theme preference, dismissed banners |
+
+---
+
+### FS-29. HTTP Status Codes — Complete Reference for Full-Stack
+
+| Code | Meaning | When to Use |
+|------|---------|-------------|
+| **200** | OK | Successful GET, PUT, PATCH |
+| **201** | Created | Successful POST (include Location header) |
+| **204** | No Content | Successful DELETE (no body) |
+| **301** | Moved Permanently | URL redirector (permanent) |
+| **302** | Found (temp redirect) | OAuth callback redirects |
+| **304** | Not Modified | Cache validation (ETag match) |
+| **400** | Bad Request | Validation failed, malformed JSON |
+| **401** | Unauthorized | Not authenticated (no/invalid token) |
+| **403** | Forbidden | Authenticated but not authorized |
+| **404** | Not Found | Resource doesn't exist |
+| **405** | Method Not Allowed | POST to a GET-only endpoint |
+| **409** | Conflict | Duplicate email, optimistic lock failure |
+| **422** | Unprocessable Entity | Valid JSON but business logic fails |
+| **429** | Too Many Requests | Rate limit exceeded |
+| **500** | Internal Server Error | Unhandled exception on server |
+| **502** | Bad Gateway | Upstream service unreachable |
+| **503** | Service Unavailable | Server overloaded / maintenance |
+| **504** | Gateway Timeout | Upstream service timeout |
+
+**React handling:**
+```javascript
+api.interceptors.response.use(null, (error) => {
+  switch (error.response?.status) {
+    case 401: logout(); redirect('/login'); break;
+    case 403: toast.error('Access denied'); break;
+    case 404: toast.error('Resource not found'); break;
+    case 422: return Promise.reject(error); // Let form handle
+    case 429: toast.error('Too many requests. Slow down.'); break;
+    case 500: toast.error('Server error. Try again later.'); break;
+  }
+  return Promise.reject(error);
+});
+```
+
+---
+
+### FS-30. React Routing — Advanced Patterns (Layouts, Guards, Lazy Loading)
+
+**Answer:**
+
+```javascript
+import { lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+
+// Lazy-loaded pages (code splitting)
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const UserList = lazy(() => import('./pages/UserList'));
+const OrderDetail = lazy(() => import('./pages/OrderDetail'));
+const Settings = lazy(() => import('./pages/Settings'));
+const Login = lazy(() => import('./pages/Login'));
+
+// Layout with sidebar + header
+const AppLayout = () => (
+  <div className="app">
+    <Sidebar />
+    <div className="main">
+      <Header />
+      <Suspense fallback={<PageSkeleton />}>
+        <Outlet /> {/* Child routes render here */}
+      </Suspense>
+    </div>
+  </div>
+);
+
+// Auth guard
+const RequireAuth = ({ roles }) => {
+  const { user, isAuthenticated } = useAuth();
+  if (!isAuthenticated) return <Navigate to="/login" state={{ from: location }} />;
+  if (roles && !roles.includes(user.role)) return <Navigate to="/unauthorized" />;
+  return <Outlet />;
+};
+
+// Route configuration
+const AppRoutes = () => (
+  <BrowserRouter>
+    <Routes>
+      {/* Public routes */}
+      <Route path="/login" element={<Login />} />
+
+      {/* Protected routes with layout */}
+      <Route element={<RequireAuth />}>
+        <Route element={<AppLayout />}>
+          <Route path="/" element={<Navigate to="/dashboard" />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/users" element={<UserList />} />
+          <Route path="/users/:id" element={<UserDetail />} />
+          <Route path="/orders/:id" element={<OrderDetail />} />
+          <Route path="/settings" element={<Settings />} />
+        </Route>
+      </Route>
+
+      {/* Admin-only routes */}
+      <Route element={<RequireAuth roles={['ADMIN']} />}>
+        <Route element={<AppLayout />}>
+          <Route path="/admin/*" element={<AdminRoutes />} />
+        </Route>
+      </Route>
+
+      {/* 404 */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  </BrowserRouter>
+);
+```
+
+---
+
+### FS-31. Full-Stack Data Flow — From Button Click to Database and Back
+
+**Answer:**
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant R as React Component
+    participant RQ as React Query
+    participant AX as Axios Interceptor
+    participant GW as API Gateway :8080
+    participant SC as Spring Controller
+    participant SV as Service Layer
+    participant RP as Repository
+    participant DB as PostgreSQL
+
+    U->>R: Clicks "Create User" button
+    R->>R: Validates form (client-side)
+    R->>RQ: useMutation.mutate(userData)
+    RQ->>AX: POST /api/v1/users + JWT header
+    AX->>GW: HTTP POST (adds auth header, handles errors)
+    GW->>GW: Validates JWT token
+    GW->>SC: Routes to UserController
+    SC->>SC: @Valid — validates request DTO
+    SC->>SV: userService.create(dto)
+    SV->>SV: Business validation (duplicate email?)
+    SV->>RP: userRepository.save(entity)
+    RP->>DB: INSERT INTO users VALUES(...)
+    DB-->>RP: Generated ID returned
+    RP-->>SV: User entity with ID
+    SV-->>SC: UserResponse DTO
+    SC-->>GW: 201 Created + Location header
+    GW-->>AX: HTTP 201 + JSON body
+    AX-->>RQ: Resolved promise
+    RQ->>RQ: Invalidates ['users'] cache
+    RQ->>R: onSuccess callback
+    R->>R: Toast "User created!" + close modal
+    R->>U: Updated UI (new user appears in list)
+```
+
+**This diagram shows the COMPLETE flow** — understanding this end-to-end is what makes you a fullstack developer. Every tech screen will ask "walk me through what happens when a user clicks a button."
 
 ---
 
@@ -45927,5 +47120,1703 @@ npx openapi-generator-cli generate \
 | **Intermediate** | Generics, utility types, type guards, discriminated unions | Build a generic API hook? |
 | **Advanced** | Mapped types, conditional types, infer, template literals | Build a type-safe ORM / query builder? |
 | **Expert** | Branded types, HKT patterns, variance, module augmentation | Design library types that prevent misuse at compile time? |
+
+---
+
+
+---
+
+<a id="-fullstack-tricky-interview-questions"></a>
+
+# 🔥 Fullstack Tricky Interview Questions — React + Spring Boot + Microservices
+
+> **Deep-dive theory + tricky questions that catch senior developers off guard**
+> These are the questions that separate mid-level from senior/lead candidates
+
+---
+
+## 📋 Section A: React.js Deep Theory + Tricky Questions
+
+### FT-1. Explain React's Reconciliation Algorithm in Detail
+
+**Answer:**
+
+React uses a **heuristic O(n) diffing algorithm** instead of the optimal O(n³) tree diff. Two key assumptions make this possible:
+
+```mermaid
+graph TD
+    A[React Reconciliation] --> B[Assumption 1]
+    A --> C[Assumption 2]
+    A --> D[Process]
+
+    B --> B1["Different element types<br/>produce different trees<br/>→ Destroy old, build new"]
+
+    C --> C1["Developer hints via 'key' prop<br/>identify stable elements<br/>across renders"]
+
+    D --> D1["1. Compare root elements"]
+    D --> D2["2. Same type? → Update props/attrs"]
+    D --> D3["3. Different type? → Unmount old tree"]
+    D --> D4["4. Recurse on children"]
+    D --> D5["5. Keys → reorder without remount"]
+
+    style A fill:#61dafb,stroke:#333,color:#000
+```
+
+**Tricky Interview Question:** *"What happens when you change the key prop of a component?"*
+
+**Answer:** The component is **completely unmounted and remounted** — state is destroyed. This is actually a pattern:
+
+```javascript
+// TRICK: Force remount by changing key (reset state)
+const [resetKey, setResetKey] = useState(0);
+
+// This RESETS the form completely (new instance, fresh state)
+<ComplexForm key={resetKey} />
+<button onClick={() => setResetKey(k => k + 1)}>Reset Form</button>
+```
+
+**Tricky Question:** *"Why should you never use array index as key?"*
+
+```javascript
+// ❌ BAD — array index as key
+const [items, setItems] = useState(['A', 'B', 'C']);
+{items.map((item, index) => <Input key={index} defaultValue={item} />)}
+
+// If you DELETE 'B' → items becomes ['A', 'C']
+// React thinks: key=0 stays (correct), key=1 stays (WRONG — still has B's input state!)
+// Result: 'C' item has 'B's input value — ghost state bug!
+
+// ✅ CORRECT — stable unique ID
+{items.map(item => <Input key={item.id} defaultValue={item.value} />)}
+```
+
+---
+
+### FT-2. React Fiber Architecture — What Changed and Why?
+
+**Answer:**
+
+**Before Fiber (React 15):** Reconciliation was synchronous — once started, it blocked the main thread until complete. Large trees → janky UI.
+
+**After Fiber (React 16+):** Work is split into "fibers" (units of work) that can be paused, aborted, and resumed.
+
+```mermaid
+graph TD
+    subgraph Old["React 15 — Stack Reconciler"]
+        O1[Start Render] --> O2[Process All Components]
+        O2 --> O3[Update DOM]
+        O2 -.->|"Blocks main thread<br/>No interruption possible"| O2
+    end
+
+    subgraph New["React 16+ — Fiber Reconciler"]
+        N1[Start Render] --> N2[Process Chunk 1]
+        N2 --> N3{Higher Priority?}
+        N3 -->|Yes| N4[Handle User Input]
+        N4 --> N5[Resume Chunk 2]
+        N3 -->|No| N5
+        N5 --> N6[Process Chunk 3]
+        N6 --> N7[Commit to DOM]
+    end
+
+    style Old fill:#dc2626,stroke:#333,color:#fff
+    style New fill:#15803d,stroke:#333,color:#fff
+```
+
+**Tricky Question:** *"What is the difference between the Render phase and Commit phase?"*
+
+| Phase | Can be interrupted? | Side effects allowed? | Runs on... |
+|-------|--------------------|-----------------------|------------|
+| **Render** (reconciliation) | ✅ Yes — may be called multiple times | ❌ No — must be pure | Virtual DOM |
+| **Commit** (DOM update) | ❌ No — synchronous | ✅ Yes — useEffect runs here | Real DOM |
+
+**Why this matters:** Your render function might be called multiple times in Concurrent Mode! Never put side effects (API calls, mutations) directly in the render body.
+
+---
+
+### FT-3. Closures in React — The Stale Closure Trap
+
+**Answer:**
+
+**Tricky Question:** *"Why does this counter not work correctly?"*
+
+```javascript
+function Timer() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCount(count + 1); // ❌ BUG: Always increments from 0!
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []); // Empty deps = closure captures count=0 forever!
+
+  return <p>{count}</p>; // Shows 1, 1, 1, 1... never increments past 1
+}
+```
+
+**Why?** The setInterval callback captures `count` from the initial render (value = 0). It's a **stale closure**.
+
+**Three Fixes:**
+
+```javascript
+// Fix 1: Functional update (most common)
+setCount(prevCount => prevCount + 1); // ✅ Always uses latest value
+
+// Fix 2: useRef (for values you need to READ, not trigger re-render)
+const countRef = useRef(0);
+useEffect(() => {
+  const interval = setInterval(() => {
+    countRef.current += 1;
+    setCount(countRef.current);
+  }, 1000);
+  return () => clearInterval(interval);
+}, []);
+
+// Fix 3: Add count to deps (but creates new interval every second)
+useEffect(() => {
+  const interval = setInterval(() => {
+    setCount(count + 1);
+  }, 1000);
+  return () => clearInterval(interval);
+}, [count]); // ⚠️ Works but inefficient — recreates interval on every count change
+```
+
+---
+
+### FT-4. Why Does React Re-render? — Common Mistakes
+
+**Answer:**
+
+```mermaid
+graph TD
+    A[Component Re-renders When...] --> B["Parent re-renders<br/>(even if props unchanged!)"]
+    A --> C["State changes (setState)"]
+    A --> D["Context value changes"]
+
+    B --> B1["Fix: React.memo()"]
+    C --> C1["Fix: Avoid unnecessary setState"]
+    D --> D1["Fix: Split contexts / useMemo provider value"]
+
+    E[Common Mistakes] --> E1["Creating objects/arrays in render<br/>→ New reference every render"]
+    E --> E2["Inline functions in JSX<br/>→ New function reference"]
+    E --> E3["Context with object value<br/>→ All consumers re-render"]
+
+    style A fill:#61dafb,stroke:#333,color:#000
+    style E fill:#dc2626,stroke:#333,color:#fff
+```
+
+**Tricky Question:** *"This component re-renders on every parent render. Why?"*
+
+```javascript
+// ❌ BROKEN — memo is useless here!
+const ExpensiveList = React.memo(({ items, onItemClick }) => {
+  return items.map(item => (
+    <div key={item.id} onClick={() => onItemClick(item.id)}>
+      {item.name}
+    </div>
+  ));
+});
+
+// Parent:
+const Parent = () => {
+  const [count, setCount] = useState(0);
+  const items = [{ id: 1, name: 'A' }]; // ❌ New array reference every render!
+  const handleClick = (id) => console.log(id); // ❌ New function reference every render!
+
+  return (
+    <>
+      <button onClick={() => setCount(c + 1)}>Count: {count}</button>
+      <ExpensiveList items={items} onItemClick={handleClick} />
+    </>
+  );
+};
+```
+
+**Answer:** `React.memo` does **shallow comparison** of props. `items` is a new array object every render (even if contents are same). `handleClick` is a new function every render. Shallow compare fails → re-render.
+
+**Fix:**
+```javascript
+const Parent = () => {
+  const [count, setCount] = useState(0);
+  const items = useMemo(() => [{ id: 1, name: 'A' }], []); // ✅ Stable reference
+  const handleClick = useCallback((id) => console.log(id), []); // ✅ Stable reference
+
+  return (
+    <>
+      <button onClick={() => setCount(c + 1)}>Count: {count}</button>
+      <ExpensiveList items={items} onItemClick={handleClick} /> {/* ✅ Won't re-render */}
+    </>
+  );
+};
+```
+
+---
+
+### FT-5. useEffect vs useLayoutEffect — When and Why?
+
+**Tricky Question:** *"When would useEffect cause a visual flicker but useLayoutEffect wouldn't?"*
+
+```javascript
+// ❌ FLICKER with useEffect:
+const Tooltip = ({ targetRef }) => {
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+
+  useEffect(() => {
+    // Runs AFTER browser paints → user sees tooltip at (0,0) then jump
+    const rect = targetRef.current.getBoundingClientRect();
+    setPosition({ top: rect.bottom, left: rect.left });
+  }, []);
+
+  return <div style={{ position: 'absolute', ...position }}>Tooltip</div>;
+};
+
+// ✅ NO FLICKER with useLayoutEffect:
+const Tooltip = ({ targetRef }) => {
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+
+  useLayoutEffect(() => {
+    // Runs BEFORE browser paints → position is correct from first paint
+    const rect = targetRef.current.getBoundingClientRect();
+    setPosition({ top: rect.bottom, left: rect.left });
+  }, []);
+
+  return <div style={{ position: 'absolute', ...position }}>Tooltip</div>;
+};
+```
+
+| | useEffect | useLayoutEffect |
+|---|-----------|-----------------|
+| **Timing** | After paint (async) | Before paint (sync) |
+| **Use case** | API calls, subscriptions, logging | DOM measurements, positioning, animations |
+| **Performance** | ✅ Non-blocking | ⚠️ Blocks paint — use sparingly |
+| **SSR** | Works | ❌ Warning on server — use useEffect |
+
+---
+
+### FT-6. React Concurrent Features — startTransition, useDeferredValue
+
+**Answer:**
+
+**Tricky Question:** *"How do you keep a search input responsive while filtering a list of 50,000 items?"*
+
+```javascript
+import { useState, useTransition, useDeferredValue } from 'react';
+
+// Solution 1: useTransition (mark state update as low priority)
+const SearchPage = () => {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
+  const [isPending, startTransition] = useTransition();
+
+  const handleChange = (e) => {
+    setQuery(e.target.value); // ✅ HIGH priority — input stays responsive
+
+    startTransition(() => {
+      // ✅ LOW priority — can be interrupted by typing
+      const filtered = allItems.filter(item =>
+        item.name.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setResults(filtered);
+    });
+  };
+
+  return (
+    <>
+      <input value={query} onChange={handleChange} />
+      {isPending && <Spinner />}
+      <ResultsList items={results} />
+    </>
+  );
+};
+
+// Solution 2: useDeferredValue (defer the VALUE itself)
+const SearchWithDeferred = () => {
+  const [query, setQuery] = useState('');
+  const deferredQuery = useDeferredValue(query); // Lags behind during rapid typing
+
+  // This computation uses the DEFERRED value — won't block input
+  const filteredItems = useMemo(() =>
+    allItems.filter(item => item.name.includes(deferredQuery)),
+    [deferredQuery]
+  );
+
+  return (
+    <>
+      <input value={query} onChange={e => setQuery(e.target.value)} />
+      <div style={{ opacity: query !== deferredQuery ? 0.6 : 1 }}>
+        <ResultsList items={filteredItems} />
+      </div>
+    </>
+  );
+};
+```
+
+---
+
+### FT-7. Server-Side Rendering Theory — Hydration Problems
+
+**Tricky Question:** *"What is a hydration mismatch and how does it crash your app?"*
+
+```javascript
+// ❌ HYDRATION ERROR — different output on server vs client
+const TimeDisplay = () => {
+  return <p>Current time: {new Date().toLocaleTimeString()}</p>;
+  // Server renders: "10:00:00 AM"
+  // Client hydrates: "10:00:01 AM" (1 second later)
+  // React: "Hydration mismatch!" — throws error or silently corrupts DOM
+};
+
+// ✅ FIX — Use client-only rendering for dynamic content
+const TimeDisplay = () => {
+  const [time, setTime] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Only runs on client — no mismatch
+    setTime(new Date().toLocaleTimeString());
+    const interval = setInterval(() => setTime(new Date().toLocaleTimeString()), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!time) return <p>Loading...</p>; // Same on server AND first client render
+  return <p>Current time: {time}</p>;
+};
+
+// ✅ React 18 fix — suppressHydrationWarning
+<p suppressHydrationWarning>{new Date().toLocaleTimeString()}</p>
+```
+
+**Common hydration mismatch causes:**
+1. Using `Date.now()` or `Math.random()` during render
+2. Checking `window` or `localStorage` during render
+3. Browser extensions injecting elements
+4. Different locale between server and client
+
+---
+
+## 📋 Section B: Spring Boot + Microservices Tricky Questions
+
+### FT-8. @Transactional Pitfalls — Most Common Bug
+
+**Tricky Question:** *"Why does this @Transactional NOT rollback?"*
+
+```java
+@Service
+public class OrderService {
+
+    @Transactional
+    public void createOrder(OrderDTO dto) {
+        try {
+            orderRepository.save(toEntity(dto));
+            paymentService.charge(dto.getAmount()); // Throws RuntimeException!
+        } catch (Exception e) {
+            log.error("Payment failed", e); // ❌ Swallowed the exception!
+            // Transaction COMMITS because exception never propagated!
+        }
+    }
+}
+```
+
+**Answer:** `@Transactional` only rolls back when an **uncaught exception** propagates out of the method. Catching it inside prevents rollback.
+
+**Fixes:**
+```java
+// Fix 1: Re-throw after logging
+catch (Exception e) {
+    log.error("Payment failed", e);
+    throw e; // ✅ Now @Transactional sees it and rolls back
+}
+
+// Fix 2: Programmatic rollback
+catch (Exception e) {
+    log.error("Payment failed", e);
+    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+}
+
+// Fix 3: Explicit rollbackFor (for checked exceptions)
+@Transactional(rollbackFor = Exception.class) // Rolls back on ALL exceptions
+```
+
+**Another Tricky Question:** *"Why does calling `@Transactional` from the same class not work?"*
+
+```java
+@Service
+public class UserService {
+
+    public void registerUser(UserDTO dto) {
+        createUser(dto);  // ❌ @Transactional is IGNORED here!
+    }
+
+    @Transactional
+    public void createUser(UserDTO dto) {
+        userRepository.save(toEntity(dto));
+    }
+}
+```
+
+**Answer:** Spring AOP uses **proxies**. Internal method calls (`this.createUser()`) bypass the proxy — the `@Transactional` annotation is never intercepted.
+
+**Fix:** Inject self or restructure:
+```java
+@Service
+public class UserService {
+    @Autowired private UserService self; // Inject proxy of self
+
+    public void registerUser(UserDTO dto) {
+        self.createUser(dto); // ✅ Goes through proxy → @Transactional works
+    }
+}
+```
+
+---
+
+### FT-9. N+1 Query Problem — Silent Performance Killer
+
+**Tricky Question:** *"This endpoint takes 5 seconds for 100 users. Why?"*
+
+```java
+@Entity
+public class User {
+    @OneToMany(fetch = FetchType.LAZY)  // Default is LAZY — seems fine?
+    private List<Order> orders;
+}
+
+@GetMapping("/users")
+public List<UserDTO> getUsers() {
+    List<User> users = userRepository.findAll(); // 1 SQL query
+    return users.stream()
+        .map(user -> new UserDTO(
+            user.getName(),
+            user.getOrders().size() // ❌ Triggers 1 SQL per user!
+        ))
+        .toList();
+}
+// Total queries: 1 (users) + 100 (each user's orders) = 101 queries!
+```
+
+**Fixes:**
+```java
+// Fix 1: JOIN FETCH in repository
+@Query("SELECT u FROM User u JOIN FETCH u.orders")
+List<User> findAllWithOrders();
+
+// Fix 2: @EntityGraph
+@EntityGraph(attributePaths = {"orders"})
+List<User> findAll();
+
+// Fix 3: @BatchSize (fetches orders in batches)
+@OneToMany(fetch = FetchType.LAZY)
+@BatchSize(size = 25) // Fetches 25 users' orders at a time
+private List<Order> orders;
+// Total: 1 + ceil(100/25) = 5 queries instead of 101
+```
+
+---
+
+### FT-10. Race Conditions in Microservices — Double Spending
+
+**Tricky Question:** *"Two users buy the last item simultaneously. How to prevent overselling?"*
+
+```mermaid
+sequenceDiagram
+    participant U1 as User 1
+    participant U2 as User 2
+    participant S as Product Service
+    participant DB as Database
+
+    U1->>S: Buy Product (stock=1)
+    U2->>S: Buy Product (stock=1)
+    S->>DB: SELECT stock WHERE id=1 → returns 1
+    S->>DB: SELECT stock WHERE id=1 → returns 1
+    Note over S,DB: Both see stock=1, both proceed!
+    S->>DB: UPDATE stock=0, create order for U1
+    S->>DB: UPDATE stock=-1, create order for U2 ← OVERSOLD!
+```
+
+**Solutions:**
+
+```java
+// Solution 1: Optimistic Locking (@Version)
+@Entity
+public class Product {
+    @Version
+    private Long version; // Auto-incremented on update
+
+    private int stock;
+}
+
+// If two transactions try to update same row:
+// First one succeeds (version 1 → 2)
+// Second gets OptimisticLockException (expected version 1, found 2)
+// Retry or return "out of stock"
+
+// Solution 2: Pessimistic Locking (SELECT FOR UPDATE)
+@Query("SELECT p FROM Product p WHERE p.id = :id")
+@Lock(LockModeType.PESSIMISTIC_WRITE)
+Product findByIdForUpdate(@Param("id") Long id);
+
+// Solution 3: Atomic SQL operation (best for high concurrency)
+@Modifying
+@Query("UPDATE Product p SET p.stock = p.stock - 1 WHERE p.id = :id AND p.stock > 0")
+int decrementStock(@Param("id") Long id);
+// Returns 0 if stock was already 0 → no overselling possible!
+```
+
+---
+
+### FT-11. CAP Theorem in Practice
+
+**Tricky Question:** *"You're designing an inventory service for a flash sale. CP or AP? Why?"*
+
+```mermaid
+graph TD
+    A[CAP Theorem] --> B[Consistency]
+    A --> C[Availability]
+    A --> D[Partition Tolerance]
+
+    B --> B1["Every read gets<br/>the latest write"]
+    C --> C1["Every request gets<br/>a response (not error)"]
+    D --> D1["System works despite<br/>network partitions"]
+
+    E[You can only pick 2] --> F[CP: Consistent + Partition-tolerant]
+    E --> G[AP: Available + Partition-tolerant]
+
+    F --> F1["Example: Banking balance<br/>Better to refuse than show wrong balance<br/>MongoDB with majority reads"]
+    G --> G1["Example: Social media feed<br/>Better to show stale than refuse<br/>Cassandra, DynamoDB"]
+
+    style A fill:#3178c6,stroke:#333,color:#fff
+    style F fill:#dc2626,stroke:#333,color:#fff
+    style G fill:#15803d,stroke:#333,color:#fff
+```
+
+**Answer for flash sale:** **CP** — because showing incorrect stock (AP) means overselling. It's better to temporarily return an error than to sell items you don't have. Use optimistic locking + stock decrement in a strong-consistent store (PostgreSQL with serializable isolation).
+
+---
+
+## 📋 Section C: TypeScript Tricky Questions
+
+### TT-1. The `this` Context Trap in TypeScript
+
+**Tricky Question:** *"Why does this code compile but crash at runtime?"*
+
+```typescript
+class ApiClient {
+  baseUrl = "https://api.example.com";
+
+  fetchData(endpoint: string) {
+    return fetch(`${this.baseUrl}${endpoint}`); // 'this' depends on call site!
+  }
+}
+
+const client = new ApiClient();
+const fetchUsers = client.fetchData; // ❌ Detached from class instance!
+fetchUsers("/users"); // Runtime: Cannot read 'baseUrl' of undefined
+// TypeScript does NOT catch this!
+
+// Fix 1: Arrow function (lexical this)
+class ApiClient {
+  baseUrl = "https://api.example.com";
+  fetchData = (endpoint: string) => { // Arrow = 'this' always bound
+    return fetch(`${this.baseUrl}${endpoint}`);
+  };
+}
+
+// Fix 2: Explicit this parameter (TypeScript catches it!)
+class ApiClient {
+  baseUrl = "https://api.example.com";
+  fetchData(this: ApiClient, endpoint: string) { // 'this' type annotation
+    return fetch(`${this.baseUrl}${endpoint}`);
+  }
+}
+const fetchUsers = client.fetchData;
+fetchUsers("/users"); // ❌ Now TypeScript ERROR: 'this' context is 'void'
+```
+
+---
+
+### TT-2. Covariance & Contravariance — Why Arrays Are Broken
+
+**Tricky Question:** *"This code is type-safe according to TypeScript but crashes. Why?"*
+
+```typescript
+class Animal { name = "animal"; }
+class Dog extends Animal { bark() { console.log("woof"); } }
+class Cat extends Animal { meow() { console.log("meow"); } }
+
+// TypeScript allows this (arrays are covariant):
+const dogs: Dog[] = [new Dog(), new Dog()];
+const animals: Animal[] = dogs; // ✅ TypeScript allows (Dog[] → Animal[])
+
+animals.push(new Cat()); // ✅ TypeScript allows (Cat is Animal)
+// BUT... dogs[2] is now a Cat!
+
+dogs[2].bark(); // ❌ RUNTIME ERROR: dogs[2].bark is not a function
+// TypeScript didn't catch this!
+```
+
+**Why?** TypeScript arrays are **covariant** for practical reasons (strict invariance would break too much code). This is a known unsoundness.
+
+**Fix:** Use `readonly` arrays:
+```typescript
+const animals: readonly Animal[] = dogs; // readonly — can't push!
+animals.push(new Cat()); // ❌ Compile error! Property 'push' does not exist on readonly
+```
+
+---
+
+### TT-3. Type Widening & Narrowing Gotchas
+
+**Tricky Question:** *"Why doesn't this discriminated union work?"*
+
+```typescript
+type Success = { status: "success"; data: string };
+type Error = { status: "error"; message: string };
+type Response = Success | Error;
+
+function handleResponse(response: Response) {
+  if (response.status === "success") {
+    console.log(response.data); // ✅ Works
+  }
+}
+
+// BUT...
+const status = "success"; // TypeScript widens to: string (not "success")
+const response = { status, data: "hello" }; // type: { status: string; data: string }
+handleResponse(response); // ❌ Error! { status: string } is not assignable to Response
+// Because string is NOT "success" | "error"
+
+// Fix 1: as const
+const status = "success" as const; // type: "success" (literal)
+
+// Fix 2: satisfies
+const response = { status: "success", data: "hello" } satisfies Response;
+
+// Fix 3: Inline (no intermediate variable)
+handleResponse({ status: "success", data: "hello" }); // ✅ Works
+```
+
+---
+
+### TT-4. Excess Property Checking — When TypeScript is NOT Strict
+
+**Tricky Question:** *"Why does one of these compile but not the other?"*
+
+```typescript
+interface Config {
+  host: string;
+  port: number;
+}
+
+// ❌ FAILS — excess property checking on object literals
+const config: Config = { host: "localhost", port: 3000, debug: true };
+// Error: 'debug' does not exist in type 'Config'
+
+// ✅ PASSES — no excess property check!
+const obj = { host: "localhost", port: 3000, debug: true };
+const config: Config = obj; // No error! Extra properties are ignored!
+```
+
+**Why?** TypeScript only performs excess property checking on **object literals directly assigned to a typed variable**. If assigned via an intermediate variable, structural typing allows extra properties (duck typing).
+
+---
+
+### TT-5. The `{} | null | undefined` vs `unknown` Trap
+
+**Tricky Question:** *"What type is `{}`? Can you assign anything to it?"*
+
+```typescript
+// {} means "any non-nullish value" — NOT an empty object!
+let value: {} = "hello";    // ✅ string is not null/undefined
+let value2: {} = 42;        // ✅ number is not null/undefined
+let value3: {} = { a: 1 };  // ✅ object is not null/undefined
+let value4: {} = null;      // ❌ Error!
+let value5: {} = undefined; // ❌ Error!
+
+// To type an actual empty object:
+type EmptyObject = Record<string, never>;
+let empty: EmptyObject = {};     // ✅
+let empty2: EmptyObject = { a: 1 }; // ❌ Error!
+
+// Hierarchy:
+// unknown → {} | null | undefined → {} → string | number | object | ...
+```
+
+---
+
+### TT-6. The `satisfies` Operator — Why It Exists (TS 4.9+)
+
+**Tricky Question:** *"What's the difference between `as`, type annotation, and `satisfies`?"*
+
+```typescript
+type Color = "red" | "green" | "blue";
+type ColorMap = Record<string, Color | Color[]>;
+
+// Method 1: Type annotation — loses specificity
+const colors1: ColorMap = {
+  primary: "red",
+  secondary: ["green", "blue"],
+};
+colors1.primary.toUpperCase(); // ❌ Error! Type is Color | Color[] (could be array)
+
+// Method 2: `as` assertion — LIES to compiler (unsafe)
+const colors2 = {
+  primary: "red" as Color,
+  secondary: ["green", "blue"],
+} as ColorMap;
+colors2.typo; // No error! But 'typo' doesn't exist — 'as' bypasses checks
+
+// Method 3: `satisfies` — BEST: validates AND preserves specific type
+const colors3 = {
+  primary: "red",
+  secondary: ["green", "blue"],
+} satisfies ColorMap;
+
+colors3.primary.toUpperCase(); // ✅ TypeScript knows it's "red" (string, not array)
+colors3.secondary.map(c => c); // ✅ TypeScript knows it's Color[]
+colors3.typo; // ❌ Error! Property 'typo' does not exist
+```
+
+---
+
+### TT-7. Promise + async/await Type Pitfalls
+
+**Tricky Question:** *"What's wrong with this error handling?"*
+
+```typescript
+// ❌ DANGEROUS — catch doesn't type errors!
+async function fetchUser(id: number) {
+  try {
+    const res = await fetch(`/api/users/${id}`);
+    return await res.json() as User;
+  } catch (error) {
+    // 'error' is type 'unknown' in TS 4.4+ (used to be 'any')
+    console.log(error.message); // ❌ Error! 'unknown' has no 'message'
+
+    // Fix: Type narrow the error
+    if (error instanceof Error) {
+      console.log(error.message); // ✅
+    }
+    // But fetch errors might not be Error instances!
+    // AbortError, TypeError (network), etc.
+  }
+}
+
+// Better pattern:
+async function fetchUser(id: number): Promise<Result<User>> {
+  try {
+    const res = await fetch(`/api/users/${id}`);
+    if (!res.ok) {
+      return { success: false, error: `HTTP ${res.status}` };
+    }
+    const data = await res.json();
+    return { success: true, data };
+  } catch (error) {
+    return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
+  }
+}
+
+// Result type — forces caller to handle errors
+type Result<T> =
+  | { success: true; data: T }
+  | { success: false; error: string };
+```
+
+---
+
+### TT-8. Declaration Merging & Module Augmentation
+
+**Tricky Question:** *"How do you add a custom property to Express Request globally?"*
+
+```typescript
+// types/express.d.ts — Module Augmentation
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        id: string;
+        email: string;
+        role: "admin" | "user";
+      };
+      requestId: string;
+    }
+  }
+}
+
+// Now in any controller:
+app.get("/profile", (req, res) => {
+  console.log(req.user?.email); // ✅ TypeScript knows this exists!
+  console.log(req.requestId);    // ✅ Auto-complete works!
+});
+
+// This works because interfaces support DECLARATION MERGING
+// Multiple declarations of same interface → combined into one
+```
+
+---
+
+## 📋 Section D: Full-Stack Integration Tricky Questions
+
+### FT-12. CORS — Why It Fails and How to Debug
+
+**Tricky Question:** *"Your React app at localhost:3000 calls Spring Boot at localhost:8080. The preflight OPTIONS request fails. Why?"*
+
+```mermaid
+sequenceDiagram
+    participant B as Browser
+    participant R as React (localhost:3000)
+    participant S as Spring Boot (localhost:8080)
+
+    R->>B: fetch('/api/users', { headers: { Authorization: 'Bearer ...' }})
+    Note over B: Custom header → triggers preflight!
+    B->>S: OPTIONS /api/users (preflight)
+    Note over B,S: Checks: Access-Control-Allow-Origin, Allow-Methods, Allow-Headers
+    S-->>B: 403 Forbidden (no CORS config!)
+    B--xR: ❌ CORS error (never sends actual request)
+```
+
+**Common causes:**
+1. Spring Security intercepts OPTIONS before CORS filter
+2. `@CrossOrigin` on controller but Security blocks preflight
+3. `allowCredentials(true)` with `allowedOrigins("*")` — not allowed!
+4. Missing `Authorization` in `allowedHeaders`
+
+```java
+// ✅ CORRECT ORDER: CORS must run BEFORE Spring Security
+@Configuration
+public class CorsConfig {
+    @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE) // Run FIRST
+    public CorsFilter corsFilter() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOriginPatterns(List.of("http://localhost:3000"));
+        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+        config.setMaxAge(3600L); // Cache preflight 1 hour
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
+}
+```
+
+---
+
+### FT-13. WebSocket vs SSE vs Polling — When to Use What?
+
+**Tricky Question:** *"You need real-time notifications. WebSocket or Server-Sent Events?"*
+
+| Feature | WebSocket | SSE (EventSource) | Long Polling |
+|---------|-----------|-------------------|-------------|
+| **Direction** | Bidirectional | Server → Client only | Request/Response |
+| **Protocol** | ws:// (separate) | HTTP (same) | HTTP (same) |
+| **Reconnection** | Manual | Automatic (built-in) | Manual |
+| **Load Balancer** | ⚠️ Needs sticky sessions | ✅ Standard HTTP | ✅ Standard HTTP |
+| **Binary data** | ✅ Yes | ❌ Text only | ✅ Yes |
+| **Max connections** | Browser: ~6 per domain | Browser: ~6 per domain | Many |
+| **Use case** | Chat, gaming, collab editing | Notifications, live feed, stock prices | Legacy, simple cases |
+
+```typescript
+// React — SSE for notifications (simpler than WebSocket for one-way)
+const useNotifications = () => {
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  useEffect(() => {
+    const eventSource = new EventSource('/api/notifications/stream', {
+      withCredentials: true,
+    });
+
+    eventSource.onmessage = (event) => {
+      const notification = JSON.parse(event.data);
+      setNotifications(prev => [notification, ...prev]);
+    };
+
+    eventSource.onerror = () => {
+      eventSource.close();
+      // Auto-reconnect after 5s
+      setTimeout(() => { /* reconnect logic */ }, 5000);
+    };
+
+    return () => eventSource.close();
+  }, []);
+
+  return notifications;
+};
+```
+
+```java
+// Spring Boot — SSE endpoint
+@RestController
+public class NotificationController {
+
+    @GetMapping(value = "/api/notifications/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ServerSentEvent<Notification>> streamNotifications(Authentication auth) {
+        return notificationService.getStream(auth.getName())
+            .map(notification -> ServerSentEvent.<Notification>builder()
+                .id(notification.getId())
+                .event("notification")
+                .data(notification)
+                .build());
+    }
+}
+```
+
+---
+
+## 📋 Section E: Tricky Quick-Fire (One-Liners)
+
+| # | Tricky Question | Answer |
+|---|----------------|--------|
+| 1 | Why does `[] == ![]` return `true` in JavaScript? | `![]` is `false`. `[] == false` → both coerced to 0. `0 == 0` is `true`. TS prevents with strict equality |
+| 2 | What's the return type of `async function`? | Always `Promise<T>`. Even if you return `T`, it's wrapped. `async (): string` is invalid — must be `Promise<string>` |
+| 3 | Can you override a `final` Spring bean? | Yes with `@Primary` or `@Qualifier`. `final` on class prevents subclassing, not bean override |
+| 4 | What happens if two `@Order(1)` filters exist? | Undefined order between them. Spring doesn't guarantee. Use unique values |
+| 5 | `Object.freeze()` is deep or shallow? | Shallow! Nested objects are still mutable. Use libraries for deep freeze |
+| 6 | `useEffect` with no deps vs no `useEffect`? | No deps = runs after EVERY render. No useEffect = runs during render (different timing + purpose) |
+| 7 | Can React render `undefined`? | No! Returns error. `null` renders nothing (valid). `undefined` from component = crash |
+| 8 | Why does `0.1 + 0.2 !== 0.3` in TypeScript? | IEEE 754 floating point. Use `Math.abs(a - b) < Number.EPSILON` or integer cents for money |
+| 9 | Kafka exactly-once: myth or real? | Real within Kafka (idempotent producer + transactions). NOT guaranteed end-to-end without consumer idempotency |
+| 10 | Why avoid `@Autowired` on fields? | Untestable (can't inject mocks without reflection). Use constructor injection — explicit, immutable, testable |
+| 11 | `==` vs `===` in TypeScript? | `===` always. TS doesn't prevent `==` coercion bugs. `"0" == false` is `true`! |
+| 12 | What's a zombie child in React? | Unmounted component's async callback updates state. Causes "Can't update unmounted component" warning |
+| 13 | `String` vs `string` in TypeScript? | `string` = primitive (correct). `String` = wrapper object (wrong!). Never use capital `String` |
+| 14 | Why is `[]` truthy but `[] == false`? | Truthy = Boolean() context. `==` uses ToNumber coercion. Different algorithms! |
+| 15 | Can a `@Transactional(readOnly=true)` method write? | Yes! It's a HINT, not enforcement. Hibernate might skip dirty checks but won't prevent writes |
+| 16 | What happens if you `setState` in `render()`? | Infinite loop! render → setState → re-render → setState → ... Until stack overflow |
+| 17 | `type A = never & string` equals? | `never` — intersection with `never` always produces `never` |
+| 18 | `type B = never | string` equals? | `string` — union with `never` eliminates `never` |
+| 19 | What's the difference between `null` and `undefined` in API responses? | `null` = explicitly set to nothing. `undefined` = field doesn't exist. JSON.stringify strips undefined! |
+| 20 | Why does `typeof null === "object"`? | JavaScript bug from 1995. Never fixed due to backward compatibility. TS has strict null checks to help |
+
+---
+
+
+---
+
+<a id="-must-know-interview-questions"></a>
+
+# 🎯 MUST-KNOW Interview Questions — Top 50 (Guaranteed to Be Asked)
+
+> **These questions appear in 90%+ of Java Fullstack interviews. Know these by heart.**
+> Organized by frequency: most commonly asked first
+
+---
+
+## 📋 Part 1: Java Core — Top 15 Must-Know
+
+### MK-1. What is the difference between `==` and `.equals()` in Java?
+
+**Answer:**
+- `==` compares **object references** (memory address) — are they the SAME object?
+- `.equals()` compares **logical equality** (content) — are they EQUIVALENT?
+
+```java
+String s1 = new String("hello");
+String s2 = new String("hello");
+
+s1 == s2;       // false — different objects in memory
+s1.equals(s2);  // true — same content
+
+// GOTCHA: String pool
+String s3 = "hello";
+String s4 = "hello";
+s3 == s4;       // true! — String pool reuses same object
+```
+
+**Follow-up:** *"What happens if you don't override `.equals()`?"*
+Default `Object.equals()` uses `==` (reference comparison). You MUST override it (with `hashCode()`) for value-based equality.
+
+---
+
+### MK-2. Explain HashMap internals — How does it work?
+
+**Answer:**
+
+```mermaid
+graph TD
+    A[HashMap Internals] --> B[Array of Buckets]
+    A --> C[Hashing Process]
+    A --> D[Collision Handling]
+
+    C --> C1["1. key.hashCode() → int"]
+    C --> C2["2. index = hash & (n-1)"]
+    C --> C3["3. Store at index"]
+
+    D --> D1["Java 7: LinkedList<br/>(O(n) worst case)"]
+    D --> D2["Java 8+: Treeify at 8 nodes<br/>(O(log n) worst case)"]
+
+    B --> B1["Default: 16 buckets"]
+    B --> B2["Load factor: 0.75"]
+    B --> B3["Resize: doubles at 75% full"]
+
+    style A fill:#6db33f,stroke:#333,color:#fff
+```
+
+**Key Points:**
+1. `put(key, value)`: Compute `hashCode()` → find bucket → store `Entry(key, value, next)`
+2. **Collision**: Multiple keys in same bucket → linked list (Java 7) or red-black tree (Java 8+ when >8 nodes)
+3. `get(key)`: Compute hash → find bucket → traverse chain using `.equals()` to find exact key
+4. **Why override both `hashCode()` and `equals()`**: hashCode finds bucket, equals finds exact entry within bucket
+
+**Tricky Follow-up:** *"What happens if hashCode() returns same value for all objects?"*
+All entries go to ONE bucket → HashMap degrades to a linked list → O(n) for every operation. In Java 8+ it becomes a tree → O(log n).
+
+---
+
+### MK-3. What are the SOLID Principles?
+
+**Answer:**
+
+| Principle | Meaning | Simple Example |
+|-----------|---------|---------------|
+| **S** — Single Responsibility | One class = one reason to change | `UserService` handles users, `EmailService` handles emails |
+| **O** — Open/Closed | Open for extension, closed for modification | Use interfaces + strategy pattern instead of if-else chains |
+| **L** — Liskov Substitution | Subclass must be usable wherever parent is used | `Square extends Rectangle` breaks if width/height are independent |
+| **I** — Interface Segregation | Many specific interfaces > one fat interface | `Printable`, `Scannable` vs one `MultiFunctionDevice` |
+| **D** — Dependency Inversion | Depend on abstractions, not concretions | Inject `PaymentGateway` interface, not `StripePaymentService` |
+
+---
+
+### MK-4. What is the difference between Abstract Class and Interface?
+
+**Answer:**
+
+| Feature | Abstract Class | Interface (Java 8+) |
+|---------|---------------|---------------------|
+| Methods | Abstract + Concrete | Abstract + default + static |
+| Variables | Any (instance vars) | Only `public static final` (constants) |
+| Constructor | ✅ Yes | ❌ No |
+| Multiple inheritance | ❌ Single | ✅ Multiple |
+| Access modifiers | Any | Only public (methods) |
+| **When to use** | IS-A relationship + shared state | CAN-DO capability / contract |
+
+**Rule:** Use interface for **contract/behavior** (what it can do). Use abstract class for **base implementation with shared state** (what it is).
+
+---
+
+### MK-5. Explain Java Memory Model — Stack vs Heap
+
+**Answer:**
+
+```mermaid
+graph LR
+    subgraph Stack["Stack (per thread)"]
+        S1[Method call frames]
+        S2[Local variables]
+        S3[Primitive values]
+        S4[Object references]
+    end
+
+    subgraph Heap["Heap (shared)"]
+        H1[Objects]
+        H2[Instance variables]
+        H3[Arrays]
+        H4[String Pool]
+    end
+
+    S4 -->|"points to"| H1
+
+    style Stack fill:#2563eb,stroke:#333,color:#fff
+    style Heap fill:#dc2626,stroke:#333,color:#fff
+```
+
+| Feature | Stack | Heap |
+|---------|-------|------|
+| **Stores** | Local vars, method frames | Objects, instance vars |
+| **Thread safety** | Thread-private (safe) | Shared (needs synchronization) |
+| **Speed** | Fast (LIFO) | Slower (GC managed) |
+| **Size** | Small (default ~1MB) | Large (configurable, GB) |
+| **Error** | StackOverflowError | OutOfMemoryError |
+| **Lifecycle** | Method scope | Until GC collects |
+
+---
+
+### MK-6. What is the difference between `final`, `finally`, and `finalize()`?
+
+| Keyword | Purpose | Example |
+|---------|---------|---------|
+| `final` | Prevent modification | `final` class (can't extend), `final` method (can't override), `final` var (can't reassign) |
+| `finally` | Always-execute block | `try { } catch { } finally { closeConnection(); }` — runs even if exception |
+| `finalize()` | GC callback (DEPRECATED!) | Called before GC — unreliable, removed in Java 18. Use `try-with-resources` instead |
+
+---
+
+### MK-7. Explain Java Streams — map, filter, reduce, collect
+
+```java
+List<Employee> employees = getEmployees();
+
+// Find highest-paid employee in IT department
+Optional<Employee> topPaid = employees.stream()
+    .filter(e -> "IT".equals(e.getDepartment()))    // Filter IT
+    .max(Comparator.comparing(Employee::getSalary)); // Find max salary
+
+// Get names as comma-separated string
+String names = employees.stream()
+    .map(Employee::getName)
+    .sorted()
+    .collect(Collectors.joining(", "));
+
+// Group by department, get average salary
+Map<String, Double> avgByDept = employees.stream()
+    .collect(Collectors.groupingBy(
+        Employee::getDepartment,
+        Collectors.averagingDouble(Employee::getSalary)
+    ));
+
+// Parallel stream (use only for CPU-heavy + large data)
+long count = employees.parallelStream()
+    .filter(e -> e.getSalary() > 100000)
+    .count();
+```
+
+**Key Rules:**
+- Streams are **lazy** — intermediate operations don't execute until terminal operation
+- Streams are **single-use** — can't reuse after terminal operation
+- **Don't use parallel streams** for IO operations or small collections
+
+---
+
+### MK-8. What is the difference between `Comparable` and `Comparator`?
+
+| | Comparable | Comparator |
+|---|-----------|-----------|
+| **Package** | `java.lang` | `java.util` |
+| **Method** | `compareTo(T o)` | `compare(T o1, T o2)` |
+| **Where** | Implemented BY the class | External, separate class/lambda |
+| **Sorting** | Natural/default order | Custom/multiple sort orders |
+| **Modify class?** | Yes (must implement) | No (external) |
+
+```java
+// Comparable — natural order (built into class)
+public class Employee implements Comparable<Employee> {
+    public int compareTo(Employee other) {
+        return this.name.compareTo(other.name); // Sort by name (default)
+    }
+}
+
+// Comparator — custom order (external, reusable)
+employees.sort(Comparator.comparing(Employee::getSalary).reversed());
+employees.sort(Comparator.comparing(Employee::getDepartment)
+    .thenComparing(Employee::getName));
+```
+
+---
+
+### MK-9. What is Immutability? How to Create an Immutable Class?
+
+**Answer:** Immutable = state cannot change after creation. Thread-safe by default.
+
+```java
+public final class Money {                   // 1. Class is final (no subclassing)
+    private final BigDecimal amount;          // 2. Fields are private final
+    private final String currency;
+
+    public Money(BigDecimal amount, String currency) {  // 3. Set everything in constructor
+        this.amount = amount;
+        this.currency = currency;
+    }
+
+    public BigDecimal getAmount() { return amount; }     // 4. Only getters, no setters
+    public String getCurrency() { return currency; }
+
+    // 5. If fields are mutable objects, return defensive copies
+    // e.g., if there was a List field: return Collections.unmodifiableList(items);
+}
+```
+
+**Why immutable?** Thread-safe, cacheable, predictable, can be used as Map keys safely.
+
+---
+
+### MK-10. Explain Exception Handling Best Practices
+
+```java
+// ✅ DO: Specific exceptions, meaningful messages
+try {
+    return userRepository.findById(id)
+        .orElseThrow(() -> new UserNotFoundException("User not found: " + id));
+} catch (DataAccessException e) {
+    throw new ServiceException("Database error fetching user " + id, e);
+}
+
+// ❌ DON'T: Catch-all, swallow, or throw generic
+try { ... } catch (Exception e) { } // NEVER swallow
+throw new Exception("error");       // Too generic — use specific type
+
+// ✅ Custom exception hierarchy
+public class BusinessException extends RuntimeException { /* base */ }
+public class UserNotFoundException extends BusinessException { /* 404 */ }
+public class InsufficientFundsException extends BusinessException { /* 422 */ }
+```
+
+| Rule | Why |
+|------|-----|
+| Catch specific exceptions | Different handling per error type |
+| Never catch and ignore | Hidden bugs — log at minimum |
+| Use custom exceptions | Business meaning > technical jargon |
+| Include context in message | "User 42 not found" > "not found" |
+| Use try-with-resources | Auto-closes streams, connections |
+| Don't use exceptions for flow control | Performance cost + unclear logic |
+
+---
+
+## 📋 Part 2: Spring Boot — Top 15 Must-Know
+
+### MK-11. What is Spring Boot Auto-Configuration? How Does It Work?
+
+**Answer:**
+
+```mermaid
+graph TD
+    A["@SpringBootApplication"] --> B["@EnableAutoConfiguration"]
+    B --> C["Reads META-INF/spring.factories<br/>or spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports"]
+    C --> D["Each AutoConfiguration class<br/>has @Conditional annotations"]
+    D --> E{"Condition met?"}
+    E -->|"@ConditionalOnClass<br/>@ConditionalOnProperty<br/>@ConditionalOnMissingBean"| F[Create Bean]
+    E -->|Condition not met| G[Skip]
+
+    style A fill:#6db33f,stroke:#333,color:#fff
+```
+
+**Example:** If `spring-boot-starter-data-jpa` is on classpath AND `DataSource` bean exists → auto-configures `EntityManagerFactory`, `TransactionManager`, etc.
+
+**Key:** You can OVERRIDE any auto-configured bean by defining your own `@Bean` — Spring Boot backs off (`@ConditionalOnMissingBean`).
+
+---
+
+### MK-12. Explain Spring Bean Scopes
+
+| Scope | Instances | Lifecycle | Use Case |
+|-------|-----------|-----------|----------|
+| **singleton** (default) | 1 per container | App lifetime | Stateless services |
+| **prototype** | New every injection | Until GC | Stateful, per-use objects |
+| **request** | 1 per HTTP request | Request lifetime | Request-scoped data |
+| **session** | 1 per HTTP session | Session lifetime | User session data |
+| **application** | 1 per ServletContext | App lifetime | Shared across servlets |
+
+**Tricky Question:** *"What happens if a singleton bean depends on a prototype bean?"*
+
+```java
+@Component // Singleton
+public class OrderProcessor {
+    @Autowired
+    private OrderValidator validator; // Prototype — BUT injected once!
+    // validator is ALWAYS the same instance — prototype scope is broken!
+
+    // Fix: Use ObjectFactory or @Lookup
+    @Autowired
+    private ObjectFactory<OrderValidator> validatorFactory;
+
+    public void process(Order order) {
+        OrderValidator v = validatorFactory.getObject(); // ✅ New instance each time
+    }
+}
+```
+
+---
+
+### MK-13. What is the difference between @Component, @Service, @Repository, @Controller?
+
+**Answer:** Functionally identical — all register a Spring bean. The difference is **semantic**:
+
+| Annotation | Purpose | Extra Behavior |
+|-----------|---------|----------------|
+| `@Component` | Generic bean | Base annotation |
+| `@Service` | Business logic layer | None (documentation only) |
+| `@Repository` | Data access layer | Exception translation (SQL → Spring exceptions) |
+| `@Controller` | Web MVC controller | Returns views |
+| `@RestController` | REST API controller | = @Controller + @ResponseBody |
+
+---
+
+### MK-14. How Does Spring Security Work? (Filter Chain)
+
+```mermaid
+graph LR
+    A[HTTP Request] --> B[Security Filter Chain]
+    B --> C[CORS Filter]
+    C --> D[CSRF Filter]
+    D --> E[Authentication Filter<br/>JWT / Basic / OAuth2]
+    E --> F{Authenticated?}
+    F -->|No| G[401 Unauthorized]
+    F -->|Yes| H[Authorization Filter]
+    H --> I{Authorized?}
+    I -->|No| J[403 Forbidden]
+    I -->|Yes| K[Controller]
+
+    style A fill:#282c34,stroke:#fff,color:#fff
+    style K fill:#6db33f,stroke:#333,color:#fff
+```
+
+**Key concept:** Security is a chain of **Filters** before your controller. Each filter can:
+1. Pass to next filter
+2. Reject (return error response)
+3. Modify request (e.g., set authenticated user)
+
+---
+
+### MK-15. Explain @Transactional — Propagation & Isolation Levels
+
+| Propagation | Meaning | Use Case |
+|------------|---------|----------|
+| **REQUIRED** (default) | Join existing TX or create new | Most service methods |
+| **REQUIRES_NEW** | Always create new TX (suspend current) | Audit logging (must save even if parent fails) |
+| **SUPPORTS** | Use TX if exists, else run without | Read-only queries |
+| **NOT_SUPPORTED** | Run without TX (suspend current) | Long-running operations |
+| **MANDATORY** | Must have existing TX (else error) | Methods that should never be called alone |
+| **NEVER** | Must NOT have TX (else error) | External API calls |
+
+| Isolation | Prevents | Performance |
+|-----------|----------|-------------|
+| **READ_UNCOMMITTED** | Nothing | Fastest (dirty reads possible) |
+| **READ_COMMITTED** | Dirty reads | Fast (default PostgreSQL) |
+| **REPEATABLE_READ** | Dirty + non-repeatable reads | Medium (default MySQL) |
+| **SERIALIZABLE** | All anomalies | Slowest (full locks) |
+
+---
+
+### MK-16. What is Spring Boot Actuator and How to Secure It?
+
+**Answer:** Production-ready monitoring endpoints.
+
+| Endpoint | Purpose |
+|----------|---------|
+| `/actuator/health` | App health (UP/DOWN) |
+| `/actuator/metrics` | JVM metrics, HTTP stats |
+| `/actuator/info` | Build info, git commit |
+| `/actuator/env` | Environment properties |
+| `/actuator/loggers` | Change log levels at runtime |
+| `/actuator/threaddump` | Thread dump (debug deadlocks) |
+| `/actuator/heapdump` | Heap dump (debug memory leaks) |
+
+```yaml
+# Only expose safe endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      show-details: when-authorized  # Only show details to authenticated users
+```
+
+---
+
+### MK-17. Explain Spring Boot Profiles
+
+```yaml
+# application.yml (default — all profiles)
+spring:
+  application:
+    name: user-service
+
+---
+# application-dev.yml
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+
+---
+# application-prod.yml
+spring:
+  datasource:
+    url: jdbc:postgresql://prod-db:5432/users
+  jpa:
+    show-sql: false
+```
+
+Activate: `--spring.profiles.active=prod` or `SPRING_PROFILES_ACTIVE=prod`
+
+**Best Practice:** Never put secrets in YAML. Use environment vars or external config (Vault, AWS Secrets Manager).
+
+---
+
+## 📋 Part 3: Microservices — Top 10 Must-Know
+
+### MK-18. What are the 12-Factor App principles? (Top 5)
+
+| Factor | Principle | Why |
+|--------|-----------|-----|
+| **III. Config** | Store config in environment vars | Don't hardcode URLs, passwords |
+| **VI. Processes** | Stateless — store state externally | Enables horizontal scaling |
+| **IX. Disposability** | Fast startup + graceful shutdown | Enables deployments, scaling |
+| **X. Dev/Prod parity** | Same images across envs | Reduces "works on my machine" |
+| **XI. Logs** | Logs as event streams (stdout) | Let platform handle collection |
+
+---
+
+### MK-19. How Do Microservices Communicate? Sync vs Async
+
+```mermaid
+graph TD
+    A[Inter-Service Communication] --> B[Synchronous]
+    A --> C[Asynchronous]
+
+    B --> B1["REST API (HTTP)"]
+    B --> B2["gRPC (Protocol Buffers)"]
+    B --> B3["GraphQL"]
+
+    C --> C1["Message Queue (RabbitMQ)"]
+    C --> C2["Event Streaming (Kafka)"]
+    C --> C3["Pub/Sub (Redis, SNS)"]
+
+    B1 --> B1a["✅ Simple, universal<br/>❌ Coupling, cascading failures"]
+    C2 --> C2a["✅ Decoupled, resilient<br/>❌ Eventual consistency, complexity"]
+
+    style A fill:#6db33f,stroke:#333,color:#fff
+```
+
+| | Synchronous (REST/gRPC) | Asynchronous (Kafka/RabbitMQ) |
+|---|---|---|
+| **Coupling** | Tight — caller waits | Loose — fire and forget |
+| **Failure** | Cascading (if B is down, A fails) | Isolated (messages queue up) |
+| **Consistency** | Immediate | Eventual |
+| **Use case** | Read queries, real-time needed | Events, commands that can be deferred |
+
+---
+
+### MK-20. What is Circuit Breaker Pattern? Why?
+
+```mermaid
+graph LR
+    A[CLOSED<br/>Normal operation] -->|"Failure threshold<br/>exceeded"| B[OPEN<br/>Reject all calls<br/>Return fallback]
+    B -->|"Timeout period<br/>expires"| C[HALF-OPEN<br/>Allow 1 test call]
+    C -->|"Success"| A
+    C -->|"Failure"| B
+
+    style A fill:#15803d,stroke:#333,color:#fff
+    style B fill:#dc2626,stroke:#333,color:#fff
+    style C fill:#ca8a04,stroke:#333,color:#fff
+```
+
+```java
+@CircuitBreaker(name = "paymentService", fallbackMethod = "paymentFallback")
+public PaymentResponse processPayment(PaymentRequest request) {
+    return paymentClient.charge(request); // If this fails repeatedly → circuit opens
+}
+
+private PaymentResponse paymentFallback(PaymentRequest request, Throwable t) {
+    return PaymentResponse.builder()
+        .status("QUEUED")
+        .message("Payment service unavailable. Will retry.")
+        .build();
+}
+```
+
+**Why?** Prevents cascade failures. Without it: Service A → B → C. If C is slow/down, A and B exhaust thread pools waiting → entire system dies.
+
+---
+
+### MK-21. Explain Saga Pattern for Distributed Transactions
+
+**Problem:** You can't use `@Transactional` across microservices (each has its own DB).
+
+```mermaid
+sequenceDiagram
+    participant OS as Order Service
+    participant PS as Payment Service
+    participant IS as Inventory Service
+
+    OS->>OS: Create Order (PENDING)
+    OS->>PS: Charge Payment
+    PS-->>OS: Payment SUCCESS
+    OS->>IS: Reserve Inventory
+    IS-->>OS: Reserve FAILED (out of stock!)
+
+    Note over OS,IS: COMPENSATING TRANSACTION
+    OS->>PS: Refund Payment ← Undo Step 2
+    OS->>OS: Cancel Order ← Undo Step 1
+```
+
+**Two implementations:**
+1. **Choreography** (event-driven): Each service publishes events. Others react. Simple but can become tangled.
+2. **Orchestration** (central coordinator): One service orchestrates all steps + compensations. Clearer but single point of failure.
+
+---
+
+### MK-22. What is API Gateway? Why Use It?
+
+| Responsibility | Without Gateway | With Gateway |
+|---------------|-----------------|--------------|
+| Authentication | Every service validates JWT | Gateway validates once |
+| Rate limiting | Each service implements separately | Central rate limiter |
+| Routing | Client knows all service URLs | Client knows one URL |
+| Load balancing | Client-side or per-service | Gateway handles |
+| Monitoring | Scattered logs | Central access logs |
+| CORS | Every service configures | Configure once |
+
+---
+
+## 📋 Part 4: Database — Top 5 Must-Know
+
+### MK-23. SQL Indexes — When and Why?
+
+```sql
+-- B-Tree index (default): great for =, <, >, BETWEEN, ORDER BY
+CREATE INDEX idx_users_email ON users(email);
+
+-- Composite index: column order matters!
+CREATE INDEX idx_orders_user_date ON orders(user_id, created_at DESC);
+-- Supports: WHERE user_id = ? AND created_at > ?
+-- Supports: WHERE user_id = ? (leftmost prefix)
+-- Does NOT support: WHERE created_at > ? (skips first column)
+
+-- Covering index: all columns needed are in index → no table lookup
+CREATE INDEX idx_orders_cover ON orders(user_id, status, total_amount);
+-- SELECT status, total_amount FROM orders WHERE user_id = 5 → index-only scan!
+```
+
+**When NOT to index:**
+- Small tables (<1000 rows)
+- Columns with low cardinality (boolean, status with 3 values)
+- Frequently updated columns (index maintenance cost)
+- Columns you never filter/sort by
+
+---
+
+### MK-24. SQL vs NoSQL — When to Use What?
+
+| | SQL (PostgreSQL, MySQL) | NoSQL (MongoDB, DynamoDB) |
+|---|---|---|
+| **Schema** | Strict, predefined | Flexible, schema-less |
+| **Relationships** | JOINs (excellent) | Embedded docs or denormalized |
+| **Transactions** | ACID (strong) | Usually eventual consistency |
+| **Scale** | Vertical (bigger server) | Horizontal (more servers) |
+| **Best for** | Complex queries, relationships | High volume, simple access patterns |
+| **Example** | Banking, ERP, e-commerce orders | IoT, social feeds, product catalogs |
+
+**Rule:** Start with SQL unless you have a SPECIFIC reason for NoSQL.
+
+---
+
+## 📋 Part 5: React.js — Top 5 Must-Know
+
+### MK-25. Explain the Virtual DOM and How React Updates the UI
+
+**Answer:**
+1. State changes → React creates NEW virtual DOM tree
+2. React **diffs** new tree vs old tree (reconciliation)
+3. Calculates **minimum DOM operations** needed
+4. **Batches** and applies changes to real DOM
+
+**Why?** Real DOM manipulation is expensive (reflows, repaints). Batching minimizes it.
+
+---
+
+### MK-26. What is the difference between `useState` and `useReducer`?
+
+| | useState | useReducer |
+|---|---------|-----------|
+| **Complexity** | Simple state (1 value) | Complex state (multiple related values) |
+| **Updates** | Direct set: `setState(newVal)` | Dispatch action: `dispatch({ type: 'ADD' })` |
+| **Logic** | In the component | In the reducer (testable, reusable) |
+| **When** | Counter, toggle, form field | Shopping cart, form with validation, multi-step |
+
+**Rule:** If next state depends on previous state AND you have multiple related pieces → useReducer.
+
+---
+
+### MK-27. How Does React Router Work? (Client-Side Routing)
+
+```javascript
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>          {/* Shared layout */}
+          <Route index element={<Home />} />            {/* / */}
+          <Route path="users" element={<Users />} />    {/* /users */}
+          <Route path="users/:id" element={<UserDetail />} /> {/* /users/42 */}
+          <Route path="admin" element={<ProtectedRoute />}>  {/* Protected */}
+            <Route index element={<Dashboard />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />     {/* 404 */}
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+// Protected Route wrapper
+function ProtectedRoute() {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+}
+```
+
+**How it works:** React Router intercepts link clicks, updates the URL (History API), and renders matching component — WITHOUT full page reload.
+
+---
+
+## 📋 Part 6: System Design — Top 3 Must-Know
+
+### MK-28. Design a URL Shortener — Classic Interview Answer
+
+| Requirement | Solution |
+|-------------|----------|
+| Short URL | Base62 encode of auto-increment ID |
+| Redirect | 301 (permanent) or 302 (temporary) |
+| Scale reads | Redis cache of popular URLs |
+| Scale writes | ID range pre-allocation per server |
+| Analytics | Kafka events + async processing |
+| Expiration | TTL column + batch cleanup job |
+
+**Capacity:**
+- 100M URLs/month = ~40 URLs/sec write, ~4000 reads/sec
+- URL length: 7 chars Base62 = 62⁷ = 3.5 trillion combinations
+
+---
+
+### MK-29. Design Rate Limiter
+
+**Algorithms:**
+| Algorithm | How It Works | Pros/Cons |
+|-----------|-------------|-----------|
+| **Token Bucket** | Bucket fills with tokens at fixed rate. Each request uses 1 token | ✅ Allows bursts. Simple |
+| **Sliding Window** | Count requests in last N seconds | ✅ Accurate. ❌ Memory per user |
+| **Fixed Window** | Count per time window (e.g., per minute) | ✅ Simple. ❌ Burst at window boundary |
+
+```java
+// Redis Token Bucket (production pattern)
+public boolean isAllowed(String userId) {
+    String key = "ratelimit:" + userId;
+    long current = redisTemplate.opsForValue().increment(key);
+    if (current == 1) {
+        redisTemplate.expire(key, 60, TimeUnit.SECONDS); // 1 min window
+    }
+    return current <= 100; // 100 requests per minute
+}
+```
+
+---
+
+## 📋 Part 7: Quick-Fire — 20 Most Asked One-Liners
+
+| # | Question | 15-Second Answer |
+|---|----------|-----------------|
+| 1 | What is dependency injection? | Framework creates + injects dependencies instead of class creating its own. Enables loose coupling + testing |
+| 2 | What is REST? | Architectural style: stateless, resource-based URLs, HTTP verbs (GET/POST/PUT/DELETE), JSON responses |
+| 3 | GET vs POST? | GET: read, idempotent, params in URL. POST: create, not idempotent, body payload |
+| 4 | What is JPA? | Java Persistence API — ORM specification. Hibernate is the most common implementation |
+| 5 | What are microservices? | Independent, deployable services. Own database. Communicate via API/events. Scale independently |
+| 6 | Monolith vs Microservices? | Monolith: simple, one deployment. Microservices: complex but scales independently, team-independent deploys |
+| 7 | What is Docker? | Container runtime — packages app + dependencies into portable image. Runs same everywhere |
+| 8 | What is Kubernetes? | Container orchestrator — manages containers across servers. Scaling, self-healing, rolling updates |
+| 9 | ACID properties? | Atomicity (all or nothing), Consistency (valid state), Isolation (concurrent TXs don't interfere), Durability (committed = permanent) |
+| 10 | What is Redis? | In-memory key-value store. Used for caching, sessions, rate-limiting, pub/sub. Sub-ms latency |
+| 11 | What is Kafka? | Distributed event streaming. High throughput. Used for async communication between microservices |
+| 12 | What is OAuth2? | Authorization framework. Resource owner grants limited access to third-party via tokens |
+| 13 | JWT vs Session? | JWT: stateless (token contains claims, no server storage). Session: stateful (server stores session data) |
+| 14 | What is CORS? | Browser security: blocks requests to different origin. Server must explicitly allow via headers |
+| 15 | What is connection pooling? | Reuse DB connections instead of creating new per request. HikariCP is default in Spring Boot |
+| 16 | What is lazy loading? | Load data only when accessed (not upfront). JPA: @ManyToOne(fetch=LAZY). React: React.lazy() |
+| 17 | What is idempotency? | Same request multiple times = same result. GET is idempotent. POST is not (creates duplicates) |
+| 18 | What is eventual consistency? | After write, all replicas EVENTUALLY converge to same value. Not instant. OK for most reads |
+| 19 | What is a deadlock? | Two threads each hold a lock the other needs. Both wait forever. Fix: consistent lock ordering |
+| 20 | What is garbage collection? | JVM automatically reclaims memory from unreachable objects. G1GC is default (Java 9+) |
 
 ---
