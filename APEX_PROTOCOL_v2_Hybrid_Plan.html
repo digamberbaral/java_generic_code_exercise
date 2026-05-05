@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX PROTOCOL v2 — 12-Week Hybrid Evolution Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --dark: #111111;
+    --card: #181818;
+    --border: #2a2a2a;
+    --border-light: #333;
+    --gold: #d4a017;
+    --gold-dim: #8a6510;
+    --gold-bg: #1a1400;
+    --text: #e8e4dc;
+    --text-dim: #8a8680;
+    --text-muted: #555;
+    --red: #c0392b;
+    --teal: #1a7a6e;
+    --teal-light: #1fb8a3;
+    --phase1: #1a3a5c;
+    --phase2: #3a1a5c;
+    --phase3: #3a1a1a;
+    --glow-gold: rgba(212,160,23,0.3);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--text); font-family: 'Barlow', sans-serif; font-size: 15px; line-height: 1.7; }
+
+  /* HERO - Enhanced */
+  .hero { background: linear-gradient(135deg, #0d0d0d 0%, #1a1200 50%, #0d0d0d 100%); border-bottom: 2px solid var(--gold); padding: 80px 40px 60px; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at center, rgba(212,160,23,0.05) 0%, transparent 70%); pointer-events: none; }
+  .hero::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent, rgba(212,160,23,0.02), transparent, rgba(212,160,23,0.02), transparent); animation: rotate 30s linear infinite; pointer-events: none; }
+  @keyframes rotate { to { transform: rotate(360deg); } }
+  .hero-tag { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gold); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px; position: relative; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: 90px; letter-spacing: 8px; color: var(--text); line-height: 1; margin-bottom: 10px; position: relative; text-shadow: 0 0 40px rgba(212,160,23,0.15); }
+  .hero h1 span { color: var(--gold); text-shadow: 0 0 30px var(--glow-gold); }
+  .hero-sub { font-size: 15px; color: var(--text-dim); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 40px; position: relative; }
+  .hero-stats { display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; position: relative; }
+  .hero-stat { text-align: center; padding: 12px 20px; background: rgba(212,160,23,0.04); border: 1px solid rgba(212,160,23,0.15); border-radius: 8px; transition: all 0.3s ease; }
+  .hero-stat:hover { background: rgba(212,160,23,0.08); border-color: rgba(212,160,23,0.4); transform: translateY(-2px); }
+  .hero-stat-val { font-family: 'Bebas Neue', sans-serif; font-size: 40px; color: var(--gold); display: block; text-shadow: 0 0 20px var(--glow-gold); }
+  .hero-stat-label { font-size: 10px; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+
+  /* Navigation */
+  .nav { background: var(--dark); border-bottom: 1px solid var(--border); padding: 14px 24px; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
+  .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+  .nav a { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); text-decoration: none; letter-spacing: 1px; text-transform: uppercase; padding: 5px 12px; border: 1px solid transparent; border-radius: 4px; transition: all 0.2s; }
+  .nav a:hover { color: var(--gold); border-color: rgba(212,160,23,0.3); background: rgba(212,160,23,0.05); }
+
+  .page { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 44px; letter-spacing: 4px; color: var(--gold); margin-bottom: 8px; text-shadow: 0 0 20px rgba(212,160,23,0.1); }
+  .section-sub { font-size: 12px; color: var(--text-muted); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 35px; }
+
+  /* Cards - Enhanced with hover */
+  .philosophy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 30px; }
+  .philo-card { background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--gold); padding: 20px 22px; border-radius: 6px; transition: all 0.3s ease; }
+  .philo-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.4); border-left-color: var(--teal-light); }
+  .philo-card h4 { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 2px; color: var(--gold); margin-bottom: 8px; }
+  .philo-card p { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+
+  /* Phase Headers - Enhanced */
+  .phase-header { padding: 32px 35px; margin-bottom: 28px; position: relative; overflow: hidden; border-radius: 8px; }
+  .phase-header::after { content: attr(data-num); position: absolute; right: 30px; top: 50%; transform: translateY(-50%); font-family: 'Bebas Neue', sans-serif; font-size: 100px; color: rgba(255,255,255,0.04); line-height: 1; }
+  .phase1-bg { background: linear-gradient(135deg, var(--phase1) 0%, #0d2540 100%); border-left: 4px solid #4a9fd4; }
+  .phase2-bg { background: linear-gradient(135deg, var(--phase2) 0%, #250d40 100%); border-left: 4px solid #9a4ad4; }
+  .phase3-bg { background: linear-gradient(135deg, var(--phase3) 0%, #401a0d 100%); border-left: 4px solid var(--gold); }
+  .phase-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+  .phase-title { font-family: 'Bebas Neue', sans-serif; font-size: 38px; letter-spacing: 4px; color: var(--text); margin-bottom: 10px; }
+  .phase-desc { font-size: 14px; color: var(--text-dim); max-width: 650px; line-height: 1.7; }
+  .phase-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; padding: 5px 12px; border: 1px solid var(--border-light); color: var(--text-dim); border-radius: 4px; transition: all 0.2s; }
+  .tag:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* Week Grid - Enhanced */
+  .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; margin-bottom: 30px; }
+  .day-card { background: var(--card); border: 1px solid var(--border); padding: 16px 14px; border-radius: 6px; transition: all 0.3s ease; position: relative; overflow: hidden; }
+  .day-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gold); opacity: 0; transition: opacity 0.3s; }
+  .day-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+  .day-card:hover::before { opacity: 1; }
+  .day-name { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px; color: var(--gold); margin-bottom: 10px; display: block; }
+  .day-focus { font-size: 11px; color: var(--text-dim); line-height: 1.6; font-weight: 500; }
+  .day-badge { display: inline-block; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; margin-top: 8px; font-family: 'IBM Plex Mono', monospace; border-radius: 3px; }
+  .badge-power { background: rgba(74,159,212,0.15); color: #4a9fd4; border: 1px solid rgba(74,159,212,0.3); }
+  .badge-lower { background: rgba(154,74,212,0.15); color: #9a4ad4; border: 1px solid rgba(154,74,212,0.3); }
+  .badge-cond { background: rgba(26,122,110,0.2); color: #1fb8a3; border: 1px solid rgba(26,178,163,0.3); }
+  .badge-hyper { background: rgba(212,160,23,0.15); color: var(--gold); border: 1px solid rgba(212,160,23,0.3); }
+  .badge-strength { background: rgba(192,57,43,0.15); color: #e74c3c; border: 1px solid rgba(192,57,43,0.3); }
+  .badge-sprint { background: rgba(255,255,255,0.08); color: #aaa; border: 1px solid #333; }
+  .badge-recovery { background: rgba(26,122,110,0.1); color: #1fb8a3; border: 1px solid rgba(26,178,163,0.2); }
+
+  /* Day Blocks - Enhanced */
+  .day-block { background: var(--dark); border: 1px solid var(--border); margin-bottom: 24px; border-radius: 8px; overflow: hidden; transition: all 0.3s ease; }
+  .day-block:hover { border-color: rgba(212,160,23,0.2); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .day-block-header { padding: 18px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; background: rgba(212,160,23,0.02); }
+  .day-num { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--gold); line-height: 1; min-width: 44px; opacity: 0.7; }
+  .day-block-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; color: var(--text); }
+  .day-block-sub { font-size: 12px; color: var(--text-dim); margin-top: 3px; line-height: 1.5; }
+  .day-body { padding: 24px; }
+  .exercise-section { margin-bottom: 22px; }
+  .ex-section-title { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); padding-bottom: 10px; border-bottom: 1px solid var(--gold-bg); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .ex-section-title::before { content: '▸'; color: var(--gold); }
+
+  /* Tables - Enhanced */
+  table { width: 100%; border-collapse: collapse; border-radius: 6px; overflow: hidden; }
+  th { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.02); }
+  td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr { transition: background 0.2s; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  td:first-child { font-weight: 500; color: var(--text); }
+  td:not(:first-child) { color: var(--text-dim); font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+  .highlight-row td { background: rgba(212,160,23,0.05); }
+  .highlight-row td:first-child { color: var(--gold); font-weight: 600; }
+  .highlight-row:hover td { background: rgba(212,160,23,0.08); }
+
+  /* Info/Warn/KOT Boxes - Enhanced */
+  .info-box { background: rgba(26,122,110,0.1); border: 1px solid rgba(26,178,163,0.2); border-left: 4px solid var(--teal-light); padding: 16px 20px; margin: 16px 0; font-size: 13px; color: var(--text-dim); line-height: 1.8; border-radius: 0 6px 6px 0; }
+  .warn-box { background: rgba(212,160,23,0.06); border: 1px solid rgba(212,160,23,0.15); border-left: 4px solid var(--gold); padding: 16px 20px; margin: 16px 0; font-size: 13px; color: var(--text-dim); line-height: 1.8; border-radius: 0 6px 6px 0; }
+  .kot-box { background: rgba(154,74,212,0.06); border: 1px solid rgba(154,74,212,0.15); border-left: 4px solid #9a4ad4; padding: 16px 20px; margin: 16px 0; font-size: 13px; color: var(--text-dim); line-height: 1.8; border-radius: 0 6px 6px 0; }
+
+  /* Layout Grids */
+  .col2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .col3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+
+  /* Mini Cards - Enhanced */
+  .mini-card { background: var(--card); border: 1px solid var(--border); padding: 18px; border-radius: 8px; transition: all 0.3s ease; }
+  .mini-card:hover { border-color: rgba(212,160,23,0.2); transform: translateY(-2px); }
+  .mini-card h5 { font-family: 'Bebas Neue', sans-serif; font-size: 17px; letter-spacing: 2px; color: var(--gold); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .mini-card ul { list-style: none; }
+  .mini-card li { font-size: 12px; color: var(--text-dim); padding: 6px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 8px; transition: background 0.2s; }
+  .mini-card li:hover { background: rgba(255,255,255,0.02); padding-left: 4px; }
+  .mini-card li:last-child { border-bottom: none; }
+  .li-val { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gold); white-space: nowrap; }
+
+  /* Progress Bars - Enhanced */
+  .progress-block { display: flex; align-items: center; gap: 16px; margin: 8px 0; }
+  .progress-label { font-size: 12px; color: var(--text-dim); min-width: 140px; }
+  .progress-bar { flex: 1; height: 6px; background: var(--border); position: relative; border-radius: 3px; overflow: hidden; }
+  .progress-fill { position: absolute; left: 0; top: 0; height: 100%; background: linear-gradient(90deg, var(--gold-dim), var(--gold)); border-radius: 3px; transition: width 0.5s ease; }
+  .p2-fill { background: linear-gradient(90deg, #6a2ad4, #9a4ad4); }
+  .p3-fill { background: linear-gradient(90deg, #8a2020, var(--red)); }
+
+  /* KOT Steps Grid - Enhanced */
+  .kot-steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .kot-step { background: var(--card); border: 1px solid var(--border); border-top: 3px solid #9a4ad4; padding: 16px 18px; border-radius: 0 0 6px 6px; transition: all 0.3s ease; }
+  .kot-step:hover { transform: translateY(-2px); border-top-color: var(--teal-light); }
+  .kot-step-num { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: #9a4ad4; line-height: 1; margin-bottom: 6px; }
+  .kot-step-name { font-weight: 600; font-size: 13px; color: var(--text); margin-bottom: 4px; }
+  .kot-step-detail { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); }
+
+  /* Nutrition Grid - Enhanced */
+  .nutrition-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .nutr-card { background: var(--card); border: 1px solid var(--border); padding: 18px; text-align: center; border-radius: 8px; transition: all 0.3s ease; }
+  .nutr-card:hover { transform: translateY(-3px); border-color: rgba(212,160,23,0.3); }
+  .nutr-val { font-family: 'Bebas Neue', sans-serif; font-size: 34px; color: var(--gold); display: block; line-height: 1; margin-bottom: 6px; text-shadow: 0 0 15px var(--glow-gold); }
+  .nutr-label { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; font-weight: 500; }
+  .nutr-note { font-size: 11px; color: var(--text-dim); line-height: 1.5; }
+
+  /* Footer - Enhanced */
+  footer { background: linear-gradient(135deg, #0d0d0d, #1a1200); border-top: 2px solid var(--gold); padding: 40px; text-align: center; }
+  footer p { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 5px; color: var(--gold); margin-bottom: 8px; text-shadow: 0 0 20px var(--glow-gold); }
+  footer small { font-size: 11px; color: var(--text-muted); font-family: 'IBM Plex Mono', monospace; letter-spacing: 2px; }
+
+  .mono { font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+
+  /* Video links styling */
+  a { color: var(--teal-light); text-decoration: none; transition: all 0.2s; }
+  a:hover { color: var(--gold); text-decoration: underline; }
+
+  /* Scroll to top button */
+  .scroll-top { position: fixed; bottom: 30px; right: 30px; width: 44px; height: 44px; background: var(--gold); color: var(--black); border: none; border-radius: 50%; font-size: 20px; cursor: pointer; display: none; z-index: 200; box-shadow: 0 4px 15px var(--glow-gold); transition: all 0.3s; }
+  .scroll-top:hover { transform: translateY(-3px); box-shadow: 0 6px 25px var(--glow-gold); }
+
+  /* === NEW VISUAL ELEMENTS === */
+
+  /* Animated gradient divider */
+  .gradient-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--teal-light), var(--gold), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 3s ease infinite;
+    margin: 30px 0;
+    border: none;
+  }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  /* Glowing section icons */
+  .section-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+    display: block;
+    filter: drop-shadow(0 0 10px rgba(212,160,23,0.4));
+    animation: pulse-icon 2s ease-in-out infinite;
+  }
+  @keyframes pulse-icon { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+  /* Floating particles background */
+  .particles {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+  }
+  .particle {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: var(--gold);
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: float-up linear infinite;
+  }
+  @keyframes float-up {
+    0% { transform: translateY(100vh) scale(0); opacity: 0; }
+    10% { opacity: 0.3; }
+    90% { opacity: 0.3; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+  }
+
+  /* Stat counter animation */
+  .hero-stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    color: var(--gold);
+    display: block;
+    text-shadow: 0 0 20px var(--glow-gold);
+    animation: count-in 0.8s ease-out;
+  }
+  @keyframes count-in { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  /* Badge glow pulse */
+  .day-badge { animation: badge-pulse 3s ease-in-out infinite; }
+  @keyframes badge-pulse { 0%, 100% { box-shadow: none; } 50% { box-shadow: 0 0 8px currentColor; } }
+
+  /* Method source tag style */
+  .method-source {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    background: rgba(26,178,163,0.08);
+    padding: 3px 8px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  /* Highlight marker effect */
+  .gold-highlight {
+    background: linear-gradient(120deg, rgba(212,160,23,0.15) 0%, rgba(212,160,23,0.05) 100%);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    color: var(--gold);
+  }
+
+  /* Timeline dots for phases */
+  .phase-timeline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 30px 0 10px;
+    padding: 20px 0;
+  }
+  .timeline-dot {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    position: relative;
+    transition: all 0.3s;
+  }
+  .timeline-dot.active { background: var(--gold); box-shadow: 0 0 12px var(--glow-gold); }
+  .timeline-dot.p2 { border-color: #9a4ad4; }
+  .timeline-dot.p2.active { background: #9a4ad4; box-shadow: 0 0 12px rgba(154,74,212,0.5); }
+  .timeline-dot.p3 { border-color: var(--red); }
+  .timeline-dot.p3.active { background: var(--red); box-shadow: 0 0 12px rgba(192,57,43,0.5); }
+  .timeline-line { width: 80px; height: 2px; background: var(--border); }
+  .timeline-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; position: absolute; top: 22px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+
+  /* Strength ratio visual */
+  .ratio-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(212,160,23,0.1);
+    border: 1px solid rgba(212,160,23,0.25);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--gold);
+    margin: 4px;
+  }
+  .ratio-badge .emoji { font-size: 16px; }
+
+  /* Day number circle */
+  .day-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--black);
+    background: var(--gold);
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    line-height: 1;
+    box-shadow: 0 0 15px var(--glow-gold);
+  }
+
+  /* Animated border for active phase */
+  @keyframes border-flow {
+    0% { border-image-source: linear-gradient(0deg, var(--gold), transparent); }
+    25% { border-image-source: linear-gradient(90deg, var(--gold), transparent); }
+    50% { border-image-source: linear-gradient(180deg, var(--gold), transparent); }
+    75% { border-image-source: linear-gradient(270deg, var(--gold), transparent); }
+    100% { border-image-source: linear-gradient(360deg, var(--gold), transparent); }
+  }
+
+  /* Tooltip for exercise */
+  .exercise-tip {
+    font-size: 10px;
+    color: var(--teal-light);
+    font-style: italic;
+    margin-top: 4px;
+    opacity: 0.8;
+  }
+
+  /* Stats comparison arrow */
+  .stat-arrow {
+    display: inline-block;
+    color: var(--teal-light);
+    font-size: 14px;
+    margin: 0 6px;
+    animation: bounce-right 1.5s ease infinite;
+  }
+  @keyframes bounce-right { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
+
+  /* Responsive */
+  @media (max-width: 900px) { .hero h1 { font-size: 56px; } .week-grid { grid-template-columns: repeat(4, 1fr); } .col2, .col3 { grid-template-columns: 1fr; } .phase-timeline { flex-wrap: wrap; } }
+  @media (max-width: 600px) { .week-grid { grid-template-columns: repeat(2, 1fr); } .hero { padding: 50px 20px; } .hero h1 { font-size: 44px; } .hero-stats { gap: 20px; } .nav-inner { gap: 10px; } }
+</style>
+</head>
+<body>
+
+<!-- Floating Particles Background -->
+<div class="particles" id="particles"></div>
+
+<div class="hero">
+  <div class="hero-tag">12-Week Hybrid Evolution · Ronnie Coleman × Jujimufu × Ido Portal × DDP Yoga × Frank Medrano</div>
+  <h1>APEX <span>PROTOCOL v2</span></h1>
+  <div class="hero-sub">Hybrid Power · Athletic Mobility · Stamina Dominance · Flexibility Mastery</div>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="hero-stat-val">12</span><span class="hero-stat-label">Weeks</span></div>
+    <div class="hero-stat"><span class="hero-stat-val">3</span><span class="hero-stat-label">Phases</span></div>
+    <div class="hero-stat"><span class="hero-stat-val">6</span><span class="hero-stat-label">Training Days</span></div>
+    <div class="hero-stat"><span class="hero-stat-val">5</span><span class="hero-stat-label">Methods Fused</span></div>
+    <div class="hero-stat"><span class="hero-stat-val">83kg</span><span class="hero-stat-label">Body Weight</span></div>
+    <div class="hero-stat"><span class="hero-stat-val">5'9"</span><span class="hero-stat-label">Height</span></div>
+    <div class="hero-stat"><span class="hero-stat-val">175kg</span><span class="hero-stat-label">DL/Squat Base</span></div>
+    <div class="hero-stat"><span class="hero-stat-val">100kg</span><span class="hero-stat-label">Incline Base</span></div>
+  </div>
+</div>
+
+<!-- STICKY NAVIGATION -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#stats">Stats</a>
+    <a href="#methods">Methods</a>
+    <a href="#weekly">Weekly Plan</a>
+    <a href="#phase1">Phase 1</a>
+    <a href="#phase2">Phase 2</a>
+    <a href="#phase3">Phase 3</a>
+    <a href="#recovery">Recovery</a>
+    <a href="#nutrition">Nutrition</a>
+    <a href="#targets">Targets</a>
+    <a href="#videos">Videos</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- CURRENT STATS -->
+<div class="section" id="stats">
+  <span class="section-icon">⚡</span>
+  <div class="section-title">Your Current Foundation</div>
+  <div class="section-sub">Raw strength baseline — all lifts without belt or support</div>
+  <div class="col3">
+    <div class="mini-card">
+      <h5>Incline Bench Press</h5>
+      <ul>
+        <li>Current Max <span class="li-val">100kg × 5 reps</span></li>
+        <li>Estimated 1RM <span class="li-val">~115kg</span></li>
+        <li>12-Week Target <span class="li-val">120kg × 5</span></li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h5>Deadlift (Sumo/Conv)</h5>
+      <ul>
+        <li>Current Max <span class="li-val">175kg × 8 reps</span></li>
+        <li>Estimated 1RM <span class="li-val">~220kg</span></li>
+        <li>12-Week Target <span class="li-val">200kg × 5 raw</span></li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h5>Back Squat</h5>
+      <ul>
+        <li>Current Max <span class="li-val">175kg × 8 reps</span></li>
+        <li>Estimated 1RM <span class="li-val">~220kg</span></li>
+        <li>12-Week Target <span class="li-val">200kg × 5 raw</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-box" style="margin-top: 16px;">
+    <strong style="color: var(--teal-light);">Assessment:</strong> You are an advanced raw lifter. 175kg×8 on squat and deadlift without support is elite-intermediate. This plan builds the ATHLETE around your strength — stamina, mobility, flexibility, and power-endurance are the new frontiers.
+  </div>
+  <div style="text-align: center; margin-top: 20px;">
+    <span class="ratio-badge"><span class="emoji">🦵</span> Squat:BW = <strong>2.1×</strong></span>
+    <span class="ratio-badge"><span class="emoji">🏋️</span> Deadlift:BW = <strong>2.1×</strong></span>
+    <span class="ratio-badge"><span class="emoji">💪</span> Bench:BW = <strong>1.2×</strong></span>
+    <span class="ratio-badge"><span class="emoji">⚡</span> Total:BW = <strong>5.4×</strong></span>
+  </div>
+  <!-- Phase Timeline -->
+  <div class="phase-timeline">
+    <div class="timeline-dot active" style="position:relative;"><span class="timeline-label">Wk 1–4</span></div>
+    <div class="timeline-line"></div>
+    <div class="timeline-dot p2 active" style="position:relative;"><span class="timeline-label">Wk 5–8</span></div>
+    <div class="timeline-line"></div>
+    <div class="timeline-dot p3 active" style="position:relative;"><span class="timeline-label">Wk 9–12</span></div>
+  </div>
+  <div style="text-align: center; margin-top: 30px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-muted);">
+    100kg × 5 <span class="stat-arrow">→</span> <span class="gold-highlight">120kg × 5</span> &nbsp;&nbsp;|&nbsp;&nbsp;
+    175kg × 8 <span class="stat-arrow">→</span> <span class="gold-highlight">200kg × 5</span> &nbsp;&nbsp;|&nbsp;&nbsp;
+    0 split <span class="stat-arrow">→</span> <span class="gold-highlight">Full Front Split</span>
+  </div>
+  <div class="gradient-divider"></div>
+</div>
+
+<!-- METHODOLOGY -->
+<div class="section" id="methods">
+  <span class="section-icon">🧬</span>
+  <div class="section-title">Hybrid Methodology — 5 Systems Fused</div>
+  <div class="section-sub">Each system targets a specific athletic quality</div>
+  <div class="philosophy-grid">
+    <div class="philo-card">
+      <h4>Ronnie Coleman Volume</h4>
+      <p><strong>"Lightweight baby!"</strong> Heavy compounds for HIGH REPS (8–12+). Not just singles. 5×10 squats at 130kg with 90s rest builds more stamina than any cardio. Volume = work capacity = stamina under load.</p>
+    </div>
+    <div class="philo-card">
+      <h4>Jujimufu Flexibility</h4>
+      <p><strong>Strength + splits = real athleticism.</strong> Loaded pancakes, PNF-loaded front splits, Jefferson curls. Stretch AFTER heavy training when muscles are hot. Load makes flexibility permanent.</p>
+    </div>
+    <div class="philo-card">
+      <h4>Ido Portal Movement</h4>
+      <p><strong>"Move or die."</strong> Daily hanging (7 min), squat sits (5 min), locomotion flows. Movement quality as the foundation of all athletic expression. Ground-based preparation.</p>
+    </div>
+    <div class="philo-card">
+      <h4>Frank Medrano Calisthenics</h4>
+      <p><strong>Bodyweight mastery at any size.</strong> Weighted muscle-ups, front levers, human flags — integrated INTO heavy training. Strength expressed through bodyweight control.</p>
+    </div>
+    <div class="philo-card">
+      <h4>DDP Yoga Recovery</h4>
+      <p><strong>"Ain't your mama's yoga."</strong> Dynamic tension stretching — flex all muscles WHILE in stretch positions. Active recovery that builds real flexibility. Rehabilitated wheelchair-bound athletes.</p>
+    </div>
+    <div class="philo-card">
+      <h4>Ben Patrick KOT</h4>
+      <p><strong>Bulletproof joints for 175kg+ loads.</strong> ATG Split Squats, Tibialis work, Nordic Curls. Loaded heavier to match your strength. Joint prep is non-negotiable at this weight class.</p>
+    </div>
+  </div>
+  <div class="warn-box">
+    <strong style="color: var(--gold);">The Hybrid Principle:</strong> Every session blends 2+ systems. Coleman squats finish with Jujimufu loaded stretches. Ido hangs open every session. DDP flows close every session. You never do "just strength" or "just mobility."
+  </div>
+</div>
+
+<!-- WEEKLY ARCHITECTURE -->
+<div class="section" id="weekly">
+  <span class="section-icon">📅</span>
+  <div class="section-title">Weekly Architecture</div>
+  <div class="section-sub">Every day is hybrid — strength meets flexibility meets stamina</div>
+  <div class="week-grid">
+    <div class="day-card"><span class="day-name">MON</span><div class="day-focus">Coleman Upper Volume + Medrano Calisthenics + Ido Hanging</div><span class="day-badge badge-power">Power + Skill</span></div>
+    <div class="day-card"><span class="day-name">TUE</span><div class="day-focus">Coleman Lower Volume + Jujimufu Loaded Stretch + KOT</div><span class="day-badge badge-lower">Volume + Flex</span></div>
+    <div class="day-card"><span class="day-name">WED</span><div class="day-focus">Ido Portal Movement + Full KOT + Stamina Conditioning</div><span class="day-badge badge-cond">Move + Stamina</span></div>
+    <div class="day-card"><span class="day-name">THU</span><div class="day-focus">Medrano Weighted Calisthenics + Hypertrophy + DDP Flow</div><span class="day-badge badge-hyper">Skill + Hyper</span></div>
+    <div class="day-card"><span class="day-name">FRI</span><div class="day-focus">Heavy Lower Strength + Nordics + Jujimufu Splits</div><span class="day-badge badge-strength">Strength + Flex</span></div>
+    <div class="day-card"><span class="day-name">SAT</span><div class="day-focus">Sprint Power + Plyometrics + Conditioning Complex</div><span class="day-badge badge-sprint">Sprint/Plyo</span></div>
+    <div class="day-card"><span class="day-name">SUN</span><div class="day-focus">RECOVERY DAY — Option A: DDP Yoga + Mobility OR Option B: FULL REST (No Training)</div><span class="day-badge badge-recovery">Recovery / OFF</span></div>
+  </div>
+  <div class="info-box">
+    <strong style="color: var(--teal-light);">Daily Non-Negotiables (Every Session):</strong> Ido Portal Dead Hang 7 min total · Squat Sit 5 min · Wrist warm-up 2 min. These run EVERY DAY regardless of the session type.
+  </div>
+</div>
+
+<!-- PHASE 1 -->
+<div class="section" id="phase1">
+  <div class="phase-header phase1-bg" data-num="1">
+    <div class="phase-label">Weeks 1–4</div>
+    <div class="phase-title">ATHLETIC RECONSTRUCTION</div>
+    <div class="phase-desc">Build work capacity with Coleman volume. Introduce Jujimufu flexibility. Establish Ido Portal movement baselines. Focus: stamina-under-load and mobility expansion.</div>
+    <div class="phase-tags">
+      <span class="tag">Coleman 5×8–10</span>
+      <span class="tag">Jujimufu Loaded Stretch</span>
+      <span class="tag">Ido Portal Hanging</span>
+      <span class="tag">KOT Foundation</span>
+      <span class="tag">DDP Recovery</span>
+    </div>
+  </div>
+
+  <div class="col2" style="margin-bottom: 24px;">
+    <div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">Load Parameters</div>
+      <div class="progress-block"><div class="progress-label">Compounds (%1RM)</div><div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div><span class="mono">70–78% (volume)</span></div>
+      <div class="progress-block"><div class="progress-label">Calisthenics</div><div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div><span class="mono">BW + 10–20kg</span></div>
+      <div class="progress-block"><div class="progress-label">Loaded Stretches</div><div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div><span class="mono">Light (form focus)</span></div>
+      <div class="progress-block"><div class="progress-label">Rest Between Compounds</div><div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div><span class="mono">90s ONLY (stamina)</span></div>
+    </div>
+    <div>
+      <div class="mini-card">
+        <h5>Phase 1 Rules</h5>
+        <ul>
+          <li>All compounds: 8–10 rep range <span class="li-val">Volume focus</span></li>
+          <li>Rest: 90–120s max <span class="li-val">Builds stamina</span></li>
+          <li>Every session opens with Ido hangs <span class="li-val">7 min</span></li>
+          <li>Every session closes with DDP/stretch <span class="li-val">10 min</span></li>
+          <li>Juji stretch: after lower days only <span class="li-val">Tue + Fri</span></li>
+          <li>Week 4 = Deload <span class="li-val">50% vol, 60% load</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- P1 MON -->
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">01</div>
+      <div><div class="day-block-title">MONDAY — COLEMAN UPPER VOLUME + MEDRANO POWER</div><div class="day-block-sub">High-volume pressing · Weighted calisthenics · Ido shoulder protocol</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <div class="ex-section-title">Ido Portal Opening (10 min)</div>
+        <table>
+        <tr><td>Dead Hang (passive)</td><td>3 × 60s</td><td>Full shoulder extension. Gravity decompresses spine.</td></tr>
+        <tr><td>Active Hang (scapular pull-ups)</td><td>2 × 15</td><td>Engage lats without bending elbows.</td></tr>
+        <tr><td>Squat Sit Hold</td><td>3 min</td><td>Deep squat, heels down. Shift weight side to side.</td></tr>
+        <tr><td>Wrist Circles + Loading</td><td>2 min</td><td>Prep for calisthenics load bearing.</td></tr>
+        </table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Coleman Volume — Upper Press (90s Rest ONLY)</div>
+        <table><thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Load</th><th>Notes</th></tr></thead>
+        <tbody>
+        <tr class="highlight-row"><td>Incline Barbell Press</td><td>5 × 8</td><td>75–80kg</td><td>Coleman principle: HEAVY for HIGH REPS. 90s rest forces cardiovascular adaptation under load.</td></tr>
+        <tr><td>Flat DB Press</td><td>4 × 10</td><td>36kg DBs</td><td>Deep stretch at bottom. Full ROM. 90s rest.</td></tr>
+        <tr class="highlight-row"><td>Weighted Pull-up</td><td>5 × 8</td><td>BW + 20kg</td><td>"Ain't nothin' but a peanut." Volume pull-ups build stamina.</td></tr>
+        <tr><td>Barbell Row (Pendlay)</td><td>4 × 10</td><td>100kg</td><td>Dead-stop each rep. Explosive pull. 90s rest.</td></tr>
+        </tbody></table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Medrano Weighted Calisthenics</div>
+        <table><thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Notes</th></tr></thead>
+        <tbody>
+        <tr class="highlight-row"><td>Weighted Dips (+20kg)</td><td>4 × 10</td><td>3s negative, explode up. Full ROM — chest below hands.</td></tr>
+        <tr><td>Muscle-Up (or Negative)</td><td>4 × 3–5</td><td>Strict bar. If not achievable: explosive pull-up + negative transition.</td></tr>
+        <tr><td>Archer Push-ups</td><td>3 × 8/side</td><td>Gateway to one-arm push-up. Full extension on assist arm.</td></tr>
+        <tr><td>Typewriter Pull-ups</td><td>3 × 5/side</td><td>Pull to one side, traverse, lower. Asymmetric pulling strength.</td></tr>
+        </tbody></table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Ido Portal Closing — Shoulder Flexibility</div>
+        <table>
+        <tr><td>German Hang</td><td>3 × 20s</td><td>Behind-body shoulder extension stretch under load.</td></tr>
+        <tr><td>Skin the Cat</td><td>3 × 5</td><td>Full controlled rotation. 3s at each end position.</td></tr>
+        <tr><td>Dead Hang (final)</td><td>2 × 45s</td><td>Decompression to finish.</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- P1 TUE -->
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">02</div>
+      <div><div class="day-block-title">TUESDAY — COLEMAN LOWER VOLUME + JUJIMUFU FLEXIBILITY</div><div class="day-block-sub">5×10 heavy squats · Loaded stretching · KOT joint prep · Front splits</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <div class="ex-section-title">KOT Warm-Up (Steps 1–5)</div>
+        <table>
+        <tr><td>Tibialis Raise → FHL Calf → KOT Calf → Patrick Step → ATG Split Squat</td><td>12 min</td><td>25 reps each. ATG: 5×5 per side bodyweight. Non-negotiable before heavy lower.</td></tr>
+        </table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Coleman Lower Volume (Stamina Under Load)</div>
+        <table><thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Load</th><th>Notes</th></tr></thead>
+        <tbody>
+        <tr class="highlight-row"><td>Back Squat</td><td>5 × 10</td><td>130–140kg</td><td>Coleman did 315lbs for 20+ reps. This is YOUR version. 90s rest ONLY. Lungs will burn. Legs will scream. Stamina GROWS.</td></tr>
+        <tr class="highlight-row"><td>Romanian Deadlift</td><td>4 × 10</td><td>120kg</td><td>Full stretch at bottom. Build hamstring endurance for your heavy pulls.</td></tr>
+        <tr><td>Walking Lunges (DB)</td><td>4 × 12/leg</td><td>30kg DBs</td><td>No rest between legs. Cardiovascular + leg volume combined.</td></tr>
+        <tr><td>Leg Press</td><td>3 × 20</td><td>Heavy</td><td>Last 5 reps: 3s pause at bottom. Stamina + stretch under load.</td></tr>
+        </tbody></table>
+        <div class="warn-box"><strong style="color: var(--gold);">Why 5×10 at 130kg?</strong> You squat 175×8. At 75% for 5×10 with 90s rest, you create massive cardiovascular adaptation under load. After 4 weeks, your 175×8 will feel like your old 5-rep set.</div>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Jujimufu Loaded Stretching (Muscles are HOT — perfect timing)</div>
+        <table><thead><tr><th>Stretch</th><th>Protocol</th><th>Notes</th></tr></thead>
+        <tbody>
+        <tr class="highlight-row"><td>Loaded Pancake (BB on back)</td><td>3 × 45s</td><td>20–40kg barbell across upper back. Legs wide, lean forward. Load forces hip opening.</td></tr>
+        <tr class="highlight-row"><td>Jefferson Curl (Loaded)</td><td>3 × 8 slow reps</td><td>20kg, stand on platform. Roll down vertebra by vertebra. 5s down, 5s up.</td></tr>
+        <tr><td>Front Split — PNF</td><td>3 × (10s contract + 30s relax)/side</td><td>In split: push heel into ground 10s → release, sink deeper 30s. Jujimufu's method.</td></tr>
+        <tr><td>Cossack Squat (Loaded)</td><td>3 × 8/side</td><td>15kg KB at chest. Full depth. Adductor flexibility + strength.</td></tr>
+        <tr><td>Elevated Pigeon</td><td>60s/side</td><td>Front leg on bench. Lean forward. Deep hip external rotation.</td></tr>
+        </tbody></table>
+        <div class="info-box"><strong style="color: var(--teal-light);">Juji Principle:</strong> Muscles are warmest post-heavy training. Blood is pumped into fascia. Neural inhibition at lowest. This is when you make REAL flexibility gains.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P1 WED -->
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">03</div>
+      <div><div class="day-block-title">WEDNESDAY — IDO MOVEMENT + KOT + STAMINA CONDITIONING</div><div class="day-block-sub">Movement culture · All 8 KOT steps · EMOM/Tabata for cardiovascular stamina</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <div class="ex-section-title">Ido Portal Movement Flow (20 min)</div>
+        <table>
+        <tr><td>Bear Crawl Variations</td><td>4 × 20m</td><td>Forward, backward, lateral. Low hips.</td></tr>
+        <tr><td>Lizard Crawl</td><td>4 × 15m</td><td>Chest touches ground each step. Hip rotation.</td></tr>
+        <tr><td>QDR Freestyle</td><td>3 × 30s</td><td>Combine bear, crab, monkey. Explore ranges.</td></tr>
+        <tr class="highlight-row"><td>Squat Routine (30/30)</td><td>10 min</td><td>30s deep squat → 30s standing. Accumulate 5 min in squat. Shift, rotate, reach.</td></tr>
+        <tr><td>Hanging Challenge</td><td>7 min total</td><td>Passive, active, single-arm, traversal. Min 30s per hang.</td></tr>
+        </table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Full KOT Protocol (All 8 Steps)</div>
+        <div class="kot-steps-grid">
+          <div class="kot-step"><div class="kot-step-num">1</div><div class="kot-step-name">Tibialis Raise</div><div class="kot-step-detail">25 reps · 2s hold</div></div>
+          <div class="kot-step"><div class="kot-step-num">2</div><div class="kot-step-name">FHL Calf Raise</div><div class="kot-step-detail">25 reps · big toe</div></div>
+          <div class="kot-step"><div class="kot-step-num">3</div><div class="kot-step-name">KOT Calf Raise</div><div class="kot-step-detail">25 each · knees over toes</div></div>
+          <div class="kot-step"><div class="kot-step-num">4</div><div class="kot-step-name">Patrick Step</div><div class="kot-step-detail">25 each · pain-free</div></div>
+          <div class="kot-step"><div class="kot-step-num">5</div><div class="kot-step-name">ATG Split Squat</div><div class="kot-step-detail">5×5 per side</div></div>
+          <div class="kot-step"><div class="kot-step-num">6</div><div class="kot-step-name">Elephant Walk</div><div class="kot-step-detail">30 reps · hamstring</div></div>
+          <div class="kot-step"><div class="kot-step-num">7</div><div class="kot-step-name">L-Sit</div><div class="kot-step-detail">60s total</div></div>
+          <div class="kot-step"><div class="kot-step-num">8</div><div class="kot-step-name">Couch Stretch</div><div class="kot-step-detail">60s per side</div></div>
+        </div>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Core Destruction Block — Wednesday (10 min)</div>
+        <table><thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Notes</th></tr></thead>
+        <tbody>
+        <tr class="highlight-row"><td>Hanging Leg Raises (toes to bar)</td><td>4 × 12</td><td>Full ROM. No swing. Progress: weighted ankles by Phase 2.</td></tr>
+        <tr><td>Ab Wheel Rollout (standing)</td><td>3 × 8–10</td><td>Full extension. 2s hold at bottom. Kneeling if needed Wk 1–2.</td></tr>
+        <tr class="highlight-row"><td>Pallof Press (Cable Anti-Rotation)</td><td>3 × 12/side</td><td>Anti-rotation = functional core. Resist the pull. 3s hold extended.</td></tr>
+        <tr><td>Hollow Body Hold</td><td>3 × 30s</td><td>Gymnast standard. Lower back GLUED to floor. Arms overhead.</td></tr>
+        </tbody></table>
+        <div class="info-box"><strong style="color: var(--teal-light);">Why here, not separate?</strong> Core work placed AFTER movement flow and BEFORE conditioning. Pre-fatigued core during conditioning = real-world stamina. Your 175kg squat already demands massive core bracing — this adds the aesthetic/endurance component.</div>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Stamina Conditioning — EMOM + Tabata (20 min)</div>
+        <div class="col2">
+          <div class="mini-card">
+            <h5>Block A: EMOM 10 min (Odd Wks)</h5>
+            <ul>
+              <li>Min 1: KB Swings × 15 <span class="li-val">32kg</span></li>
+              <li>Min 2: Burpee Pull-ups × 8 <span class="li-val">Explosive</span></li>
+              <li>Min 3: Battle Ropes × 30s <span class="li-val">Max</span></li>
+              <li>Min 4: Box Jump × 10 <span class="li-val">24"</span></li>
+              <li>Min 5: Thrusters × 10 <span class="li-val">40kg</span></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <h5>Block B: Tabata (Even Wks)</h5>
+            <ul>
+              <li>Assault Bike: 20s ON / 10s OFF <span class="li-val">×8 = 4 min</span></li>
+              <li>Rest 2 min <span class="li-val">—</span></li>
+              <li>KB Snatch: 20s ON / 10s OFF <span class="li-val">×8 = 4 min</span></li>
+              <li>Rest 2 min <span class="li-val">—</span></li>
+              <li>Burpees: 20s ON / 10s OFF <span class="li-val">×8 = 4 min</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P1 THU -->
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">04</div>
+      <div><div class="day-block-title">THURSDAY — MEDRANO SKILLS + HYPERTROPHY + DDP YOGA</div><div class="day-block-sub">Advanced calisthenics · Accessory hypertrophy · DDP dynamic tension closing flow</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <div class="ex-section-title">Medrano Calisthenics Skills</div>
+        <table><thead><tr><th>Skill</th><th>Sets × Duration</th><th>Notes</th></tr></thead>
+        <tbody>
+        <tr class="highlight-row"><td>Front Lever (Tuck → Adv. Tuck)</td><td>5 × 10–15s</td><td>Straight arms, hips level. Progress weekly.</td></tr>
+        <tr><td>Muscle-Up to L-Sit</td><td>4 × 3–5</td><td>Full MU → hold L-sit at top. Medrano signature.</td></tr>
+        <tr><td>Handstand Push-up (wall)</td><td>4 × 5–8</td><td>Full ROM. Head to floor. Progress to deficit.</td></tr>
+        <tr><td>Dragon Flag</td><td>4 × 6–8</td><td>Full body lever. 3s eccentric. Core for front lever.</td></tr>
+        <tr><td>One-Arm Push-up Progression</td><td>3 × 5/side</td><td>Wk 1–2: elevated. Wk 3–4: floor level.</td></tr>
+        </tbody></table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Hypertrophy Accessories (Coleman Volume)</div>
+        <table>
+        <tr><td>DB Lateral Raises</td><td>4 × 15</td><td>No swing. 60s rest. Cannonball delts.</td></tr>
+        <tr><td>Face Pulls</td><td>4 × 15</td><td>External rotation. Rear delt health.</td></tr>
+        <tr><td>Incline DB Curl</td><td>3 × 12</td><td>Full stretch. Peak squeeze.</td></tr>
+        <tr><td>Overhead Tricep Extension</td><td>3 × 15</td><td>Deep stretch. Constant tension.</td></tr>
+        </table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">DDP Yoga Closing Flow (10 min)</div>
+        <table>
+        <tr class="highlight-row"><td>Diamond Cutter Series</td><td>3 rounds</td><td>Warrior 1→2→Reverse→Side Angle→Triangle. 15s each. DYNAMIC TENSION: flex all muscles while stretching. DDP's secret weapon.</td></tr>
+        <tr><td>Standing Bow</td><td>30s/side</td><td>Quad + balance + hamstring. DDP balance builder.</td></tr>
+        <tr><td>Push-up → Cobra → Downward Dog</td><td>5 reps + holds</td><td>Spinal + hamstring + shoulder flexibility in one flow.</td></tr>
+        <tr><td>4-7-8 Breathing (corpse pose)</td><td>2 min</td><td>Parasympathetic reset. 4-count in, 7 hold, 8 out.</td></tr>
+        </table>
+        <div class="kot-box"><strong style="color: #9a4ad4;">DDP Principle:</strong> Dynamic tension = flexing muscles while in stretch positions. Creates isometric strength WITHIN flexibility. Rehabbed NFL players back from wheelchairs. You use it for recovery + athletic flexibility.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P1 FRI -->
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">05</div>
+      <div><div class="day-block-title">FRIDAY — HEAVY LOWER + NORDICS + JUJIMUFU SPLITS</div><div class="day-block-sub">Deadlift + Front Squat strength · Nordic progression · Loaded split training</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <div class="ex-section-title">KOT Warm-Up + Ido Squat Sit</div>
+        <table>
+        <tr><td>KOT Steps 1–5</td><td>12 min</td><td>Full sequence as programmed.</td></tr>
+        <tr><td>Deep Squat Sit</td><td>3 min</td><td>Rock side to side. Knees out. Prime ankles/hips.</td></tr>
+        </table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Strength Block (Heavier, Fewer Reps than Tuesday)</div>
+        <table><thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Load</th><th>Notes</th></tr></thead>
+        <tbody>
+        <tr class="highlight-row"><td>Conventional Deadlift</td><td>4 × 6</td><td>150–155kg</td><td>Heavy work. 2 min rest. Drive floor away. Your 175×8 base means 155×6 is sustainable.</td></tr>
+        <tr class="highlight-row"><td>Front Squat</td><td>4 × 6</td><td>110–120kg</td><td>Upright torso. Deep as possible. Quad + mobility simultaneously.</td></tr>
+        <tr><td>Deficit Deadlift (+5cm)</td><td>3 × 5</td><td>130kg</td><td>Increases ROM. Strengthens bottom position.</td></tr>
+        </tbody></table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Nordic + ATG Block</div>
+        <table>
+        <tr class="highlight-row"><td>Nordic Curl — Eccentric</td><td>4 × 5–6</td><td>5–6s descent. Push back up. At your strength, expect 3+ self-assisted concentrics by week 3.</td></tr>
+        <tr><td>Loaded ATG Split Squat</td><td>4 × 8/side</td><td>15kg DBs. +2.5kg weekly. Full depth. Non-negotiable knee protection.</td></tr>
+        <tr><td>Pistol Squat Progression</td><td>3 × 5/leg</td><td>Wk 1–2: to box. Wk 3–4: half pistol.</td></tr>
+        </table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Jujimufu Flexibility Finisher</div>
+        <table>
+        <tr class="highlight-row"><td>Front Split PNF Loaded</td><td>3 × (10s contract + 30s relax)/side</td><td>Push heel into ground (contract) 10s → release, sink 30s. Add 10kg plate on lap.</td></tr>
+        <tr class="highlight-row"><td>Middle Split Loaded Pancake</td><td>3 × 45s</td><td>20–30kg BB on back. Lean forward. Load pulls you deeper.</td></tr>
+        <tr><td>Jefferson Curl</td><td>3 × 8 @ 20kg</td><td>Full spinal flexion under load. Stand on plate for extra ROM.</td></tr>
+        <tr><td>Couch Stretch (KOT 8)</td><td>60s/side</td><td>Every lower day. Shin to wall goal.</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- P1 SAT -->
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">06</div>
+      <div><div class="day-block-title">SATURDAY — SPRINT + ATHLETIC CONDITIONING</div><div class="day-block-sub">Hill sprints · Plyometrics · 5-round stamina circuit</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <div class="ex-section-title">Sprint Development (90s Rest — Builds Recovery)</div>
+        <table>
+        <tr><td>Dynamic Warm-Up</td><td>10 min</td><td>A-skips, B-skips, high knees, lateral shuffles</td></tr>
+        <tr class="highlight-row"><td>Hill Sprints OR 30m Flat</td><td>8 × 30m</td><td>FULL effort. 90s rest (not 3 min). Sprint-recovery stamina.</td></tr>
+        <tr><td>Box Jumps (Max Height)</td><td>4 × 5</td><td>Step off. Full reset. Explosive triple extension.</td></tr>
+        <tr><td>Broad Jump</td><td>4 × 4</td><td>Stick landing. Max horizontal power.</td></tr>
+        </table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Core Power Block — Saturday (8 min)</div>
+        <table><thead><tr><th>Exercise</th><th>Sets × Reps</th><th>Notes</th></tr></thead>
+        <tbody>
+        <tr class="highlight-row"><td>Dragon Flag</td><td>3 × 6–8</td><td>Full body lever off bench. 3s eccentric. Transfers directly to front lever strength.</td></tr>
+        <tr><td>Weighted Plank (plate on back)</td><td>3 × 45s</td><td>20kg plate. Anti-extension under load. Brace like a 200kg squat.</td></tr>
+        <tr class="highlight-row"><td>L-Sit Hold (parallettes)</td><td>3 × 20–30s</td><td>Both legs parallel to floor. Straight arms. Overlap with KOT Step 7 progression.</td></tr>
+        <tr><td>Cable Woodchop (High to Low)</td><td>3 × 10/side</td><td>Rotational power. Athletic core for sprinting and throwing.</td></tr>
+        </tbody></table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Athletic Conditioning — 5 Rounds (60s Rest ONLY)</div>
+        <table>
+        <tr><td>KB Clean + Press</td><td>5/arm</td><td>No rest between arms. Full hip drive.</td></tr>
+        <tr><td>Burpee Pull-ups</td><td>8 reps</td><td>Full burpee → jump to bar → pull-up.</td></tr>
+        <tr><td>Farmer's Walk</td><td>40m</td><td>40kg+ per hand. Grip + core challenge.</td></tr>
+        <tr><td>Battle Ropes</td><td>30s max</td><td>Stay low in squat position.</td></tr>
+        <tr class="highlight-row"><td>Rest between rounds</td><td>60s ONLY</td><td>Where stamina is BUILT. Powerful movements, minimal rest.</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- P1 SUN -->
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">07</div>
+      <div><div class="day-block-title">SUNDAY — RECOVERY DAY (CHOOSE YOUR OPTION)</div><div class="day-block-sub">Option A: DDP Yoga active recovery (if feeling fresh) · Option B: FULL REST — zero training (if fatigued)</div></div>
+    </div>
+    <div class="day-body">
+      <div class="warn-box" style="margin-bottom: 16px;">
+        <strong style="color: var(--gold);">⚠️ THE HONEST TRUTH:</strong> At 83kg handling 175kg+ raw across 6 intense days — a FULL rest day is not laziness, it's INTELLIGENCE. Choose below based on how you feel Sunday morning:
+      </div>
+      <div class="col2" style="margin-bottom: 16px;">
+        <div class="mini-card">
+          <h5>✅ Option A (Active Recovery) IF:</h5>
+          <ul>
+            <li>Slept 8+ hours <span class="li-val">Rested</span></li>
+            <li>No lingering DOMS <span class="li-val">Recovered</span></li>
+            <li>Motivation is high <span class="li-val">CNS fresh</span></li>
+            <li>Resting HR is normal <span class="li-val">Not overtrained</span></li>
+            <li>NOT a PR week <span class="li-val">Low CNS debt</span></li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h5>🛑 Option B (FULL REST) IF:</h5>
+          <ul>
+            <li>Slept under 7 hours <span class="li-val">Rest needed</span></li>
+            <li>Still sore from Fri/Sat <span class="li-val">Incomplete repair</span></li>
+            <li>Low energy / brain fog <span class="li-val">CNS fatigued</span></li>
+            <li>Hit PRs this week <span class="li-val">Nervous system debt</span></li>
+            <li>Work/life stress was high <span class="li-val">Total load matters</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Option A — DDP Yoga Light Recovery (30–40 min, HR stays under 100bpm)</div>
+        <table>
+        <tr><td>Standing Series (Diamond Cutter)</td><td>10 min</td><td>Warrior flow. Dynamic tension. ZERO intensity. This is RECOVERY not training.</td></tr>
+        <tr><td>Floor Series (Pigeon + Fold)</td><td>10 min</td><td>Pigeon 90s/side. Seated fold. Gentle hip opening.</td></tr>
+        <tr><td>Deep Squat Sit + Easy Hanging</td><td>5+5 min</td><td>Mobility maintenance only. No effort.</td></tr>
+        <tr><td>4-7-8 Breathing</td><td>5 min</td><td>Parasympathetic activation. Actual recovery hormone trigger.</td></tr>
+        </table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Option B — FULL REST (Do NOTHING Training-Related)</div>
+        <table>
+        <tr class="highlight-row"><td>No gym. No yoga. No "just a quick stretch."</td><td>All day</td><td>Your muscles grow DURING REST, not during training. Respect the biology.</td></tr>
+        <tr><td>Sleep in / Nap if needed</td><td>8–10 hours</td><td>Growth hormone peaks during deep sleep. This builds you.</td></tr>
+        <tr><td>Easy walk (optional)</td><td>20–30 min</td><td>Gentle stroll only. NOT cardio. Blood flow without CNS demand.</td></tr>
+        <tr><td>Eat full nutrition</td><td>Don't cut calories</td><td>Muscles are REPAIRING today. 150g protein. Full carbs.</td></tr>
+        </table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Recommended Sunday Choice Across 12 Weeks</div>
+        <table><thead><tr><th>Week</th><th>Recommendation</th><th>Reason</th></tr></thead>
+        <tbody>
+        <tr><td>Week 1–2</td><td>🛑 FULL REST</td><td>Body adapting to new volume. Don't push.</td></tr>
+        <tr><td>Week 3</td><td>✅ Active Recovery</td><td>If adapting well, light movement helps.</td></tr>
+        <tr class="highlight-row"><td>Week 4 (Deload)</td><td>✅ Active Recovery</td><td>Deload — body isn't stressed. Yoga fine.</td></tr>
+        <tr><td>Week 5–6</td><td>🛑 FULL REST</td><td>Phase 2 intensity ramps up. Conserve.</td></tr>
+        <tr><td>Week 7</td><td>✅ Active Recovery</td><td>If no red flags.</td></tr>
+        <tr class="highlight-row"><td>Week 8 (Deload)</td><td>✅ Active Recovery</td><td>Deload — light yoga is fine.</td></tr>
+        <tr><td>Week 9–11 (PR weeks)</td><td>🛑 FULL REST</td><td>MAX EFFORT phase. Full CNS recovery needed.</td></tr>
+        <tr><td>Week 12</td><td>Auto-regulate</td><td>You know your body by now.</td></tr>
+        </tbody></table>
+      </div>
+      <div class="kot-box"><strong style="color: #9a4ad4;">Bottom Line:</strong> Ronnie Coleman rested. Dorian Yates rested. Every elite athlete rests. Your effective training schedule is <strong>5–6 days</strong> depending on fatigue. Sunday OFF is not weakness — it's when the 175kg becomes 200kg.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 2 -->
+<div class="section" id="phase2">
+  <div class="phase-header phase2-bg" data-num="2">
+    <div class="phase-label">Weeks 5–8</div>
+    <div class="phase-title">POWER DOMINANCE</div>
+    <div class="phase-desc">Contrast training on all compound days. Coleman volume increases. Jujimufu targets: near-full front split. Medrano skills: front lever straddle, weighted muscle-ups. KOT heavily loaded. Sprint times tracked.</div>
+    <div class="phase-tags">
+      <span class="tag">Contrast Method (PAP)</span>
+      <span class="tag">Coleman 6×10</span>
+      <span class="tag">KOT +20–25kg</span>
+      <span class="tag">Juji: 10cm from Floor</span>
+      <span class="tag">Medrano Holds 20s</span>
+    </div>
+  </div>
+
+  <div class="col2" style="margin-bottom: 24px;">
+    <div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">Phase 2 Loads</div>
+      <div class="progress-block"><div class="progress-label">Compounds</div><div class="progress-bar"><div class="progress-fill p2-fill" style="width:88%"></div></div><span class="mono">82–90% 1RM</span></div>
+      <div class="progress-block"><div class="progress-label">Volume Sets</div><div class="progress-bar"><div class="progress-fill p2-fill" style="width:78%"></div></div><span class="mono">75–80% × 8–10</span></div>
+      <div class="progress-block"><div class="progress-label">Calisthenics</div><div class="progress-bar"><div class="progress-fill p2-fill" style="width:72%"></div></div><span class="mono">BW + 25–35kg</span></div>
+      <div class="progress-block"><div class="progress-label">Nordic Curl</div><div class="progress-bar"><div class="progress-fill p2-fill" style="width:70%"></div></div><span class="mono">Full eccentric + concentric</span></div>
+    </div>
+    <div>
+      <div class="mini-card">
+        <h5>Phase 2 Upgrades</h5>
+        <ul>
+          <li>Every compound: contrast pair <span class="li-val">Heavy → Explosive</span></li>
+          <li>Squat volume: 5×10 → 2×15 <span class="li-val">Endurance peak</span></li>
+          <li>Juji stretch load: +50% <span class="li-val">30–45kg</span></li>
+          <li>DDP: add "Black Out" series <span class="li-val">Sunday</span></li>
+          <li>Sprint: track times weekly <span class="li-val">Progress visible</span></li>
+          <li>Deload Week 8 <span class="li-val">50% vol, 70% load</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">01</div>
+      <div><div class="day-block-title">MONDAY — CONTRAST UPPER + ADVANCED MEDRANO</div><div class="day-block-sub">Heavy → Explosive pairs · Weighted muscle-ups · Front lever straddle · Coleman back volume</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <div class="ex-section-title">Contrast Training (Post-Activation Potentiation)</div>
+        <table><thead><tr><th>Heavy (A1)</th><th>Explosive (A2)</th><th>Sets</th><th>Protocol</th></tr></thead>
+        <tbody>
+        <tr class="highlight-row"><td>Incline Press: 5×5 @ 85–90kg</td><td>Plyo Push-up (clap): 5×5</td><td>5</td><td>30s between. 90s between pairs. Heavy primes fibers for speed.</td></tr>
+        <tr class="highlight-row"><td>Weighted Pull-up: 5×5 @ BW+30kg</td><td>Explosive Pull-up: 5×5</td><td>5</td><td>BW feels light after heavy. EXPLODE through bar.</td></tr>
+        <tr><td>Weighted Dip: 4×6 @ BW+25kg</td><td>Med Ball Chest Pass: 4×8</td><td>4</td><td>Transfer pressing power to velocity.</td></tr>
+        </tbody></table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Medrano Phase 2 Skills</div>
+        <table>
+        <tr class="highlight-row"><td>Front Lever (Adv Tuck → Straddle)</td><td>5 × 12–20s</td><td>Progress to straddle by week 7. Straight arms throughout.</td></tr>
+        <tr><td>Weighted Muscle-Up (+10kg)</td><td>4 × 3</td><td>Clean transition. No kip. Pure strength.</td></tr>
+        <tr><td>Back Lever (Tuck → Straddle)</td><td>4 × 15s</td><td>Bulletproof shoulders for heavy pressing.</td></tr>
+        <tr><td>Handstand Push-up (Deficit)</td><td>4 × 5–8</td><td>Hands on parallettes. Head below hand level.</td></tr>
+        <tr><td>Human Flag (Tuck)</td><td>3 × 10s</td><td>Engage obliques + lats. Build toward one-leg.</td></tr>
+        </table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Coleman Back Finisher</div>
+        <table>
+        <tr><td>Barbell Row</td><td>4 × 10 @ 110kg</td><td>Volume. 90s rest. "Yeah buddy!"</td></tr>
+        <tr><td>Lat Pulldown (Wide)</td><td>3 × 12</td><td>Squeeze, 2s pause at chest. 60s rest.</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">02</div>
+      <div><div class="day-block-title">TUESDAY — CONTRAST LOWER + VOLUME SET + JUJIMUFU DEEP</div><div class="day-block-sub">Squat→Box Jump · 2×15 endurance set · Loaded splits progress · Nordic full ROM</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <div class="ex-section-title">Contrast Lower Power</div>
+        <table><thead><tr><th>Heavy (A1)</th><th>Explosive (A2)</th><th>Sets</th><th>Notes</th></tr></thead>
+        <tbody>
+        <tr class="highlight-row"><td>Back Squat: 4×4 @ 155–160kg</td><td>Max Box Jump: 4×3</td><td>4</td><td>30s between. Step off box. 2 min pairs.</td></tr>
+        <tr class="highlight-row"><td>Trap Bar DL: 4×4 @ 160kg</td><td>Broad Jump: 4×4</td><td>4</td><td>Horizontal power after heavy pull.</td></tr>
+        </tbody></table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Coleman Endurance Set (The Hardest Set of the Week)</div>
+        <table>
+        <tr class="highlight-row"><td>Back Squat</td><td>2 × 15 @ 120–130kg</td><td>"Lightweight!" 120kg for 15 reps at 90s rest. Cardiovascular + muscular endurance at its peak. Breathe EVERY rep. Brace EVERY rep.</td></tr>
+        </table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">KOT + Nordic (Loaded)</div>
+        <table>
+        <tr><td>Loaded ATG Split Squat</td><td>4 × 8/side @ 20–25kg DBs</td><td>Every week +2.5kg if form pristine.</td></tr>
+        <tr class="highlight-row"><td>Nordic Curl Full ROM</td><td>4 × 6–8</td><td>Full eccentric + attempt concentric. Band assist if needed. Wk 6+: unassisted.</td></tr>
+        <tr><td>Single-Leg RDL</td><td>3 × 10/leg @ 20kg</td><td>Balance + hamstring.</td></tr>
+        </table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Jujimufu Deep Flex (Loaded, Post-Training)</div>
+        <table>
+        <tr class="highlight-row"><td>Front Split PNF + 10kg</td><td>3 × (10s + 45s)/side</td><td>Contract → release → sink. Target: 10cm from floor by wk 8.</td></tr>
+        <tr><td>Middle Split Loaded Slide</td><td>3 × 45s</td><td>Sliders + 15kg plate on lap. Gravity pulls deeper.</td></tr>
+        <tr><td>Loaded Pancake (30–40kg)</td><td>3 × 45s</td><td>Chest toward floor.</td></tr>
+        <tr><td>Jefferson Curl (25kg)</td><td>3 × 8</td><td>Full vertebral flexion.</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">06</div>
+      <div><div class="day-block-title">SATURDAY — SPRINT PEAK + POWER + STAMINA CIRCUIT</div><div class="day-block-sub">Timed sprints · Hang cleans · 6-round conditioning (60s rest)</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <div class="ex-section-title">Sprint + Olympic Power</div>
+        <table>
+        <tr class="highlight-row"><td>40m Sprints (timed)</td><td>6 × 40m @ 90s rest</td><td>FULL effort. Track time weekly. Improvement = stamina + power growing.</td></tr>
+        <tr class="highlight-row"><td>Hang Power Clean</td><td>5 × 3 @ 70–80kg</td><td>Explosive hip extension. Olympic athleticism.</td></tr>
+        <tr><td>Push Press</td><td>4 × 5 @ 70kg</td><td>Leg drive into lockout. Power chain.</td></tr>
+        </table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Stamina Circuit — 6 Rounds (60s Rest)</div>
+        <table>
+        <tr><td>KB Swing (32kg) × 15</td><td>Burpee Box Jump × 8</td><td>Thrusters (40kg) × 10</td></tr>
+        <tr><td>Pull-ups × 10</td><td>Assault Bike × 15 cal</td><td>Rest: 60s between rounds</td></tr>
+        </table>
+        <div class="warn-box"><strong style="color: var(--gold);">6 rounds at 60s rest = elite conditioning territory.</strong> If you complete all 6 under 25 min, your stamina has already eclipsed 95% of gym-goers.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 3 -->
+<div class="section" id="phase3">
+  <div class="phase-header phase3-bg" data-num="3">
+    <div class="phase-label">Weeks 9–12</div>
+    <div class="phase-title">APEX UNLOCKING</div>
+    <div class="phase-desc">1RM testing. Full conjugate method. Front lever mastery. Front split flat. Nordic unassisted. 200kg squat/deadlift. You emerge as a complete hybrid athlete — strong, flexible, mobile, with stamina that outlasts anyone.</div>
+    <div class="phase-tags">
+      <span class="tag">1RM Testing (Wk 10–11)</span>
+      <span class="tag">Dynamic Effort Speed</span>
+      <span class="tag">Front Lever Full 15s</span>
+      <span class="tag">Front Split Floor</span>
+      <span class="tag">Nordic 8 Unassisted</span>
+      <span class="tag">200kg Club</span>
+    </div>
+  </div>
+
+  <div class="col2" style="margin-bottom: 24px;">
+    <div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">Phase 3 Loads</div>
+      <div class="progress-block"><div class="progress-label">Max Effort Day</div><div class="progress-bar"><div class="progress-fill p3-fill" style="width:100%"></div></div><span class="mono">95–100% (PR)</span></div>
+      <div class="progress-block"><div class="progress-label">Dynamic Effort</div><div class="progress-bar"><div class="progress-fill p3-fill" style="width:60%"></div></div><span class="mono">55–65% (speed)</span></div>
+      <div class="progress-block"><div class="progress-label">Volume Back-offs</div><div class="progress-bar"><div class="progress-fill p3-fill" style="width:85%"></div></div><span class="mono">80–85% × 8–10</span></div>
+      <div class="progress-block"><div class="progress-label">Calisthenics</div><div class="progress-bar"><div class="progress-fill p3-fill" style="width:82%"></div></div><span class="mono">BW+40kg / Full skills</span></div>
+    </div>
+    <div>
+      <div class="mini-card">
+        <h5>Phase 3 Peak Targets</h5>
+        <ul>
+          <li>Squat 1RM (Wk 10) <span class="li-val">200kg+ raw</span></li>
+          <li>Deadlift 1RM (Wk 11) <span class="li-val">200–210kg raw</span></li>
+          <li>Incline Press 5RM <span class="li-val">115–120kg</span></li>
+          <li>Front Lever <span class="li-val">15s full layout</span></li>
+          <li>Front Split <span class="li-val">Flat on floor</span></li>
+          <li>7-Round Circuit <span class="li-val">Under 35 min</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">01</div>
+      <div><div class="day-block-title">MONDAY — MAX EFFORT UPPER + CALISTHENICS PEAK</div><div class="day-block-sub">Incline 1RM (Wk 10) · Back-off volume · Full front lever · Weighted muscle-ups · Human flag</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <div class="ex-section-title">Max Effort Press — PR Protocol</div>
+        <table>
+        <tr class="highlight-row"><td>Incline Press → 1RM</td><td>60%×5→70%×3→80%×2→85%×1→90%×1→95%×1→PR</td><td>Target: 115–120kg. After 9 weeks of Coleman volume + contrast, this is earned.</td></tr>
+        <tr><td>Back-off Coleman Volume</td><td>3 × 8 @ 85% of PR</td><td>Immediately after PR. Volume on top of peak. 90s rest.</td></tr>
+        <tr><td>Contrast: Dip+30kg → Med Ball Slam</td><td>4 × 5 + 4 × 8</td><td>Full PAP expression.</td></tr>
+        </table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Medrano Phase 3 — Peak Expression</div>
+        <table>
+        <tr class="highlight-row"><td>Front Lever FULL LAYOUT</td><td>5 × 10–15s</td><td>Both legs extended. Body parallel. Straight arms. Top 0.1% of gym-goers.</td></tr>
+        <tr class="highlight-row"><td>Weighted Muscle-Up (+20kg)</td><td>4 × 3</td><td>Clean transition. Ultimate pulling power.</td></tr>
+        <tr><td>Human Flag (One-Leg Extended)</td><td>4 × 8–10s</td><td>Full oblique+lat engagement.</td></tr>
+        <tr><td>One-Arm Push-up (Full)</td><td>3 × 5/side</td><td>Flat floor. Controlled.</td></tr>
+        <tr><td>Handstand Push-up (Deficit/Free)</td><td>3 × 5</td><td>Attempt 1 freestanding rep by Wk 12.</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">02</div>
+      <div><div class="day-block-title">TUESDAY — MAX EFFORT LOWER + SPLIT ACHIEVEMENT</div><div class="day-block-sub">Squat 1RM (Wk 10) · DL 1RM (Wk 11) · Full split target · Nordic mastery</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <div class="ex-section-title">Max Effort (Alternating Weeks)</div>
+        <table>
+        <tr class="highlight-row"><td>Back Squat 1RM (Week 10)</td><td>Pyramid to PR. Target: 200kg+</td><td>Your 175×8 base = ~220 est. 1RM. After volume adaptation, 200 single should be smooth.</td></tr>
+        <tr class="highlight-row"><td>Conv. Deadlift 1RM (Week 11)</td><td>Pyramid to PR. Target: 200–210kg</td><td>Same logic. You WILL hit 200+ raw.</td></tr>
+        <tr><td>Volume Back-off</td><td>2 × 12 @ 140kg (sq) / 150kg (DL)</td><td>Coleman: volume even on max day.</td></tr>
+        </table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">KOT Peak + Nordic Mastery</div>
+        <table>
+        <tr class="highlight-row"><td>Nordic Curl — Full Unassisted</td><td>4 × 8</td><td>Full eccentric + concentric. No band. Top 1% hamstring strength.</td></tr>
+        <tr><td>Loaded ATG Split Squat</td><td>4 × 8 @ 30–35kg DBs</td><td>Heaviest ever. Perfect form or drop weight.</td></tr>
+        <tr><td>Pistol Squat (Loaded +10kg)</td><td>4 × 8/leg</td><td>Full depth. Balance mastery.</td></tr>
+        </table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Jujimufu — Front Split Achievement</div>
+        <table>
+        <tr class="highlight-row"><td>Front Split PNF MAX</td><td>5 × (10s + 60s)/side</td><td>20kg plate. 12 weeks culminates HERE. Hips touch floor. BREATHE through it.</td></tr>
+        <tr><td>Middle Split Progress</td><td>3 × 60s @ 25kg</td><td>Target: 15–20cm from floor.</td></tr>
+        <tr><td>Loaded Pancake (40kg)</td><td>3 × 60s</td><td>Chest toward floor. Peak adductor flexibility.</td></tr>
+        <tr><td>Jefferson Curl (30–35kg)</td><td>3 × 8</td><td>Peak posterior chain mobility.</td></tr>
+        </table>
+        <div class="info-box"><strong style="color: var(--teal-light);">Jujimufu Promise:</strong> A 100kg+ athlete doing full splits while squatting 200kg. Flexibility and strength are the same thing expressed differently.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">03</div>
+      <div><div class="day-block-title">WEDNESDAY — DYNAMIC EFFORT + KOT + PEAK CONDITIONING</div><div class="day-block-sub">Speed work · Full loaded KOT · 7-round championship circuit</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <div class="ex-section-title">Dynamic Effort — Bar Speed Focus</div>
+        <table>
+        <tr class="highlight-row"><td>Speed Squat (Box)</td><td>10 × 3 @ 55–60% (~120kg)</td><td>45s rest. MAX bar speed every rep.</td></tr>
+        <tr class="highlight-row"><td>Speed Bench</td><td>10 × 3 @ 55–60% (~65kg)</td><td>45s rest. Launch the bar. Speed = power.</td></tr>
+        </table>
+      </div>
+      <div class="exercise-section">
+        <div class="ex-section-title">Championship Circuit — 7 Rounds (45s Rest)</div>
+        <table>
+        <tr><td>KB Swing (40kg) × 15</td><td>Burpee Muscle-Up × 5</td><td>Thrusters (50kg) × 8</td></tr>
+        <tr><td>Farmer's Walk 50m (48kg/hand)</td><td>Assault Bike 20 cal</td><td><strong>Rest: 45s ONLY</strong></td></tr>
+        </table>
+        <div class="warn-box"><strong style="color: var(--gold);">7 rounds at 45s rest under 35 min = ELITE stamina.</strong> Your heart rate will hit 90%+ max. This is the final test of work capacity.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">06</div>
+      <div><div class="day-block-title">SATURDAY — WEEK 12 FINAL ATHLETIC ASSESSMENT</div><div class="day-block-sub">Complete hybrid athlete scorecard testing</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <div class="ex-section-title">Final Assessment Tests (Week 12 Only)</div>
+        <table><thead><tr><th>Test</th><th>Target</th><th>What It Proves</th></tr></thead>
+        <tbody>
+        <tr class="highlight-row"><td>100kg Squat Max Reps (2 min cap)</td><td>20+ reps</td><td>Stamina under load. Coleman volume payoff.</td></tr>
+        <tr class="highlight-row"><td>Max Strict Pull-ups</td><td>25+</td><td>Upper body muscular endurance.</td></tr>
+        <tr><td>30m Sprint (timed)</td><td>Sub 4.5s</td><td>Speed + power development.</td></tr>
+        <tr><td>Front Lever Hold</td><td>15s full layout</td><td>Calisthenics mastery (Medrano standard).</td></tr>
+        <tr><td>Front Split Depth</td><td>0 cm (flat)</td><td>Flexibility mastery (Jujimufu standard).</td></tr>
+        <tr><td>Deep Squat Sit</td><td>10 min continuous</td><td>Mobility mastery (Ido Portal standard).</td></tr>
+        <tr><td>Nordic Curl Full ROM</td><td>8 unassisted reps</td><td>Joint bulletproofing (KOT standard).</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NUTRITION -->
+<div class="section" id="nutrition">
+  <span class="section-icon">🍗</span>
+  <div class="section-title">Nutrition — Performance Fueling</div>
+  <div class="section-sub">Calibrated for 83kg / 5'9" — optimized for stamina + recovery + flexibility</div>
+  <div class="nutrition-grid">
+    <div class="nutr-card"><span class="nutr-val">150g</span><div class="nutr-label">Protein Daily</div><div class="nutr-note">~1.8g/kg. Split across 4–5 meals. Non-negotiable for 6-day training at 83kg.</div></div>
+    <div class="nutr-card"><span class="nutr-val">380g</span><div class="nutr-label">Carbs (Heavy Day)</div><div class="nutr-note">Mon/Tue/Fri/Sat. Fuel Coleman volume + conditioning. Rice, oats, potatoes.</div></div>
+    <div class="nutr-card"><span class="nutr-val">250g</span><div class="nutr-label">Carbs (Light Day)</div><div class="nutr-note">Wed/Thu/Sun. Still active — needs fuel but less glycolytic demand.</div></div>
+    <div class="nutr-card"><span class="nutr-val">75g</span><div class="nutr-label">Fats Daily</div><div class="nutr-note">~0.9g/kg. Salmon, eggs, avocado, olive oil, nuts. Joint + hormone health.</div></div>
+    <div class="nutr-card"><span class="nutr-val">~3200</span><div class="nutr-label">Calories (Heavy)</div><div class="nutr-note">Training day total. Lean bulk territory at 83kg/5'9". Adjust ±200 based on scale trend.</div></div>
+    <div class="nutr-card"><span class="nutr-val">~2700</span><div class="nutr-label">Calories (Light)</div><div class="nutr-note">Light/recovery day. Maintain without excess. Protein stays constant.</div></div>
+    <div class="nutr-card"><span class="nutr-val">15g</span><div class="nutr-label">Collagen Daily</div><div class="nutr-note">30 min pre-training + Vitamin C. Supports tendons for loaded stretching.</div></div>
+    <div class="nutr-card"><span class="nutr-val">5g</span><div class="nutr-label">Creatine Daily</div><div class="nutr-note">Sprint recovery + power between sets. Take with post-workout meal.</div></div>
+  </div>
+  <div class="warn-box"><strong style="color: var(--gold);">Flexibility Hack (Jujimufu):</strong> 15g collagen + 50mg Vitamin C 30 min before flexibility sessions. Research shows 2× collagen synthesis in tendons/fascia. Faster flexibility gains + better joint health.</div>
+</div>
+
+<!-- WEEK 12 BENCHMARKS -->
+<div class="section" id="targets">
+  <span class="section-icon">🏆</span>
+  <div class="section-title">Week 12 — Complete Hybrid Athlete Scorecard</div>
+  <div class="section-sub">The full picture of what you've built across all 5 systems</div>
+  <div class="col3">
+    <div class="mini-card">
+      <h5>Strength (Raw)</h5>
+      <ul>
+        <li>Squat 1RM <span class="li-val">200kg+</span></li>
+        <li>Deadlift 1RM <span class="li-val">200–210kg</span></li>
+        <li>Incline Press 5RM <span class="li-val">115–120kg</span></li>
+        <li>Weighted Pull-up <span class="li-val">BW+40kg × 5</span></li>
+        <li>Power Clean 3RM <span class="li-val">90–100kg</span></li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h5>Stamina</h5>
+      <ul>
+        <li>100kg Squat (2 min) <span class="li-val">20+ reps</span></li>
+        <li>Max Pull-ups <span class="li-val">25+</span></li>
+        <li>7-Round Circuit <span class="li-val">&lt;35 min</span></li>
+        <li>30m Sprint <span class="li-val">Sub 4.5s</span></li>
+        <li>Recovery (HR→120) <span class="li-val">&lt;60s</span></li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h5>Flexibility (Jujimufu)</h5>
+      <ul>
+        <li>Front Split <span class="li-val">Flat on floor</span></li>
+        <li>Middle Split <span class="li-val">15–20cm</span></li>
+        <li>Jefferson Curl <span class="li-val">30kg full ROM</span></li>
+        <li>Loaded Pancake <span class="li-val">40kg chest→floor</span></li>
+        <li>Squat Sit <span class="li-val">10 min continuous</span></li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h5>Calisthenics (Medrano)</h5>
+      <ul>
+        <li>Front Lever Full <span class="li-val">15s hold</span></li>
+        <li>Weighted MU <span class="li-val">+20kg × 3</span></li>
+        <li>Human Flag <span class="li-val">10s</span></li>
+        <li>One-Arm Push-up <span class="li-val">5/side</span></li>
+        <li>HSPU <span class="li-val">8 reps</span></li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h5>Mobility (Ido Portal)</h5>
+      <ul>
+        <li>Dead Hang <span class="li-val">2+ min</span></li>
+        <li>Squat Sit <span class="li-val">10 min easy</span></li>
+        <li>Skin the Cat <span class="li-val">5 smooth reps</span></li>
+        <li>German Hang <span class="li-val">30s comfortable</span></li>
+        <li>QDR Flow <span class="li-val">5 min continuous</span></li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h5>Joint Health (KOT)</h5>
+      <ul>
+        <li>ATG Split Squat <span class="li-val">30–35kg × 8</span></li>
+        <li>Nordic Curl <span class="li-val">8 unassisted</span></li>
+        <li>Pistol Squat <span class="li-val">+10kg × 8</span></li>
+        <li>Couch Stretch <span class="li-val">Shin to wall</span></li>
+        <li>Patrick Step <span class="li-val">Full ankle bend</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- RECOVERY SCIENCE -->
+<div class="section" id="recovery">
+  <span class="section-icon">🛡️</span>
+  <div class="section-title">Recovery Science — Will You Actually Recover?</div>
+  <div class="section-sub">The honest answer: YES — but only if you follow these non-negotiable protocols</div>
+
+  <div class="warn-box" style="margin-bottom: 20px;">
+    <strong style="color: var(--gold);">The Reality Check:</strong> You're training 6 days/week with 175kg+ compounds, calisthenics skills, loaded stretching, AND conditioning. Without deliberate recovery management, you WILL burn out by Week 3. The program is designed with built-in recovery mechanisms — but you must execute them.
+  </div>
+
+  <div class="col2" style="margin-bottom: 20px;">
+    <div class="mini-card">
+      <h5>Why This Program WORKS Despite Intensity</h5>
+      <ul>
+        <li>Never 2 heavy days back-to-back <span class="li-val">Mon upper / Tue lower</span></li>
+        <li>Wednesday = Movement + Conditioning <span class="li-val">Active recovery for Mon/Tue</span></li>
+        <li>Thursday = Calisthenics + Hypertrophy <span class="li-val">Low spinal load</span></li>
+        <li>Friday = Heavy lower again <span class="li-val">72+ hrs after Tuesday</span></li>
+        <li>Sunday = Full yoga recovery <span class="li-val">Parasympathetic reset</span></li>
+        <li>Deload every 4th week <span class="li-val">Mandatory supercompensation</span></li>
+        <li>90s rest (not 30s) between heavy sets <span class="li-val">ATP partial recovery</span></li>
+        <li>DDP Yoga = active recovery built-in <span class="li-val">Not passive rest</span></li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h5>Recovery Red Flags — STOP If You See These</h5>
+      <ul>
+        <li>Resting HR elevated 5+ bpm above normal <span class="li-val">Overreaching</span></li>
+        <li>Lifts declining 2 weeks in a row <span class="li-val">Take extra rest day</span></li>
+        <li>Joint pain (NOT muscle soreness) <span class="li-val">Skip that movement</span></li>
+        <li>Sleep quality dropping <span class="li-val">Reduce volume 30%</span></li>
+        <li>Mood/motivation crashed <span class="li-val">CNS fatigue — deload NOW</span></li>
+        <li>Can't complete warm-up sets properly <span class="li-val">Go home. Rest.</span></li>
+        <li>DOMS lasting 4+ days <span class="li-val">Too much volume</span></li>
+        <li>Appetite vanished <span class="li-val">Cortisol spike — back off</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; color: var(--gold); margin-bottom: 14px;">THE 5 RECOVERY PILLARS (ALL MANDATORY)</div>
+
+  <div class="col2" style="margin-bottom: 16px;">
+    <div class="mini-card">
+      <h5>Pillar 1: Sleep (The #1 Recovery Tool)</h5>
+      <ul>
+        <li>Minimum sleep <span class="li-val">7.5–9 hours</span></li>
+        <li>Sleep schedule consistency <span class="li-val">±30 min daily</span></li>
+        <li>Room temperature <span class="li-val">18–20°C</span></li>
+        <li>No screens 60 min before bed <span class="li-val">Blue light = cortisol</span></li>
+        <li>Magnesium glycinate before bed <span class="li-val">400mg</span></li>
+        <li>Growth Hormone release during deep sleep <span class="li-val">This is when muscle BUILDS</span></li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h5>Pillar 2: Nutrition Timing</h5>
+      <ul>
+        <li>Post-workout protein <span class="li-val">40–50g within 30 min</span></li>
+        <li>Post-workout carbs <span class="li-val">60–80g fast carbs</span></li>
+        <li>Pre-sleep casein/cottage cheese <span class="li-val">30g slow protein</span></li>
+        <li>Total daily protein <span class="li-val">1.6g/lb (split 4–5 meals)</span></li>
+        <li>Hydration <span class="li-val">3.5–4L water daily min</span></li>
+        <li>Collagen 30 min pre-training <span class="li-val">15g + Vit C (tendon repair)</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col3" style="margin-bottom: 16px;">
+    <div class="mini-card">
+      <h5>Pillar 3: Active Recovery</h5>
+      <ul>
+        <li>Sunday DDP Yoga <span class="li-val">40 min (mandatory)</span></li>
+        <li>Daily walking <span class="li-val">8000+ steps</span></li>
+        <li>Foam rolling post-session <span class="li-val">5 min major groups</span></li>
+        <li>Cold shower (last 60s) <span class="li-val">Inflammation control</span></li>
+        <li>Contrast shower (heavy days) <span class="li-val">30s cold / 60s hot × 3</span></li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h5>Pillar 4: Stress Management</h5>
+      <ul>
+        <li>4-7-8 Breathing daily <span class="li-val">5 min (cortisol down)</span></li>
+        <li>Training stress + life stress = TOTAL <span class="li-val">Account for both</span></li>
+        <li>High work stress week? <span class="li-val">Drop 1 conditioning set</span></li>
+        <li>Caffeine cutoff <span class="li-val">2 PM latest</span></li>
+        <li>Sunlight first 30 min of day <span class="li-val">Circadian rhythm</span></li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h5>Pillar 5: Periodization</h5>
+      <ul>
+        <li>Week 4: MANDATORY deload <span class="li-val">Supercompensation</span></li>
+        <li>Week 8: MANDATORY deload <span class="li-val">Peak adaptation</span></li>
+        <li>Never max effort 2 days in a row <span class="li-val">CNS needs 48–72hrs</span></li>
+        <li>Listen to RPE — if 9+ too often <span class="li-val">Back off 10%</span></li>
+        <li>Auto-regulate: bad day = reduce load <span class="li-val">Not every day is PR day</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong style="color: var(--teal-light);">The Science of Why This Works:</strong><br><br>
+    <strong>Muscle Protein Synthesis (MPS) peaks 24–48 hours post-training</strong> and returns to baseline by 72 hours. Your schedule ensures:<br>
+    • Upper body (Mon) → 72+ hours before next upper (Thu) ✅<br>
+    • Heavy lower (Tue) → 72+ hours before next heavy lower (Fri) ✅<br>
+    • Wed/Sun are LOW spinal-load days → spine recovers from squat/deadlift ✅<br>
+    • Loaded stretching (Jujimufu) INCREASES recovery by promoting blood flow to trained muscles ✅<br>
+    • DDP Yoga (Sun) activates parasympathetic system → accelerates systemic recovery ✅<br><br>
+    <strong>Key insight:</strong> The conditioning and mobility work on Wed/Sun are NOT additional STRESS — they are RECOVERY ACCELERATORS. Low-intensity movement pushes blood into damaged tissue faster than sitting on a couch. This is why active athletes recover faster than sedentary people.
+  </div>
+
+  <div class="warn-box">
+    <strong style="color: var(--gold);">Supplementation for Recovery at This Intensity:</strong><br>
+    • Creatine: 5g daily (ATP regeneration between sets)<br>
+    • Collagen: 15g + 50mg Vitamin C pre-training (tendon/fascia repair)<br>
+    • Magnesium Glycinate: 400mg before bed (muscle relaxation + sleep quality)<br>
+    • Omega-3: 3g EPA/DHA daily (systemic inflammation control)<br>
+    • Zinc: 30mg daily (testosterone + immune support)<br>
+    • Vitamin D3: 4000 IU daily (muscle function + recovery hormones)<br>
+    • Optional: Tart Cherry Juice 250ml post-training (reduces DOMS by 25% per research)
+  </div>
+
+  <div class="kot-box">
+    <strong style="color: #9a4ad4;">THE AUTO-REGULATION RULE:</strong> If you feel beaten up by Week 2–3, DO NOT power through. Use this adjustment ladder:<br><br>
+    1. First: Reduce conditioning rounds by 50% (Wed + Sat)<br>
+    2. Second: Drop volume sets (remove the 2×15 squat endurance set)<br>
+    3. Third: Make Thursday a full DDP Yoga day instead of training<br>
+    4. Fourth: If still fatigued → take an unplanned deload (3–4 days at 50%)<br><br>
+    The program assumes you're eating 3500+ calories, sleeping 8+ hours, and managing life stress. If ANY of those are compromised, reduce training load FIRST.
+  </div>
+</div>
+
+<!-- PROGRESSION -->
+<div class="section">
+  <span class="section-icon">📈</span>
+  <div class="section-title">Progression & Deload Rules</div>
+  <div class="section-sub">When to push, when to back off</div>
+  <div class="col2">
+    <div class="mini-card">
+      <h5>Progression Rules</h5>
+      <ul>
+        <li>Hit all reps all sets? <span class="li-val">+2.5–5kg next week</span></li>
+        <li>Volume set felt easy? <span class="li-val">+5kg immediately</span></li>
+        <li>Calisthenics hold exceeded? <span class="li-val">Next progression level</span></li>
+        <li>Deeper than last week? <span class="li-val">+2.5kg stretch load</span></li>
+        <li>Sprint improved? <span class="li-val">Add distance (40m→50m)</span></li>
+        <li>RPE below 7? <span class="li-val">Increase load now</span></li>
+        <li>Joint pain? <span class="li-val">STOP. Rest. Reassess.</span></li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h5>Deload Protocol (Wk 4, 8)</h5>
+      <ul>
+        <li>Strength volume <span class="li-val">–50%</span></li>
+        <li>Strength load <span class="li-val">–30–40%</span></li>
+        <li>KOT Protocol <span class="li-val">NEVER deloads</span></li>
+        <li>Flexibility time <span class="li-val">INCREASE 50%</span></li>
+        <li>DDP Yoga <span class="li-val">Add 2nd session</span></li>
+        <li>Conditioning <span class="li-val">3 rounds max</span></li>
+        <li>Calisthenics <span class="li-val">Skill only, no load</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="warn-box" style="margin-top: 16px;"><strong style="color: var(--gold);">Golden Rule:</strong> Deload weeks = flexibility acceleration. Body recovers from load stress → push DEEPER into stretches, LONGER holds, FURTHER movement patterns. Strength deloads. Flexibility never does.</div>
+</div>
+
+</div><!-- end page -->
+
+<!-- VIDEO REFERENCE LIBRARY -->
+<div class="page">
+<div class="section" id="videos">
+  <span class="section-icon">🎬</span>
+  <div class="section-title">Video Reference Library</div>
+  <div class="section-sub">YouTube tutorials for every key exercise — proper form is everything at 175kg+</div>
+
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">🎬</div>
+      <div><div class="day-block-title">RONNIE COLEMAN — VOLUME TRAINING METHOD</div><div class="day-block-sub">Learn the high-rep heavy philosophy from the GOAT himself</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <table><thead><tr><th>Exercise / Concept</th><th>Video Link</th></tr></thead>
+        <tbody>
+        <tr><td>Ronnie Coleman Full Leg Workout (Volume Philosophy)</td><td><a href="https://www.youtube.com/watch?v=6aHMWPaR3gA" target="_blank" style="color: var(--teal-light);">youtube.com — Ronnie Coleman Leg Day</a></td></tr>
+        <tr><td>Ronnie Coleman Back Workout (Heavy Rows for Reps)</td><td><a href="https://www.youtube.com/watch?v=wXGKQbfqjMw" target="_blank" style="color: var(--teal-light);">youtube.com — Ronnie Coleman Back</a></td></tr>
+        <tr><td>Incline Barbell Press — Proper Form</td><td><a href="https://www.youtube.com/watch?v=SrqOu55lrYU" target="_blank" style="color: var(--teal-light);">youtube.com — Jeff Nippard Incline Press</a></td></tr>
+        <tr><td>Barbell Row (Pendlay Style) — Technique</td><td><a href="https://www.youtube.com/watch?v=ZlRrIsoDpKg" target="_blank" style="color: var(--teal-light);">youtube.com — Alan Thrall Pendlay Row</a></td></tr>
+        <tr><td>Walking Lunges Heavy (Coleman Style)</td><td><a href="https://www.youtube.com/watch?v=D7KaRcUTQeE" target="_blank" style="color: var(--teal-light);">youtube.com — Walking Lunge Form</a></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">🎬</div>
+      <div><div class="day-block-title">JUJIMUFU — LOADED FLEXIBILITY PROTOCOLS</div><div class="day-block-sub">How to stretch with load for real, permanent flexibility gains</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <table><thead><tr><th>Exercise / Concept</th><th>Video Link</th></tr></thead>
+        <tbody>
+        <tr class="highlight-row"><td>Jujimufu Loaded Stretching Explained</td><td><a href="https://www.youtube.com/watch?v=hLaJi_gXcDY" target="_blank" style="color: var(--gold);">youtube.com — Jujimufu Loaded Stretch</a></td></tr>
+        <tr><td>Front Splits Tutorial (PNF Method)</td><td><a href="https://www.youtube.com/watch?v=0_S14ePkOIo" target="_blank" style="color: var(--teal-light);">youtube.com — Jujimufu Front Splits</a></td></tr>
+        <tr class="highlight-row"><td>Jefferson Curl — Full Tutorial (Loaded Spinal Flexion)</td><td><a href="https://www.youtube.com/watch?v=nYS0R4c3qCA" target="_blank" style="color: var(--gold);">youtube.com — Jefferson Curl Form</a></td></tr>
+        <tr><td>Loaded Pancake Stretch — Technique</td><td><a href="https://www.youtube.com/watch?v=3HVsDRjOHqU" target="_blank" style="color: var(--teal-light);">youtube.com — Pancake Stretch Loaded</a></td></tr>
+        <tr><td>Cossack Squat — Mobility + Strength</td><td><a href="https://www.youtube.com/watch?v=tpczTeSkHz0" target="_blank" style="color: var(--teal-light);">youtube.com — Cossack Squat Tutorial</a></td></tr>
+        <tr><td>Middle Splits Progression (Loaded)</td><td><a href="https://www.youtube.com/watch?v=M5xGSqFTuzM" target="_blank" style="color: var(--teal-light);">youtube.com — Middle Split Training</a></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">🎬</div>
+      <div><div class="day-block-title">IDO PORTAL — MOVEMENT CULTURE</div><div class="day-block-sub">Hanging, squat sits, locomotion, and ground flow fundamentals</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <table><thead><tr><th>Exercise / Concept</th><th>Video Link</th></tr></thead>
+        <tbody>
+        <tr class="highlight-row"><td>Ido Portal Hanging Challenge (7 min daily)</td><td><a href="https://www.youtube.com/watch?v=aGgeGlsGoWc" target="_blank" style="color: var(--gold);">youtube.com — Ido Portal Hanging</a></td></tr>
+        <tr class="highlight-row"><td>Ido Portal 30/30 Squat Challenge</td><td><a href="https://www.youtube.com/watch?v=8jyhJurV2Ys" target="_blank" style="color: var(--gold);">youtube.com — Ido Portal Squat Routine</a></td></tr>
+        <tr><td>Skin the Cat — Full Tutorial</td><td><a href="https://www.youtube.com/watch?v=2F-YiFFm3hs" target="_blank" style="color: var(--teal-light);">youtube.com — Skin the Cat Progression</a></td></tr>
+        <tr><td>German Hang — Shoulder Flexibility</td><td><a href="https://www.youtube.com/watch?v=lJ97-BGENDM" target="_blank" style="color: var(--teal-light);">youtube.com — German Hang Tutorial</a></td></tr>
+        <tr><td>Locomotion Patterns (Bear, Lizard, QDR)</td><td><a href="https://www.youtube.com/watch?v=Umi6LaYkmYg" target="_blank" style="color: var(--teal-light);">youtube.com — Animal Flow Locomotion</a></td></tr>
+        <tr><td>Active Hang / Scapular Pull-ups</td><td><a href="https://www.youtube.com/watch?v=HoE-C85ZlCE" target="_blank" style="color: var(--teal-light);">youtube.com — Scapular Pull-up</a></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">🎬</div>
+      <div><div class="day-block-title">FRANK MEDRANO — CALISTHENICS SKILLS</div><div class="day-block-sub">Weighted calisthenics, levers, muscle-ups, flags</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <table><thead><tr><th>Exercise / Concept</th><th>Video Link</th></tr></thead>
+        <tbody>
+        <tr class="highlight-row"><td>Front Lever — Full Progression (Tuck to Full)</td><td><a href="https://www.youtube.com/watch?v=K3EwjmqsPnw" target="_blank" style="color: var(--gold);">youtube.com — Front Lever Progression</a></td></tr>
+        <tr class="highlight-row"><td>Muscle-Up Tutorial (Strict Bar)</td><td><a href="https://www.youtube.com/watch?v=wjiKfRkE5P4" target="_blank" style="color: var(--gold);">youtube.com — Strict Muscle-Up</a></td></tr>
+        <tr><td>Human Flag — Step-by-Step Progression</td><td><a href="https://www.youtube.com/watch?v=HBRA0BqIUhg" target="_blank" style="color: var(--teal-light);">youtube.com — Human Flag Tutorial</a></td></tr>
+        <tr><td>Back Lever Progression</td><td><a href="https://www.youtube.com/watch?v=lX8xfNrrHtg" target="_blank" style="color: var(--teal-light);">youtube.com — Back Lever Tutorial</a></td></tr>
+        <tr><td>Dragon Flag — Full Tutorial</td><td><a href="https://www.youtube.com/watch?v=njKXkNdQjFo" target="_blank" style="color: var(--teal-light);">youtube.com — Dragon Flag Progression</a></td></tr>
+        <tr><td>One-Arm Push-up Progression</td><td><a href="https://www.youtube.com/watch?v=VKnLpz_IRQQ" target="_blank" style="color: var(--teal-light);">youtube.com — One-Arm Push-up</a></td></tr>
+        <tr><td>Handstand Push-up (Wall to Free)</td><td><a href="https://www.youtube.com/watch?v=tQhrk6WMcKw" target="_blank" style="color: var(--teal-light);">youtube.com — HSPU Progression</a></td></tr>
+        <tr><td>Weighted Dips — Proper Form</td><td><a href="https://www.youtube.com/watch?v=2z8JmcrW-As" target="_blank" style="color: var(--teal-light);">youtube.com — Weighted Dip Form</a></td></tr>
+        <tr><td>Typewriter Pull-ups</td><td><a href="https://www.youtube.com/watch?v=pVJMkFOmzjU" target="_blank" style="color: var(--teal-light);">youtube.com — Typewriter Pull-ups</a></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">🎬</div>
+      <div><div class="day-block-title">DDP YOGA — DYNAMIC FLEXIBILITY + RECOVERY</div><div class="day-block-sub">Active recovery flows, dynamic tension, warrior series</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <table><thead><tr><th>Exercise / Concept</th><th>Video Link</th></tr></thead>
+        <tbody>
+        <tr class="highlight-row"><td>DDP Yoga Full Beginner Workout</td><td><a href="https://www.youtube.com/watch?v=qX9FSZJu448" target="_blank" style="color: var(--gold);">youtube.com — DDP Yoga Intro</a></td></tr>
+        <tr class="highlight-row"><td>DDP Yoga Diamond Cutter Workout</td><td><a href="https://www.youtube.com/watch?v=q3pn6kGMfLw" target="_blank" style="color: var(--gold);">youtube.com — Diamond Cutter Series</a></td></tr>
+        <tr><td>DDP Yoga — Red Hot Core</td><td><a href="https://www.youtube.com/watch?v=u7vcREzQNfU" target="_blank" style="color: var(--teal-light);">youtube.com — DDP Red Hot Core</a></td></tr>
+        <tr><td>Warrior 1, 2, 3 — Proper Form</td><td><a href="https://www.youtube.com/watch?v=k4qaVoAbeHM" target="_blank" style="color: var(--teal-light);">youtube.com — Warrior Poses</a></td></tr>
+        <tr><td>Dynamic Tension Explained (DDP Method)</td><td><a href="https://www.youtube.com/watch?v=OLjbFfJsiMw" target="_blank" style="color: var(--teal-light);">youtube.com — Dynamic Tension</a></td></tr>
+        <tr><td>4-7-8 Breathing Technique</td><td><a href="https://www.youtube.com/watch?v=YRPh_GaiL8s" target="_blank" style="color: var(--teal-light);">youtube.com — 4-7-8 Breathing</a></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">🎬</div>
+      <div><div class="day-block-title">BEN PATRICK (KNEES OVER TOES GUY) — KOT PROTOCOL</div><div class="day-block-sub">All 8 steps demonstrated with proper form + progressions</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <table><thead><tr><th>Exercise / Concept</th><th>Video Link</th></tr></thead>
+        <tbody>
+        <tr class="highlight-row"><td>Full Knee Ability Zero Program (All 8 Steps)</td><td><a href="https://www.youtube.com/watch?v=bafmFkc-xUA" target="_blank" style="color: var(--gold);">youtube.com — KOT Zero Full Routine</a></td></tr>
+        <tr><td>Tibialis Raise — Proper Form</td><td><a href="https://www.youtube.com/watch?v=gNS_QjGAs_k" target="_blank" style="color: var(--teal-light);">youtube.com — Tibialis Raise</a></td></tr>
+        <tr><td>ATG Split Squat — Full Depth Tutorial</td><td><a href="https://www.youtube.com/watch?v=JbNR76aNiJM" target="_blank" style="color: var(--teal-light);">youtube.com — ATG Split Squat</a></td></tr>
+        <tr class="highlight-row"><td>Nordic Curl — Progression from Zero</td><td><a href="https://www.youtube.com/watch?v=WaZCioTLbHY" target="_blank" style="color: var(--gold);">youtube.com — Nordic Curl Progression</a></td></tr>
+        <tr><td>Patrick Step — Technique</td><td><a href="https://www.youtube.com/watch?v=Gd4v1rIqu8Y" target="_blank" style="color: var(--teal-light);">youtube.com — Patrick Step</a></td></tr>
+        <tr><td>Couch Stretch — Full Position Goal</td><td><a href="https://www.youtube.com/watch?v=rqiTPz7oXpU" target="_blank" style="color: var(--teal-light);">youtube.com — Couch Stretch</a></td></tr>
+        <tr><td>Pistol Squat — Step-by-Step</td><td><a href="https://www.youtube.com/watch?v=qDcniqddTeE" target="_blank" style="color: var(--teal-light);">youtube.com — Pistol Squat Tutorial</a></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">🎬</div>
+      <div><div class="day-block-title">HEAVY COMPOUND LIFTS — FORM REFERENCE</div><div class="day-block-sub">At 175kg+ you need PERFECT form or risk injury</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <table><thead><tr><th>Exercise</th><th>Video Link</th></tr></thead>
+        <tbody>
+        <tr class="highlight-row"><td>Back Squat — Perfect Form (ATG)</td><td><a href="https://www.youtube.com/watch?v=bEv6CCg2BC8" target="_blank" style="color: var(--gold);">youtube.com — Squat University Full Guide</a></td></tr>
+        <tr class="highlight-row"><td>Conventional Deadlift — Technique Breakdown</td><td><a href="https://www.youtube.com/watch?v=r4MzxtBKyNE" target="_blank" style="color: var(--gold);">youtube.com — Alan Thrall Deadlift</a></td></tr>
+        <tr><td>Sumo Deadlift — Form Guide</td><td><a href="https://www.youtube.com/watch?v=LGIS92WpIJo" target="_blank" style="color: var(--teal-light);">youtube.com — Sumo Deadlift</a></td></tr>
+        <tr><td>Front Squat — Proper Rack Position</td><td><a href="https://www.youtube.com/watch?v=m4ytaCJZpl0" target="_blank" style="color: var(--teal-light);">youtube.com — Front Squat Tutorial</a></td></tr>
+        <tr><td>Hang Power Clean — Olympic Lift Entry</td><td><a href="https://www.youtube.com/watch?v=V5sYxRPEVo4" target="_blank" style="color: var(--teal-light);">youtube.com — Hang Clean Tutorial</a></td></tr>
+        <tr><td>Push Press — Leg Drive Technique</td><td><a href="https://www.youtube.com/watch?v=iaBVSJm78ko" target="_blank" style="color: var(--teal-light);">youtube.com — Push Press Form</a></td></tr>
+        <tr><td>Deficit Deadlift — Setup + Execution</td><td><a href="https://www.youtube.com/watch?v=EcaZ_sPYmYI" target="_blank" style="color: var(--teal-light);">youtube.com — Deficit Deadlift</a></td></tr>
+        <tr><td>Romanian Deadlift — Hamstring Focus</td><td><a href="https://www.youtube.com/watch?v=JCXUYuzwNrM" target="_blank" style="color: var(--teal-light);">youtube.com — RDL Form Guide</a></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-block-header">
+      <div class="day-num">🎬</div>
+      <div><div class="day-block-title">CONDITIONING + CORE EXERCISES</div><div class="day-block-sub">EMOM, Tabata, KB work, ab wheel, hollow body form references</div></div>
+    </div>
+    <div class="day-body">
+      <div class="exercise-section">
+        <table><thead><tr><th>Exercise</th><th>Video Link</th></tr></thead>
+        <tbody>
+        <tr><td>Kettlebell Swing — Perfect Hip Hinge</td><td><a href="https://www.youtube.com/watch?v=YSxHifyI6s8" target="_blank" style="color: var(--teal-light);">youtube.com — KB Swing Form</a></td></tr>
+        <tr><td>Burpee Pull-up — Full Movement</td><td><a href="https://www.youtube.com/watch?v=JNrRma5qFlc" target="_blank" style="color: var(--teal-light);">youtube.com — Burpee Pull-up</a></td></tr>
+        <tr><td>Thrusters (Barbell) — Technique</td><td><a href="https://www.youtube.com/watch?v=L219ltL15zk" target="_blank" style="color: var(--teal-light);">youtube.com — Thruster Form</a></td></tr>
+        <tr><td>Ab Wheel Rollout — Standing Progression</td><td><a href="https://www.youtube.com/watch?v=rqiTPz7oXpU" target="_blank" style="color: var(--teal-light);">youtube.com — Ab Wheel Tutorial</a></td></tr>
+        <tr><td>Hollow Body Hold — Gymnast Standard</td><td><a href="https://www.youtube.com/watch?v=LlDNef_Ztsc" target="_blank" style="color: var(--teal-light);">youtube.com — Hollow Body Hold</a></td></tr>
+        <tr><td>Pallof Press — Anti-Rotation Core</td><td><a href="https://www.youtube.com/watch?v=AH_QZLm_0-s" target="_blank" style="color: var(--teal-light);">youtube.com — Pallof Press</a></td></tr>
+        <tr><td>Battle Ropes — Proper Technique</td><td><a href="https://www.youtube.com/watch?v=OdAEXPie8pY" target="_blank" style="color: var(--teal-light);">youtube.com — Battle Ropes</a></td></tr>
+        <tr><td>Farmer's Walk — Grip + Posture</td><td><a href="https://www.youtube.com/watch?v=Fkzk_RqlYig" target="_blank" style="color: var(--teal-light);">youtube.com — Farmer's Walk</a></td></tr>
+        <tr><td>Box Jump — Safe Landing Technique</td><td><a href="https://www.youtube.com/watch?v=hxldG9FX4j4" target="_blank" style="color: var(--teal-light);">youtube.com — Box Jump Form</a></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong style="color: var(--teal-light);">📌 Pro Tip:</strong> Watch each video BEFORE attempting the exercise for the first time. For heavy compounds (squat, deadlift) at your level (175kg+), record yourself from the side and compare to the reference videos. Small form breakdowns at heavy loads = injury risk. Film every PR attempt.
+  </div>
+</div>
+</div>
+
+<footer>
+  <p>APEX PROTOCOL v2 — THE COMPLETE HYBRID ATHLETE</p>
+  <small>Ronnie Coleman Volume × Jujimufu Flexibility × Ido Portal Movement × Frank Medrano Calisthenics × DDP Yoga × Ben Patrick KOT</small>
+</footer>
+
+</body>
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<script>
+  // Scroll to top button
+  window.addEventListener('scroll', () => {
+    const btn = document.getElementById('scrollTop');
+    btn.style.display = window.scrollY > 400 ? 'block' : 'none';
+  });
+
+  // Floating particles
+  const particlesContainer = document.getElementById('particles');
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = Math.random() * 10 + 's';
+    p.style.width = (1 + Math.random() * 2) + 'px';
+    p.style.height = p.style.width;
+    particlesContainer.appendChild(p);
+  }
+
+  // Smooth reveal on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.day-block, .mini-card, .philo-card, .kot-step, .nutr-card, .info-box, .warn-box, .kot-box').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('.section[id]');
+  const navLinks = document.querySelectorAll('.nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.getAttribute('id');
+    });
+    navLinks.forEach(l => {
+      l.style.color = l.getAttribute('href') === '#' + current ? 'var(--gold)' : '';
+      l.style.borderColor = l.getAttribute('href') === '#' + current ? 'rgba(212,160,23,0.3)' : 'transparent';
+    });
+  });
+</script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
