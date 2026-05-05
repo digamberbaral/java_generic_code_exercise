@@ -97,6 +97,8 @@
 | 22 | [🎓 Interview Cheat Sheet](#-interview-cheat-sheet) | Top 10 Questions, Quick-Fire Answers, HTTP Codes, Anti-Patterns | 🟢 All Levels |
 | 23 | [🏦 Societe Generale — Company-Specific Interview Prep](#-societe-generale--company-specific-interview-prep) | Banking Domain, SocGen Tech Stack, Java/Spring/SQL/Docker/K8s Q&A | 🟢 All Levels |
 | 23a | [🏢 LTIMindtree — AI-First Sr. Tech Lead Interview Prep](#-ltimindtree--ai-first-sr-tech-lead-interview-prep) | Berribot AI, Backend Architecture, Oracle, Saga, Cache, CI/CD, Full-Stack | 🔴 Advanced |
+| 23b | [🌐 Fullstack Developer — Java + Spring Boot + Microservices + React.js](#-fullstack-developer--java-springboot-microservices-reactjs) | Basics to Sr. Lead, Component Design, State, Hooks, REST Integration, Auth | 🟢 Beginner → Advanced |
+| 23c | [📘 TypeScript Refresher — Basics to Advanced Interview Guide](#-typescript-refresher--basics-to-advanced-interview-guide) | Types, Interfaces, Generics, Utility Types, Decorators, React+TS Patterns | 🟢 Beginner → Advanced |
 
 
 ---
@@ -43250,3 +43252,2680 @@ ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody OrderRequest reque
 
 > **🎯 Final Preparation Note:** Practice each answer aloud while looking at your camera lens. Berribot scores confidence through tone stability and eye contact. Use the STAR format for behavioral questions. Speak at a moderate pace — the AI needs to transcribe your answers accurately. Good luck at LTIMindtree! 🚀
 
+
+
+---
+
+<a id="-fullstack-developer--java-springboot-microservices-reactjs"></a>
+
+# 🌐 Fullstack Developer — Java + Spring Boot + Microservices + React.js
+
+> **Complete Interview Guide: Basics to Senior Lead Level**
+> Covers: Core Java, Spring Boot, Microservices Architecture, React.js Fundamentals to Advanced, Full Integration Patterns
+
+---
+
+## 📋 Section 1: React.js Fundamentals — Core Concepts
+
+### FS-1. What is React.js and Why Use It?
+
+**Answer:**
+React is a JavaScript library for building user interfaces, developed by Facebook. It uses a component-based architecture with a Virtual DOM for efficient rendering.
+
+```mermaid
+graph TD
+    A[React.js Core Concepts] --> B[Components]
+    A --> C[Virtual DOM]
+    A --> D[JSX]
+    A --> E[One-Way Data Flow]
+
+    B --> B1[Functional Components]
+    B --> B2[Class Components - Legacy]
+
+    C --> C1[Diffing Algorithm]
+    C --> C2[Reconciliation]
+    C --> C3[Batch Updates]
+
+    D --> D1[HTML in JavaScript]
+    D --> D2[Babel Transpiles]
+
+    E --> E1[Props: Parent → Child]
+    E --> E2[State: Internal]
+    E --> E3[Context: Global]
+
+    style A fill:#61dafb,stroke:#333,color:#000
+    style B fill:#282c34,stroke:#61dafb,color:#fff
+    style C fill:#282c34,stroke:#61dafb,color:#fff
+    style D fill:#282c34,stroke:#61dafb,color:#fff
+    style E fill:#282c34,stroke:#61dafb,color:#fff
+```
+
+**Key Concepts:**
+```javascript
+// Functional Component (Modern React)
+import React, { useState, useEffect } from 'react';
+
+const UserProfile = ({ userId }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`/api/users/${userId}`)
+      .then(res => res.json())
+      .then(data => {
+        setUser(data);
+        setLoading(false);
+      });
+  }, [userId]); // Re-fetch when userId changes
+
+  if (loading) return <div>Loading...</div>;
+
+  return (
+    <div className="profile">
+      <h1>{user.name}</h1>
+      <p>{user.email}</p>
+    </div>
+  );
+};
+
+export default UserProfile;
+```
+
+---
+
+### FS-2. React Hooks — useState, useEffect, useContext, useReducer, useMemo, useCallback
+
+**Answer:**
+
+```mermaid
+graph LR
+    A[React Hooks] --> B[useState]
+    A --> C[useEffect]
+    A --> D[useContext]
+    A --> E[useReducer]
+    A --> F[useMemo]
+    A --> G[useCallback]
+    A --> H[useRef]
+
+    B --> B1["State management<br/>Re-renders on change"]
+    C --> C1["Side effects<br/>API calls, subscriptions"]
+    D --> D1["Global state<br/>Avoid prop drilling"]
+    E --> E1["Complex state logic<br/>Redux-like pattern"]
+    F --> F1["Memoize values<br/>Expensive computations"]
+    G --> G1["Memoize functions<br/>Prevent child re-renders"]
+    H --> H1["DOM refs<br/>Persist values without re-render"]
+
+    style A fill:#61dafb,stroke:#333,color:#000
+```
+
+```javascript
+// useReducer — Complex State Management
+const initialState = { count: 0, step: 1 };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment': return { ...state, count: state.count + state.step };
+    case 'decrement': return { ...state, count: state.count - state.step };
+    case 'setStep':   return { ...state, step: action.payload };
+    case 'reset':     return initialState;
+    default: throw new Error(`Unknown action: ${action.type}`);
+  }
+}
+
+const Counter = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <div>
+      <p>Count: {state.count} (Step: {state.step})</p>
+      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+      <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
+    </div>
+  );
+};
+
+// useMemo + useCallback — Performance Optimization
+const ExpensiveList = ({ items, filter }) => {
+  // Only recalculates when items or filter changes
+  const filteredItems = useMemo(() => {
+    return items.filter(item => item.name.includes(filter));
+  }, [items, filter]);
+
+  // Function reference stays stable — prevents child re-renders
+  const handleClick = useCallback((id) => {
+    console.log('Clicked:', id);
+  }, []);
+
+  return filteredItems.map(item => (
+    <ListItem key={item.id} item={item} onClick={handleClick} />
+  ));
+};
+```
+
+---
+
+### FS-3. Component Lifecycle & useEffect Patterns
+
+**Answer:**
+
+```mermaid
+sequenceDiagram
+    participant M as Mount
+    participant U as Update
+    participant UM as Unmount
+
+    M->>M: Constructor / useState init
+    M->>M: Render (JSX → Virtual DOM)
+    M->>M: DOM Updated
+    M->>M: useEffect(() => {}, []) — componentDidMount
+
+    U->>U: Props/State Change
+    U->>U: Re-Render
+    U->>U: DOM Updated
+    U->>U: useEffect(() => {}, [dep]) — componentDidUpdate
+
+    UM->>UM: useEffect cleanup — componentWillUnmount
+    UM->>UM: return () => { cleanup }
+```
+
+```javascript
+// Complete useEffect Patterns
+const DataComponent = ({ id }) => {
+  // Pattern 1: Run ONCE on mount (empty deps)
+  useEffect(() => {
+    console.log('Component mounted');
+    return () => console.log('Component unmounted'); // Cleanup
+  }, []);
+
+  // Pattern 2: Run when dependency changes
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetch(`/api/data/${id}`, { signal: controller.signal })
+      .then(res => res.json())
+      .then(setData);
+
+    return () => controller.abort(); // Cancel on unmount or id change
+  }, [id]);
+
+  // Pattern 3: Subscription with cleanup
+  useEffect(() => {
+    const ws = new WebSocket('ws://localhost:8080/events');
+    ws.onmessage = (event) => setMessages(prev => [...prev, event.data]);
+
+    return () => ws.close(); // Always cleanup subscriptions!
+  }, []);
+};
+```
+
+---
+
+## 📋 Section 2: React.js Advanced Patterns — Senior Level
+
+### FS-4. State Management — Context API vs Redux vs Zustand
+
+**Answer:**
+
+```mermaid
+graph TD
+    A[State Management Options] --> B[Local State]
+    A --> C[Context API]
+    A --> D[Redux Toolkit]
+    A --> E[Zustand]
+    A --> F[React Query / TanStack]
+
+    B --> B1["useState / useReducer<br/>Component-level only"]
+    C --> C1["Built-in React<br/>Good for theme/auth<br/>⚠️ Re-renders all consumers"]
+    D --> D1["Global store<br/>Complex state<br/>DevTools, middleware"]
+    E --> E1["Lightweight<br/>No boilerplate<br/>Selective re-renders"]
+    F --> F1["Server state<br/>Caching, refetching<br/>Best for API data"]
+
+    style A fill:#764abc,stroke:#333,color:#fff
+    style D fill:#764abc,stroke:#fff,color:#fff
+    style F fill:#ff4154,stroke:#333,color:#fff
+```
+
+```javascript
+// Context API — Auth Example
+const AuthContext = React.createContext(null);
+
+const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem('token'));
+
+  const login = async (credentials) => {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials)
+    });
+    const data = await res.json();
+    setToken(data.token);
+    setUser(data.user);
+    localStorage.setItem('token', data.token);
+  };
+
+  const logout = () => {
+    setToken(null);
+    setUser(null);
+    localStorage.removeItem('token');
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, token, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+// Usage in any component
+const ProfilePage = () => {
+  const { user, logout } = useContext(AuthContext);
+  return <button onClick={logout}>Logout {user.name}</button>;
+};
+```
+
+---
+
+### FS-5. React + Spring Boot Integration — Full Architecture
+
+**Answer:**
+
+```mermaid
+graph TB
+    subgraph Frontend["React.js Frontend (Port 3000)"]
+        R1[React Router]
+        R2[Components]
+        R3[Axios / Fetch]
+        R4[Redux / Context]
+    end
+
+    subgraph Gateway["API Gateway (Port 8080)"]
+        G1[Spring Cloud Gateway]
+        G2[Rate Limiting]
+        G3[JWT Validation]
+    end
+
+    subgraph Backend["Spring Boot Microservices"]
+        S1[User Service :8081]
+        S2[Order Service :8082]
+        S3[Product Service :8083]
+    end
+
+    subgraph Data["Data Layer"]
+        DB1[(PostgreSQL)]
+        DB2[(MongoDB)]
+        CACHE[(Redis Cache)]
+    end
+
+    R3 -->|REST API + JWT| G1
+    G1 --> S1
+    G1 --> S2
+    G1 --> S3
+    S1 --> DB1
+    S2 --> DB1
+    S3 --> DB2
+    S1 --> CACHE
+
+    style Frontend fill:#282c34,stroke:#61dafb,color:#fff
+    style Gateway fill:#6db33f,stroke:#333,color:#fff
+    style Backend fill:#6db33f,stroke:#333,color:#fff
+    style Data fill:#336791,stroke:#333,color:#fff
+```
+
+**React API Service Layer:**
+```javascript
+// src/services/api.js — Centralized API configuration
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8080/api',
+  timeout: 10000,
+});
+
+// Request Interceptor — Add JWT to every request
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Response Interceptor — Handle 401 globally
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default api;
+
+// src/services/userService.js
+export const userService = {
+  getAll: () => api.get('/users'),
+  getById: (id) => api.get(`/users/${id}`),
+  create: (data) => api.post('/users', data),
+  update: (id, data) => api.put(`/users/${id}`, data),
+  delete: (id) => api.delete(`/users/${id}`),
+};
+```
+
+**Spring Boot CORS + Security Configuration:**
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .cors(cors -> cors.configurationSource(corsConfigSource()))
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(sm -> sm.sessionCreationPolicy(STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/public/**").permitAll()
+                .anyRequest().authenticated()
+            )
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/api/**", config);
+        return source;
+    }
+}
+```
+
+---
+
+### FS-6. Authentication Flow — JWT with React + Spring Boot
+
+**Answer:**
+
+```mermaid
+sequenceDiagram
+    participant U as User (Browser)
+    participant R as React App
+    participant G as API Gateway
+    participant A as Auth Service
+    participant D as Database
+
+    U->>R: Enter email + password
+    R->>G: POST /api/auth/login
+    G->>A: Forward request
+    A->>D: Validate credentials
+    D-->>A: User found, password matches
+    A-->>G: JWT token + Refresh token
+    G-->>R: { accessToken, refreshToken, user }
+    R->>R: Store token in localStorage/httpOnly cookie
+
+    Note over R,G: Subsequent Requests
+    R->>G: GET /api/orders (Authorization: Bearer <JWT>)
+    G->>G: Validate JWT signature + expiry
+    G->>A: Forward to Order Service
+    A-->>R: Order data
+
+    Note over R,G: Token Refresh
+    R->>G: POST /api/auth/refresh (refreshToken)
+    G->>A: Validate refresh token
+    A-->>R: New accessToken
+```
+
+```javascript
+// React — Custom Hook for Authentication
+const useAuth = () => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      api.get('/auth/me')
+        .then(res => setUser(res.data))
+        .catch(() => localStorage.removeItem('accessToken'))
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
+  const login = async (email, password) => {
+    const { data } = await api.post('/auth/login', { email, password });
+    localStorage.setItem('accessToken', data.accessToken);
+    localStorage.setItem('refreshToken', data.refreshToken);
+    setUser(data.user);
+    return data;
+  };
+
+  const logout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    setUser(null);
+  };
+
+  return { user, loading, login, logout, isAuthenticated: !!user };
+};
+
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) return <Spinner />;
+  if (!isAuthenticated) return <Navigate to="/login" />;
+  return children;
+};
+```
+
+---
+
+## 📋 Section 3: Microservices + React — Full-Stack Patterns
+
+### FS-7. Micro-Frontend Architecture
+
+**Answer:**
+
+```mermaid
+graph TD
+    subgraph Shell["App Shell (Host)"]
+        NAV[Navigation]
+        AUTH[Auth Module]
+        ROUTER[Router]
+    end
+
+    subgraph MF1["Micro-Frontend 1<br/>Team: Orders"]
+        O1[Order List]
+        O2[Order Detail]
+        O3[Order Create]
+    end
+
+    subgraph MF2["Micro-Frontend 2<br/>Team: Products"]
+        P1[Product Catalog]
+        P2[Product Detail]
+        P3[Cart]
+    end
+
+    subgraph MF3["Micro-Frontend 3<br/>Team: Admin"]
+        A1[Dashboard]
+        A2[Analytics]
+        A3[User Management]
+    end
+
+    ROUTER --> MF1
+    ROUTER --> MF2
+    ROUTER --> MF3
+
+    MF1 -.->|Order Service| BE1[Spring Boot :8081]
+    MF2 -.->|Product Service| BE2[Spring Boot :8082]
+    MF3 -.->|Admin Service| BE3[Spring Boot :8083]
+
+    style Shell fill:#282c34,stroke:#61dafb,color:#fff
+    style MF1 fill:#1a3a5c,stroke:#4a9fd4,color:#fff
+    style MF2 fill:#3a1a5c,stroke:#9a4ad4,color:#fff
+    style MF3 fill:#3a1a1a,stroke:#d4a017,color:#fff
+```
+
+**Module Federation (Webpack 5):**
+```javascript
+// webpack.config.js — Host Application
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+
+module.exports = {
+  plugins: [
+    new ModuleFederationPlugin({
+      name: 'shell',
+      remotes: {
+        orders: 'orders@http://localhost:3001/remoteEntry.js',
+        products: 'products@http://localhost:3002/remoteEntry.js',
+        admin: 'admin@http://localhost:3003/remoteEntry.js',
+      },
+      shared: ['react', 'react-dom', 'react-router-dom'],
+    }),
+  ],
+};
+
+// Lazy load micro-frontends
+const OrderModule = React.lazy(() => import('orders/OrderList'));
+const ProductModule = React.lazy(() => import('products/Catalog'));
+
+const App = () => (
+  <Suspense fallback={<Loading />}>
+    <Routes>
+      <Route path="/orders/*" element={<OrderModule />} />
+      <Route path="/products/*" element={<ProductModule />} />
+    </Routes>
+  </Suspense>
+);
+```
+
+---
+
+### FS-8. React Performance Optimization — Senior Lead Level
+
+**Answer:**
+
+```mermaid
+graph TD
+    A[React Performance] --> B[Rendering]
+    A --> C[Bundle Size]
+    A --> D[Data Fetching]
+    A --> E[Memory]
+
+    B --> B1[React.memo]
+    B --> B2[useMemo / useCallback]
+    B --> B3[Virtualization - react-window]
+    B --> B4[Concurrent Features]
+
+    C --> C1[Code Splitting - lazy/Suspense]
+    C --> C2[Tree Shaking]
+    C --> C3[Dynamic Imports]
+    C --> C4[Bundle Analyzer]
+
+    D --> D1[React Query - Caching]
+    D --> D2[SWR - Stale While Revalidate]
+    D --> D3[Pagination / Infinite Scroll]
+    D --> D4[Debounce / Throttle]
+
+    E --> E1[Cleanup useEffect]
+    E --> E2[Avoid memory leaks]
+    E --> E3[WeakRef for large objects]
+
+    style A fill:#61dafb,stroke:#333,color:#000
+```
+
+```javascript
+// React Query — Server State Management (Best Practice)
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
+// Fetching with caching, refetching, error handling
+const useUsers = (page, filter) => {
+  return useQuery({
+    queryKey: ['users', page, filter],
+    queryFn: () => api.get(`/users?page=${page}&filter=${filter}`),
+    staleTime: 5 * 60 * 1000, // 5 min cache
+    keepPreviousData: true,    // Smooth pagination
+  });
+};
+
+// Mutation with optimistic update
+const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (user) => api.put(`/users/${user.id}`, user),
+    onMutate: async (newUser) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries(['users']);
+      // Snapshot previous value
+      const previous = queryClient.getQueryData(['users']);
+      // Optimistically update
+      queryClient.setQueryData(['users'], old =>
+        old.map(u => u.id === newUser.id ? newUser : u)
+      );
+      return { previous };
+    },
+    onError: (err, newUser, context) => {
+      // Rollback on error
+      queryClient.setQueryData(['users'], context.previous);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(['users']);
+    },
+  });
+};
+
+// Virtualized List — Render 10,000+ items smoothly
+import { FixedSizeList } from 'react-window';
+
+const VirtualizedUserList = ({ users }) => (
+  <FixedSizeList
+    height={600}
+    width="100%"
+    itemCount={users.length}
+    itemSize={60}
+  >
+    {({ index, style }) => (
+      <div style={style}>
+        <UserRow user={users[index]} />
+      </div>
+    )}
+  </FixedSizeList>
+);
+```
+
+---
+
+## 📋 Section 4: Full-Stack System Design — Senior Lead
+
+### FS-9. Design an E-Commerce Order System (Full-Stack)
+
+**Answer:**
+
+```mermaid
+graph TB
+    subgraph FE["React Frontend"]
+        UI1[Product Page]
+        UI2[Cart Component]
+        UI3[Checkout Flow]
+        UI4[Order Tracking]
+    end
+
+    subgraph GW["API Gateway + BFF"]
+        BFF[Backend for Frontend<br/>Aggregates multiple APIs]
+    end
+
+    subgraph MS["Microservices"]
+        US[User Service<br/>Auth + Profile]
+        PS[Product Service<br/>Catalog + Inventory]
+        OS[Order Service<br/>Order + Payment]
+        NS[Notification Service<br/>Email + Push]
+    end
+
+    subgraph MQ["Event Bus"]
+        K[Apache Kafka]
+    end
+
+    subgraph DB["Databases"]
+        PG[(PostgreSQL<br/>Users, Orders)]
+        MG[(MongoDB<br/>Products, Reviews)]
+        RD[(Redis<br/>Cart, Sessions)]
+    end
+
+    FE --> BFF
+    BFF --> US
+    BFF --> PS
+    BFF --> OS
+
+    OS -->|OrderCreated| K
+    K -->|Consume| NS
+    K -->|Consume| PS
+
+    US --> PG
+    OS --> PG
+    PS --> MG
+    UI2 --> RD
+
+    style FE fill:#282c34,stroke:#61dafb,color:#fff
+    style GW fill:#6db33f,stroke:#333,color:#fff
+    style MS fill:#6db33f,stroke:#333,color:#fff
+    style MQ fill:#231f20,stroke:#fff,color:#fff
+    style DB fill:#336791,stroke:#333,color:#fff
+```
+
+---
+
+### FS-10. Error Handling & Loading States — Production Pattern
+
+**Answer:**
+
+```javascript
+// Custom Hook — Universal Data Fetching with Error Boundary
+const useApi = (endpoint, options = {}) => {
+  const [state, setState] = useState({
+    data: null,
+    loading: true,
+    error: null,
+  });
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setState(prev => ({ ...prev, loading: true, error: null }));
+
+    api.get(endpoint, { signal: controller.signal })
+      .then(res => setState({ data: res.data, loading: false, error: null }))
+      .catch(err => {
+        if (err.name !== 'AbortError') {
+          setState({ data: null, loading: false, error: err.message });
+        }
+      });
+
+    return () => controller.abort();
+  }, [endpoint]);
+
+  return state;
+};
+
+// Error Boundary Component
+class ErrorBoundary extends React.Component {
+  state = { hasError: false, error: null };
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    // Log to monitoring service (Sentry, DataDog)
+    logErrorToService(error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="error-fallback">
+          <h2>Something went wrong</h2>
+          <button onClick={() => this.setState({ hasError: false })}>
+            Try Again
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+// Usage
+<ErrorBoundary>
+  <Suspense fallback={<Skeleton />}>
+    <OrderList />
+  </Suspense>
+</ErrorBoundary>
+```
+
+---
+
+## 📋 Section 5: Full-Stack Testing — End-to-End
+
+### FS-11. Testing Strategy for Full-Stack Applications
+
+**Answer:**
+
+```mermaid
+graph TD
+    A[Testing Pyramid] --> B[Unit Tests - 70%]
+    A --> C[Integration Tests - 20%]
+    A --> D[E2E Tests - 10%]
+
+    B --> B1["React: Jest + RTL<br/>Components, Hooks, Utils"]
+    B --> B2["Java: JUnit 5 + Mockito<br/>Services, Controllers"]
+
+    C --> C1["React: MSW Mock API<br/>Full component flows"]
+    C --> C2["Java: @SpringBootTest<br/>+ Testcontainers"]
+
+    D --> D1["Cypress / Playwright<br/>Full user flows<br/>Login → Order → Payment"]
+
+    style A fill:#61dafb,stroke:#333,color:#000
+    style B fill:#15803d,stroke:#333,color:#fff
+    style C fill:#ca8a04,stroke:#333,color:#fff
+    style D fill:#dc2626,stroke:#333,color:#fff
+```
+
+```javascript
+// React Testing — Component with API call
+import { render, screen, waitFor } from '@testing-library/react';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
+import UserList from './UserList';
+
+// Mock API
+const server = setupServer(
+  rest.get('/api/users', (req, res, ctx) => {
+    return res(ctx.json([
+      { id: 1, name: 'Digamber', role: 'Lead' },
+      { id: 2, name: 'Alice', role: 'Dev' },
+    ]));
+  })
+);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+test('renders user list from API', async () => {
+  render(<UserList />);
+
+  // Shows loading initially
+  expect(screen.getByText(/loading/i)).toBeInTheDocument();
+
+  // Waits for API data to render
+  await waitFor(() => {
+    expect(screen.getByText('Digamber')).toBeInTheDocument();
+    expect(screen.getByText('Alice')).toBeInTheDocument();
+  });
+});
+
+test('handles API error gracefully', async () => {
+  server.use(
+    rest.get('/api/users', (req, res, ctx) => res(ctx.status(500)))
+  );
+
+  render(<UserList />);
+
+  await waitFor(() => {
+    expect(screen.getByText(/error/i)).toBeInTheDocument();
+  });
+});
+```
+
+```java
+// Spring Boot Integration Test — Controller + Service + DB
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@Testcontainers
+class UserControllerIntegrationTest {
+
+    @Container
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15");
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Test
+    void shouldCreateAndRetrieveUser() {
+        // Create
+        UserDTO request = new UserDTO("Digamber", "digamber@test.com");
+        ResponseEntity<UserDTO> createRes = restTemplate.postForEntity(
+            "/api/users", request, UserDTO.class);
+
+        assertThat(createRes.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(createRes.getBody().getId()).isNotNull();
+
+        // Retrieve
+        Long id = createRes.getBody().getId();
+        ResponseEntity<UserDTO> getRes = restTemplate.getForEntity(
+            "/api/users/" + id, UserDTO.class);
+
+        assertThat(getRes.getBody().getName()).isEqualTo("Digamber");
+    }
+}
+```
+
+---
+
+## 📋 Section 6: React.js Interview Quick-Fire (30 Seconds Each)
+
+| # | Question | Answer |
+|---|----------|--------|
+| 1 | Virtual DOM vs Real DOM? | Virtual DOM is in-memory representation; React diffs it and updates only changed real DOM nodes |
+| 2 | What is JSX? | Syntactic sugar for `React.createElement()`. Babel transpiles it to JavaScript |
+| 3 | Controlled vs Uncontrolled? | Controlled: React state drives input value. Uncontrolled: DOM manages its own state via refs |
+| 4 | Key prop purpose? | Helps React identify which items changed/added/removed in lists. Use stable IDs, never index |
+| 5 | useEffect cleanup? | Return function runs before next effect or unmount. Clean subscriptions, timers, abort controllers |
+| 6 | React.memo vs useMemo? | React.memo memoizes COMPONENTS (skip re-render). useMemo memoizes VALUES (skip computation) |
+| 7 | Context vs Redux? | Context: simple global state (theme, auth). Redux: complex state with middleware, DevTools, time-travel |
+| 8 | What is prop drilling? | Passing props through intermediate components that don't use them. Solve with Context or composition |
+| 9 | Lazy loading? | `React.lazy(() => import('./Component'))` + Suspense. Splits bundle, loads on demand |
+| 10 | Server Components (React 18+)? | Render on server, zero JS shipped to client. For static content. Use `'use client'` for interactive |
+| 11 | What is hydration? | Attaching event listeners to server-rendered HTML. React "takes over" the static markup |
+| 12 | Custom Hooks? | Functions starting with `use` that compose other hooks. Reuse stateful logic across components |
+| 13 | useRef vs useState? | useRef doesn't trigger re-render on change. Use for DOM refs, previous values, timers |
+| 14 | Error Boundaries? | Class components with `getDerivedStateFromError` + `componentDidCatch`. Catch render errors |
+| 15 | React Router v6? | `<Routes>`, `<Route>`, nested routes, `useNavigate`, `useParams`, `<Outlet>` for layouts |
+
+---
+
+## 📋 Section 7: Full-Stack Architecture Decisions — Lead Level
+
+### FS-12. When to Use SSR vs CSR vs SSG?
+
+**Answer:**
+
+```mermaid
+graph TD
+    A[Rendering Strategy Decision] --> B{Content Type?}
+
+    B -->|Static/Marketing| C[SSG - Static Site Generation]
+    B -->|Dynamic/SEO needed| D[SSR - Server Side Rendering]
+    B -->|App-like/Dashboard| E[CSR - Client Side Rendering]
+    B -->|Mix of both| F[ISR - Incremental Static Regen]
+
+    C --> C1["Next.js getStaticProps<br/>Build-time HTML<br/>📈 Best performance"]
+    D --> D1["Next.js getServerSideProps<br/>Per-request HTML<br/>📈 SEO + fresh data"]
+    E --> E1["React SPA<br/>CRA / Vite<br/>📈 Best for dashboards"]
+    F --> F1["Next.js revalidate<br/>Static + background refresh<br/>📈 Best of both"]
+
+    style A fill:#61dafb,stroke:#333,color:#000
+    style C fill:#15803d,stroke:#333,color:#fff
+    style D fill:#ca8a04,stroke:#333,color:#fff
+    style E fill:#2563eb,stroke:#333,color:#fff
+    style F fill:#7c3aed,stroke:#333,color:#fff
+```
+
+| Strategy | Use Case | Example |
+|----------|----------|---------|
+| **CSR** | Admin dashboards, internal tools | CRM, Analytics Dashboard |
+| **SSR** | E-commerce product pages, SEO content | Amazon product page |
+| **SSG** | Blogs, documentation, marketing | Company landing page |
+| **ISR** | Product catalogs (change hourly) | Shopify storefronts |
+
+---
+
+### FS-13. Fullstack Project Structure — Production Ready
+
+```
+my-fullstack-app/
+├── frontend/                    # React Application
+│   ├── src/
+│   │   ├── components/         # Reusable UI components
+│   │   │   ├── common/         # Button, Input, Modal
+│   │   │   └── features/       # Feature-specific components
+│   │   ├── pages/              # Page-level components (routes)
+│   │   ├── hooks/              # Custom hooks
+│   │   ├── services/           # API service layer
+│   │   ├── store/              # State management (Redux/Zustand)
+│   │   ├── utils/              # Helper functions
+│   │   ├── types/              # TypeScript interfaces
+│   │   └── App.tsx
+│   ├── public/
+│   ├── package.json
+│   └── vite.config.ts
+│
+├── backend/                     # Spring Boot Microservices
+│   ├── api-gateway/            # Spring Cloud Gateway
+│   ├── user-service/           # User management
+│   ├── order-service/          # Order processing
+│   ├── notification-service/   # Email, Push, SMS
+│   └── common/                 # Shared DTOs, Utils
+│       ├── src/main/java/
+│       │   ├── config/         # Security, CORS, Kafka
+│       │   ├── controller/     # REST endpoints
+│       │   ├── service/        # Business logic
+│       │   ├── repository/     # Data access
+│       │   ├── model/          # Entities
+│       │   ├── dto/            # Request/Response objects
+│       │   ├── exception/      # Global error handling
+│       │   └── filter/         # JWT, Logging filters
+│       └── src/main/resources/
+│           └── application.yml
+│
+├── docker-compose.yml           # Local development
+├── k8s/                         # Kubernetes manifests
+└── .github/workflows/           # CI/CD pipelines
+```
+
+---
+
+## 📋 Summary: Fullstack Developer Skills Matrix
+
+| Level | Java/Spring Boot | React.js | System Design |
+|-------|-----------------|----------|---------------|
+| **Junior (0-2 yrs)** | Basic REST APIs, JPA, Security basics | Components, Props, State, useEffect, Router | Single service CRUD |
+| **Mid (3-5 yrs)** | Microservices, Kafka, Redis, Testing | Context, Redux, React Query, Performance | Multi-service, Caching |
+| **Senior (5-8 yrs)** | Distributed TX, Event Sourcing, CQRS | Micro-frontends, SSR, Optimization, Testing | Full system design with trade-offs |
+| **Lead (8+ yrs)** | Architecture decisions, Team standards, FinOps | Tech stack selection, Build vs Buy, CI/CD | Enterprise-scale, Multi-team coordination |
+
+---
+
+
+---
+
+
+---
+
+## 📋 Section 8: CI/CD Pipeline & Deployment Strategies — Full-Stack
+
+### FS-14. Full-Stack CI/CD Pipeline Architecture
+
+**Answer:**
+
+```mermaid
+graph TD
+    subgraph DEV["Developer Workflow"]
+        D1[Git Push / PR]
+        D2[Code Review]
+    end
+
+    subgraph CI["Continuous Integration"]
+        CI1[Lint + Type Check]
+        CI2[Unit Tests]
+        CI3[Build Frontend]
+        CI4[Build Backend]
+        CI5[Integration Tests]
+        CI6[Security Scan]
+    end
+
+    subgraph CD["Continuous Deployment"]
+        CD1[Build Docker Images]
+        CD2[Push to Registry]
+        CD3[Deploy to Staging]
+        CD4[E2E Tests on Staging]
+        CD5[Manual Approval]
+        CD6[Deploy to Production]
+    end
+
+    subgraph PROD["Production"]
+        P1[Blue/Green or Canary]
+        P2[Health Checks]
+        P3[Monitoring + Alerts]
+        P4[Rollback if needed]
+    end
+
+    D1 --> CI1
+    CI1 --> CI2
+    CI2 --> CI3
+    CI3 --> CI4
+    CI4 --> CI5
+    CI5 --> CI6
+    CI6 --> CD1
+    CD1 --> CD2
+    CD2 --> CD3
+    CD3 --> CD4
+    CD4 --> CD5
+    CD5 --> CD6
+    CD6 --> P1
+    P1 --> P2
+    P2 --> P3
+    P3 --> P4
+
+    style DEV fill:#282c34,stroke:#61dafb,color:#fff
+    style CI fill:#15803d,stroke:#333,color:#fff
+    style CD fill:#7c3aed,stroke:#333,color:#fff
+    style PROD fill:#dc2626,stroke:#333,color:#fff
+```
+
+---
+
+### FS-15. GitHub Actions — Complete Full-Stack Pipeline
+
+**Answer:**
+
+```yaml
+# .github/workflows/fullstack-ci-cd.yml
+name: Full-Stack CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  REGISTRY: ghcr.io
+  BACKEND_IMAGE: ghcr.io/${{ github.repository }}/backend
+  FRONTEND_IMAGE: ghcr.io/${{ github.repository }}/frontend
+
+jobs:
+  # ═══════════════════════════════════════════
+  # STAGE 1: LINT + TYPE CHECK (Fails Fast)
+  # ═══════════════════════════════════════════
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Frontend lint + type check
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Frontend Dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: TypeScript Type Check
+        working-directory: frontend
+        run: npx tsc --noEmit
+
+      - name: ESLint
+        working-directory: frontend
+        run: npm run lint
+
+      # Backend lint
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Backend Checkstyle
+        working-directory: backend
+        run: ./mvnw checkstyle:check -pl user-service,order-service
+
+  # ═══════════════════════════════════════════
+  # STAGE 2: UNIT TESTS (Parallel)
+  # ═══════════════════════════════════════════
+  test-frontend:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+        working-directory: frontend
+      - name: Run Tests with Coverage
+        working-directory: frontend
+        run: npm test -- --coverage --watchAll=false
+      - name: Upload Coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: frontend/coverage/
+
+  test-backend:
+    runs-on: ubuntu-latest
+    needs: lint
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: testdb
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7
+        ports: ['6379:6379']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+      - name: Run Tests
+        working-directory: backend
+        run: ./mvnw verify -pl user-service,order-service
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/testdb
+          SPRING_REDIS_HOST: localhost
+
+  # ═══════════════════════════════════════════
+  # STAGE 3: BUILD + PUSH DOCKER IMAGES
+  # ═══════════════════════════════════════════
+  build:
+    runs-on: ubuntu-latest
+    needs: [test-frontend, test-backend]
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & Push Backend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: |
+            ${{ env.BACKEND_IMAGE }}:${{ github.sha }}
+            ${{ env.BACKEND_IMAGE }}:latest
+
+      - name: Build & Push Frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: |
+            ${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
+            ${{ env.FRONTEND_IMAGE }}:latest
+
+  # ═══════════════════════════════════════════
+  # STAGE 4: DEPLOY TO STAGING
+  # ═══════════════════════════════════════════
+  deploy-staging:
+    runs-on: ubuntu-latest
+    needs: build
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Staging (Kubernetes)
+        run: |
+          kubectl set image deployment/backend backend=${{ env.BACKEND_IMAGE }}:${{ github.sha }} -n staging
+          kubectl set image deployment/frontend frontend=${{ env.FRONTEND_IMAGE }}:${{ github.sha }} -n staging
+          kubectl rollout status deployment/backend -n staging --timeout=300s
+          kubectl rollout status deployment/frontend -n staging --timeout=300s
+
+  # ═══════════════════════════════════════════
+  # STAGE 5: E2E TESTS ON STAGING
+  # ═══════════════════════════════════════════
+  e2e-tests:
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+      - name: Run E2E Tests
+        run: npx playwright test
+        env:
+          BASE_URL: https://staging.myapp.com
+
+  # ═══════════════════════════════════════════
+  # STAGE 6: DEPLOY TO PRODUCTION
+  # ═══════════════════════════════════════════
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: e2e-tests
+    environment: production  # Requires manual approval
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Production (Canary)
+        run: |
+          # Deploy canary (10% traffic)
+          kubectl set image deployment/backend-canary backend=${{ env.BACKEND_IMAGE }}:${{ github.sha }} -n production
+          sleep 60
+          # Check error rate
+          ERROR_RATE=$(curl -s "http://prometheus:9090/api/v1/query?query=rate(http_errors[5m])")
+          if [ "$ERROR_RATE" -gt "0.01" ]; then
+            echo "❌ Error rate too high — rolling back canary"
+            kubectl rollout undo deployment/backend-canary -n production
+            exit 1
+          fi
+          # Full rollout
+          kubectl set image deployment/backend backend=${{ env.BACKEND_IMAGE }}:${{ github.sha }} -n production
+          kubectl set image deployment/frontend frontend=${{ env.FRONTEND_IMAGE }}:${{ github.sha }} -n production
+          kubectl rollout status deployment/backend -n production --timeout=300s
+```
+
+---
+
+### FS-16. Deployment Strategies — Detailed Comparison
+
+**Answer:**
+
+```mermaid
+graph TD
+    A[Deployment Strategies] --> B[Rolling Update]
+    A --> C[Blue/Green]
+    A --> D[Canary]
+    A --> E[A/B Testing]
+    A --> F[Shadow / Dark Launch]
+
+    B --> B1["Replace pods one by one<br/>✅ Zero downtime<br/>✅ No extra resources<br/>⚠️ Mixed versions during rollout"]
+    C --> C1["Two identical environments<br/>✅ Instant rollback<br/>✅ No mixed versions<br/>❌ 2x infrastructure cost"]
+    D --> D1["Route 5-10% traffic to new version<br/>✅ Low risk<br/>✅ Real user testing<br/>⚠️ Complex routing setup"]
+    E --> E1["Route by user segment<br/>✅ Feature validation<br/>✅ Business metrics<br/>⚠️ Needs feature flags"]
+    F --> F1["Duplicate production traffic<br/>✅ Zero user impact<br/>✅ Performance comparison<br/>⚠️ Complex to implement"]
+
+    style A fill:#3178c6,stroke:#333,color:#fff
+    style B fill:#15803d,stroke:#333,color:#fff
+    style C fill:#2563eb,stroke:#333,color:#fff
+    style D fill:#ca8a04,stroke:#333,color:#fff
+    style E fill:#7c3aed,stroke:#333,color:#fff
+    style F fill:#dc2626,stroke:#333,color:#fff
+```
+
+| Strategy | Rollback Time | Risk | Cost | Best For |
+|----------|--------------|------|------|----------|
+| **Rolling Update** | 30–60s | Medium | Low (1x) | Default K8s deployments, Internal tools |
+| **Blue/Green** | Instant (DNS switch) | Low | High (2x) | Banking, Payment systems, Zero-risk requirement |
+| **Canary** | 10–30s | Very Low | Low (+10%) | User-facing apps, High-traffic services |
+| **A/B Testing** | N/A (feature flag) | Low | Low | New feature validation, Business experiments |
+| **Shadow/Dark** | N/A (no live traffic) | Zero | Medium | Performance testing, ML model validation |
+
+---
+
+### FS-17. Blue/Green Deployment — Implementation
+
+**Answer:**
+
+```mermaid
+sequenceDiagram
+    participant LB as Load Balancer
+    participant B as Blue (Current v1.0)
+    participant G as Green (New v1.1)
+    participant DB as Database
+
+    Note over LB,DB: Phase 1 — Deploy Green
+    LB->>B: All traffic goes to Blue (v1.0)
+    Note over G: Deploy v1.1 to Green environment
+    G->>DB: Run DB migrations (backward compatible!)
+    G->>G: Health checks pass ✓
+
+    Note over LB,DB: Phase 2 — Switch Traffic
+    LB->>G: Switch DNS/Route → 100% to Green
+    LB--xB: Blue receives 0% traffic
+
+    Note over LB,DB: Phase 3 — Verify
+    G->>G: Monitor error rates, latency
+    Note over B: Keep Blue running (rollback ready)
+
+    Note over LB,DB: Phase 4a — Success
+    Note over B: Tear down Blue after 30 min
+
+    Note over LB,DB: Phase 4b — Rollback (if issues)
+    LB->>B: Switch back to Blue instantly
+    LB--xG: Green traffic stopped
+```
+
+```yaml
+# Kubernetes Blue/Green with Argo Rollouts
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: backend-rollout
+spec:
+  replicas: 3
+  strategy:
+    blueGreen:
+      activeService: backend-active       # Current production
+      previewService: backend-preview     # New version (preview)
+      autoPromotionEnabled: false         # Require manual approval
+      prePromotionAnalysis:
+        templates:
+          - templateName: smoke-tests
+        args:
+          - name: service-name
+            value: backend-preview
+      scaleDownDelaySeconds: 300          # Keep old version 5 min after switch
+  template:
+    spec:
+      containers:
+        - name: backend
+          image: ghcr.io/myapp/backend:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+```
+
+---
+
+### FS-18. Canary Deployment — Progressive Delivery
+
+**Answer:**
+
+```mermaid
+graph LR
+    subgraph Traffic["Incoming Traffic (100%)"]
+        T[Users]
+    end
+
+    subgraph Router["Ingress / Service Mesh"]
+        R[Traffic Splitter]
+    end
+
+    subgraph Stable["Stable (v1.0)"]
+        S1[Pod 1]
+        S2[Pod 2]
+        S3[Pod 3]
+    end
+
+    subgraph Canary["Canary (v1.1)"]
+        C1[Pod 1 — 10% traffic]
+    end
+
+    subgraph Monitor["Automated Analysis"]
+        M1[Error Rate < 1%?]
+        M2[Latency p99 < 200ms?]
+        M3[CPU/Memory normal?]
+    end
+
+    T --> R
+    R -->|90%| Stable
+    R -->|10%| Canary
+    Canary --> Monitor
+    Monitor -->|Pass| PROMOTE[Promote to 100%]
+    Monitor -->|Fail| ROLLBACK[Rollback to Stable]
+
+    style Traffic fill:#282c34,stroke:#fff,color:#fff
+    style Stable fill:#15803d,stroke:#333,color:#fff
+    style Canary fill:#ca8a04,stroke:#333,color:#fff
+    style Monitor fill:#7c3aed,stroke:#333,color:#fff
+```
+
+```yaml
+# Argo Rollouts — Canary with automatic analysis
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: frontend-canary
+spec:
+  replicas: 5
+  strategy:
+    canary:
+      steps:
+        # Step 1: 10% traffic to canary
+        - setWeight: 10
+        - pause: { duration: 5m }
+
+        # Step 2: Automated analysis
+        - analysis:
+            templates:
+              - templateName: error-rate-check
+            args:
+              - name: service
+                value: frontend-canary
+
+        # Step 3: Increase to 30%
+        - setWeight: 30
+        - pause: { duration: 5m }
+
+        # Step 4: Increase to 50%
+        - setWeight: 50
+        - pause: { duration: 5m }
+
+        # Step 5: Full rollout
+        - setWeight: 100
+
+      # Automatic rollback conditions
+      analysis:
+        templates:
+          - templateName: error-rate-check
+        startingStep: 1  # Start monitoring from step 1
+
+      # Anti-affinity — canary pods on different nodes
+      canaryMetadata:
+        labels:
+          deployment: canary
+
+---
+# Analysis Template — Automatic success/failure
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: error-rate-check
+spec:
+  metrics:
+    - name: error-rate
+      interval: 1m
+      successCondition: result[0] < 0.01  # Less than 1% errors
+      provider:
+        prometheus:
+          address: http://prometheus:9090
+          query: |
+            sum(rate(http_requests_total{status=~"5.*",service="{{args.service}}"}[5m]))
+            /
+            sum(rate(http_requests_total{service="{{args.service}}"}[5m]))
+
+    - name: latency-p99
+      interval: 1m
+      successCondition: result[0] < 200   # p99 under 200ms
+      provider:
+        prometheus:
+          address: http://prometheus:9090
+          query: |
+            histogram_quantile(0.99,
+              rate(http_request_duration_seconds_bucket{service="{{args.service}}"}[5m]))
+            * 1000
+```
+
+---
+
+### FS-19. Frontend Deployment — React Build & CDN Strategy
+
+**Answer:**
+
+```mermaid
+graph TD
+    subgraph Build["React Build Pipeline"]
+        B1["npm run build"]
+        B2["Webpack / Vite Bundle"]
+        B3["Code Splitting"]
+        B4["Asset Hashing<br/>(main.a3f2b.js)"]
+        B5["Source Maps<br/>(upload to Sentry)"]
+    end
+
+    subgraph Deploy["Deployment"]
+        D1["Upload to S3 / GCS"]
+        D2["CloudFront / Cloud CDN"]
+        D3["Invalidate Cache"]
+    end
+
+    subgraph Serve["Serving"]
+        S1["index.html — no-cache"]
+        S2["*.js, *.css — cache 1 year<br/>(hash in filename)"]
+        S3["Edge locations worldwide"]
+    end
+
+    B1 --> B2 --> B3 --> B4 --> B5
+    B4 --> D1 --> D2 --> D3
+    D2 --> S1
+    D2 --> S2
+    D2 --> S3
+
+    style Build fill:#282c34,stroke:#61dafb,color:#fff
+    style Deploy fill:#ff9900,stroke:#333,color:#000
+    style Serve fill:#15803d,stroke:#333,color:#fff
+```
+
+```dockerfile
+# Frontend Dockerfile — Multi-stage build
+# Stage 1: Build
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build   # Produces /app/dist
+
+# Stage 2: Serve with Nginx
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+```
+
+```nginx
+# nginx.conf — Production React serving
+server {
+    listen 80;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # React Router — all routes serve index.html
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Static assets — aggressive caching (hash in filename)
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff2)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # index.html — never cache (picks up new JS bundles)
+    location = /index.html {
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+    }
+
+    # API proxy — forward to backend
+    location /api/ {
+        proxy_pass http://backend-service:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Strict-Transport-Security "max-age=31536000" always;
+
+    # Gzip compression
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/xml;
+    gzip_min_length 256;
+}
+```
+
+---
+
+### FS-20. Rollback Strategies & Incident Response
+
+**Answer:**
+
+```mermaid
+graph TD
+    A[Deployment Issue Detected] --> B{Severity?}
+
+    B -->|Critical: 5xx spike| C[Immediate Rollback]
+    B -->|High: Performance degradation| D[Canary Halt + Investigate]
+    B -->|Medium: Edge case bug| E[Hotfix Forward]
+    B -->|Low: UI glitch| F[Schedule Fix in Next Deploy]
+
+    C --> C1["kubectl rollout undo<br/>Switch Blue/Green<br/>Revert canary weight to 0%"]
+    D --> D1["Pause canary progression<br/>Check logs + metrics<br/>Decide: fix or rollback"]
+    E --> E1["Fix in code<br/>Fast-track through CI/CD<br/>Deploy fix (not rollback)"]
+
+    C1 --> G[Post-Mortem within 24h]
+    D1 --> G
+    E1 --> G
+
+    style A fill:#dc2626,stroke:#333,color:#fff
+    style C fill:#dc2626,stroke:#333,color:#fff
+    style D fill:#ca8a04,stroke:#333,color:#fff
+    style E fill:#2563eb,stroke:#333,color:#fff
+    style F fill:#15803d,stroke:#333,color:#fff
+```
+
+```bash
+# === ROLLBACK COMMANDS (Must know by heart!) ===
+
+# Kubernetes — Rolling update rollback (instant)
+kubectl rollout undo deployment/backend -n production
+kubectl rollout undo deployment/frontend -n production
+
+# Check rollout history
+kubectl rollout history deployment/backend -n production
+
+# Rollback to specific revision
+kubectl rollout undo deployment/backend --to-revision=3 -n production
+
+# Argo Rollouts — Abort canary
+kubectl argo rollouts abort frontend-canary -n production
+
+# Argo Rollouts — Promote (if canary is good)
+kubectl argo rollouts promote frontend-canary -n production
+
+# Helm — Rollback to previous release
+helm rollback my-app 0 -n production        # Previous version
+helm rollback my-app 3 -n production        # Specific version
+helm history my-app -n production           # View history
+```
+
+**Database Rollback Considerations:**
+```java
+// CRITICAL: Database migrations must be BACKWARD COMPATIBLE
+// Why? During Blue/Green, BOTH versions access the SAME database!
+
+// ✅ SAFE Migration Pattern:
+// Step 1 (v1.1): ADD new column (nullable)
+ALTER TABLE users ADD COLUMN phone VARCHAR(20);  -- Both v1.0 and v1.1 work
+
+// Step 2 (v1.2): Populate new column + update code to use it
+UPDATE users SET phone = legacy_phone;           -- Backfill data
+
+// Step 3 (v1.3): DROP old column (only after v1.2 is stable)
+ALTER TABLE users DROP COLUMN legacy_phone;      -- Safe — no code uses it
+
+// ❌ UNSAFE — Breaks rollback:
+// ALTER TABLE users RENAME COLUMN name TO full_name;  -- v1.0 code still expects 'name'!
+```
+
+---
+
+### FS-21. Environment Strategy & Feature Flags
+
+**Answer:**
+
+```mermaid
+graph LR
+    subgraph Envs["Environment Pipeline"]
+        DEV[Dev<br/>Auto-deploy on PR]
+        STAGING[Staging<br/>Auto-deploy on main]
+        PROD[Production<br/>Manual approval]
+    end
+
+    DEV -->|Merge to main| STAGING
+    STAGING -->|E2E pass + Approval| PROD
+
+    style DEV fill:#15803d,stroke:#333,color:#fff
+    style STAGING fill:#ca8a04,stroke:#333,color:#fff
+    style PROD fill:#dc2626,stroke:#333,color:#fff
+```
+
+```typescript
+// Feature Flags — React implementation
+interface FeatureFlags {
+  newCheckoutFlow: boolean;
+  darkMode: boolean;
+  aiRecommendations: boolean;
+  betaUserProfile: boolean;
+}
+
+// Fetch flags from backend (LaunchDarkly, Unleash, or custom)
+const useFeatureFlags = (): FeatureFlags => {
+  const { data } = useQuery({
+    queryKey: ['feature-flags'],
+    queryFn: () => api.get('/api/features').then(r => r.data),
+    staleTime: 5 * 60 * 1000,  // Cache 5 min
+  });
+
+  return data ?? {
+    newCheckoutFlow: false,
+    darkMode: false,
+    aiRecommendations: false,
+    betaUserProfile: false,
+  };
+};
+
+// Usage in components
+const CheckoutPage = () => {
+  const flags = useFeatureFlags();
+
+  if (flags.newCheckoutFlow) {
+    return <NewCheckoutFlow />;  // New version (canary users)
+  }
+  return <LegacyCheckout />;     // Stable version (everyone else)
+};
+```
+
+```java
+// Spring Boot — Feature Flag backend
+@RestController
+@RequestMapping("/api/features")
+public class FeatureFlagController {
+
+    @Value("${features.new-checkout:false}")
+    private boolean newCheckout;
+
+    @GetMapping
+    public Map<String, Boolean> getFlags(Authentication auth) {
+        Map<String, Boolean> flags = new HashMap<>();
+        flags.put("newCheckoutFlow", newCheckout && isBetaUser(auth));
+        flags.put("darkMode", true);  // Rolled out to everyone
+        flags.put("aiRecommendations", isPremiumUser(auth));
+        return flags;
+    }
+
+    private boolean isBetaUser(Authentication auth) {
+        // 10% of users get beta features
+        return Math.abs(auth.getName().hashCode() % 100) < 10;
+    }
+}
+```
+
+---
+
+## 📋 CI/CD Quick Reference — Interview Ready
+
+| Question | Answer |
+|----------|--------|
+| Rolling update vs Blue/Green? | Rolling: gradual pod replacement (mixed versions). B/G: instant full switch (no mixed versions) |
+| When to use Canary? | High-traffic user-facing apps. Route 5-10% first, monitor, then full rollout |
+| How to rollback in K8s? | `kubectl rollout undo deployment/name` — instant, uses previous ReplicaSet |
+| DB migration during Blue/Green? | Must be backward compatible. Add column → populate → remove old (3 deploys) |
+| Frontend caching strategy? | `index.html`: no-cache. `*.js/*.css`: 1 year (hash in filename enables this) |
+| What triggers auto-rollback? | Error rate > 1%, latency p99 > threshold, failed health checks |
+| Feature flags purpose? | Deploy code without activating it. Enable per user/segment. Safe rollback = toggle off |
+| GitOps vs Push-based CD? | GitOps (ArgoCD): cluster pulls from Git. Push: CI pushes to cluster. GitOps = audit trail + drift detection |
+| Staging vs Production parity? | Same Docker images, same K8s configs, different ConfigMaps/Secrets only |
+| Zero-downtime requires? | Rolling/B-G/Canary + health checks + backward-compatible DB migrations + graceful shutdown |
+
+---
+
+
+<a id="-typescript-refresher--basics-to-advanced-interview-guide"></a>
+
+# 📘 TypeScript Refresher — Basics to Advanced Interview Guide
+
+> **Complete TypeScript Interview Prep: From Type Basics to Advanced Generic Patterns**
+> Essential for: React.js + Spring Boot Fullstack roles, Frontend Lead positions, Any modern JS/TS project
+
+---
+
+## 📋 Section 1: TypeScript Fundamentals
+
+### TS-1. What is TypeScript and Why Use It?
+
+**Answer:**
+TypeScript is a statically-typed superset of JavaScript that compiles to plain JavaScript. It adds type safety, better tooling (autocomplete, refactoring), and catches errors at compile time instead of runtime.
+
+```mermaid
+graph TD
+    A[TypeScript Benefits] --> B[Type Safety]
+    A --> C[Better IDE Support]
+    A --> D[Self-Documenting Code]
+    A --> E[Catches Bugs Early]
+    A --> F[Easier Refactoring]
+
+    B --> B1["Compile-time errors<br/>vs runtime crashes"]
+    C --> C1["IntelliSense<br/>Auto-imports<br/>Go to definition"]
+    D --> D1["Types ARE documentation<br/>No stale comments"]
+    E --> E1["null/undefined errors<br/>Typos in property names<br/>Wrong function args"]
+    F --> F1["Rename symbol safely<br/>Find all usages<br/>Change interface → all implementors update"]
+
+    style A fill:#3178c6,stroke:#333,color:#fff
+    style B fill:#1a365d,stroke:#3178c6,color:#fff
+    style C fill:#1a365d,stroke:#3178c6,color:#fff
+    style D fill:#1a365d,stroke:#3178c6,color:#fff
+    style E fill:#1a365d,stroke:#3178c6,color:#fff
+    style F fill:#1a365d,stroke:#3178c6,color:#fff
+```
+
+```typescript
+// JavaScript (no safety)
+function greet(name) {
+  return "Hello, " + name.toUpperCase(); // Runtime error if name is null!
+}
+greet(42); // No error until runtime — crashes with .toUpperCase()
+
+// TypeScript (compile-time safety)
+function greet(name: string): string {
+  return "Hello, " + name.toUpperCase(); // ✅ Safe — name is guaranteed string
+}
+greet(42); // ❌ Compile error: Argument of type 'number' is not assignable to 'string'
+```
+
+---
+
+### TS-2. Basic Types — Primitives, Arrays, Objects, Tuples, Enums
+
+**Answer:**
+
+```typescript
+// === PRIMITIVE TYPES ===
+let name: string = "Digamber";
+let age: number = 30;
+let isActive: boolean = true;
+let nothing: null = null;
+let notDefined: undefined = undefined;
+
+// === ARRAYS ===
+let numbers: number[] = [1, 2, 3];
+let names: Array<string> = ["Alice", "Bob"]; // Generic syntax (same thing)
+
+// === TUPLE — Fixed-length array with specific types per position ===
+let pair: [string, number] = ["age", 30];
+let httpResponse: [number, string, boolean] = [200, "OK", true];
+
+// === ENUM — Named constants ===
+enum HttpStatus {
+  OK = 200,
+  NOT_FOUND = 404,
+  INTERNAL_ERROR = 500,
+}
+const status: HttpStatus = HttpStatus.OK; // 200
+
+// Const enum (inlined at compile time — better performance)
+const enum Direction {
+  Up = "UP",
+  Down = "DOWN",
+  Left = "LEFT",
+  Right = "RIGHT",
+}
+
+// === OBJECT TYPE ===
+let user: { name: string; age: number; email?: string } = {
+  name: "Digamber",
+  age: 30,
+  // email is optional (?)
+};
+
+// === UNION TYPES — Can be one of multiple types ===
+let id: string | number = "abc123";
+id = 42; // Also valid
+
+// === LITERAL TYPES — Exact values only ===
+let status2: "active" | "inactive" | "pending" = "active";
+
+// === ANY vs UNKNOWN vs NEVER ===
+let anything: any = 42;        // ⚠️ Disables type checking — avoid!
+let uncertain: unknown = 42;   // ✅ Safe alternative — must narrow before use
+// uncertain.toFixed(); // ❌ Error — must check type first
+if (typeof uncertain === "number") {
+  uncertain.toFixed(); // ✅ Now safe
+}
+
+// never — function that never returns (throws or infinite loop)
+function throwError(msg: string): never {
+  throw new Error(msg);
+}
+```
+
+---
+
+### TS-3. Interfaces vs Types — When to Use Which?
+
+**Answer:**
+
+```mermaid
+graph TD
+    A[Interface vs Type] --> B[Interface]
+    A --> C[Type Alias]
+
+    B --> B1["✅ Object shapes"]
+    B --> B2["✅ Class contracts"]
+    B --> B3["✅ Declaration merging"]
+    B --> B4["✅ extends keyword"]
+
+    C --> C1["✅ Unions & Intersections"]
+    C --> C2["✅ Primitives & Tuples"]
+    C --> C3["✅ Mapped/Conditional types"]
+    C --> C4["✅ Utility type compositions"]
+
+    style A fill:#3178c6,stroke:#333,color:#fff
+    style B fill:#15803d,stroke:#333,color:#fff
+    style C fill:#7c3aed,stroke:#333,color:#fff
+```
+
+```typescript
+// === INTERFACE — Best for object shapes & contracts ===
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  createdAt: Date;
+}
+
+// Extending interfaces (inheritance)
+interface AdminUser extends User {
+  permissions: string[];
+  isSuperAdmin: boolean;
+}
+
+// Declaration merging (interfaces auto-merge — unique feature!)
+interface User {
+  avatar?: string; // This MERGES with the above User interface
+}
+
+// Interface for function shape
+interface SearchFn {
+  (query: string, limit?: number): Promise<User[]>;
+}
+
+// === TYPE ALIAS — Best for unions, intersections, and complex types ===
+type ID = string | number;  // Union — can't do this with interface
+
+type ApiResponse<T> = {
+  data: T;
+  status: number;
+  message: string;
+};
+
+// Intersection — combine multiple types
+type WithTimestamps = {
+  createdAt: Date;
+  updatedAt: Date;
+};
+type UserWithTimestamps = User & WithTimestamps;
+
+// Discriminated Union — powerful pattern for state management
+type RequestState<T> =
+  | { status: "idle" }
+  | { status: "loading" }
+  | { status: "success"; data: T }
+  | { status: "error"; error: string };
+
+// Usage
+function renderState(state: RequestState<User[]>) {
+  switch (state.status) {
+    case "idle":    return <Idle />;
+    case "loading": return <Spinner />;
+    case "success": return <UserList users={state.data} />;  // TS knows data exists!
+    case "error":   return <Error msg={state.error} />;      // TS knows error exists!
+  }
+}
+```
+
+**Rule of Thumb:**
+| Use Case | Choose |
+|----------|--------|
+| Object shape / contract | `interface` |
+| Class implementation | `interface` |
+| Union / intersection types | `type` |
+| Primitives, tuples | `type` |
+| Library/SDK (allow consumers to extend) | `interface` |
+| Internal application code | Either (be consistent) |
+
+---
+
+## 📋 Section 2: Intermediate TypeScript
+
+### TS-4. Generics — Type Parameters for Reusable Code
+
+**Answer:**
+
+```typescript
+// === BASIC GENERIC — Type parameter T ===
+function identity<T>(value: T): T {
+  return value;
+}
+const num = identity<number>(42);      // T = number
+const str = identity("hello");         // T inferred as string
+
+// === GENERIC INTERFACE — API Response wrapper ===
+interface ApiResponse<T> {
+  data: T;
+  status: number;
+  timestamp: string;
+  pagination?: {
+    page: number;
+    totalPages: number;
+    totalItems: number;
+  };
+}
+
+// Usage
+type UserResponse = ApiResponse<User>;
+type OrderListResponse = ApiResponse<Order[]>;
+
+// === GENERIC CONSTRAINTS — Limit what T can be ===
+interface HasId {
+  id: number | string;
+}
+
+function findById<T extends HasId>(items: T[], id: T["id"]): T | undefined {
+  return items.find(item => item.id === id);
+}
+
+// === GENERIC CLASS — Type-safe repository pattern ===
+class Repository<T extends HasId> {
+  private items: T[] = [];
+
+  add(item: T): void {
+    this.items.push(item);
+  }
+
+  findById(id: T["id"]): T | undefined {
+    return this.items.find(i => i.id === id);
+  }
+
+  findAll(): T[] {
+    return [...this.items];
+  }
+
+  update(id: T["id"], updates: Partial<T>): T | undefined {
+    const index = this.items.findIndex(i => i.id === id);
+    if (index === -1) return undefined;
+    this.items[index] = { ...this.items[index], ...updates };
+    return this.items[index];
+  }
+}
+
+// Usage — fully type-safe!
+const userRepo = new Repository<User>();
+userRepo.add({ id: 1, name: "Digamber", email: "d@test.com", createdAt: new Date() });
+const user = userRepo.findById(1); // Type: User | undefined
+
+// === MULTIPLE GENERICS ===
+function merge<T, U>(obj1: T, obj2: U): T & U {
+  return { ...obj1, ...obj2 };
+}
+const merged = merge({ name: "Digamber" }, { age: 30 });
+// Type: { name: string } & { age: number }
+```
+
+---
+
+### TS-5. Utility Types — Built-in Type Transformations
+
+**Answer:**
+
+```mermaid
+graph TD
+    A[TypeScript Utility Types] --> B["Partial&lt;T&gt;<br/>All props optional"]
+    A --> C["Required&lt;T&gt;<br/>All props required"]
+    A --> D["Pick&lt;T, K&gt;<br/>Select specific props"]
+    A --> E["Omit&lt;T, K&gt;<br/>Remove specific props"]
+    A --> F["Record&lt;K, V&gt;<br/>Key-value mapping"]
+    A --> G["Readonly&lt;T&gt;<br/>Immutable object"]
+    A --> H["ReturnType&lt;F&gt;<br/>Extract return type"]
+    A --> I["Extract / Exclude<br/>Filter union types"]
+
+    style A fill:#3178c6,stroke:#333,color:#fff
+```
+
+```typescript
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  avatar: string;
+  role: "admin" | "user" | "moderator";
+  createdAt: Date;
+}
+
+// Partial<T> — All properties become optional (great for updates)
+type UpdateUserDTO = Partial<User>;
+// { id?: number; name?: string; email?: string; ... }
+
+// Pick<T, K> — Select only specific properties
+type UserPublicInfo = Pick<User, "id" | "name" | "avatar">;
+// { id: number; name: string; avatar: string }
+
+// Omit<T, K> — Remove specific properties
+type CreateUserDTO = Omit<User, "id" | "createdAt">;
+// { name: string; email: string; password: string; avatar: string; role: ... }
+
+// Record<K, V> — Create object type with specific keys and value type
+type RolePermissions = Record<User["role"], string[]>;
+// { admin: string[]; user: string[]; moderator: string[] }
+
+const permissions: RolePermissions = {
+  admin: ["read", "write", "delete", "manage-users"],
+  moderator: ["read", "write", "moderate-comments"],
+  user: ["read"],
+};
+
+// Readonly<T> — Immutable
+type ImmutableUser = Readonly<User>;
+// const user: ImmutableUser = { ... };
+// user.name = "New"; // ❌ Error: Cannot assign to 'name' because it is a read-only property
+
+// ReturnType<T> — Extract return type of a function
+function fetchUsers(): Promise<User[]> { /* ... */ }
+type FetchUsersResult = ReturnType<typeof fetchUsers>; // Promise<User[]>
+
+// Extract & Exclude — Filter union types
+type AllRoles = "admin" | "user" | "moderator" | "guest";
+type PrivilegedRoles = Extract<AllRoles, "admin" | "moderator">; // "admin" | "moderator"
+type BasicRoles = Exclude<AllRoles, "admin">;  // "user" | "moderator" | "guest"
+
+// NonNullable — Remove null and undefined
+type MaybeString = string | null | undefined;
+type DefiniteString = NonNullable<MaybeString>; // string
+```
+
+---
+
+### TS-6. Type Guards & Narrowing
+
+**Answer:**
+
+```typescript
+// === typeof guard ===
+function processValue(value: string | number) {
+  if (typeof value === "string") {
+    return value.toUpperCase(); // TS knows it's string here
+  }
+  return value.toFixed(2); // TS knows it's number here
+}
+
+// === instanceof guard ===
+class ApiError extends Error {
+  constructor(public statusCode: number, message: string) {
+    super(message);
+  }
+}
+
+function handleError(error: Error | ApiError) {
+  if (error instanceof ApiError) {
+    console.log(`Status: ${error.statusCode}`); // TS knows statusCode exists
+  } else {
+    console.log(error.message);
+  }
+}
+
+// === "in" operator guard ===
+interface Bird { fly(): void; layEggs(): void; }
+interface Fish { swim(): void; layEggs(): void; }
+
+function move(animal: Bird | Fish) {
+  if ("fly" in animal) {
+    animal.fly(); // TS knows it's Bird
+  } else {
+    animal.swim(); // TS knows it's Fish
+  }
+}
+
+// === Custom Type Guard (type predicate) ===
+interface User { type: "user"; name: string; email: string; }
+interface Admin { type: "admin"; name: string; permissions: string[]; }
+type Person = User | Admin;
+
+// Custom guard function — returns type predicate
+function isAdmin(person: Person): person is Admin {
+  return person.type === "admin";
+}
+
+function greetPerson(person: Person) {
+  if (isAdmin(person)) {
+    console.log(`Admin ${person.name} with ${person.permissions.length} perms`);
+  } else {
+    console.log(`User ${person.name} (${person.email})`);
+  }
+}
+
+// === Discriminated Union (most common in React) ===
+type AsyncState<T> =
+  | { status: "idle" }
+  | { status: "loading" }
+  | { status: "success"; data: T }
+  | { status: "error"; error: string };
+
+function renderAsync<T>(state: AsyncState<T>) {
+  switch (state.status) {
+    case "success":
+      return state.data; // TS knows 'data' exists only when status is "success"
+    case "error":
+      return state.error; // TS knows 'error' exists only when status is "error"
+  }
+}
+```
+
+---
+
+## 📋 Section 3: Advanced TypeScript
+
+### TS-7. Mapped Types & Conditional Types
+
+**Answer:**
+
+```typescript
+// === MAPPED TYPES — Transform every property ===
+
+// Make all properties optional
+type MyPartial<T> = {
+  [K in keyof T]?: T[K];
+};
+
+// Make all properties readonly
+type MyReadonly<T> = {
+  readonly [K in keyof T]: T[K];
+};
+
+// Make all properties nullable
+type Nullable<T> = {
+  [K in keyof T]: T[K] | null;
+};
+
+// Prefix all keys
+type Getters<T> = {
+  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
+};
+
+interface Person { name: string; age: number; }
+type PersonGetters = Getters<Person>;
+// { getName: () => string; getAge: () => number }
+
+// === CONDITIONAL TYPES — Type-level if/else ===
+type IsString<T> = T extends string ? "yes" : "no";
+type A = IsString<string>;  // "yes"
+type B = IsString<number>;  // "no"
+
+// Extract array element type
+type ElementType<T> = T extends (infer U)[] ? U : never;
+type Nums = ElementType<number[]>;  // number
+type Strs = ElementType<string[]>;  // string
+
+// Extract Promise resolved type
+type Unwrap<T> = T extends Promise<infer U> ? U : T;
+type Result = Unwrap<Promise<User>>;  // User
+
+// Extract function return type (how ReturnType works internally)
+type MyReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
+
+// === TEMPLATE LITERAL TYPES ===
+type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+type ApiEndpoint = `/api/${string}`;
+type ApiRoute = `${HttpMethod} ${ApiEndpoint}`;
+// "GET /api/..." | "POST /api/..." | "PUT /api/..." | "DELETE /api/..."
+
+// Event handler pattern
+type EventName = "click" | "focus" | "blur";
+type EventHandler = `on${Capitalize<EventName>}`;
+// "onClick" | "onFocus" | "onBlur"
+```
+
+---
+
+### TS-8. TypeScript with React — Typing Components, Props, Hooks
+
+**Answer:**
+
+```typescript
+// === TYPING FUNCTIONAL COMPONENTS ===
+interface UserCardProps {
+  user: User;
+  onEdit: (id: number) => void;
+  onDelete?: (id: number) => void; // Optional
+  variant?: "compact" | "full";    // Union literal
+  children?: React.ReactNode;       // For wrapper components
+}
+
+const UserCard: React.FC<UserCardProps> = ({ user, onEdit, onDelete, variant = "full", children }) => {
+  return (
+    <div className={`card card-${variant}`}>
+      <h3>{user.name}</h3>
+      <button onClick={() => onEdit(user.id)}>Edit</button>
+      {onDelete && <button onClick={() => onDelete(user.id)}>Delete</button>}
+      {children}
+    </div>
+  );
+};
+
+// === TYPING HOOKS ===
+// useState with explicit type
+const [users, setUsers] = useState<User[]>([]);
+const [error, setError] = useState<string | null>(null);
+
+// Custom hook with return type
+interface UseApiReturn<T> {
+  data: T | null;
+  loading: boolean;
+  error: string | null;
+  refetch: () => void;
+}
+
+function useApi<T>(url: string): UseApiReturn<T> {
+  const [data, setData] = useState<T | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const refetch = useCallback(() => {
+    setLoading(true);
+    fetch(url)
+      .then(res => res.json())
+      .then((json: T) => { setData(json); setError(null); })
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
+  }, [url]);
+
+  useEffect(() => { refetch(); }, [refetch]);
+
+  return { data, loading, error, refetch };
+}
+
+// Usage — fully typed!
+const { data: users, loading } = useApi<User[]>("/api/users");
+// users is User[] | null — TypeScript enforces null check
+
+// === TYPING EVENT HANDLERS ===
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  console.log(e.target.value);
+};
+
+const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+};
+
+const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  console.log(e.currentTarget);
+};
+
+// === TYPING CONTEXT ===
+interface ThemeContextType {
+  theme: "light" | "dark";
+  toggleTheme: () => void;
+}
+
+const ThemeContext = React.createContext<ThemeContextType | null>(null);
+
+// Custom hook that guarantees non-null
+function useTheme(): ThemeContextType {
+  const context = useContext(ThemeContext);
+  if (!context) throw new Error("useTheme must be within ThemeProvider");
+  return context; // TypeScript knows it's not null after this
+}
+
+// === GENERIC COMPONENTS ===
+interface ListProps<T> {
+  items: T[];
+  renderItem: (item: T) => React.ReactNode;
+  keyExtractor: (item: T) => string | number;
+}
+
+function List<T>({ items, renderItem, keyExtractor }: ListProps<T>) {
+  return (
+    <ul>
+      {items.map(item => (
+        <li key={keyExtractor(item)}>{renderItem(item)}</li>
+      ))}
+    </ul>
+  );
+}
+
+// Usage — T is inferred from items!
+<List
+  items={users}
+  renderItem={(user) => <span>{user.name}</span>}  // user is typed as User!
+  keyExtractor={(user) => user.id}
+/>
+```
+
+---
+
+### TS-9. Advanced Patterns — Discriminated Unions, Exhaustive Checks, Branded Types
+
+**Answer:**
+
+```typescript
+// === EXHAUSTIVE SWITCH with never ===
+type Shape =
+  | { kind: "circle"; radius: number }
+  | { kind: "rectangle"; width: number; height: number }
+  | { kind: "triangle"; base: number; height: number };
+
+function area(shape: Shape): number {
+  switch (shape.kind) {
+    case "circle":
+      return Math.PI * shape.radius ** 2;
+    case "rectangle":
+      return shape.width * shape.height;
+    case "triangle":
+      return 0.5 * shape.base * shape.height;
+    default:
+      // If you add a new shape and forget to handle it — compile error!
+      const _exhaustive: never = shape;
+      throw new Error(`Unhandled shape: ${_exhaustive}`);
+  }
+}
+
+// === BRANDED TYPES — Prevent mixing IDs ===
+type UserId = number & { __brand: "UserId" };
+type OrderId = number & { __brand: "OrderId" };
+
+function createUserId(id: number): UserId { return id as UserId; }
+function createOrderId(id: number): OrderId { return id as OrderId; }
+
+function getUser(id: UserId) { /* ... */ }
+function getOrder(id: OrderId) { /* ... */ }
+
+const userId = createUserId(1);
+const orderId = createOrderId(1);
+
+getUser(userId);   // ✅ OK
+getUser(orderId);  // ❌ Compile error! Can't pass OrderId where UserId expected.
+// Even though both are numbers, TypeScript prevents the mix-up!
+
+// === BUILDER PATTERN with Types ===
+interface QueryBuilder<T> {
+  select<K extends keyof T>(...fields: K[]): QueryBuilder<Pick<T, K>>;
+  where(condition: Partial<T>): QueryBuilder<T>;
+  orderBy(field: keyof T, dir?: "asc" | "desc"): QueryBuilder<T>;
+  execute(): Promise<T[]>;
+}
+
+// === FUNCTION OVERLOADS ===
+function createElement(tag: "a"): HTMLAnchorElement;
+function createElement(tag: "div"): HTMLDivElement;
+function createElement(tag: "input"): HTMLInputElement;
+function createElement(tag: string): HTMLElement {
+  return document.createElement(tag);
+}
+
+const anchor = createElement("a"); // Type: HTMLAnchorElement (not just HTMLElement!)
+anchor.href = "https://google.com"; // ✅ TypeScript knows .href exists
+```
+
+---
+
+## 📋 Section 4: TypeScript Interview Quick-Fire (30 Seconds Each)
+
+| # | Question | Answer |
+|---|----------|--------|
+| 1 | `any` vs `unknown`? | `any` disables type checking (unsafe). `unknown` requires type narrowing before use (safe) |
+| 2 | `interface` vs `type`? | Interface: object shapes, declaration merging, extends. Type: unions, intersections, mapped types |
+| 3 | What are Generics? | Type parameters (`<T>`) that make functions/classes work with any type while keeping type safety |
+| 4 | `Partial<T>` does what? | Makes all properties of T optional. Great for update/patch DTOs |
+| 5 | `keyof` operator? | Returns union of all property names: `keyof User` = `"id" \| "name" \| "email"` |
+| 6 | Type narrowing? | Refineing a broad type to a specific one using typeof, instanceof, in, or custom type guards |
+| 7 | `never` type? | Represents impossible values. Functions that always throw. Exhaustive switch default case |
+| 8 | Discriminated Union? | Union types sharing a common literal property (`kind`, `type`, `status`) for safe narrowing |
+| 9 | `as const`? | Makes values deeply readonly + narrows to literal types: `[1, 2] as const` → `readonly [1, 2]` |
+| 10 | `readonly` vs `Readonly<T>`? | `readonly` on individual props. `Readonly<T>` makes ALL props readonly |
+| 11 | Mapped Types? | Transform object types: `{ [K in keyof T]: newType }` — creates new type from existing |
+| 12 | Conditional Types? | Type-level if/else: `T extends U ? X : Y`. Used in utility types like `Extract`, `Exclude` |
+| 13 | `infer` keyword? | Declares a type variable within conditional types: `T extends Promise<infer U> ? U : T` |
+| 14 | Template Literal Types? | String manipulation at type level: `` `on${Capitalize<EventName>}` `` creates `"onClick"` etc. |
+| 15 | `satisfies` keyword (TS 4.9+)? | Validates a value matches a type without widening: `const cfg = {...} satisfies Config` |
+| 16 | Declaration files (`.d.ts`)? | Type definitions without implementation. For JS libraries without TS support |
+| 17 | `strictNullChecks`? | When enabled, `null` and `undefined` are not assignable to other types. Always enable! |
+| 18 | Enums vs Union Literals? | Union literals (`"A" \| "B"`) are preferred — tree-shakeable, no runtime cost. Enums generate JS code |
+| 19 | `!` non-null assertion? | Tells TS "I know this isn't null": `element!.focus()`. Avoid — use proper narrowing instead |
+| 20 | `typeof` in type position? | Extracts type from a value: `const user = {...}; type User = typeof user` |
+
+---
+
+## 📋 Section 5: TypeScript + Spring Boot — Full-Stack Type Safety
+
+### TS-10. Sharing Types Between Frontend and Backend
+
+**Answer:**
+
+```mermaid
+graph TD
+    A[Type Sharing Strategies] --> B[OpenAPI / Swagger]
+    A --> C[Shared DTOs Package]
+    A --> D[GraphQL Codegen]
+
+    B --> B1["Spring Boot → OpenAPI spec<br/>→ openapi-generator → TS types<br/>✅ Single source of truth"]
+    C --> C1["Shared npm package<br/>Manual sync<br/>⚠️ Can drift"]
+    D --> D1["GraphQL schema<br/>→ codegen → TS types<br/>✅ Auto-synced"]
+
+    style A fill:#3178c6,stroke:#333,color:#fff
+    style B fill:#15803d,stroke:#333,color:#fff
+```
+
+```typescript
+// Generated from Spring Boot OpenAPI spec (automatic!)
+// src/types/generated/api.ts
+
+export interface UserDTO {
+  id: number;
+  name: string;
+  email: string;
+  role: "ADMIN" | "USER" | "MODERATOR";
+  createdAt: string; // ISO date string
+}
+
+export interface CreateUserRequest {
+  name: string;
+  email: string;
+  password: string;
+  role?: "ADMIN" | "USER" | "MODERATOR";
+}
+
+export interface PageResponse<T> {
+  content: T[];
+  totalPages: number;
+  totalElements: number;
+  page: number;
+  size: number;
+}
+
+export interface ApiError {
+  timestamp: string;
+  status: number;
+  error: string;
+  message: string;
+  path: string;
+}
+
+// Type-safe API service
+const userApi = {
+  getAll: (page = 0, size = 20): Promise<PageResponse<UserDTO>> =>
+    api.get(`/users?page=${page}&size=${size}`).then(r => r.data),
+
+  getById: (id: number): Promise<UserDTO> =>
+    api.get(`/users/${id}`).then(r => r.data),
+
+  create: (data: CreateUserRequest): Promise<UserDTO> =>
+    api.post("/users", data).then(r => r.data),
+
+  update: (id: number, data: Partial<CreateUserRequest>): Promise<UserDTO> =>
+    api.put(`/users/${id}`, data).then(r => r.data),
+};
+```
+
+**Spring Boot side (Java → generates the OpenAPI spec):**
+```java
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+
+    @Operation(summary = "Get all users with pagination")
+    @GetMapping
+    public Page<UserDTO> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return userService.findAll(PageRequest.of(page, size));
+    }
+
+    @Operation(summary = "Create a new user")
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserDTO create(@Valid @RequestBody CreateUserRequest request) {
+        return userService.create(request);
+    }
+}
+```
+
+**Auto-generate TS types from Spring Boot:**
+```bash
+# In your CI/CD or npm script:
+npx openapi-generator-cli generate \
+  -i http://localhost:8080/v3/api-docs \
+  -g typescript-axios \
+  -o src/types/generated
+
+# Result: Perfectly typed API client generated from your Spring Boot endpoints!
+```
+
+---
+
+## 📋 Section 6: TypeScript Configuration & Best Practices
+
+### TS-11. Essential tsconfig.json Settings
+
+```json
+{
+  "compilerOptions": {
+    // === STRICT MODE (always enable ALL of these) ===
+    "strict": true,                    // Enables all strict checks below
+    "strictNullChecks": true,          // null/undefined are distinct types
+    "noImplicitAny": true,             // Must explicitly type 'any'
+    "strictFunctionTypes": true,       // Stricter function type checking
+
+    // === MODULE & TARGET ===
+    "target": "ES2022",                // Modern JS output
+    "module": "ESNext",                // ES modules
+    "moduleResolution": "bundler",     // For Vite/Webpack projects
+    "esModuleInterop": true,           // import React from 'react' works
+
+    // === PATH ALIASES ===
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["./*"],
+      "@components/*": ["components/*"],
+      "@hooks/*": ["hooks/*"],
+      "@services/*": ["services/*"],
+      "@types/*": ["types/*"]
+    },
+
+    // === REACT ===
+    "jsx": "react-jsx",                // React 17+ transform
+
+    // === QUALITY ===
+    "noUnusedLocals": true,            // Error on unused variables
+    "noUnusedParameters": true,        // Error on unused params
+    "noFallthroughCasesInSwitch": true, // Must break/return in switch
+    "forceConsistentCasingInFileNames": true,
+
+    // === OUTPUT ===
+    "outDir": "dist",
+    "declaration": true,               // Generate .d.ts files
+    "sourceMap": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+---
+
+## 📋 Summary: TypeScript Skill Levels
+
+| Level | Topics | Can You... |
+|-------|--------|-----------|
+| **Beginner** | Primitives, interfaces, arrays, enums, unions | Type a React component with props? |
+| **Intermediate** | Generics, utility types, type guards, discriminated unions | Build a generic API hook? |
+| **Advanced** | Mapped types, conditional types, infer, template literals | Build a type-safe ORM / query builder? |
+| **Expert** | Branded types, HKT patterns, variance, module augmentation | Design library types that prevent misuse at compile time? |
+
+---
