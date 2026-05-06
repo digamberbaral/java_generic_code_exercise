@@ -48774,6 +48774,7 @@ function ProtectedRoute() {
 ### MK-29. Design Rate Limiter
 
 **Algorithms:**
+
 | Algorithm | How It Works | Pros/Cons |
 |-----------|-------------|-----------|
 | **Token Bucket** | Bucket fills with tokens at fixed rate. Each request uses 1 token | ✅ Allows bursts. Simple |
