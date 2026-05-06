@@ -1,11 +1,11 @@
-﻿# 🎓 Senior Java Tech Lead — Ultimate Interview Master Blueprint
-
 <div align="center">
+
+# 🎓 Senior Java Tech Lead — Ultimate Interview Master Blueprint
 
 ![Java](https://img.shields.io/badge/Java-17%2F21-orange?style=for-the-badge&logo=openjdk)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-brightgreen?style=for-the-badge&logo=springboot)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue?style=for-the-badge&logo=postgresql)
-![Redis](https://img.shields.io/badge/Redis-7.x-red?style=for-the-badge&logo=redis)React Core Theory — Step-by-Step Foundation
+![Redis](https://img.shields.io/badge/Redis-7.x-red?style=for-the-badge&logo=redis)
 ![Kafka](https://img.shields.io/badge/Apache_Kafka-3.x-black?style=for-the-badge&logo=apachekafka)
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-1.28-blue?style=for-the-badge&logo=kubernetes)
 ![Docker](https://img.shields.io/badge/Docker-24.x-blue?style=for-the-badge&logo=docker)
@@ -126,6 +126,18 @@
 | 34 | [🧪 DT-6: GraalVM & Native Images](#-dt-6-graalvm--native-images--solving-cold-start) | AOT vs JIT, 50ms Startup, When to Use, Spring Boot 3.x Native | 🟢 Beginner to Advanced |
 | 35 | [🏗 DT-7: Platform Engineering & IDP](#-dt-7-platform-engineering--internal-developer-platforms-idp) | Backstage, Self-Service Portal, Golden Paths, Service Templates | 🟢 Beginner to Advanced |
 | 36 | [📉 DT-8: Estimation Cheat Sheet](#-dt-8-the-tech-leads-estimation-cheat-sheet) | Latency Benchmarks, Availability Math, QPS/Storage/Server Estimation | 🟢 Beginner to Advanced |
+
+---
+
+### 📝 Phase 14 — Practical Interview Problems & Scenario-Based Q&A *(From Interview Question Bank)*
+| # | Section | Key Topics | Level |
+|---|---|---|---|
+| 37 | [📝 IP-1: Java 8 Coding Problems — Stream Mastery](#-ip-1-java-8-coding-problems--stream-mastery) | Merge Arrays, Top-K, Anagram, Palindrome, Duplicates, Common Elements | 🟢 Beginner → Advanced |
+| 38 | [🔧 IP-2: Concurrency & Custom Data Structures](#-ip-2-concurrency--custom-data-structures) | ExecutorService, ReentrantLock, Custom HashMap, Thread Safety | 🔵 Intermediate → Advanced |
+| 39 | [🏗️ IP-3: Spring Boot Production Scenarios](#-ip-3-spring-boot-production-scenarios) | Hibernate Tuning, Data Migrations, CSRF, JWT Auth, REST API Design | 🔵 Intermediate → Advanced |
+| 40 | [🌐 IP-4: Microservices Architecture Scenarios](#-ip-4-microservices-architecture-scenarios) | Data Consistency, Saga Pattern, Logging/Monitoring, Rate Limiting, Spring Integration | 🔴 Advanced |
+| 41 | [🎯 IP-5: Design Patterns & API Strategy](#-ip-5-design-patterns--api-strategy) | Decorator Pattern, API Versioning Strategy, Code Review in Agile, Breaking Changes | 🔵 Intermediate → Advanced |
+
 **⚡ Quick Jump:**
 > [Core Java](#-core-java-mastery) • [DSA](#-dsa--problem-solving--complete-interview-guide) • [Spring Boot](#-spring-boot--data-architecture) • [Database](#-database-interview-questions--mysqlpostgresql--mongodb) • [Microservices](#-microservices--cloud-native) • [Kafka](#-messaging--kafka--rabbitmq-interview-questions) • [System Design](#-system-design--url-shortener) • [Docker/K8s](#-docker--kubernetes-basics-to-advanced) • [CI/CD](#-cicd-pipeline--jenkins-docker-kubernetes-aws--gcp) • [Interview Prep](#-interview-cheat-sheet)
 
@@ -48821,3 +48833,1165 @@ public boolean isAllowed(String userId) {
 | 20 | What is garbage collection? | JVM automatically reclaims memory from unreachable objects. G1GC is default (Java 9+) |
 
 ---
+
+
+---
+
+<a id="-ip-1-java-8-coding-problems--stream-mastery"></a>
+# 📝 Phase 14: Practical Interview Problems & Scenario-Based Q&A
+
+> **📋 Source:** This section is restructured from the Interview Question Bank document with enhanced explanations, real-life analogies, diagrams, and interview-focused step-by-step answers for a Sr. Tech Lead (10+ years) profile.
+
+---
+
+## 🟢 IP-1: Java 8 Coding Problems — Stream Mastery
+
+> **💡 Interview Context:** These coding problems are asked in almost every Java interview. As a Sr. Tech Lead, you should explain not just the solution but also time complexity, when NOT to use streams, and production implications.
+
+---
+
+### 🤔 Why Streams Matter for Senior Engineers
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                    STREAM PIPELINE                            │
+│                                                              │
+│   Source → Intermediate Ops → Terminal Op → Result           │
+│   (List)   (filter/map/sort)  (collect/forEach)             │
+│                                                              │
+│   Real-life Analogy: Assembly Line in a Factory              │
+│   ┌─────┐   ┌──────┐   ┌──────┐   ┌─────────┐            │
+│   │ Raw │──→│Filter│──→│ Sort │──→│ Package │──→ Product   │
+│   │Metal│   │Defect│   │ Size │   │  & Ship │              │
+│   └─────┘   └──────┘   └──────┘   └─────────┘            │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Q1: How do you merge two unsorted arrays into a single sorted array without duplicates?
+
+**🟢 Beginner Explanation:**
+Think of two messy piles of numbered cards. You want ONE pile that's sorted and has no repeats.
+
+**🔵 Intermediate — The Code:**
+
+```java
+import java.util.Arrays;
+import java.util.stream.IntStream;
+
+public class MergeArrays {
+    public static void main(String[] args) {
+        int[] a = {4, 2, 5, 1};
+        int[] b = {8, 1, 9, 5};
+
+        int[] result = IntStream.concat(Arrays.stream(a), Arrays.stream(b))
+                                .sorted()
+                                .distinct()
+                                .toArray();
+
+        System.out.println(Arrays.toString(result));
+        // Output: [1, 2, 4, 5, 8, 9]
+    }
+}
+```
+
+**🔴 Advanced — Sr. Tech Lead Depth:**
+
+| Aspect | Stream Approach | Alternative |
+|--------|----------------|-------------|
+| Time Complexity | O((m+n) log(m+n)) due to sort | O(m+n) with TreeSet but higher constant |
+| Space Complexity | O(m+n) for intermediate array | O(m+n) same |
+| When to avoid streams | Arrays > 10M elements (GC pressure) | Use primitive sort + manual dedup |
+| Production consideration | Fine for batch jobs | For hot-path, benchmark first |
+
+**💡 Real-life Analogy:** Imagine two grocery lists from different family members. You combine them, remove duplicates (no need for 2 "milk" entries), and sort alphabetically for efficient shopping.
+
+**🎯 Interview Scenario:**
+> "In your billing system at VMware, how would you handle merging transaction records from multiple sources?"
+
+**Answer:** "We used a similar stream-concat-sort-distinct approach for daily reconciliation reports. For the hot path (real-time), we used a ConcurrentSkipListSet for O(log n) insert + automatic dedup + sorted order."
+
+---
+
+### Q2: How do you get three maximum and three minimum numbers from a list?
+
+**🟢 Beginner Explanation:**
+Like finding the 3 tallest and 3 shortest students in a class — sort everyone by height, pick from ends.
+
+**🔵 Intermediate — The Code:**
+
+```java
+import java.util.*;
+import java.util.stream.*;
+
+public class TopKNumbers {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(45, 12, 56, 15, 24, 75, 31, 89);
+
+        // 3 Minimum
+        List<Integer> min3 = numbers.stream()
+            .sorted()
+            .limit(3)
+            .collect(Collectors.toList());
+        System.out.println("Min 3: " + min3); // [12, 15, 24]
+
+        // 3 Maximum
+        List<Integer> max3 = numbers.stream()
+            .sorted(Comparator.reverseOrder())
+            .limit(3)
+            .collect(Collectors.toList());
+        System.out.println("Max 3: " + max3); // [89, 75, 56]
+    }
+}
+```
+
+**🔴 Advanced — Performance Analysis:**
+
+```
+┌─────────────────────────────────────────────────────────┐
+│         TOP-K PROBLEM: APPROACH COMPARISON               │
+├──────────────────┬──────────────┬────────────────────────┤
+│ Approach         │ Time         │ When to Use            │
+├──────────────────┼──────────────┼────────────────────────┤
+│ Full sort+limit  │ O(n log n)   │ Small lists (<10K)     │
+│ PriorityQueue    │ O(n log k)   │ Large lists, small k   │
+│ QuickSelect      │ O(n) average │ Very large, single run │
+│ Stream.sorted()  │ O(n log n)   │ Readability first      │
+└──────────────────┴──────────────┴────────────────────────┘
+```
+
+**🎯 Interview Follow-up:** "For 100M records, I'd use `PriorityQueue` with fixed size k=3 — only O(n log 3) = O(n) effectively, with constant memory."
+
+---
+
+### Q3: Check if two strings are anagrams using Java 8
+
+**🟢 Beginner Explanation:**
+Anagram = same letters, different arrangement. "listen" ↔ "silent". Like rearranging Scrabble tiles.
+
+**🔵 The Code:**
+
+```java
+import java.util.stream.*;
+
+public class AnagramCheck {
+    public static boolean areAnagrams(String s1, String s2) {
+        String sorted1 = Stream.of(s1.split(""))
+            .map(String::toUpperCase)
+            .sorted()
+            .collect(Collectors.joining());
+
+        String sorted2 = Stream.of(s2.split(""))
+            .map(String::toUpperCase)
+            .sorted()
+            .collect(Collectors.joining());
+
+        return sorted1.equals(sorted2);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(areAnagrams("RaceCar", "CarRace")); // true
+        System.out.println(areAnagrams("Hello", "World"));     // false
+    }
+}
+```
+
+**🔴 Advanced — O(n) Alternative:**
+```java
+// Frequency map approach - O(n) time, O(1) space (fixed 26 chars)
+public static boolean areAnagramsOptimal(String s1, String s2) {
+    if (s1.length() != s2.length()) return false;
+    int[] freq = new int[26];
+    for (char c : s1.toUpperCase().toCharArray()) freq[c - 'A']++;
+    for (char c : s2.toUpperCase().toCharArray()) freq[c - 'A']--;
+    return Arrays.stream(freq).allMatch(f -> f == 0);
+}
+```
+
+---
+
+### Q4: Find common elements between two arrays
+
+**🟢 Analogy:** Two friends comparing Spotify playlists — find songs they both have.
+
+```java
+List<Integer> list1 = Arrays.asList(71, 21, 34, 89, 56, 28);
+List<Integer> list2 = Arrays.asList(12, 56, 17, 21, 94, 34);
+
+// Beginner approach - O(n*m)
+list1.stream().filter(list2::contains).forEach(System.out::println);
+
+// Senior approach - O(n+m) using HashSet
+Set<Integer> set2 = new HashSet<>(list2);
+List<Integer> common = list1.stream()
+    .filter(set2::contains)
+    .collect(Collectors.toList());
+// Result: [21, 34, 56]
+```
+
+**🎯 Interview Tip:** Always mention converting the lookup list to a `HashSet` for O(1) contains check instead of O(n) linear scan.
+
+---
+
+### Q5: Palindrome check using Java 8 Streams
+
+```java
+public static boolean isPalindrome(String str) {
+    return IntStream.range(0, str.length() / 2)
+        .noneMatch(i -> str.charAt(i) != str.charAt(str.length() - i - 1));
+}
+// "ROTATOR" → true (checks: R==R, O==O, T==T → all match)
+```
+
+**💡 Analogy:** Like reading a word in a mirror — if it looks the same, it's a palindrome.
+
+---
+
+### Q6: Find duplicate elements in a list using Streams
+
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 2, 4, 1, 5, 3);
+
+// Approach 1: groupingBy + filter
+List<Integer> duplicates = numbers.stream()
+    .collect(Collectors.groupingBy(n -> n, Collectors.counting()))
+    .entrySet().stream()
+    .filter(e -> e.getValue() > 1)
+    .map(Map.Entry::getKey)
+    .collect(Collectors.toList());
+// Result: [1, 2, 3]
+
+// Approach 2: Using Set (more efficient)
+Set<Integer> seen = new HashSet<>();
+List<Integer> dups = numbers.stream()
+    .filter(n -> !seen.add(n))  // add() returns false if already present
+    .collect(Collectors.toList());
+```
+
+**⚠️ Senior Note:** Approach 2 uses a side-effect (modifying `seen`) which breaks stream contract for parallel streams. Use Approach 1 for parallel-safe code.
+
+---
+
+<a id="-ip-2-concurrency--custom-data-structures"></a>
+## 🔧 IP-2: Concurrency & Custom Data Structures
+
+---
+
+### Q7: ExecutorService — Running tasks concurrently
+
+**🟢 Beginner Analogy:** A restaurant with 3 chefs (thread pool size = 3). When 5 orders come in, 3 are processed immediately, 2 wait in queue.
+
+```java
+import java.util.concurrent.*;
+
+public class ExecutorServiceExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        for (int i = 0; i < 5; i++) {
+            int taskId = i;
+            executor.submit(() -> {
+                System.out.println("Task " + taskId + " by " + Thread.currentThread().getName());
+                try { Thread.sleep(1000); } catch (InterruptedException e) {}
+            });
+        }
+        executor.shutdown();
+        // Tasks 0,1,2 start immediately; 3,4 wait for a thread to free up
+    }
+}
+```
+
+**🔴 Advanced — Production Considerations:**
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│           THREAD POOL DECISION DIAGRAM                          │
+│                                                                │
+│   Is task CPU-bound or I/O-bound?                             │
+│       │                    │                                   │
+│       ▼                    ▼                                   │
+│   CPU-bound            I/O-bound                              │
+│   Pool = cores         Pool = cores × (1 + wait/service)      │
+│   (e.g., 8 cores      (e.g., 8 × (1 + 10) = 88 threads      │
+│    = 8 threads)         for 10:1 wait ratio)                  │
+│       │                    │                                   │
+│       ▼                    ▼                                   │
+│   ForkJoinPool         Bounded ThreadPool                     │
+│   (parallelism)        + Rejection Policy                     │
+└────────────────────────────────────────────────────────────────┘
+```
+
+**🎯 Interview Scenario:**
+> "At Comviva, how did you size your thread pools for Salesforce integration?"
+
+**Answer:** "Salesforce calls averaged 200ms response time. With 30 concurrent users, we needed pool = 30 × (200ms/1000ms) = 6 core threads + burst buffer. We used `ThreadPoolExecutor(6, 20, 60s, LinkedBlockingQueue(100))` with CallerRunsPolicy to prevent unbounded growth."
+
+---
+
+### Q8: Concurrency — Handling race conditions with ReentrantLock
+
+**🟢 Analogy:** A single bathroom key in an office. Only the person holding the key can enter. Others wait in line.
+
+```java
+import java.util.concurrent.locks.ReentrantLock;
+
+public class Account {
+    private double balance;
+    private final ReentrantLock lock = new ReentrantLock();
+
+    public void deposit(double amount) {
+        lock.lock();
+        try {
+            balance += amount;
+        } finally {
+            lock.unlock(); // ALWAYS in finally — prevents deadlock on exception
+        }
+    }
+
+    public void withdraw(double amount) {
+        lock.lock();
+        try {
+            if (balance >= amount) {
+                balance -= amount;
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public double getBalance() {
+        lock.lock();
+        try {
+            return balance;
+        } finally {
+            lock.unlock();
+        }
+    }
+}
+```
+
+**🔴 Advanced — synchronized vs ReentrantLock:**
+
+| Feature | synchronized | ReentrantLock |
+|---------|-------------|---------------|
+| Try-lock (timeout) | ❌ No | ✅ `tryLock(5, TimeUnit.SECONDS)` |
+| Interruptible | ❌ No | ✅ `lockInterruptibly()` |
+| Fair ordering | ❌ No guarantee | ✅ `new ReentrantLock(true)` |
+| Multiple conditions | ❌ Only one wait-set | ✅ `lock.newCondition()` |
+| Performance | Slightly better (JVM optimized) | Same in Java 8+ |
+| Simplicity | ✅ Less boilerplate | ❌ Must remember finally{unlock} |
+
+**🎯 When to use what:**
+- `synchronized` → 90% of cases (simpler, less error-prone)
+- `ReentrantLock` → Need timeout, fair scheduling, or multiple conditions
+
+---
+
+### Q9: Implement a Custom HashMap
+
+**🟢 Analogy:** A library with 16 shelves (buckets). Each book's call number (hashCode) determines which shelf it goes on. If two books map to the same shelf, they form a linked list on that shelf.
+
+```java
+public class MyHashMap<K, V> {
+    private static class Entry<K, V> {
+        K key;
+        V value;
+        Entry<K, V> next;
+
+        Entry(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+
+    private static final int SIZE = 16;
+    private Entry<K, V>[] table;
+
+    @SuppressWarnings("unchecked")
+    public MyHashMap() {
+        table = new Entry[SIZE];
+    }
+
+    private int getBucket(K key) {
+        return Math.abs(key.hashCode()) % SIZE;
+    }
+
+    public void put(K key, V value) {
+        int bucket = getBucket(key);
+        Entry<K, V> current = table[bucket];
+
+        // Check if key exists — update value
+        while (current != null) {
+            if (current.key.equals(key)) {
+                current.value = value;
+                return;
+            }
+            current = current.next;
+        }
+
+        // Key not found — insert at head
+        Entry<K, V> newEntry = new Entry<>(key, value);
+        newEntry.next = table[bucket];
+        table[bucket] = newEntry;
+    }
+
+    public V get(K key) {
+        int bucket = getBucket(key);
+        Entry<K, V> current = table[bucket];
+        while (current != null) {
+            if (current.key.equals(key)) return current.value;
+            current = current.next;
+        }
+        return null;
+    }
+
+    public void remove(K key) {
+        int bucket = getBucket(key);
+        Entry<K, V> current = table[bucket];
+        Entry<K, V> prev = null;
+
+        while (current != null) {
+            if (current.key.equals(key)) {
+                if (prev == null) table[bucket] = current.next;
+                else prev.next = current.next;
+                return;
+            }
+            prev = current;
+            current = current.next;
+        }
+    }
+}
+```
+
+**🔴 Advanced — How Java's real HashMap evolved:**
+
+```
+┌───────────────────────────────────────────────────────────┐
+│     JAVA HASHMAP INTERNAL EVOLUTION                        │
+├────────────┬──────────────────────────────────────────────┤
+│ Java 7     │ Array + LinkedList (always)                  │
+│ Java 8+    │ Array + LinkedList → TreeNode (when >8)      │
+│            │ (O(n) degrades to O(log n) on collision)     │
+├────────────┼──────────────────────────────────────────────┤
+│ Load Factor│ 0.75 — resize at 75% capacity               │
+│ Resize     │ Double capacity, rehash all entries          │
+│ Thread-safe│ ❌ Use ConcurrentHashMap for multithreaded   │
+└────────────┴──────────────────────────────────────────────┘
+```
+
+---
+
+<a id="-ip-3-spring-boot-production-scenarios"></a>
+## 🏗️ IP-3: Spring Boot Production Scenarios
+
+---
+
+### Q10: Optimizing Hibernate Performance for High-Load Systems
+
+**🟢 Analogy:** Imagine a warehouse where workers walk to a distant shelf for EVERY item. Optimization = batch orders, use a local cache of popular items, and bring a cart (batch fetch) instead of one item at a time.
+
+**🔵 Step-by-step strategies:**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│      HIBERNATE PERFORMANCE OPTIMIZATION LAYERS               │
+│                                                             │
+│  Layer 1: Batch Processing                                  │
+│  ┌─────────────────────────────────────────────┐           │
+│  │ spring.jpa.properties.hibernate.jdbc.        │           │
+│  │     batch_size=50                            │           │
+│  │ → 50 INSERTs in one DB round-trip            │           │
+│  └─────────────────────────────────────────────┘           │
+│                                                             │
+│  Layer 2: Second-Level Cache                                │
+│  ┌─────────────────────────────────────────────┐           │
+│  │ @Entity @Cacheable                           │           │
+│  │ → Frequently read entities cached in EhCache │           │
+│  │ → Reduces DB calls by 60-80% for reads       │           │
+│  └─────────────────────────────────────────────┘           │
+│                                                             │
+│  Layer 3: Lazy Loading (default)                            │
+│  ┌─────────────────────────────────────────────┐           │
+│  │ @OneToMany(fetch = FetchType.LAZY)           │           │
+│  │ → Load child collections only when accessed   │           │
+│  │ → Prevents loading entire object graph        │           │
+│  └─────────────────────────────────────────────┘           │
+│                                                             │
+│  Layer 4: JOIN FETCH for N+1 Problem                        │
+│  ┌─────────────────────────────────────────────┐           │
+│  │ SELECT p FROM Product p JOIN FETCH p.category│           │
+│  │ → 1 query instead of N+1 queries             │           │
+│  └─────────────────────────────────────────────┘           │
+│                                                             │
+│  Layer 5: Connection Pooling (HikariCP)                     │
+│  ┌─────────────────────────────────────────────┐           │
+│  │ spring.datasource.hikari.maximum-pool-size=30│           │
+│  │ → Reuse connections, reduce handshake time    │           │
+│  └─────────────────────────────────────────────┘           │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**🎯 Interview Answer (Sr. Tech Lead):**
+> "At VMware, our billing service had p95 of 3.2s under load. Investigation: slow-query log showed 47 individual SELECTs for one product listing (N+1 problem). Fix sequence: (1) Added `@BatchSize(50)`, (2) `JOIN FETCH` for hot queries, (3) Redis cache for catalog data, (4) HikariCP tuned to 30 connections. Result: p95 dropped to 450ms, throughput 200→600 TPS."
+
+---
+
+### Q11: Handling Data Migrations Without Downtime
+
+**🟢 Analogy:** Renovating a kitchen while the restaurant stays open. You can't close the kitchen — so you build the new counter alongside the old one, gradually move operations, then remove the old counter.
+
+**Step-by-step approach:**
+
+```
+Phase 1: ADD (Safe)          Phase 2: DUAL WRITE         Phase 3: SWITCH READ
+┌─────────────────┐         ┌─────────────────┐         ┌─────────────────┐
+│ Add new columns │         │ Write to BOTH   │         │ Read from NEW   │
+│ (nullable/      │────────→│ old + new cols  │────────→│ Write to NEW    │
+│  default value) │         │ Read from OLD   │         │ Monitor errors  │
+└─────────────────┘         └─────────────────┘         └─────────────────┘
+                                                                 │
+Phase 4: BACKFILL           Phase 5: CLEANUP                     │
+┌─────────────────┐         ┌─────────────────┐                 │
+│ Populate new    │         │ Drop old cols   │←────────────────┘
+│ cols from old   │────────→│ Remove dual     │
+│ (batch script)  │         │ write logic     │
+└─────────────────┘         └─────────────────┘
+```
+
+**Tools:** Flyway or Liquibase for versioned migrations + rollback support.
+
+```sql
+-- V1: Add new columns (backward compatible)
+ALTER TABLE orders ADD COLUMN new_status VARCHAR(50) DEFAULT 'PENDING';
+
+-- V2: Backfill (run off-peak)
+UPDATE orders SET new_status = old_status WHERE new_status IS NULL;
+
+-- V3: Cleanup (after verification)
+ALTER TABLE orders DROP COLUMN old_status;
+```
+
+---
+
+### Q12: Designing a RESTful API for E-Commerce
+
+**🟢 Analogy:** A well-organized library card catalog. Each resource (book/product) has a clear address, you use specific actions (borrow/return = GET/POST), and the catalog tells you if things went wrong (404 = book not found).
+
+```java
+@RestController
+@RequestMapping("/api/v1/products")
+public class ProductController {
+
+    @GetMapping
+    public ResponseEntity<Page<ProductDTO>> getAllProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return ResponseEntity.ok(productService.findAll(PageRequest.of(page, size)));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDTO> getProduct(@PathVariable Long id) {
+        return productService.findById(id)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody CreateProductRequest request) {
+        ProductDTO created = productService.create(request);
+        URI location = URI.create("/api/v1/products/" + created.getId());
+        return ResponseEntity.created(location).body(created);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductDTO> updateProduct(
+            @PathVariable Long id, @Valid @RequestBody UpdateProductRequest request) {
+        return ResponseEntity.ok(productService.update(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        productService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+}
+```
+
+**🔴 Advanced Checklist (what interviewers look for):**
+
+| Aspect | What to Do | What NOT to Do |
+|--------|-----------|----------------|
+| URIs | Plural nouns: `/products` | Verbs: `/getProducts` |
+| HTTP Methods | GET=read, POST=create, PUT=replace, PATCH=partial, DELETE=remove | POST for everything |
+| Status Codes | 200, 201, 204, 400, 404, 409, 500 | Always 200 with error in body |
+| Pagination | `?page=0&size=20` with total in response | Return all 1M records |
+| Versioning | `/api/v1/` in URI path | No version at all |
+| Security | OAuth2/JWT + rate limiting | Basic auth in production |
+| HATEOAS | Links to related resources (optional but impressive) | |
+
+---
+
+### Q13: JWT Authentication in Spring Boot
+
+**🟢 Analogy:** A concert wristband. Security checks your ID once (login), gives you a wristband (JWT). For every area you enter (API call), they just scan the wristband — no need to re-check your ID.
+
+```java
+@Component
+public class JwtRequestFilter extends OncePerRequestFilter {
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+            HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
+
+        final String authHeader = request.getHeader("Authorization");
+        String username = null;
+        String jwt = null;
+
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwt = authHeader.substring(7);
+            username = jwtUtil.extractUsername(jwt);
+        }
+
+        if (username != null &&
+            SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (jwtUtil.validateToken(jwt, username)) {
+                UsernamePasswordAuthenticationToken authToken =
+                    new UsernamePasswordAuthenticationToken(
+                        username, null, new ArrayList<>());
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+        chain.doFilter(request, response);
+    }
+}
+```
+
+**Flow Diagram:**
+```
+Client                    Server
+  │                         │
+  │─── POST /login ────────→│  (username + password)
+  │                         │── Validate credentials
+  │←── JWT Token ──────────│  (signed with secret)
+  │                         │
+  │─── GET /api/data ──────→│  (Authorization: Bearer <JWT>)
+  │                         │── JwtFilter extracts token
+  │                         │── Validate signature + expiry
+  │                         │── Set SecurityContext
+  │←── 200 OK + data ──────│
+  │                         │
+  │─── GET /api/data ──────→│  (expired/invalid token)
+  │←── 401 Unauthorized ───│
+```
+
+---
+
+### Q14: CSRF Protection in REST APIs
+
+**🟢 Analogy:** A special stamp on your hand at a club. Every time you go to the bar (state-changing request), the bartender checks your stamp matches — prevents someone else ordering on your tab.
+
+**Key Insight for Sr. Tech Lead:**
+> REST APIs are typically **stateless** (no cookies/sessions), so CSRF is NOT a concern. CSRF only matters when browsers auto-attach cookies.
+
+| Scenario | CSRF Needed? | Why |
+|----------|:---:|-----|
+| JWT in Authorization header | ❌ No | Browser doesn't auto-send headers |
+| Session cookies (traditional web app) | ✅ Yes | Browser auto-sends cookies |
+| Mobile app calling API | ❌ No | No cookie mechanism |
+| SPA with httpOnly cookie | ✅ Yes | Cookie sent automatically |
+
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            // For pure REST API with JWT — disable CSRF
+            .csrf(csrf -> csrf.disable())
+            // For web app with cookies — enable with cookie repository
+            // .csrf(csrf -> csrf.csrfTokenRepository(
+            //     CookieCsrfTokenRepository.withHttpOnlyFalse()))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/public/**").permitAll()
+                .anyRequest().authenticated());
+        return http.build();
+    }
+}
+```
+
+---
+
+<a id="-ip-4-microservices-architecture-scenarios"></a>
+## 🌐 IP-4: Microservices Architecture Scenarios
+
+---
+
+### Q15: Data Consistency Across Microservices (Saga Pattern)
+
+**🟢 Analogy:** Booking a vacation package (flight + hotel + car). If the hotel is fully booked after you paid for the flight, you need to cancel the flight too. Each step is independent but must be coordinated.
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│              SAGA PATTERN (Choreography)                          │
+│                                                                  │
+│  Order Service    Payment Service    Inventory Service            │
+│       │                 │                   │                    │
+│  1. Create Order        │                   │                    │
+│       │──OrderCreated──→│                   │                    │
+│       │                 │                   │                    │
+│       │            2. Process Payment       │                    │
+│       │                 │──PaymentDone─────→│                    │
+│       │                 │                   │                    │
+│       │                 │          3. Reserve Inventory          │
+│       │                 │                   │                    │
+│       │                 │     ❌ OUT OF STOCK                    │
+│       │                 │                   │                    │
+│       │                 │←──InventoryFailed─│  (compensating)    │
+│       │←─PaymentRefund──│                   │                    │
+│       │                                                          │
+│  4. Cancel Order (compensating transaction)                      │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+```java
+public class OrderSaga {
+    private final OrderService orderService;
+    private final PaymentService paymentService;
+    private final InventoryService inventoryService;
+
+    public void createOrder(Order order) {
+        try {
+            orderService.create(order);
+            paymentService.processPayment(order);
+            inventoryService.reserve(order);
+            orderService.confirm(order);
+        } catch (PaymentFailedException e) {
+            orderService.cancel(order); // Compensate
+        } catch (InventoryFailedException e) {
+            paymentService.refund(order); // Compensate
+            orderService.cancel(order);   // Compensate
+        }
+    }
+}
+```
+
+**🎯 Sr. Tech Lead Answer:**
+> "At Comviva, Quote→Salesforce sync uses choreography-based saga. Each service publishes events. If SalesforceSync fails, a compensating event triggers quote status rollback. We chose choreography over orchestration because services are independently deployed by different teams."
+
+---
+
+### Q16: Logging and Monitoring Microservices
+
+**🟢 Analogy:** Hospital monitoring — each patient (service) has vitals (metrics), a medical record (logs), and when something goes wrong, doctors trace the patient's journey through departments (distributed tracing).
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│          THREE PILLARS OF OBSERVABILITY                       │
+│                                                             │
+│  ┌──────────┐    ┌──────────┐    ┌──────────────┐         │
+│  │  METRICS │    │   LOGS   │    │   TRACES     │         │
+│  │(Prometheus│    │  (ELK)   │    │(Jaeger/Zipkin│         │
+│  │ +Grafana) │    │          │    │              │         │
+│  ├──────────┤    ├──────────┤    ├──────────────┤         │
+│  │ p95 = ?  │    │ What     │    │ Which service│         │
+│  │ Error% = │    │ happened │    │ is slow?     │         │
+│  │ QPS = ?  │    │ exactly? │    │ Where failed?│         │
+│  └──────────┘    └──────────┘    └──────────────┘         │
+│       │               │                │                   │
+│       └───────────────┼────────────────┘                   │
+│                       │                                    │
+│              Connected by TRACE ID                          │
+│              (one ID across all services)                   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**ELK Stack Setup:**
+```yaml
+# Logstash config
+input {
+  file {
+    path => "/var/log/microservices/*.log"
+    codec => json
+  }
+}
+output {
+  elasticsearch {
+    hosts => ["localhost:9200"]
+    index => "microservices-logs-%{+YYYY.MM.dd}"
+  }
+}
+```
+
+**Prometheus scrape config:**
+```yaml
+scrape_configs:
+  - job_name: 'quote-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['quote-service:8080']
+```
+
+---
+
+### Q17: Rate Limiting — Token Bucket Algorithm
+
+**🟢 Analogy:** A parking lot with 100 spots. Cars enter one at a time. When full, new cars must wait. Every hour, spots free up at a fixed rate (1000/hour = ~16/minute).
+
+```java
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+public class TokenBucketRateLimiter {
+    private final int maxTokens;
+    private final AtomicInteger tokens;
+    private final int refillRate; // tokens per second
+
+    public TokenBucketRateLimiter(int maxTokens, int refillRate) {
+        this.maxTokens = maxTokens;
+        this.tokens = new AtomicInteger(maxTokens);
+        this.refillRate = refillRate;
+
+        // Refill tokens periodically
+        Executors.newSingleThreadScheduledExecutor()
+            .scheduleAtFixedRate(() -> {
+                tokens.updateAndGet(current -> Math.min(maxTokens, current + refillRate));
+            }, 1, 1, TimeUnit.SECONDS);
+    }
+
+    public boolean tryConsume() {
+        return tokens.getAndUpdate(current -> current > 0 ? current - 1 : 0) > 0;
+    }
+}
+
+// Usage: 1000 requests per hour = ~17 per minute
+TokenBucketRateLimiter limiter = new TokenBucketRateLimiter(100, 17);
+if (limiter.tryConsume()) {
+    // proceed with API call
+} else {
+    // return 429 Too Many Requests
+}
+```
+
+**🔴 Production enhancement:** Use Redis for distributed rate limiting across multiple instances:
+```java
+// Redis-based token bucket (pseudo-code)
+String key = "rate:" + clientId;
+Long tokens = redis.get(key);
+if (tokens > 0) {
+    redis.decr(key);
+    // proceed
+} else {
+    // reject with 429 + Retry-After header
+}
+```
+
+---
+
+<a id="-ip-5-design-patterns--api-strategy"></a>
+## 🎯 IP-5: Design Patterns & API Strategy
+
+---
+
+### Q18: Decorator Pattern — Adding features without subclassing
+
+**🟢 Analogy:** A coffee shop. You start with a base coffee ($2). Each add-on (milk +$0.5, whipped cream +$0.7, caramel +$0.3) "wraps" the previous item. Each decorator adds behavior without changing the original.
+
+```
+┌─────────────────────────────────────────────┐
+│         DECORATOR PATTERN                    │
+│                                             │
+│   Component (interface)                      │
+│       │                                     │
+│   ┌───┴────────────────────────┐            │
+│   │                            │            │
+│   ConcreteComponent     Decorator(abstract) │
+│   (BasicCoffee)              │              │
+│                         ┌────┴─────┐        │
+│                    MilkDecorator  WhipDecorator
+│                                             │
+│   Wrapping: Whip(Milk(BasicCoffee))         │
+│   getPrice() = 2.0 + 0.5 + 0.7 = $3.2     │
+└─────────────────────────────────────────────┘
+```
+
+**For the e-commerce interview question (items with add-ons):**
+
+```java
+// Base interface
+interface Product {
+    double getPrice();
+    String getDescription();
+}
+
+// Concrete product
+class Electronics implements Product {
+    private double price;
+    private String name;
+
+    public Electronics(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public double getPrice() { return price; }
+    public String getDescription() { return name; }
+}
+
+// Decorator base
+abstract class ProductDecorator implements Product {
+    protected Product product;
+    public ProductDecorator(Product product) { this.product = product; }
+}
+
+// Concrete decorators
+class WithWarranty extends ProductDecorator {
+    public WithWarranty(Product product) { super(product); }
+    public double getPrice() { return product.getPrice() + 49.99; }
+    public String getDescription() { return product.getDescription() + " + Extended Warranty"; }
+}
+
+class WithBatteries extends ProductDecorator {
+    public WithBatteries(Product product) { super(product); }
+    public double getPrice() { return product.getPrice() + 9.99; }
+    public String getDescription() { return product.getDescription() + " + Extra Batteries"; }
+}
+
+// Usage — compose at runtime without new subclasses!
+Product item = new WithBatteries(new WithWarranty(new Electronics("Camera", 299.99)));
+System.out.println(item.getDescription()); // Camera + Extended Warranty + Extra Batteries
+System.out.println(item.getPrice());       // 359.97
+```
+
+**🎯 Why Decorator over Inheritance:**
+> "If you have 5 add-ons, inheritance needs 2^5 = 32 subclasses. Decorator needs just 5 classes that compose freely."
+
+---
+
+### Q19: API Versioning for Breaking Changes
+
+**🟢 Analogy:** Highway lane expansion. You add new lanes (v2) while keeping old lanes open. Gradually, traffic shifts to new lanes. Only after minimal traffic remains do you close old lanes.
+
+```java
+// Version 1 — existing clients use this
+@RestController
+@RequestMapping("/api/v1/resource")
+public class ResourceV1Controller {
+    @GetMapping
+    public ResponseEntity<ResourceV1DTO> getResource() {
+        return ResponseEntity.ok(new ResourceV1DTO("Resource V1"));
+    }
+}
+
+// Version 2 — new features, breaking changes
+@RestController
+@RequestMapping("/api/v2/resource")
+public class ResourceV2Controller {
+    @GetMapping
+    public ResponseEntity<ResourceV2DTO> getResource() {
+        // V2 returns enriched data structure
+        return ResponseEntity.ok(new ResourceV2DTO("Resource V2", metadata, links));
+    }
+}
+```
+
+**Versioning Strategy Decision:**
+
+| Strategy | Example | Best For |
+|----------|---------|----------|
+| URI Path | `/api/v1/quotes` | Enterprise APIs (most common) |
+| Header | `X-API-Version: 2` | Internal microservices |
+| Content-Type | `Accept: application/vnd.company.v2+json` | Public APIs with strict REST |
+| Query Param | `/api/quotes?version=2` | Quick prototyping |
+
+**🎯 Sr. Tech Lead Strategy:**
+> "At Comviva, we use URI versioning with a 6-month deprecation window. Steps: (1) Release v2 alongside v1, (2) Notify consumers with migration guide, (3) Monitor traffic split, (4) Deprecate v1 when <1% traffic, (5) Remove after grace period."
+
+---
+
+### Q20: Code Review Strategy in Agile CI/CD
+
+**🟢 Analogy:** Airport security. Every bag (PR) goes through the scanner (automated checks) first. Only bags that beep (complex changes) get manual inspection. This keeps the line moving fast.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│           CODE REVIEW IN FAST-PACED AGILE                    │
+│                                                             │
+│   PR Created                                                │
+│       │                                                      │
+│       ▼                                                      │
+│   ┌────────────────────────┐                                │
+│   │ AUTOMATED GATES (CI)   │  ← Catches 70% of issues      │
+│   │ • Build passes         │                                │
+│   │ • Unit tests pass      │                                │
+│   │ • SonarQube quality    │                                │
+│   │   gate (coverage >80%) │                                │
+│   │ • No critical vulns    │                                │
+│   └────────────────────────┘                                │
+│       │ (passes)                                            │
+│       ▼                                                      │
+│   ┌────────────────────────┐                                │
+│   │ HUMAN REVIEW           │  ← Focused on design          │
+│   │ • Architecture impact  │                                │
+│   │ • Business logic       │                                │
+│   │ • Edge cases           │                                │
+│   │ • Naming/readability   │                                │
+│   └────────────────────────┘                                │
+│       │ (approved)                                          │
+│       ▼                                                      │
+│   Auto-merge + Deploy to staging                            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**🎯 Sr. Tech Lead Answer:**
+> "At Comviva, I established: (1) All PRs must pass SonarQube gate before review, (2) Mandatory 1 reviewer for feature PRs, 2 for architecture changes, (3) 4-hour SLA for review turnaround, (4) Review focuses on WHAT not HOW (trust the developer), (5) Pair programming replaces review for complex features. Result: PR cycle time from 3 days → 6 hours, production bugs down 35%."
+
+---
+
+### Q21: MetaSpace in Java 8 — How it differs from PermGen
+
+**🟢 Analogy:** PermGen was like a small fixed-size closet. If you had too many clothes (classes), it overflowed → OOM. MetaSpace is like an expandable walk-in closet that grows as needed (uses native memory).
+
+```
+┌─────────────────────────────────────────────────┐
+│     PERMGEN vs METASPACE                         │
+│                                                 │
+│  Java ≤ 7 (PermGen):                           │
+│  ┌────────────────────────────────────┐         │
+│  │         JVM HEAP                    │         │
+│  │  ┌──────────┐  ┌───────────────┐  │         │
+│  │  │ Objects  │  │   PermGen     │  │         │
+│  │  │          │  │ (FIXED SIZE!) │  │         │
+│  │  │          │  │  Classes      │  │         │
+│  │  │          │  │  Strings      │  │         │
+│  │  └──────────┘  └───────────────┘  │         │
+│  └────────────────────────────────────┘         │
+│  ⚠️ java.lang.OutOfMemoryError: PermGen space  │
+│                                                 │
+│  Java 8+ (MetaSpace):                           │
+│  ┌──────────────┐  ┌──────────────────────┐    │
+│  │   JVM HEAP   │  │    NATIVE MEMORY     │    │
+│  │  ┌────────┐  │  │  ┌───────────────┐  │    │
+│  │  │Objects │  │  │  │  MetaSpace    │  │    │
+│  │  │        │  │  │  │  (AUTO-GROWS) │  │    │
+│  │  │        │  │  │  │  Classes only │  │    │
+│  │  └────────┘  │  │  └───────────────┘  │    │
+│  └──────────────┘  └──────────────────────┘    │
+│  ✅ Strings moved to heap (interned pool)       │
+│  ✅ Grows automatically — rarely OOM            │
+└─────────────────────────────────────────────────┘
+```
+
+| Aspect | PermGen | MetaSpace |
+|--------|---------|-----------|
+| Location | JVM heap | Native OS memory |
+| Default size | 64-256 MB | Unlimited (OS limit) |
+| Common OOM | Very common | Rare (classloader leak) |
+| Tuning flag | `-XX:MaxPermSize=256m` | `-XX:MaxMetaspaceSize=512m` (optional) |
+| GC behavior | Full GC | Concurrent unloading |
+| String pool | In PermGen | Moved to heap |
+| Why changed | Too many OOMs, hard to tune | Auto-adjusts, modern GC friendly |
+
+---
+
+### Q22: Spring Integration with RESTful Services
+
+**🟢 Analogy:** A conveyor belt system in a factory. Items come in from one door (HTTP inbound), pass through processing stations (transformers), and exit through another door (HTTP outbound).
+
+```java
+@Configuration
+@EnableIntegration
+public class RestIntegrationConfig {
+
+    @Bean
+    public IntegrationFlow restFlow() {
+        return IntegrationFlows
+            .from(Http.inboundGateway("/api/data")
+                .requestMapping(m -> m.methods(HttpMethod.GET))
+                .payloadExpression("#pathVariables['id']"))
+            .handle(Http.outboundGateway("https://external-service.com/data/{id}")
+                .httpMethod(HttpMethod.GET)
+                .expectedResponseType(String.class))
+            .transform(String.class, String::toUpperCase) // Process data
+            .handle(Http.outboundGateway("https://another-service.com/results")
+                .httpMethod(HttpMethod.POST)
+                .expectedResponseType(Void.class))
+            .get();
+    }
+}
+```
+
+```
+Flow: Client → /api/data → Fetch External → Transform → Send to Another Service
+         │                      │                │                │
+   [Inbound Gateway]    [Outbound GET]    [Transformer]    [Outbound POST]
+```
+
+---
+
+### Q23: How do you resolve issues in a production application?
+
+**🎯 This is the #1 behavioral question for Sr. Tech Lead interviews.**
+
+**Step-by-step framework (memorize this):**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│           PRODUCTION ISSUE RESOLUTION FRAMEWORK              │
+│                                                             │
+│  1. DETECT     → Alerts fire (PagerDuty/Grafana)           │
+│  2. ASSESS     → Impact: users affected? revenue at risk?  │
+│  3. MITIGATE   → Quick fix: rollback / circuit break / scale│
+│  4. DIAGNOSE   → RCA: traces + logs + metrics correlation  │
+│  5. FIX        → Proper fix with tests                     │
+│  6. VERIFY     → Load test + canary deploy                 │
+│  7. PREVENT    → Add monitoring + runbook + CI gate         │
+│                                                             │
+│  Total timeline: Detect(5min) → Mitigate(15min) →          │
+│                  Diagnose(1-4hr) → Fix(1-2 sprints)        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**🎯 Sr. Tech Lead Answer:**
+> "My approach: (1) Acknowledge alert within 5 min, (2) Assess blast radius — if >10% users affected, escalate immediately, (3) Apply quickest mitigation — at Comviva we keep rollback scripts pre-staged for every deploy, (4) Once stable, do proper RCA using correlated trace IDs across ELK, (5) Permanent fix includes regression test, (6) Post-mortem document shared with team — blameless culture, focus on systemic improvements, (7) Action items tracked in Jira with owners and deadlines."
+
+---
+
+## 📊 Quick Reference: All Problems at a Glance
+
+| # | Problem | Key Stream/API | Complexity | Interview Frequency |
+|---|---------|---------------|-----------|-------------------|
+| 1 | Merge unsorted arrays (sorted, unique) | `IntStream.concat().sorted().distinct()` | O(n log n) | ⭐⭐⭐⭐⭐ |
+| 2 | Top-K / Min-K numbers | `stream().sorted().limit(k)` | O(n log n) | ⭐⭐⭐⭐ |
+| 3 | Anagram check | `Stream.of(split).sorted().collect(joining)` | O(n log n) | ⭐⭐⭐⭐ |
+| 4 | Common elements | `stream().filter(set::contains)` | O(n) | ⭐⭐⭐ |
+| 5 | Palindrome | `IntStream.range().noneMatch()` | O(n) | ⭐⭐⭐ |
+| 6 | Find duplicates | `groupingBy + filter(count>1)` | O(n) | ⭐⭐⭐⭐⭐ |
+| 7 | ExecutorService | `Executors.newFixedThreadPool()` | — | ⭐⭐⭐⭐ |
+| 8 | ReentrantLock | `lock.lock(); try{} finally{unlock}` | — | ⭐⭐⭐ |
+| 9 | Custom HashMap | Array + LinkedList + hashCode | O(1) avg | ⭐⭐⭐⭐⭐ |
+| 10 | Hibernate optimization | Batch + Cache + Lazy + JOIN FETCH | — | ⭐⭐⭐⭐ |
+| 11 | Zero-downtime migration | Phased: add → dual-write → switch → cleanup | — | ⭐⭐⭐ |
+| 12 | REST API design | Controllers, status codes, pagination | — | ⭐⭐⭐⭐⭐ |
+| 13 | JWT Authentication | Filter + validate + SecurityContext | — | ⭐⭐⭐⭐⭐ |
+| 14 | CSRF in REST | Disabled for JWT APIs | — | ⭐⭐⭐ |
+| 15 | Saga Pattern | Choreography / Orchestration + compensating TX | — | ⭐⭐⭐⭐ |
+| 16 | Monitoring stack | ELK + Prometheus + Jaeger + traceId | — | ⭐⭐⭐⭐ |
+| 17 | Rate Limiting | Token Bucket + Redis distributed | O(1) | ⭐⭐⭐⭐ |
+| 18 | Decorator Pattern | Wrap objects to add behavior | — | ⭐⭐⭐ |
+| 19 | API Versioning | URI path + deprecation strategy | — | ⭐⭐⭐⭐ |
+| 20 | Code Review in Agile | Automated gates + focused human review | — | ⭐⭐⭐ |
+| 21 | MetaSpace vs PermGen | Native memory, auto-grows, rare OOM | — | ⭐⭐⭐⭐ |
+| 22 | Spring Integration | Inbound/Outbound gateways + transformers | — | ⭐⭐ |
+| 23 | Issue Resolution | Detect→Assess→Mitigate→Diagnose→Fix→Prevent | — | ⭐⭐⭐⭐⭐ |
+
+---
+
+> **🎯 End of Phase 14** — Practice these problems with a timer. For Sr. Tech Lead interviews, the code is secondary — what matters is your explanation of trade-offs, real experience, and production-readiness considerations.
+
