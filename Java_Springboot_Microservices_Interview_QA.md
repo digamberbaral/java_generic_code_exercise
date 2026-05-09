@@ -138,6 +138,17 @@
 | 40 | [🌐 IP-4: Microservices Architecture Scenarios](#-ip-4-microservices-architecture-scenarios) | Data Consistency, Saga Pattern, Logging/Monitoring, Rate Limiting, Spring Integration | 🔴 Advanced |
 | 41 | [🎯 IP-5: Design Patterns & API Strategy](#-ip-5-design-patterns--api-strategy) | Decorator Pattern, API Versioning Strategy, Code Review in Agile, Breaking Changes | 🔵 Intermediate → Advanced |
 
+---
+
+### 🛒 Phase 15 — Walmart Sr. Tech Lead Interview Prep *(DSA + System Design)*
+| # | Section | Key Topics | Level |
+|---|---|---|---|
+| 42 | [🛒 WM-1: DSA Round — Patterns & Problem Solving](#-wm-1-dsa-round--patterns--problem-solving-for-walmart-sr-tech-lead) | Sliding Window, Two Pointers, BFS/DFS, DP, Greedy, Graph, Trie, Top-K | 🟢 Beginner → Advanced |
+| 43 | [🏗️ WM-2: System Design Round — Large-Scale Architecture](#-wm-2-system-design-round--large-scale-architecture-for-walmart) | E-Commerce Platform, Inventory, Cart, Search, Order Processing, Walmart Scale | 🟢 Beginner → Advanced |
+| 44 | [🎯 WM-3: Tricky Scenario-Based Questions](#-wm-3-tricky-scenario-based-questions--walmart-focus) | Flash Sales, Inventory Oversell, Cart Consistency, Payment Failures, Geo-Distribution | 🔴 Advanced |
+| 45 | [🔴 WM-4: Advanced Walmart Q&A — Java, Spring, Microservices, Leadership](#-wm-4-advanced-walmart-interview-qa--beginner-to-advanced) | HashMap Internals, @Transactional, Circuit Breaker, CQRS, GC Tuning, Distributed Tracing | 🟢 Beginner → Advanced |
+
+
 **⚡ Quick Jump:**
 > [Core Java](#-core-java-mastery) • [DSA](#-dsa--problem-solving--complete-interview-guide) • [Spring Boot](#-spring-boot--data-architecture) • [Database](#-database-interview-questions--mysqlpostgresql--mongodb) • [Microservices](#-microservices--cloud-native) • [Kafka](#-messaging--kafka--rabbitmq-interview-questions) • [System Design](#-system-design--url-shortener) • [Docker/K8s](#-docker--kubernetes-basics-to-advanced) • [CI/CD](#-cicd-pipeline--jenkins-docker-kubernetes-aws--gcp) • [Interview Prep](#-interview-cheat-sheet)
 
@@ -12802,7 +12813,7 @@ public class UrlShortenerService {
 > **The Problem Spring Boot Solves:**
 > Traditional Spring Framework required hundreds of lines of XML configuration. Spring Boot **eliminates all that** — you can have a working REST API in under 5 minutes.
 
-`mermaid
+```mermaid
 flowchart LR
     subgraph Before["❌ Before Spring Boot"]
         B1["1. Write web.xml"] --> B2["2. Configure beans in XML"]
@@ -12812,7 +12823,7 @@ flowchart LR
         A1["1. Add starter dependency"] --> A2["2. Write @RestController"]
         A2 --> A3["3. Run main() → App starts!"]
     end
-`${crlf}
+```
 ### Spring Boot Core Concepts
 
 | Concept | What it does | Example |
@@ -12825,7 +12836,7 @@ flowchart LR
 
 ### Spring Boot Request Flow
 
-`mermaid
+```mermaid
 sequenceDiagram
 participant C as Client
 participant F as Filter Chain
@@ -12845,7 +12856,7 @@ participant DB as Database
     Repo-->>Svc: Entity
     Svc-->>Ctrl: DTO
     Ctrl-->>C: JSON Response
-`${crlf}
+```
 ### Key Starter Packages
 
 | Starter | Adds | Use When |
@@ -13657,7 +13668,7 @@ spring:
 
 ### REST API Flow Diagram
 
-`mermaid
+```mermaid
 flowchart LR
     Client["🖥️ Client"]
     API["🔗 REST API"]
@@ -13669,7 +13680,7 @@ flowchart LR
     DB --> Server
     Server --> API
     API -->|200-OK-+-JSON|Client
-`${crlf}
+```
 ### Beginner Interview Questions
 
 > **Q: What makes an API RESTful?**
@@ -13942,7 +13953,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
 > - **Check-in desk verifying your ID** = Authentication
 > - **Room key limiting which floors you can access** = Authorization
 
-`mermaid
+```mermaid
 flowchart LR
 User["👤 User"]
 Authn["🔑 Authentication\nIs this a valid user?"]
@@ -13955,10 +13966,10 @@ Deny["❌ 401/403"]
     Authn -->|Invalid-token|Deny
     Authz -->|Has-permission|Allow
     Authz -->|No-permission|Deny
-`${crlf}
+```
 ### How JWT Works (3-Step Mental Model)
 
-`mermaid
+```mermaid
 sequenceDiagram
 participant U as 👤 User
 participant API as 🔐 Auth API
@@ -13971,7 +13982,7 @@ participant App as 🌐 App API
     U->>App: GET /orders (Bearer: JWT)
     App->>App: Verify JWT signature (no DB call!)
     App-->>U: 200 OK + data
-`${crlf}
+```
 ### JWT Structure — What's Inside?
 
 \\\${crlf}Header . Payload . Signature
@@ -21967,13 +21978,13 @@ Real-World Examples:
 
 ### The 3 Testing Levels — Testing Pyramid
 
-`mermaid
+```mermaid
 flowchart BT
     UNIT["🔵 Unit Tests — 70%\nTest ONE method in isolation\nFastest: milliseconds\nJUnit 5 + Mockito"]
     INT["🟡 Integration Tests — 20%\nTest Service + real DB together\nMedium: seconds\nTestContainers + @SpringBootTest"]
     E2E["🔴 E2E Tests — 10%\nTest full user journey\nSlowest: minutes\nSelenium / REST Assured"]
     UNIT --> INT --> E2E
-`${crlf}
+```
 | Level | Tests | DB? | Speed | Tool |
 | --- | --- | --- | --- | --- |
 | Unit | Single method/class | ❌ Mocked | ⚡ ms | JUnit 5 + Mockito |
@@ -22005,16 +22016,16 @@ class DiscountServiceTest {
         assertThat(discount).isEqualTo(20.0);
     }
 }
-`${crlf}
+```
 ### TDD — Test-Driven Development Flow
 
-`mermaid
+```mermaid
 flowchart LR
     RED["🔴 RED\nWrite failing test first"]
     GREEN["🟢 GREEN\nWrite code to make it pass"]
     REFACTOR["🔵 REFACTOR\nClean up code (test still passes)"]
     RED --> GREEN --> REFACTOR --> RED
-`${crlf}
+```
 ### Key Interview Q&A
 
 > **Q: What is mocking?**
@@ -25745,7 +25756,7 @@ public class RedirectController {
 >
 > **The Journey from Code to Production:**
 
-`mermaid
+```mermaid
 flowchart LR
     Dev["💻 Development\nYour laptop"]
     Test["🧪 Testing/QA\nShared test env"]
@@ -25754,7 +25765,7 @@ flowchart LR
     Dev -->|Push-code|Test
     Test -->|QA-approved|Stage
     Stage -->|Final-check|Prod
-`${crlf}
+```
 ### Why Production is Different
 
 | Aspect | Development | Production |
@@ -25767,7 +25778,7 @@ flowchart LR
 
 ### The 3 Most Common Production Problems
 
-`mermaid
+```mermaid
 mindmap
   root((Production Issues))
     Slow API
@@ -25781,7 +25792,7 @@ mindmap
       Scale horizontally (more pods)
       Add load balancer
       Use CDN for static content
-`${crlf}
+```
 ### Key Production Terms
 
 > **SLA** (Service Level Agreement): Contract with customers — e.g., 99.9% uptime
@@ -27047,7 +27058,7 @@ kubectl scale deployment/my-service --replicas=10
 
 ### The Standard 3-Layer Architecture
 
-`mermaid
+```mermaid
 flowchart TB
 Client["🖥️ Browser/Mobile"]
 C["@RestController\nHandles HTTP\nValidation"]
@@ -27061,7 +27072,7 @@ DB["🗄️ Database"]
     R --> DB
     DB --> R --> S --> C
     C -->|JSON-Response|Client
-`${crlf}
+```
 ### Why Architecture Patterns Matter in Interviews
 
 | Pattern | Problem It Solves |
@@ -30796,7 +30807,7 @@ thanks to helm rollback."
 
 ### Deployment Pipeline (Dev to Production)
 
-`mermaid
+```mermaid
 flowchart LR
     Dev["👨‍💻 Developer"] --> Git["📦 Git Push"]
     Git --> CI["⚙️ Build & Test\nJenkins/GitHub Actions"]
@@ -30804,7 +30815,7 @@ flowchart LR
     Docker --> Registry["📋 ECR / DockerHub"]
     Registry --> K8s["☸️ Kubernetes Deploy"]
     K8s --> Users["👥 Live Users"]
-`${crlf}
+```
 ### Core AWS Services for Java Developers
 
 | Service | What it is | Java Use Case |
@@ -49994,4 +50005,2107 @@ Flow: Client → /api/data → Fetch External → Transform → Send to Another 
 ---
 
 > **🎯 End of Phase 14** — Practice these problems with a timer. For Sr. Tech Lead interviews, the code is secondary — what matters is your explanation of trade-offs, real experience, and production-readiness considerations.
+
+
+
+---
+
+<a id="-wm-1-dsa-round--patterns--problem-solving-for-walmart-sr-tech-lead"></a>
+# 🛒 Phase 15: Walmart Sr. Tech Lead Interview Prep (DSA + System Design)
+
+> **🎯 Context:** Walmart's Sr. Tech Lead (10+ years) interview typically has:
+> - **Round 1:** DSA/Coding (45-60 min) — Medium to Hard LeetCode, focus on optimal solutions
+> - **Round 2:** System Design (45-60 min) — Large-scale e-commerce systems at Walmart scale (240M+ customers, 10K+ stores)
+> - **Round 3:** Behavioral/Leadership — STAR format (covered in other sections)
+>
+> **Walmart Scale Numbers to Remember:**
+> - 240M+ customers weekly
+> - 10,500+ stores globally
+> - $600B+ annual revenue
+> - 100M+ items in catalog
+> - Peak: 50K+ orders/minute during events (Black Friday, Rollbacks)
+
+---
+
+## 🛒 WM-1: DSA Round — Patterns & Problem Solving for Walmart Sr. Tech Lead
+
+> **💡 Key Insight:** At Sr. Tech Lead level, interviewers don't just want working code. They want:
+> 1. Pattern recognition (identify which technique applies)
+> 2. Optimal solution with clear time/space analysis
+> 3. Edge case handling
+> 4. Clean, production-quality code
+> 5. Communication of thought process
+
+---
+
+### 🗺️ DSA Pattern Map — Which Pattern to Use When
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    DSA PATTERN DECISION TREE                              │
+│                                                                          │
+│   "Given an array/string..."                                            │
+│       │                                                                  │
+│       ├── Contiguous subarray? ──→ SLIDING WINDOW                       │
+│       ├── Sorted array + target? ──→ TWO POINTERS                       │
+│       ├── Find top K / kth element? ──→ HEAP (PriorityQueue)            │
+│       ├── Subsequence / choices? ──→ DYNAMIC PROGRAMMING                │
+│       └── Combinations / permutations? ──→ BACKTRACKING                 │
+│                                                                          │
+│   "Given a tree/graph..."                                               │
+│       │                                                                  │
+│       ├── Level-by-level? ──→ BFS (Queue)                               │
+│       ├── Path / depth? ──→ DFS (Recursion/Stack)                       │
+│       ├── Shortest path (unweighted)? ──→ BFS                           │
+│       ├── Shortest path (weighted)? ──→ Dijkstra                        │
+│       └── Connected components? ──→ Union-Find or DFS                   │
+│                                                                          │
+│   "Given intervals..."                                                  │
+│       │                                                                  │
+│       ├── Merge overlapping? ──→ SORT + MERGE                           │
+│       ├── Find conflicts? ──→ SORT + SWEEP LINE                         │
+│       └── Min rooms/resources? ──→ MIN HEAP + SORT                      │
+│                                                                          │
+│   "Design a data structure..."                                          │
+│       │                                                                  │
+│       ├── O(1) get + put + evict? ──→ HASHMAP + DOUBLY LINKED LIST     │
+│       ├── Prefix search? ──→ TRIE                                       │
+│       └── Range queries? ──→ SEGMENT TREE / BIT                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Pattern 1: Sliding Window
+
+**🟢 Analogy:** Imagine looking through a keyhole at a long hallway. You can only see a fixed-width section at a time. You slide the keyhole left-to-right to find what you're looking for.
+
+**When to use:** Find max/min/count in a contiguous subarray of fixed or variable size.
+
+#### Q1: Maximum Sum Subarray of Size K (Walmart Inventory — Find best K-day sales window)
+
+```java
+/**
+ * Walmart Context: Find the K consecutive days with highest total sales.
+ *
+ * Analogy: A store manager looking at a K-day window on a sales chart,
+ * sliding it day by day to find the best selling period.
+ */
+public int maxSumSubarray(int[] sales, int k) {
+    // Step 1: Calculate sum of first window
+    int windowSum = 0;
+    for (int i = 0; i < k; i++) {
+        windowSum += sales[i];
+    }
+
+    int maxSum = windowSum;
+
+    // Step 2: Slide window — add right element, remove left element
+    for (int i = k; i < sales.length; i++) {
+        windowSum += sales[i] - sales[i - k];  // Slide: add new, remove old
+        maxSum = Math.max(maxSum, windowSum);
+    }
+
+    return maxSum;
+}
+// Time: O(n) | Space: O(1)
+```
+
+```
+Sliding Window Visualization:
+Array: [2, 1, 5, 1, 3, 2]  k=3
+
+Window 1: [2, 1, 5] = 8     ←── slide right
+Window 2: [1, 5, 1] = 7
+Window 3: [5, 1, 3] = 9     ←── MAX!
+Window 4: [1, 3, 2] = 6
+
+Answer: 9
+```
+
+#### Q2: Longest Substring Without Repeating Characters (Walmart — Unique Product Codes)
+
+```java
+/**
+ * Walmart Context: Find longest sequence of unique product scans
+ * (no duplicate barcode in a window = valid batch).
+ */
+public int lengthOfLongestSubstring(String s) {
+    Map<Character, Integer> lastSeen = new HashMap<>();
+    int maxLen = 0, left = 0;
+
+    for (int right = 0; right < s.length(); right++) {
+        char c = s.charAt(right);
+        if (lastSeen.containsKey(c) && lastSeen.get(c) >= left) {
+            left = lastSeen.get(c) + 1;  // Shrink window past duplicate
+        }
+        lastSeen.put(c, right);
+        maxLen = Math.max(maxLen, right - left + 1);
+    }
+    return maxLen;
+}
+// Time: O(n) | Space: O(min(n, alphabet_size))
+```
+
+**🎯 Interview Tip:** Always state: "I'll use a sliding window with a HashMap to track last-seen positions. This gives O(n) time vs O(n²) brute force."
+
+---
+
+### Pattern 2: Two Pointers
+
+**🟢 Analogy:** Two people walking from opposite ends of a bridge toward each other. They stop when they meet or find what they're looking for.
+
+#### Q3: Container With Most Water (Warehouse — Maximize storage between shelves)
+
+```java
+/**
+ * Walmart Context: Two warehouse walls of varying height.
+ * Find which two walls hold the most water (storage capacity).
+ */
+public int maxArea(int[] height) {
+    int left = 0, right = height.length - 1;
+    int maxWater = 0;
+
+    while (left < right) {
+        int width = right - left;
+        int h = Math.min(height[left], height[right]);
+        maxWater = Math.max(maxWater, width * h);
+
+        // Move the shorter wall inward (greedy: only way to potentially increase area)
+        if (height[left] < height[right]) left++;
+        else right--;
+    }
+    return maxWater;
+}
+// Time: O(n) | Space: O(1)
+```
+
+```
+Two Pointers Visualization:
+height = [1,8,6,2,5,4,8,3,7]
+
+  L                       R
+  |  8     6        8     7
+  |  |     |        |     |
+  |  |  6  |     5  |     |
+  |  |  |  |  2  |  4  |  |
+  1  |  |  |  |  |  |  3  |
+  ─────────────────────────
+
+  Width = 8, min(1,7)=1 → area=8
+  Move L right (shorter side)...
+  Eventually find max area = 49 (walls at index 1 and 8)
+```
+
+#### Q4: 3Sum — Find triplets that sum to zero
+
+```java
+/**
+ * Walmart Context: Balance adjustment — find 3 price adjustments that net to zero.
+ * Key: Sort + fix one number + two-pointer scan for remaining two.
+ */
+public List<List<Integer>> threeSum(int[] nums) {
+    Arrays.sort(nums);
+    List<List<Integer>> result = new ArrayList<>();
+
+    for (int i = 0; i < nums.length - 2; i++) {
+        if (i > 0 && nums[i] == nums[i-1]) continue; // Skip duplicates
+
+        int left = i + 1, right = nums.length - 1;
+        int target = -nums[i];
+
+        while (left < right) {
+            int sum = nums[left] + nums[right];
+            if (sum == target) {
+                result.add(Arrays.asList(nums[i], nums[left], nums[right]));
+                while (left < right && nums[left] == nums[left+1]) left++;   // Skip dupes
+                while (left < right && nums[right] == nums[right-1]) right--; // Skip dupes
+                left++; right--;
+            } else if (sum < target) left++;
+            else right--;
+        }
+    }
+    return result;
+}
+// Time: O(n²) | Space: O(1) excluding output
+```
+
+---
+
+### Pattern 3: BFS/DFS — Trees & Graphs
+
+**🟢 Analogy:**
+- **BFS** = Exploring a mall floor by floor (level by level). You check ALL stores on floor 1 before going to floor 2.
+- **DFS** = Exploring a single hallway as deep as possible, then backtracking to try another hallway.
+
+#### Q5: Number of Islands (Walmart Store Network — Find connected store clusters)
+
+```java
+/**
+ * Walmart Context: Given a grid map of Walmart stores (1) and empty land (0),
+ * find how many separate store clusters exist.
+ */
+public int numIslands(char[][] grid) {
+    int count = 0;
+    for (int i = 0; i < grid.length; i++) {
+        for (int j = 0; j < grid[0].length; j++) {
+            if (grid[i][j] == '1') {
+                count++;
+                dfs(grid, i, j); // Sink the entire island
+            }
+        }
+    }
+    return count;
+}
+
+private void dfs(char[][] grid, int i, int j) {
+    if (i < 0 || i >= grid.length || j < 0 || j >= grid[0].length || grid[i][j] == '0')
+        return;
+    grid[i][j] = '0'; // Mark visited
+    dfs(grid, i+1, j); // Down
+    dfs(grid, i-1, j); // Up
+    dfs(grid, i, j+1); // Right
+    dfs(grid, i, j-1); // Left
+}
+// Time: O(M×N) | Space: O(M×N) recursion stack worst case
+```
+
+```
+Grid Example:
+1 1 0 0 0        After DFS from (0,0):    After DFS from (2,2):
+1 1 0 0 0   →    0 0 0 0 0           →    0 0 0 0 0
+0 0 1 0 0        0 0 1 0 0                 0 0 0 0 0
+0 0 0 1 1        0 0 0 1 1                 0 0 0 0 0
+
+Island count: 3
+```
+
+#### Q6: Binary Tree Level Order Traversal (Organization hierarchy levels)
+
+```java
+public List<List<Integer>> levelOrder(TreeNode root) {
+    List<List<Integer>> result = new ArrayList<>();
+    if (root == null) return result;
+
+    Queue<TreeNode> queue = new LinkedList<>();
+    queue.offer(root);
+
+    while (!queue.isEmpty()) {
+        int levelSize = queue.size(); // Key: process entire level
+        List<Integer> level = new ArrayList<>();
+
+        for (int i = 0; i < levelSize; i++) {
+            TreeNode node = queue.poll();
+            level.add(node.val);
+            if (node.left != null) queue.offer(node.left);
+            if (node.right != null) queue.offer(node.right);
+        }
+        result.add(level);
+    }
+    return result;
+}
+```
+
+---
+
+### Pattern 4: Dynamic Programming
+
+**🟢 Analogy:** DP is like filling out a tax form. Each box depends on values you already calculated in previous boxes. You solve small sub-problems first, then build up to the full answer.
+
+**Framework:**
+```
+1. Define state: dp[i] = what does this represent?
+2. Find relation: dp[i] depends on which previous states?
+3. Base cases: dp[0] = ?, dp[1] = ?
+4. Order: Fill left-to-right? bottom-up?
+5. Answer: dp[n]? max(dp[...])?
+```
+
+#### Q7: Longest Increasing Subsequence (Walmart — Longest continuous growth trend in daily sales)
+
+```java
+/**
+ * Find length of longest subsequence where each element is larger than previous.
+ *
+ * Analogy: Looking at your stock portfolio — what's the longest period
+ * where you could have seen continuous growth (not necessarily consecutive days)?
+ */
+public int lengthOfLIS(int[] nums) {
+    // O(n log n) solution using patience sorting
+    List<Integer> tails = new ArrayList<>();
+
+    for (int num : nums) {
+        int pos = Collections.binarySearch(tails, num);
+        if (pos < 0) pos = -(pos + 1);
+
+        if (pos == tails.size()) {
+            tails.add(num);      // Extend longest subsequence
+        } else {
+            tails.set(pos, num); // Replace to keep smallest possible tail
+        }
+    }
+    return tails.size();
+}
+// Time: O(n log n) | Space: O(n)
+```
+
+#### Q8: Coin Change (Walmart — Minimum number of discount coupons to reach target savings)
+
+```java
+/**
+ * Given coin denominations, find minimum coins to make amount.
+ *
+ * Analogy: At Walmart checkout with $5, $2, $1 coupons.
+ * What's the minimum number of coupons to save exactly $11?
+ * Answer: two $5 + one $1 = 3 coupons (not five $2 + one $1 = 6)
+ */
+public int coinChange(int[] coins, int amount) {
+    int[] dp = new int[amount + 1];
+    Arrays.fill(dp, amount + 1); // Initialize with impossible value
+    dp[0] = 0;
+
+    for (int i = 1; i <= amount; i++) {
+        for (int coin : coins) {
+            if (coin <= i) {
+                dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+            }
+        }
+    }
+    return dp[amount] > amount ? -1 : dp[amount];
+}
+// Time: O(amount × coins) | Space: O(amount)
+```
+
+```
+DP Table Visualization (coins = [1, 2, 5], amount = 11):
+
+Amount:  0  1  2  3  4  5  6  7  8  9  10  11
+dp:      0  1  1  2  2  1  2  2  3  3   2   3
+
+dp[11] = 3 (using 5+5+1)
+
+How dp[6] = 2:
+  - dp[6-1] + 1 = dp[5] + 1 = 2  (use coin=1)
+  - dp[6-2] + 1 = dp[4] + 1 = 3  (use coin=2)
+  - dp[6-5] + 1 = dp[1] + 1 = 2  (use coin=5)
+  Min = 2 ✓
+```
+
+---
+
+### Pattern 5: Heap / Priority Queue (Top-K Problems)
+
+**🟢 Analogy:** A hospital ER triage system. Patients are served by severity (priority), not arrival order. A min-heap keeps the least severe at top for easy removal when a more severe case arrives.
+
+#### Q9: Top K Frequent Elements (Walmart — Most popular products)
+
+```java
+/**
+ * Walmart Context: Find the K most frequently purchased products from transaction log.
+ */
+public int[] topKFrequent(int[] nums, int k) {
+    // Step 1: Count frequencies
+    Map<Integer, Integer> freq = new HashMap<>();
+    for (int n : nums) freq.merge(n, 1, Integer::sum);
+
+    // Step 2: Min-heap of size k (keeps top-k largest)
+    PriorityQueue<Integer> heap = new PriorityQueue<>(
+        (a, b) -> freq.get(a) - freq.get(b) // Min-heap by frequency
+    );
+
+    for (int key : freq.keySet()) {
+        heap.offer(key);
+        if (heap.size() > k) heap.poll(); // Remove least frequent
+    }
+
+    // Step 3: Extract results
+    int[] result = new int[k];
+    for (int i = 0; i < k; i++) result[i] = heap.poll();
+    return result;
+}
+// Time: O(n log k) | Space: O(n)
+```
+
+#### Q10: Merge K Sorted Lists (Walmart — Merge sorted transaction streams from K stores)
+
+```java
+/**
+ * Walmart Context: Each store sends sorted transaction lists. Merge into single sorted stream.
+ *
+ * Analogy: K checkout lines, each sorted by timestamp. Merge into one master receipt log.
+ */
+public ListNode mergeKLists(ListNode[] lists) {
+    PriorityQueue<ListNode> heap = new PriorityQueue<>(
+        (a, b) -> a.val - b.val
+    );
+
+    // Add first node of each list
+    for (ListNode head : lists) {
+        if (head != null) heap.offer(head);
+    }
+
+    ListNode dummy = new ListNode(0);
+    ListNode current = dummy;
+
+    while (!heap.isEmpty()) {
+        ListNode smallest = heap.poll();
+        current.next = smallest;
+        current = current.next;
+        if (smallest.next != null) heap.offer(smallest.next);
+    }
+    return dummy.next;
+}
+// Time: O(N log K) where N = total nodes | Space: O(K)
+```
+
+---
+
+### Pattern 6: Trie (Prefix Tree)
+
+**🟢 Analogy:** A dictionary organized like a phone tree menu. "Press 1 for words starting with A, Press 2 for words starting with B..." — each level narrows down possibilities.
+
+#### Q11: Design Autocomplete System (Walmart Search Bar)
+
+```java
+/**
+ * Walmart Context: As user types "lap", suggest "laptop", "lamp", "lapdock"
+ */
+class TrieNode {
+    TrieNode[] children = new TrieNode[26];
+    List<String> suggestions = new ArrayList<>(); // Top 3 products at this prefix
+}
+
+class AutocompleteSystem {
+    private TrieNode root = new TrieNode();
+
+    public void insert(String word) {
+        TrieNode node = root;
+        for (char c : word.toCharArray()) {
+            int idx = c - 'a';
+            if (node.children[idx] == null) node.children[idx] = new TrieNode();
+            node = node.children[idx];
+            // Keep only top 3 suggestions per prefix node
+            if (node.suggestions.size() < 3) node.suggestions.add(word);
+        }
+    }
+
+    public List<String> search(String prefix) {
+        TrieNode node = root;
+        for (char c : prefix.toCharArray()) {
+            int idx = c - 'a';
+            if (node.children[idx] == null) return Collections.emptyList();
+            node = node.children[idx];
+        }
+        return node.suggestions;
+    }
+}
+```
+
+```
+Trie Structure for ["laptop", "lamp", "lapdock"]:
+
+        root
+         |
+         l
+         |
+         a
+        / \
+       p   m
+      /|    \
+     t  d    p → "lamp"
+     |  |
+     o  o
+     |  |
+     p  c
+     |  |
+  "laptop" k → "lapdock"
+```
+
+---
+
+### 📊 DSA Round Quick Reference (Walmart Favorites)
+
+| # | Problem | Pattern | Time | Space | Frequency |
+|---|---------|---------|------|-------|-----------|
+| 1 | Max Subarray Sum K | Sliding Window | O(n) | O(1) | ⭐⭐⭐⭐⭐ |
+| 2 | Longest Unique Substring | Sliding Window + HashMap | O(n) | O(n) | ⭐⭐⭐⭐⭐ |
+| 3 | Container Most Water | Two Pointers | O(n) | O(1) | ⭐⭐⭐⭐ |
+| 4 | 3Sum | Sort + Two Pointers | O(n²) | O(1) | ⭐⭐⭐⭐⭐ |
+| 5 | Number of Islands | DFS/BFS | O(M×N) | O(M×N) | ⭐⭐⭐⭐⭐ |
+| 6 | Level Order Traversal | BFS | O(n) | O(n) | ⭐⭐⭐⭐ |
+| 7 | Longest Increasing Subseq | DP + Binary Search | O(n log n) | O(n) | ⭐⭐⭐⭐ |
+| 8 | Coin Change | DP | O(n×m) | O(n) | ⭐⭐⭐⭐⭐ |
+| 9 | Top K Frequent | Heap | O(n log k) | O(n) | ⭐⭐⭐⭐⭐ |
+| 10 | Merge K Sorted Lists | Heap | O(N log K) | O(K) | ⭐⭐⭐⭐ |
+| 11 | Autocomplete/Prefix | Trie | O(L) | O(N×L) | ⭐⭐⭐⭐ |
+| 12 | LRU Cache | HashMap + DLL | O(1) | O(n) | ⭐⭐⭐⭐⭐ |
+
+---
+
+<a id="-wm-2-system-design-round--large-scale-architecture-for-walmart"></a>
+## 🏗️ WM-2: System Design Round — Large-Scale Architecture for Walmart
+
+> **💡 System Design Framework (Use this structure in every answer):**
+> 1. **Clarify Requirements** (functional + non-functional)
+> 2. **Back-of-envelope Estimation** (QPS, storage, bandwidth)
+> 3. **High-Level Design** (boxes and arrows)
+> 4. **Deep Dive** (specific components interviewer picks)
+> 5. **Trade-offs & Bottlenecks**
+
+---
+
+### System Design 1: Design Walmart's E-Commerce Platform
+
+**🟢 Analogy:** Think of Walmart.com as a massive shopping mall with:
+- A **catalog** (100M+ products) = library card system
+- A **cart** = shopping basket you carry around
+- **Checkout** = cash registers with payment processing
+- **Inventory** = warehouse stock management
+- **Search** = mall directory / information kiosk
+
+---
+
+#### Step 1: Requirements
+
+**Functional:**
+- Product catalog (browse, search, filter)
+- Shopping cart (add, remove, update quantity)
+- Order placement and payment
+- Inventory management (real-time stock)
+- User accounts and order history
+
+**Non-Functional:**
+- 50K+ orders/minute during peak (Black Friday)
+- <200ms p99 for search and browse
+- 99.99% availability (53 min downtime/year max)
+- Strong consistency for inventory and payments
+- Eventual consistency OK for product reviews, recommendations
+
+#### Step 2: Scale Estimation
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│           WALMART SCALE NUMBERS                              │
+│                                                             │
+│  Daily Active Users (DAU):    ~50M                          │
+│  Peak concurrent users:       ~10M                          │
+│  Product catalog:             100M+ items                   │
+│  Orders per day (normal):     ~5M                           │
+│  Orders per day (Black Friday): ~50M                        │
+│  Peak QPS (search):           ~500K                         │
+│  Peak QPS (checkout):         ~50K                          │
+│                                                             │
+│  Storage:                                                   │
+│    Product data: 100M × 10KB = ~1TB                        │
+│    Images: 100M × 5 images × 500KB = ~250TB (CDN)         │
+│    Orders (1 year): 2B × 5KB = ~10TB                       │
+│    User data: 300M × 2KB = ~600GB                          │
+│                                                             │
+│  Bandwidth:                                                 │
+│    Peak read: 500K × 50KB = ~25GB/s (served via CDN)       │
+│    Peak write: 50K × 5KB = ~250MB/s                        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### Step 3: High-Level Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    WALMART E-COMMERCE HLD                                 │
+│                                                                          │
+│  ┌──────────┐     ┌───────────────┐     ┌──────────────────────┐       │
+│  │  Client  │────→│  CDN (Akamai) │────→│  API Gateway (Kong)  │       │
+│  │ Web/App  │     │  Static+Images│     │  Rate Limit + Auth   │       │
+│  └──────────┘     └───────────────┘     └──────────┬───────────┘       │
+│                                                     │                    │
+│                    ┌────────────────────────────────┼──────────┐        │
+│                    │                                │          │         │
+│                    ▼                                ▼          ▼         │
+│  ┌──────────────────────┐  ┌──────────────────┐  ┌─────────────────┐  │
+│  │   Product Service     │  │   Cart Service   │  │  Order Service  │  │
+│  │   (Read-heavy)        │  │  (Session-based) │  │  (Write-heavy)  │  │
+│  └──────────┬───────────┘  └────────┬─────────┘  └────────┬────────┘  │
+│             │                       │                      │            │
+│             ▼                       ▼                      ▼            │
+│  ┌──────────────────┐   ┌─────────────────┐   ┌──────────────────┐    │
+│  │  Elasticsearch   │   │     Redis       │   │   PostgreSQL     │    │
+│  │  (Search Index)  │   │  (Cart + Cache) │   │   (Orders DB)    │    │
+│  └──────────────────┘   └─────────────────┘   └──────────────────┘    │
+│             │                                          │                │
+│             │            ┌─────────────────┐           │                │
+│             └───────────→│   Kafka         │←──────────┘                │
+│                          │ (Event Bus)     │                            │
+│                          └────────┬────────┘                            │
+│                                   │                                     │
+│                    ┌──────────────┼──────────────┐                     │
+│                    ▼              ▼              ▼                      │
+│  ┌──────────────────┐  ┌─────────────────┐  ┌──────────────────┐     │
+│  │ Inventory Service│  │Payment Service  │  │Notification Svc  │     │
+│  │ (Stock tracking) │  │(Stripe/Internal)│  │ (Email/SMS/Push) │     │
+│  └──────────────────┘  └─────────────────┘  └──────────────────┘     │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Step 4: Deep-Dive — Inventory Service (Most Critical for Walmart)
+
+**Problem:** How to prevent overselling when 10,000 users try to buy the last PS5 simultaneously?
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│         INVENTORY: PREVENT OVERSELL AT SCALE                 │
+│                                                             │
+│  Approach: Optimistic Locking + Redis Atomic Counter        │
+│                                                             │
+│  1. Redis holds real-time stock count:                      │
+│     KEY: "inventory:PS5:stock" = 50                         │
+│                                                             │
+│  2. On checkout attempt:                                    │
+│     DECR inventory:PS5:stock                                │
+│     if result >= 0 → PROCEED (stock reserved)              │
+│     if result < 0  → INCR back + REJECT (sold out)         │
+│                                                             │
+│  3. On payment failure/timeout:                             │
+│     INCR inventory:PS5:stock (release reserved)            │
+│                                                             │
+│  4. Async reconciliation:                                   │
+│     Kafka event → DB update (source of truth)              │
+│     Redis ← periodic sync from DB every 5min              │
+│                                                             │
+│  Why Redis? Single-threaded = no race condition on DECR    │
+│  Why not DB directly? Too slow for 50K concurrent ops      │
+└─────────────────────────────────────────────────────────────┘
+```
+
+```java
+// Redis-based inventory reservation
+@Service
+public class InventoryService {
+    @Autowired private StringRedisTemplate redis;
+
+    public boolean reserveStock(String productId, int quantity) {
+        String key = "inventory:" + productId + ":stock";
+        // DECRBY is atomic in Redis — no race condition
+        Long remaining = redis.opsForValue().decrement(key, quantity);
+
+        if (remaining != null && remaining >= 0) {
+            return true; // Reserved successfully
+        } else {
+            // Overbought — rollback
+            redis.opsForValue().increment(key, quantity);
+            return false; // Out of stock
+        }
+    }
+
+    public void releaseStock(String productId, int quantity) {
+        String key = "inventory:" + productId + ":stock";
+        redis.opsForValue().increment(key, quantity);
+    }
+}
+```
+
+#### Step 5: Deep-Dive — Search Service
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│              WALMART SEARCH ARCHITECTURE                      │
+│                                                             │
+│  User types: "wireless headphones under $50"                │
+│       │                                                     │
+│       ▼                                                     │
+│  ┌──────────────────────────────────────┐                  │
+│  │  Query Parser + NLP                   │                  │
+│  │  • Tokenize: [wireless, headphones]   │                  │
+│  │  • Filter: price < 50                 │                  │
+│  │  • Intent: product search             │                  │
+│  └──────────────────────┬───────────────┘                  │
+│                         │                                   │
+│                         ▼                                   │
+│  ┌──────────────────────────────────────┐                  │
+│  │  Elasticsearch Cluster (100+ nodes)   │                  │
+│  │  • Inverted index on product names    │                  │
+│  │  • Filters on price, category, brand  │                  │
+│  │  • BM25 relevance scoring             │                  │
+│  │  • Personalized boost (user history)  │                  │
+│  └──────────────────────┬───────────────┘                  │
+│                         │                                   │
+│                         ▼                                   │
+│  ┌──────────────────────────────────────┐                  │
+│  │  Re-Ranking Layer (ML Model)          │                  │
+│  │  • Click-through rate prediction      │                  │
+│  │  • Walmart's margin optimization      │                  │
+│  │  • Sponsored results injection        │                  │
+│  └──────────────────────────────────────┘                  │
+│                                                             │
+│  Caching Strategy:                                         │
+│  • L1: Local cache (Caffeine, 10s TTL) for trending queries│
+│  • L2: Redis cluster (5min TTL) for category pages         │
+│  • L3: Elasticsearch (source of truth)                     │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### System Design 2: Design Walmart's Order Processing Pipeline
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│              ORDER PROCESSING PIPELINE (Event-Driven)                     │
+│                                                                          │
+│  Customer clicks "Place Order"                                          │
+│       │                                                                  │
+│       ▼                                                                  │
+│  ┌──────────────────┐                                                   │
+│  │ Order Service     │──→ Validates cart + creates order (PENDING)       │
+│  └────────┬─────────┘                                                   │
+│           │ OrderCreated event                                           │
+│           ▼                                                              │
+│  ┌──────────────────────────────────────────────────────┐               │
+│  │                    Kafka                              │               │
+│  └──┬──────────────┬───────────────┬───────────────┬───┘               │
+│     │              │               │               │                    │
+│     ▼              ▼               ▼               ▼                    │
+│  ┌────────┐  ┌──────────┐  ┌───────────┐  ┌────────────┐             │
+│  │Inventory│  │ Payment  │  │  Fraud    │  │Notification│             │
+│  │Reserve  │  │ Process  │  │  Check    │  │  Service   │             │
+│  └────┬───┘  └────┬─────┘  └─────┬─────┘  └────────────┘             │
+│       │           │              │                                      │
+│       │     All succeed?         │                                      │
+│       │           │              │                                      │
+│       ▼           ▼              ▼                                      │
+│  ┌──────────────────────────────────────┐                              │
+│  │  Saga Orchestrator                    │                              │
+│  │  • All pass → Order CONFIRMED        │                              │
+│  │  • Any fail → Compensate (rollback)  │                              │
+│  └──────────────────────────────────────┘                              │
+│       │                                                                 │
+│       ▼                                                                 │
+│  ┌──────────────────┐                                                  │
+│  │ Fulfillment       │──→ Pick from nearest warehouse/store            │
+│  │ (Store/Warehouse) │──→ Ship or "Pickup Today"                       │
+│  └──────────────────┘                                                  │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### System Design 3: Design Real-Time Inventory Across 10K+ Stores
+
+**The Challenge:** Walmart has 10,500+ physical stores AND an online store, all sharing inventory. A customer ordering online should see real-time stock for their nearest store.
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│         MULTI-CHANNEL INVENTORY SYSTEM                                    │
+│                                                                          │
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐                │
+│  │  Store POS  │    │  Store POS  │    │  Online     │                │
+│  │  (Store #1) │    │  (Store #2) │    │  Orders     │                │
+│  └──────┬──────┘    └──────┬──────┘    └──────┬──────┘                │
+│         │                  │                   │                        │
+│         └──────────────────┼───────────────────┘                        │
+│                            │                                            │
+│                            ▼                                            │
+│  ┌──────────────────────────────────────────────┐                      │
+│  │         Kafka (Inventory Events)              │                      │
+│  │   Topic: inventory.{storeId}.updates          │                      │
+│  └──────────────────────┬───────────────────────┘                      │
+│                         │                                               │
+│              ┌──────────┼──────────┐                                   │
+│              ▼                     ▼                                    │
+│  ┌────────────────────┐  ┌────────────────────┐                       │
+│  │ Inventory Aggregator│  │  Real-time Cache   │                       │
+│  │ (Flink/Kafka Streams)│  │  (Redis Cluster)   │                       │
+│  │ Computes per-store  │  │  Per-store stock   │                       │
+│  │ + per-region totals │  │  <1ms reads        │                       │
+│  └─────────┬──────────┘  └────────────────────┘                       │
+│            │                                                            │
+│            ▼                                                            │
+│  ┌────────────────────┐                                                │
+│  │  PostgreSQL         │ ← Source of truth (async updated)             │
+│  │  (Partitioned by    │                                                │
+│  │   region/storeId)   │                                                │
+│  └────────────────────┘                                                │
+│                                                                          │
+│  Read Path: Client → Redis (99%) → DB (cache miss, 1%)                 │
+│  Write Path: POS/Online → Kafka → Redis + Aggregator → DB             │
+│                                                                          │
+│  Consistency Model:                                                     │
+│  • Redis: eventual (100ms lag acceptable for display)                   │
+│  • DB: strong (used for checkout decision)                              │
+│  • Checkout: Redis DECR (atomic) + DB confirm (async)                  │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="-wm-3-tricky-scenario-based-questions--walmart-focus"></a>
+## 🎯 WM-3: Tricky Scenario-Based Questions — Walmart Focus
+
+> These are the questions that separate Sr. Tech Leads from regular engineers. They test your ability to think about failure modes, edge cases, and production reality.
+
+---
+
+### Scenario 1: Flash Sale — 100K users try to buy 500 items simultaneously
+
+**❓ Question:** "Walmart is running a Black Friday flash sale for 500 PS5 consoles. 100,000 users click 'Buy Now' within 2 seconds. How do you handle this?"
+
+**🎯 Step-by-Step Answer:**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│           FLASH SALE ARCHITECTURE                             │
+│                                                             │
+│  Phase 1: BEFORE SALE (Pre-warming)                         │
+│  • Pre-load 500 stock count into Redis                      │
+│  • Enable queue system (virtual waiting room)               │
+│  • Auto-scale checkout pods (HPA → 50 replicas)            │
+│  • CDN pre-cache product page (zero origin hits)           │
+│                                                             │
+│  Phase 2: SALE STARTS                                       │
+│  ┌──────────┐   ┌──────────────┐   ┌──────────────┐       │
+│  │100K Users│──→│Virtual Queue │──→│ Rate Limiter │        │
+│  │          │   │(random order)│   │ 1000/sec     │        │
+│  └──────────┘   └──────────────┘   └──────┬───────┘       │
+│                                            │                │
+│                                            ▼                │
+│                                   ┌────────────────┐        │
+│                                   │ Redis DECR     │        │
+│                                   │ Atomic check   │        │
+│                                   │ stock >= 0?    │        │
+│                                   └───────┬────────┘        │
+│                                     YES   │   NO            │
+│                                     │     │   │             │
+│                                     ▼     │   ▼             │
+│                              ┌──────────┐ │ "Sold Out"     │
+│                              │ Checkout │ │  page           │
+│                              │ (2 min   │ │                 │
+│                              │ timeout) │ │                 │
+│                              └──────────┘ │                 │
+│                                                             │
+│  Phase 3: AFTER SALE                                        │
+│  • Unreserved stock (payment timeout) → back to pool       │
+│  • Send "Sorry" notifications to queue users               │
+│  • Audit: Redis count must match DB count within 5 min     │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Key Design Decisions:**
+
+| Decision | Why |
+|----------|-----|
+| Virtual queue (not first-come) | Fairness — otherwise users with better internet always win |
+| Redis DECR (not DB lock) | 100K concurrent ops — DB would collapse with row locks |
+| 2-min payment timeout | If user doesn't pay, stock auto-releases for next person |
+| Pre-scaled pods | Cold start at peak = failures. Scale BEFORE the event |
+| Separate checkout from browse | Flash sale traffic shouldn't slow browsing for other users |
+
+---
+
+### Scenario 2: Cart Consistency — User adds item on phone, opens laptop
+
+**❓ Question:** "A user adds 3 items to cart on mobile app, then opens Walmart.com on laptop. How do you ensure cart is consistent across devices?"
+
+**🎯 Answer:**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│           CROSS-DEVICE CART CONSISTENCY                       │
+│                                                             │
+│  Design: Server-side cart (NOT local storage)               │
+│                                                             │
+│  ┌──────────┐         ┌──────────────────────┐             │
+│  │  Mobile  │────────→│    Cart Service       │             │
+│  │  App     │ userId  │    (Redis + DB)       │             │
+│  └──────────┘         └──────────────────────┘             │
+│                               ↑                             │
+│  ┌──────────┐         userId  │                             │
+│  │  Laptop  │─────────────────┘                             │
+│  │  Browser │                                               │
+│  └──────────┘                                               │
+│                                                             │
+│  Storage Strategy:                                          │
+│  ┌────────────────────────────────────────┐                 │
+│  │  Redis (primary — fast reads):         │                 │
+│  │  KEY: "cart:{userId}"                  │                 │
+│  │  VALUE: {items: [...], updatedAt: ...} │                 │
+│  │  TTL: 30 days                          │                 │
+│  └────────────────────────────────────────┘                 │
+│  ┌────────────────────────────────────────┐                 │
+│  │  PostgreSQL (backup — survives Redis   │                 │
+│  │  eviction): cart table with userId FK  │                 │
+│  └────────────────────────────────────────┘                 │
+│                                                             │
+│  Conflict Resolution (rare edge case):                      │
+│  • Last-write-wins with timestamp                          │
+│  • OR: merge strategy (union of items)                     │
+│  • Walmart uses: server timestamp + version number         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Scenario 3: Payment Failure After Inventory Reserved
+
+**❓ Question:** "User reserved a PS5 (stock decremented), but payment fails after 30 seconds. How do you handle this without losing inventory?"
+
+**🎯 Answer:**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│       RESERVATION + TIMEOUT PATTERN                          │
+│                                                             │
+│  Timeline:                                                  │
+│  ─────────────────────────────────────────────────→ time   │
+│  │         │              │                │                │
+│  │ Reserve │  Payment     │  Timeout       │  Release      │
+│  │ stock   │  initiated   │  (2 min)       │  stock        │
+│  │ (Redis) │              │                │  (auto)       │
+│                                                             │
+│  Implementation:                                            │
+│                                                             │
+│  1. Reserve: Redis DECR + set expiry key                   │
+│     SET "reservation:{orderId}" "{productId}:1" EX 120     │
+│                                                             │
+│  2. Payment succeeds → DELETE reservation key              │
+│     → Kafka event → DB confirms stock change              │
+│                                                             │
+│  3. Payment fails OR timeout:                              │
+│     → Redis key expires → TTL callback triggers            │
+│     → INCR stock back                                      │
+│     → Order marked CANCELLED                               │
+│                                                             │
+│  Safety net: Scheduled job every 5 min scans for          │
+│  "zombie reservations" (payment started but never          │
+│  completed) → auto-releases                                │
+└─────────────────────────────────────────────────────────────┘
+```
+
+```java
+@Service
+public class ReservationService {
+    @Autowired private StringRedisTemplate redis;
+    private static final int RESERVATION_TTL = 120; // 2 minutes
+
+    public String reserve(String productId, String userId) {
+        String orderId = UUID.randomUUID().toString();
+
+        // Atomic: decrement stock + create reservation
+        Boolean reserved = redis.execute((RedisCallback<Boolean>) connection -> {
+            connection.multi();
+            connection.decrBy(("inventory:" + productId).getBytes(), 1);
+            connection.setEx(("reservation:" + orderId).getBytes(),
+                           RESERVATION_TTL,
+                           (productId + ":" + userId).getBytes());
+            List<Object> results = connection.exec();
+            Long remaining = (Long) results.get(0);
+            return remaining >= 0;
+        });
+
+        if (!reserved) {
+            redis.opsForValue().increment("inventory:" + productId);
+            throw new OutOfStockException(productId);
+        }
+        return orderId;
+    }
+}
+```
+
+---
+
+### Scenario 4: Showing "Only 3 left!" — Real-time stock display at scale
+
+**❓ Question:** "How do you show real-time 'Only X left in stock' on product pages for 50M concurrent users without melting your inventory DB?"
+
+**🎯 Answer:**
+
+| Layer | Strategy | Staleness | QPS handled |
+|-------|----------|-----------|-------------|
+| CDN/Browser | Cache stock tier ("In Stock" / "Low" / "Out") | 30s | Unlimited |
+| Redis | Exact count for product page | 1-2s | 1M+ |
+| DB | Source of truth | 0 (real-time) | 10K |
+
+```
+Tier Strategy (not exact count to billions of requests):
+
+Stock > 100   → Show: "In Stock" (green)     ← cached 60s
+Stock 10-100  → Show: "Limited Stock" (yellow) ← cached 30s
+Stock 1-9     → Show: "Only X left!" (red)    ← real-time from Redis
+Stock 0       → Show: "Out of Stock" (gray)   ← cached 10s
+
+Why tiers?
+- "In Stock" for 5000 items doesn't need real-time updates
+- Only "Only X left" needs per-request accuracy (small % of products)
+- Saves 99% of Redis calls
+```
+
+---
+
+### Scenario 5: Geo-Distributed System — User in India vs US sees different prices
+
+**❓ Question:** "Walmart operates in 19 countries. How do you design a system where users in different regions see localized prices, promotions, and inventory?"
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│              GEO-DISTRIBUTED ARCHITECTURE                                 │
+│                                                                          │
+│  ┌─────────┐     ┌─────────┐     ┌─────────┐                          │
+│  │ US-East │     │ US-West │     │  India  │  (Regional clusters)     │
+│  │ Cluster │     │ Cluster │     │ Cluster │                          │
+│  └────┬────┘     └────┬────┘     └────┬────┘                          │
+│       │               │               │                                │
+│       └───────────────┼───────────────┘                                │
+│                       │                                                 │
+│                       ▼                                                 │
+│          ┌─────────────────────────┐                                   │
+│          │  Global Config Service  │                                   │
+│          │  • Pricing rules/region │                                   │
+│          │  • Promotions/region    │                                   │
+│          │  • Tax calculations     │                                   │
+│          └─────────────────────────┘                                   │
+│                                                                          │
+│  Routing: GeoDNS → nearest regional cluster                            │
+│  Data: Each region owns its inventory + pricing                         │
+│  Shared: Product catalog (replicated), User accounts (global)          │
+│                                                                          │
+│  Consistency Model:                                                     │
+│  • Catalog: eventual (replicate hourly is fine)                         │
+│  • Pricing: strong per-region (local DB)                                │
+│  • Inventory: strong per-store (local Redis + DB)                       │
+│  • User accounts: global with conflict resolution                      │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Scenario 6: Design Walmart's "Compare Prices" Feature
+
+**❓ Question:** "You need to design a feature that compares Walmart's price with competitors (Amazon, Target) for the same product in real-time."
+
+**🎯 Answer (tricky — mostly async, not real-time):**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│       PRICE COMPARISON: NOT TRULY REAL-TIME                  │
+│                                                             │
+│  Why not real-time scraping?                                │
+│  • Legal (Terms of Service violations)                     │
+│  • Rate limits on competitor sites                         │
+│  • Latency (scraping takes 2-5s per page)                 │
+│  • Scale (100M products × 3 competitors = impossible)     │
+│                                                             │
+│  Actual Architecture:                                       │
+│                                                             │
+│  ┌──────────────────┐     ┌──────────────────────┐        │
+│  │  Scraper Fleet   │────→│  Price Database       │        │
+│  │  (Scheduled:     │     │  (product_id,         │        │
+│  │   every 4-12hrs) │     │   competitor,          │        │
+│  │   Priority:      │     │   price,               │        │
+│  │   top 10K items  │     │   last_updated)        │        │
+│  │   hourly)        │     └──────────┬───────────┘        │
+│  └──────────────────┘                │                     │
+│                                      ▼                     │
+│                          ┌─────────────────────┐           │
+│                          │  Comparison API     │           │
+│                          │  GET /compare/{sku} │           │
+│                          │  Response:          │           │
+│                          │  {walmart: $29.99,  │           │
+│                          │   amazon: $32.99,   │           │
+│                          │   target: $31.49,   │           │
+│                          │   updated: "2h ago"}│           │
+│                          └─────────────────────┘           │
+│                                                             │
+│  Key Insight: Show "as of X hours ago" disclaimer.         │
+│  Focus budget on TOP products (Pareto: 10K products =      │
+│  80% of traffic). Long tail = update weekly.               │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 📊 System Design Evaluation Checklist (What Walmart Interviewers Look For)
+
+| Criteria | What They Want | Red Flag |
+|----------|---------------|----------|
+| Scale awareness | Numbers match Walmart reality (not startup scale) | "We'll use a single PostgreSQL" for 500K QPS |
+| Fault tolerance | What happens when Redis/Kafka/DB goes down? | No mention of failover or degraded mode |
+| Consistency trade-offs | Explicit choice per component (strong vs eventual) | "Everything is strongly consistent" |
+| Cost consciousness | CDN for reads, DB only for writes | Direct DB for every read |
+| Real experience | "At Comviva, we solved similar with..." | Only theoretical, no battle scars |
+| Incremental design | Start simple, scale when needed | Over-engineered from day 1 |
+
+---
+
+### 🎯 Top 10 Walmart-Specific Interview Questions (Quick-Fire)
+
+| # | Question | Key Points in Answer |
+|---|----------|---------------------|
+| 1 | Design Walmart's shopping cart | Redis (speed) + DB (durability), server-side, 30-day TTL, merge conflicts |
+| 2 | How to handle Black Friday traffic? | Pre-scale, virtual queue, Redis counters, circuit breakers, graceful degradation |
+| 3 | Design product search at Walmart scale | Elasticsearch cluster, query parser, ML re-ranking, tiered caching |
+| 4 | Prevent inventory oversell | Redis DECR (atomic), reservation+timeout, async DB reconciliation |
+| 5 | Design order processing pipeline | Event-driven (Kafka), saga pattern, idempotent consumers, DLQ |
+| 6 | Multi-store inventory sync | Kafka events per store, regional aggregation, Redis for real-time, DB for truth |
+| 7 | Design "Pickup Today" feature | Geo-lookup nearest stores, real-time store inventory, reservation with 4hr TTL |
+| 8 | Rate limiting for Walmart API | Token bucket (Redis), per-user + per-IP, 429 with Retry-After header |
+| 9 | Design Walmart's recommendation engine | Collaborative filtering + content-based, pre-computed daily, Redis cache |
+| 10 | Disaster recovery for Walmart | Multi-region active-active, async replication, RPO<1min, RTO<5min |
+
+---
+
+### 🧠 DSA Tricky Follow-Up Questions (What Senior Interviewers Ask)
+
+| Problem | Tricky Follow-up | Expected Senior Answer |
+|---------|-----------------|----------------------|
+| Two Sum | "What if input is a stream (infinite)?" | Use HashMap with sliding window or count-based eviction |
+| LRU Cache | "Make it thread-safe" | ConcurrentHashMap + ReentrantReadWriteLock, or use Caffeine |
+| Merge K Lists | "What if one list is 10x larger?" | Still O(N log K) — heap size is K, not N |
+| Top K Frequent | "Data doesn't fit in memory" | MapReduce: partition by hash → local top-K → merge |
+| Number of Islands | "Grid is 10^9 × 10^9" | Use Union-Find with coordinate compression |
+| Coin Change | "Infinite coin types streaming in" | Can't pre-compute; use online algorithm or approximate |
+| Trie Autocomplete | "1 billion products, sub-10ms" | Distributed trie sharded by first 2 chars, pre-built suggestions |
+| 3Sum | "Find all quadruplets (4Sum)" | Two-pointer inside two loops = O(n³), mention it generalizes |
+
+---
+
+> **🎯 End of Phase 15 (Walmart)** — For DSA round: always state pattern name before coding. For System Design: always start with scale numbers and end with trade-offs. What separates a Sr. Tech Lead answer is connecting the design to real production experience.
+
+
+
+---
+
+<a id="-wm-4-advanced-walmart-interview-qa--beginner-to-advanced"></a>
+## 🛒 WM-4: Advanced Walmart Interview Q&A — Beginner to Advanced
+
+> **🎯 Context:** Beyond DSA and System Design, Walmart Sr. Tech Lead interviews include deep technical rounds on Java internals, Spring Boot, Microservices patterns, and leadership. This section covers the full spectrum from fundamentals to production-war-story answers.
+
+---
+
+### 🟢 BEGINNER LEVEL — Java Core Fundamentals (Walmart Screening Round)
+
+---
+
+#### Q1: Explain HashMap internals. What happens when two keys have the same hashCode?
+
+**🟢 Beginner Explanation:**
+Think of HashMap as a row of **mailboxes** (array of buckets). Your key's `hashCode()` decides which mailbox to use. If two keys map to the same mailbox — that's a **collision**.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│              HASHMAP INTERNAL STRUCTURE                       │
+│                                                             │
+│  Bucket Array (size 16 default):                            │
+│  ┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐       │
+│  │ 0 │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │ 7 │ 8 │...│14 │15 │       │
+│  └───┴───┴─┬─┴───┴───┴─┬─┴───┴───┴───┴───┴───┴───┘       │
+│            │            │                                   │
+│            ▼            ▼                                   │
+│      ┌──────────┐  ┌──────────┐                            │
+│      │Key:A     │  │Key:X     │                            │
+│      │Val:100   │  │Val:200   │                            │
+│      │next: ──┐ │  │next:null │                            │
+│      └────────┼─┘  └──────────┘                            │
+│               │                                             │
+│               ▼                                             │
+│         ┌──────────┐  ← COLLISION (same bucket)            │
+│         │Key:B     │                                        │
+│         │Val:300   │  (linked list in Java 7)               │
+│         │next:null │  (tree if >8 nodes in Java 8+)        │
+│         └──────────┘                                        │
+│                                                             │
+│  Java 8 Treeification:                                      │
+│  When bucket has >8 nodes → LinkedList converts to          │
+│  Red-Black Tree → O(log n) lookup instead of O(n)          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**🔴 Advanced follow-up (what Walmart interviewer asks next):**
+
+| Aspect | Answer |
+|--------|--------|
+| Initial capacity | 16 (always power of 2) |
+| Load factor | 0.75 → resize at 12 entries |
+| Resize cost | O(n) rehash all entries to new 32-bucket array |
+| Why power of 2? | `hash & (n-1)` replaces expensive `hash % n` |
+| Thread-safe alternative? | `ConcurrentHashMap` (segment-level locking in Java 7, CAS + synchronized in Java 8) |
+| Null key? | HashMap allows ONE null key (always bucket 0). ConcurrentHashMap does NOT allow null |
+
+**🎯 Sr. Tech Lead answer:**
+> "I'd also mention that in production at Comviva, we had a performance issue because a third-party library had poor hashCode distribution — all entries landed in 3 buckets. After profiling with JFR, we wrapped keys in a custom class with better hash distribution, cutting lookup time from 200μs to 5μs."
+
+---
+
+#### Q2: What's the difference between `==` and `.equals()`? What about `hashCode` contract?
+
+**🟢 Analogy:**
+- `==` checks if two people have the **same address card** (same object in memory)
+- `.equals()` checks if two people are the **same person** (logically equal)
+
+```java
+String s1 = new String("Walmart");
+String s2 = new String("Walmart");
+
+s1 == s2;      // false (different objects in heap)
+s1.equals(s2); // true  (same character sequence)
+
+// But with String pool:
+String s3 = "Walmart";
+String s4 = "Walmart";
+s3 == s4;      // true! (both point to same pooled instance)
+```
+
+**hashCode contract (MUST know for interviews):**
+```
+Rule 1: If a.equals(b) → a.hashCode() == b.hashCode()  (MANDATORY)
+Rule 2: If a.hashCode() == b.hashCode() → a.equals(b) might be false (collisions OK)
+Rule 3: If !a.equals(b) → hashCodes CAN be same (collision) or different
+
+Breaking Rule 1 = HashMap breaks completely (can't find keys)
+```
+
+---
+
+#### Q3: Explain Java Memory Model — Stack vs Heap
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│              JAVA MEMORY LAYOUT                               │
+│                                                             │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │                    JVM PROCESS                        │  │
+│  │                                                      │  │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐          │  │
+│  │  │ Thread-1 │  │ Thread-2 │  │ Thread-3 │  STACKS  │  │
+│  │  │  Stack   │  │  Stack   │  │  Stack   │(per-thread│  │
+│  │  │┌────────┐│  │┌────────┐│  │┌────────┐│ private) │  │
+│  │  ││Frame 3 ││  ││Frame 2 ││  ││Frame 1 ││          │  │
+│  │  ││Frame 2 ││  ││Frame 1 ││  ││        ││          │  │
+│  │  ││Frame 1 ││  ││        ││  ││        ││          │  │
+│  │  │└────────┘│  │└────────┘│  │└────────┘│          │  │
+│  │  └──────────┘  └──────────┘  └──────────┘          │  │
+│  │                                                      │  │
+│  │  ┌──────────────────────────────────────────────┐   │  │
+│  │  │                 HEAP (shared)                  │   │  │
+│  │  │  ┌─────────────┐  ┌──────────────────────┐  │   │  │
+│  │  │  │ Young Gen   │  │     Old Gen           │  │   │  │
+│  │  │  │ ┌────┐┌───┐│  │  (long-lived objects) │  │   │  │
+│  │  │  │ │Eden││S0 ││  │                        │  │   │  │
+│  │  │  │ │    ││S1 ││  │                        │  │   │  │
+│  │  │  │ └────┘└───┘│  └──────────────────────┘  │   │  │
+│  │  │  └─────────────┘                            │   │  │
+│  │  │  ┌──────────────────────────────────────┐   │   │  │
+│  │  │  │  MetaSpace (class metadata, native)  │   │   │  │
+│  │  │  └──────────────────────────────────────┘   │   │  │
+│  │  └──────────────────────────────────────────────┘   │  │
+│  └──────────────────────────────────────────────────────┘  │
+│                                                             │
+│  Stack stores: primitives, method frames, references       │
+│  Heap stores: objects, arrays, class instances              │
+│  MetaSpace: class definitions, method bytecode             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+| Location | Stores | Thread-safe? | Size | Speed |
+|----------|--------|:---:|------|-------|
+| Stack | Local vars, primitives, references | ✅ Per-thread | Small (512KB-1MB) | Very fast |
+| Heap | Objects, arrays | ❌ Shared | Large (GBs) | Slower (GC managed) |
+| MetaSpace | Class metadata | N/A | Auto-grows | N/A |
+
+---
+
+### 🔵 INTERMEDIATE LEVEL — Spring Boot & Microservices (Walmart Technical Round)
+
+---
+
+#### Q4: Explain @Transactional propagation levels with a Walmart order example
+
+**🟢 Analogy:** Think of transactions like **team rooms with doors**:
+- `REQUIRED` (default): "Join the existing room if one is open, otherwise open a new room"
+- `REQUIRES_NEW`: "Always open YOUR OWN room, regardless of what's happening outside"
+- `NESTED`: "Open a smaller room inside the existing room"
+
+```java
+@Service
+public class OrderService {
+
+    @Transactional // REQUIRED (default) — main transaction
+    public void placeOrder(Order order) {
+        orderRepo.save(order);           // Part of main TX
+        paymentService.charge(order);    // Part of main TX
+        notificationService.send(order); // Should NOT rollback order if fails!
+    }
+}
+
+@Service
+public class NotificationService {
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    // ↑ Opens completely separate transaction
+    // If notification insert fails, order TX is NOT rolled back
+    public void send(Order order) {
+        notificationRepo.save(new Notification(order.getUserId(), "Order placed"));
+        emailClient.send(order.getEmail()); // Might fail — that's OK
+    }
+}
+```
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│           TRANSACTION PROPAGATION VISUALIZED                  │
+│                                                             │
+│  placeOrder() starts TX-1:                                  │
+│  ┌────────────────────────────────────────────────┐        │
+│  │ TX-1 (REQUIRED)                                 │        │
+│  │   save(order) ✓                                 │        │
+│  │   charge(payment) ✓                             │        │
+│  │   │                                             │        │
+│  │   │  send(notification) — REQUIRES_NEW          │        │
+│  │   │  ┌──────────────────────────┐              │        │
+│  │   │  │ TX-2 (independent)       │              │        │
+│  │   │  │   save(notification) ✓   │              │        │
+│  │   │  │   emailClient ❌ FAIL    │              │        │
+│  │   │  │   → TX-2 ROLLBACK       │              │        │
+│  │   │  └──────────────────────────┘              │        │
+│  │   │                                             │        │
+│  │   TX-1 continues... COMMITS ✓                   │        │
+│  │   (order + payment saved despite notification   │        │
+│  │    failure)                                      │        │
+│  └────────────────────────────────────────────────┘        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**⚠️ Common pitfall (Walmart interviewers LOVE this):**
+```java
+@Service
+public class OrderService {
+
+    @Transactional
+    public void placeOrder(Order order) {
+        orderRepo.save(order);
+        this.sendNotification(order); // ❌ DOES NOT CREATE NEW TX!
+        // Why? Spring proxy only intercepts EXTERNAL calls.
+        // Self-invocation bypasses the proxy.
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void sendNotification(Order order) { ... }
+}
+```
+
+**Fix:** Inject `NotificationService` as a separate bean, or use `ApplicationContext.getBean()`.
+
+---
+
+#### Q5: How does Spring Boot auto-configuration work internally?
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│       SPRING BOOT AUTO-CONFIG: STEP BY STEP                  │
+│                                                             │
+│  1. You add: spring-boot-starter-data-jpa                   │
+│     → Brings: hibernate, HikariCP, spring-data-jpa JARs    │
+│                                                             │
+│  2. @SpringBootApplication triggers:                        │
+│     @EnableAutoConfiguration                                │
+│        ↓                                                    │
+│     Reads META-INF/spring/AutoConfiguration.imports         │
+│     (lists 100+ auto-config classes)                        │
+│        ↓                                                    │
+│  3. Each class has conditions:                              │
+│     ┌────────────────────────────────────────────┐         │
+│     │ @ConditionalOnClass(DataSource.class)       │ ← JAR  │
+│     │ @ConditionalOnMissingBean(DataSource.class) │ ← You  │
+│     │ @ConditionalOnProperty("spring.datasource") │ ← Props│
+│     └────────────────────────────────────────────┘         │
+│        ↓                                                    │
+│  4. ALL conditions met? → Create bean automatically         │
+│     ANY condition fails? → Skip silently                    │
+│        ↓                                                    │
+│  5. YOUR @Bean definition ALWAYS wins (overrides auto)      │
+│                                                             │
+│  Debug: java -jar app.jar --debug                          │
+│  Shows: CONDITIONS EVALUATION REPORT                        │
+│    Positive matches: DataSourceAutoConfiguration matched    │
+│    Negative matches: RabbitAutoConfiguration skipped        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+#### Q6: Circuit Breaker Pattern — Explain with Walmart's Salesforce integration
+
+**🟢 Analogy:** A **fuse box** in your house. If too much current flows (too many failures), the fuse **trips** (circuit opens) to protect the house (your service) from burning down (cascading failure).
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│           CIRCUIT BREAKER STATES                              │
+│                                                             │
+│                    ┌─────────┐                              │
+│   Failures < 5    │ CLOSED  │  ← Normal operation          │
+│   ┌──────────────→│(Healthy)│──────────────┐               │
+│   │               └─────────┘              │               │
+│   │                                   5 failures           │
+│   │                                   in 10 seconds        │
+│   │                                        │               │
+│   │                                        ▼               │
+│   │               ┌─────────┐                              │
+│   │               │  OPEN   │  ← Reject all calls         │
+│   │               │(Tripped)│    Return fallback           │
+│   │               └────┬────┘    immediately               │
+│   │                    │                                    │
+│   │              After 30s timeout                          │
+│   │                    │                                    │
+│   │                    ▼                                    │
+│   │            ┌──────────────┐                            │
+│   │            │ HALF-OPEN    │  ← Allow 1 test request    │
+│   │            │ (Testing)    │                             │
+│   │            └──────┬───────┘                            │
+│   │                   │                                    │
+│   │         ┌─────────┼─────────┐                         │
+│   │         │ Success │ Failure │                          │
+│   │         ▼         │         ▼                          │
+│   └─── CLOSED         │      OPEN (reset timer)           │
+│                       │                                    │
+└───────────────────────────────────────────────────────────────┘
+```
+
+```java
+// Walmart: Salesforce integration with circuit breaker
+@Service
+public class SalesforceService {
+
+    @CircuitBreaker(name = "salesforce", fallbackMethod = "syncFallback")
+    @Retry(name = "salesforce", fallbackMethod = "syncFallback")
+    public QuoteDTO syncQuote(Quote quote) {
+        // Call Salesforce REST API — might be slow or down
+        return restTemplate.postForObject(
+            "https://salesforce.com/api/quotes", quote, QuoteDTO.class);
+    }
+
+    // Fallback: queue for later processing instead of failing
+    public QuoteDTO syncFallback(Quote quote, Exception ex) {
+        log.warn("Salesforce unavailable, queuing quote {}", quote.getId());
+        kafkaTemplate.send("salesforce-retry-queue", quote);
+        return QuoteDTO.pending(quote.getId()); // Return "sync pending" status
+    }
+}
+```
+
+```yaml
+# application.yml — Resilience4j config
+resilience4j:
+  circuitbreaker:
+    instances:
+      salesforce:
+        sliding-window-size: 10
+        failure-rate-threshold: 50          # Open after 50% failures
+        wait-duration-in-open-state: 30s    # Wait 30s before half-open
+        permitted-number-of-calls-in-half-open-state: 3
+  retry:
+    instances:
+      salesforce:
+        max-attempts: 3
+        wait-duration: 2s
+        exponential-backoff-multiplier: 2   # 2s, 4s, 8s
+```
+
+---
+
+#### Q7: Explain CQRS pattern — When and why would Walmart use it?
+
+**🟢 Analogy:** A **library** with separate desks:
+- **Write desk** (librarian): Slow, careful — validates and catalogs new books
+- **Read desk** (assistant): Fast, serves pre-made book lists, doesn't touch catalog directly
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│           CQRS: COMMAND QUERY RESPONSIBILITY SEGREGATION      │
+│                                                             │
+│  WITHOUT CQRS (traditional):                                │
+│  ┌──────┐                                                   │
+│  │ API  │──→ Same DB ←── Read (complex JOINs, slow)        │
+│  │      │──→ Same DB ←── Write (simple INSERTs)            │
+│  └──────┘     Problem: Read queries slow down writes!       │
+│                                                             │
+│  WITH CQRS:                                                 │
+│  ┌──────────┐    ┌─────────────────┐    ┌──────────────┐  │
+│  │ Command  │───→│  Write DB       │───→│  Event Bus   │  │
+│  │ (POST/   │    │  (PostgreSQL)   │    │  (Kafka)     │  │
+│  │  PUT)    │    │  Normalized     │    └──────┬───────┘  │
+│  └──────────┘    └─────────────────┘           │          │
+│                                                 │          │
+│  ┌──────────┐    ┌─────────────────┐           │          │
+│  │  Query   │←──│  Read DB        │←──────────┘          │
+│  │  (GET)   │    │  (Elasticsearch │  (materialized view) │
+│  │          │    │   or Redis)     │  (denormalized,fast) │
+│  └──────────┘    └─────────────────┘                      │
+│                                                             │
+│  Walmart Use Case:                                          │
+│  • Write: Order placement (PostgreSQL, strong consistency)  │
+│  • Read: Order history + search (Elasticsearch, fast)       │
+│  • Event: OrderCreated → updates read model async           │
+│                                                             │
+│  Trade-off: Eventually consistent reads (100-500ms lag)     │
+│  Benefit: Read and write scale independently                │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 🔴 ADVANCED LEVEL — Production & Architecture (Walmart Sr. Tech Lead Deep Dive)
+
+---
+
+#### Q8: How would you handle a database connection leak in a production Spring Boot service?
+
+**🎯 This is a REAL production scenario question — answer with incident narrative:**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│       DB CONNECTION LEAK: DETECTION → DIAGNOSIS → FIX        │
+│                                                             │
+│  SYMPTOM:                                                   │
+│  • Grafana alert: HikariCP active connections = max (30)    │
+│  • All new requests getting "Connection pool exhausted"     │
+│  • App appears frozen but CPU/memory normal                 │
+│                                                             │
+│  DETECTION (5 min):                                         │
+│  Check Actuator: /actuator/metrics/hikaricp.connections     │
+│  {                                                          │
+│    "active": 30,  ← ALL connections in use                 │
+│    "idle": 0,     ← None available                         │
+│    "pending": 47  ← 47 threads waiting!                    │
+│  }                                                          │
+│                                                             │
+│  DIAGNOSIS (15 min):                                        │
+│  Enable leak detection:                                     │
+│  spring.datasource.hikari.leak-detection-threshold=30000    │
+│                                                             │
+│  Log output:                                                │
+│  "Connection leak detected. Obtained at:                    │
+│   com.walmart.OrderService.getOrderDetails(OrderService:45)"│
+│                                                             │
+│  ROOT CAUSE:                                                │
+│  Stream<Order> not closed! (.stream() opens cursor)         │
+│  ┌──────────────────────────────────────────────────┐      │
+│  │  // ❌ BUG: Stream holds connection open          │      │
+│  │  public List<Order> getOrders() {                 │      │
+│  │      return orderRepo.findAll()                   │      │
+│  │          .stream()  // Opens DB cursor            │      │
+│  │          .filter(o -> o.isActive())               │      │
+│  │          .collect(toList());                       │      │
+│  │      // Connection never returned!                │      │
+│  │  }                                                │      │
+│  └──────────────────────────────────────────────────┘      │
+│                                                             │
+│  FIX:                                                       │
+│  ┌──────────────────────────────────────────────────┐      │
+│  │  // ✅ FIX: Use try-with-resources or query       │      │
+│  │  @Query("SELECT o FROM Order o WHERE o.active=true")│    │
+│  │  List<Order> findActiveOrders();                   │      │
+│  │                                                    │      │
+│  │  // OR: Close stream explicitly                    │      │
+│  │  try (Stream<Order> stream = orderRepo.streamAll())│      │
+│  │      return stream.filter(...).collect(toList());  │      │
+│  │  }                                                 │      │
+│  └──────────────────────────────────────────────────┘      │
+│                                                             │
+│  PREVENTION:                                                │
+│  • leak-detection-threshold=30000 in all environments       │
+│  • Integration test that verifies connections returned      │
+│  • Grafana alert: active > 80% of max for > 30s            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+#### Q9: Design a distributed rate limiter for Walmart's API Gateway (10K+ req/sec)
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│       DISTRIBUTED RATE LIMITER (Redis + Sliding Window)      │
+│                                                             │
+│  Requirements:                                              │
+│  • 1000 requests/minute per user                           │
+│  • Distributed: works across 20 API gateway pods           │
+│  • Low latency: <5ms overhead per request                  │
+│  • Accurate: no race conditions between pods               │
+│                                                             │
+│  Algorithm: Sliding Window Counter (Redis sorted set)       │
+│                                                             │
+│  For each request:                                          │
+│  1. ZREMRANGEBYSCORE user:{id}:requests 0 (now - 60s)      │
+│     → Remove entries older than 1 minute                    │
+│  2. ZCARD user:{id}:requests                               │
+│     → Count requests in current window                     │
+│  3. If count < 1000:                                       │
+│     ZADD user:{id}:requests {timestamp} {requestId}        │
+│     → Allow request                                        │
+│  4. If count >= 1000:                                      │
+│     → Return 429 Too Many Requests                         │
+│     → Include Retry-After header                           │
+│                                                             │
+│  Why Redis Sorted Set?                                      │
+│  • ZREMRANGEBYSCORE + ZCARD + ZADD = atomic pipeline       │
+│  • Shared across all pods (distributed state)              │
+│  • O(log n) operations                                     │
+│  • Auto-cleanup via EXPIRE on the key (TTL = 61s)          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+```java
+@Component
+public class RedisRateLimiter {
+    @Autowired private StringRedisTemplate redis;
+
+    private static final int MAX_REQUESTS = 1000;
+    private static final long WINDOW_MS = 60_000; // 1 minute
+
+    public boolean isAllowed(String userId) {
+        String key = "ratelimit:" + userId;
+        long now = System.currentTimeMillis();
+        long windowStart = now - WINDOW_MS;
+
+        // Execute as pipeline for atomicity
+        List<Object> results = redis.executePipelined((RedisCallback<Object>) connection -> {
+            connection.zRemRangeByScore(key.getBytes(), 0, windowStart);
+            connection.zCard(key.getBytes());
+            connection.zAdd(key.getBytes(), now, (now + ":" + UUID.randomUUID()).getBytes());
+            connection.expire(key.getBytes(), 61); // Auto-cleanup
+            return null;
+        });
+
+        Long currentCount = (Long) results.get(1);
+        if (currentCount != null && currentCount >= MAX_REQUESTS) {
+            // Over limit — remove the just-added entry
+            redis.opsForZSet().removeRangeByScore(key, now, now);
+            return false;
+        }
+        return true;
+    }
+}
+```
+
+---
+
+#### Q10: Explain Kafka consumer lag and how you'd handle it at Walmart scale
+
+**🟢 Analogy:** Consumer lag = the postal service falling behind on mail delivery. Letters pile up at the post office (Kafka broker) because delivery trucks (consumers) are too slow.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│           KAFKA CONSUMER LAG MANAGEMENT                      │
+│                                                             │
+│  What is lag?                                               │
+│  Partition offset: [0][1][2][3][4][5][6][7][8][9]          │
+│                                        ↑         ↑          │
+│                                   Consumer    Producer       │
+│                                   offset=5    offset=9       │
+│                                                             │
+│                                   LAG = 9 - 5 = 4 messages │
+│                                                             │
+│  At Walmart scale:                                          │
+│  Topic: order-events (50 partitions, 50K msgs/sec peak)    │
+│  Acceptable lag: < 1000 messages (< 20 seconds behind)     │
+│  Alert threshold: > 5000 messages (> 100 seconds behind)   │
+│                                                             │
+│  CAUSES & FIXES:                                            │
+│  ┌────────────────────┬──────────────────────────────┐     │
+│  │ Cause              │ Fix                           │     │
+│  ├────────────────────┼──────────────────────────────┤     │
+│  │ Slow consumer      │ Optimize processing logic    │     │
+│  │ processing         │ (batch DB writes, async I/O) │     │
+│  ├────────────────────┼──────────────────────────────┤     │
+│  │ Too few consumers  │ Add consumers (max =         │     │
+│  │                    │ partition count = 50)         │     │
+│  ├────────────────────┼──────────────────────────────┤     │
+│  │ Consumer crash     │ Auto-restart + rebalance     │     │
+│  │ (rebalancing)      │ Use cooperative-sticky        │     │
+│  ├────────────────────┼──────────────────────────────┤     │
+│  │ GC pauses in       │ Tune G1GC: -XX:MaxGCPause   │     │
+│  │ consumer JVM       │ Reduce heap pressure         │     │
+│  ├────────────────────┼──────────────────────────────┤     │
+│  │ Downstream DB slow │ Add buffer (in-memory batch) │     │
+│  │                    │ or write-behind cache         │     │
+│  └────────────────────┴──────────────────────────────┘     │
+│                                                             │
+│  Monitoring: Kafka Lag Exporter → Prometheus → Grafana     │
+│  Alert: PagerDuty when lag > 5000 for > 2 minutes         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+#### Q11: How do you ensure exactly-once processing in a distributed system?
+
+**🟢 Analogy:** Imagine sending a birthday card by postal service. The post office might accidentally deliver it twice. You can't prevent duplicates in transit, but the birthday person can check: "Did I already record this card?" → **Idempotent receiver**.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│       EXACTLY-ONCE = AT-LEAST-ONCE + IDEMPOTENCY            │
+│                                                             │
+│  The truth: Exactly-once DELIVERY is impossible in          │
+│  distributed systems. But exactly-once PROCESSING           │
+│  is achievable with idempotent consumers.                   │
+│                                                             │
+│  Pattern:                                                   │
+│  ┌──────────────────────────────────────────────────┐      │
+│  │  Producer ──→ Kafka ──→ Consumer ──→ DB          │      │
+│  │                                                   │      │
+│  │  1. Producer enables idempotence:                 │      │
+│  │     enable.idempotence=true                       │      │
+│  │     (prevents duplicate publishes on retry)       │      │
+│  │                                                   │      │
+│  │  2. Consumer processes AT-LEAST-ONCE:             │      │
+│  │     (might receive same message twice on rebal)   │      │
+│  │                                                   │      │
+│  │  3. Idempotent write to DB:                       │      │
+│  │     INSERT ... ON CONFLICT (event_id) DO NOTHING  │      │
+│  │     (or: check processed_events table first)      │      │
+│  └──────────────────────────────────────────────────┘      │
+│                                                             │
+│  Walmart Implementation:                                    │
+│  ┌──────────────────────────────────────────────────┐      │
+│  │  @KafkaListener(topics = "order-events")          │      │
+│  │  public void process(OrderEvent event) {          │      │
+│  │      // Idempotency check                         │      │
+│  │      if (processedRepo.existsById(event.getId())) │      │
+│  │          return; // Already processed — skip      │      │
+│  │                                                   │      │
+│  │      // Process                                   │      │
+│  │      orderService.fulfill(event);                 │      │
+│  │                                                   │      │
+│  │      // Record as processed (same transaction)    │      │
+│  │      processedRepo.save(event.getId());           │      │
+│  │                                                   │      │
+│  │      // Commit Kafka offset AFTER DB commit       │      │
+│  │      // (enable.auto.commit=false)                │      │
+│  │  }                                                │      │
+│  └──────────────────────────────────────────────────┘      │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+#### Q12: Explain JVM Garbage Collection tuning for a high-throughput Walmart service
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│           GC TUNING FOR HIGH-THROUGHPUT SERVICE               │
+│                                                             │
+│  Walmart Order Service: 10K req/sec, p99 < 200ms           │
+│                                                             │
+│  Problem: G1GC pauses causing p99 spikes to 2s             │
+│                                                             │
+│  Investigation:                                             │
+│  $ jstat -gc <pid> 1000                                    │
+│  → Full GC every 30s, taking 800ms each                    │
+│                                                             │
+│  $ jcmd <pid> GC.heap_info                                 │
+│  → Old Gen filling up fast (large object allocation)        │
+│                                                             │
+│  Tuning Applied:                                            │
+│  ┌──────────────────────────────────────────────────┐      │
+│  │  BEFORE: java -Xmx4g -jar app.jar                │      │
+│  │  p99: 2000ms, Full GC: every 30s                  │      │
+│  │                                                   │      │
+│  │  AFTER:                                           │      │
+│  │  java -Xmx4g -Xms4g                              │      │
+│  │    -XX:+UseG1GC                                   │      │
+│  │    -XX:MaxGCPauseMillis=100                       │      │
+│  │    -XX:G1HeapRegionSize=16m                       │      │
+│  │    -XX:InitiatingHeapOccupancyPercent=45          │      │
+│  │    -XX:+ParallelRefProcEnabled                    │      │
+│  │    -Xlog:gc*:file=gc.log:time,uptime,level       │      │
+│  │                                                   │      │
+│  │  p99: 180ms, Full GC: eliminated (only mixed GC) │      │
+│  └──────────────────────────────────────────────────┘      │
+│                                                             │
+│  Key Decisions:                                             │
+│  • -Xms = -Xmx: Prevent heap resizing overhead            │
+│  • MaxGCPauseMillis=100: G1 targets 100ms pauses          │
+│  • RegionSize=16m: Better for large allocations            │
+│  • IHOP=45: Start concurrent marking earlier               │
+│                                                             │
+│  For Java 21+ (Walmart modernization):                     │
+│  Consider ZGC: -XX:+UseZGC -XX:+ZGenerational             │
+│  → Sub-millisecond pauses regardless of heap size          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+#### Q13: Design an API Gateway for Walmart — What are the key responsibilities?
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    WALMART API GATEWAY RESPONSIBILITIES                    │
+│                                                                          │
+│  Client Request                                                          │
+│       │                                                                  │
+│       ▼                                                                  │
+│  ┌──────────────────────────────────────────────────────────────────┐   │
+│  │                      API GATEWAY (Kong/Spring Cloud Gateway)       │   │
+│  │                                                                    │   │
+│  │  1. 🔐 AUTHENTICATION                                            │   │
+│  │     → Validate JWT/OAuth2 token                                   │   │
+│  │     → Extract user identity + roles                               │   │
+│  │                                                                    │   │
+│  │  2. 🚦 RATE LIMITING                                             │   │
+│  │     → 1000 req/min per user                                       │   │
+│  │     → 10K req/min per API key (partner)                           │   │
+│  │     → Return 429 + Retry-After header                             │   │
+│  │                                                                    │   │
+│  │  3. 🔀 ROUTING                                                    │   │
+│  │     → /api/v1/products → Product Service                          │   │
+│  │     → /api/v1/orders → Order Service                              │   │
+│  │     → /api/v2/search → Search Service (canary 10%)                │   │
+│  │                                                                    │   │
+│  │  4. ⚡ CIRCUIT BREAKING                                           │   │
+│  │     → If downstream is failing, return cached/fallback            │   │
+│  │                                                                    │   │
+│  │  5. 📊 OBSERVABILITY                                             │   │
+│  │     → Add X-Request-Id (trace correlation)                        │   │
+│  │     → Log: method, path, status, latency                         │   │
+│  │     → Metrics: request count, error rate, p50/p99                 │   │
+│  │                                                                    │   │
+│  │  6. 🔄 TRANSFORMATION                                            │   │
+│  │     → Request/Response header manipulation                        │   │
+│  │     → API versioning translation                                  │   │
+│  │                                                                    │   │
+│  │  7. 💾 CACHING                                                    │   │
+│  │     → Cache GET /products/{id} for 60s                            │   │
+│  │     → Invalidate on product update event                          │   │
+│  └──────────────────────────────────────────────────────────────────┘   │
+│       │                                                                  │
+│       ▼                                                                  │
+│  Downstream Microservices                                                │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+#### Q14: What is the Strangler Fig pattern and when would you use it at Walmart?
+
+**🟢 Analogy:** Like a strangler fig tree that grows around an old tree, eventually replacing it without anyone noticing the transition. The old tree (monolith) stays alive while the new tree (microservices) grows around it.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│       STRANGLER FIG: MONOLITH → MICROSERVICES                │
+│                                                             │
+│  Phase 1: Identify + Intercept                              │
+│  ┌─────────────────────────────────────────────┐           │
+│  │  ALL traffic → Monolith (as-is)             │           │
+│  │  Add API Gateway in front (routing layer)    │           │
+│  └─────────────────────────────────────────────┘           │
+│                                                             │
+│  Phase 2: Extract first microservice                        │
+│  ┌─────────────────────────────────────────────┐           │
+│  │  /products/* → NEW Product Service (80%)     │           │
+│  │  /products/* → Monolith (20% canary)         │←compare  │
+│  │  Everything else → Monolith                  │           │
+│  └─────────────────────────────────────────────┘           │
+│                                                             │
+│  Phase 3: Migrate more features                             │
+│  ┌─────────────────────────────────────────────┐           │
+│  │  /products/* → Product Service ✓             │           │
+│  │  /orders/*   → NEW Order Service ✓           │           │
+│  │  /users/*    → NEW User Service ✓            │           │
+│  │  /legacy/*   → Monolith (shrinking)          │           │
+│  └─────────────────────────────────────────────┘           │
+│                                                             │
+│  Phase 4: Decommission monolith                             │
+│  ┌─────────────────────────────────────────────┐           │
+│  │  ALL routes → Microservices                  │           │
+│  │  Monolith → Shut down 🎉                    │           │
+│  └─────────────────────────────────────────────┘           │
+│                                                             │
+│  Key Rules:                                                 │
+│  • Never rewrite from scratch (Big Bang = Big Risk)        │
+│  • Extract highest-value / most-changed module first       │
+│  • Keep both running in parallel until confident           │
+│  • Use feature flags to route traffic gradually            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**🎯 Sr. Tech Lead answer:**
+> "At VMware, I led exactly this pattern — migrating ColdFusion monolith to Spring Boot microservices. We started with the billing API (highest change frequency), ran parallel for 2 weeks comparing outputs, then switched traffic. Zero-downtime migration over 6 months, feature by feature."
+
+---
+
+#### Q15: How do you handle distributed tracing across 20+ microservices?
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│       DISTRIBUTED TRACING: ONE REQUEST, 20 SERVICES          │
+│                                                             │
+│  User clicks "Place Order" — hits 8 services:              │
+│                                                             │
+│  trace-id: abc-123 (generated at API Gateway)              │
+│                                                             │
+│  API Gateway ──→ Order Service ──→ Inventory Service       │
+│  span-1          span-2            span-3                  │
+│        │              │                │                    │
+│        │              ├──→ Payment Service                  │
+│        │              │    span-4                           │
+│        │              │         │                           │
+│        │              │         ├──→ Fraud Service          │
+│        │              │         │    span-5                 │
+│        │              │         │                           │
+│        │              ├──→ Notification Service             │
+│        │              │    span-6                           │
+│        │              │                                    │
+│        │              └──→ Kafka → Analytics Service       │
+│        │                          span-7                    │
+│                                                             │
+│  All spans share: trace-id = abc-123                       │
+│  Each span has: span-id, parent-span-id, start, duration  │
+│                                                             │
+│  Implementation (Spring Boot 3.x):                          │
+│  • OpenTelemetry auto-instrumentation                      │
+│  • Auto-propagates trace-id in HTTP headers & Kafka headers│
+│  • Export to Jaeger/Tempo for visualization                 │
+│  • Correlate with logs via MDC: traceId=abc-123            │
+│                                                             │
+│  In Kibana/Grafana:                                         │
+│  Search: traceId=abc-123                                   │
+│  See: Full timeline of all 8 services for that request     │
+│  Find: Payment Service took 4.2s (bottleneck!)             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 🏆 LEADERSHIP LEVEL — Behavioral & Architecture Decision Questions
+
+---
+
+#### Q16: "You need to migrate Walmart's payment system from vendor A to vendor B with zero downtime. How?"
+
+**🎯 Framework: Parallel Run + Feature Flag + Gradual Rollout**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│       ZERO-DOWNTIME PAYMENT MIGRATION                        │
+│                                                             │
+│  Week 1-2: SHADOW MODE                                      │
+│  ┌─────────────────────────────────────────────┐           │
+│  │  Request → Vendor A (PRIMARY - processes $) │           │
+│  │         → Vendor B (SHADOW - logs only)     │           │
+│  │  Compare: responses match? latency OK?      │           │
+│  └─────────────────────────────────────────────┘           │
+│                                                             │
+│  Week 3-4: CANARY (1% traffic)                             │
+│  ┌─────────────────────────────────────────────┐           │
+│  │  Feature flag: payment.vendor.b.percentage=1 │           │
+│  │  1% real transactions go to Vendor B         │           │
+│  │  Monitor: success rate, latency, chargebacks │           │
+│  └─────────────────────────────────────────────┘           │
+│                                                             │
+│  Week 5-6: GRADUAL ROLLOUT                                  │
+│  ┌─────────────────────────────────────────────┐           │
+│  │  1% → 5% → 25% → 50% → 100%               │           │
+│  │  Each increase: wait 48h, verify metrics    │           │
+│  │  ROLLBACK PLAN: flip flag back to 0%        │           │
+│  └─────────────────────────────────────────────┘           │
+│                                                             │
+│  Week 7: FULL CUTOVER                                       │
+│  ┌─────────────────────────────────────────────┐           │
+│  │  100% traffic on Vendor B                    │           │
+│  │  Keep Vendor A code for 30 days (rollback)   │           │
+│  │  Then decommission                           │           │
+│  └─────────────────────────────────────────────┘           │
+│                                                             │
+│  Key Metrics to Monitor at Each Phase:                     │
+│  • Payment success rate (target: >99.5%)                   │
+│  • p99 latency (target: <2s)                              │
+│  • Chargeback rate (target: <0.1%)                        │
+│  • Reconciliation accuracy (target: 100%)                  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+#### Q17: "A junior dev pushed a config change that brought down 3 services in production. How do you handle this as Tech Lead?"
+
+**🎯 Answer structure: Immediate Response → Fix → Prevent → Culture**
+
+| Phase | Action | Timeline |
+|-------|--------|----------|
+| **Immediate** | Rollback the config change (git revert + deploy) | 0-5 min |
+| **Communicate** | Post in #incident channel, notify stakeholders | 5-10 min |
+| **Fix** | Verify services recovered, check for data inconsistency | 10-30 min |
+| **RCA** | Blameless post-mortem (focus on system, not person) | Same day |
+| **Prevent** | Add config validation in CI/CD pipeline | Next sprint |
+| **Culture** | Share learnings in team retro, update runbook | That week |
+
+**What NOT to do:** Blame the junior dev publicly. Instead:
+> "Our system allowed a single config change to cascade across 3 services without validation gates. That's a system design problem, not a people problem. Here's how we prevent this: (1) Config changes require peer review, (2) Canary deployment for config changes, (3) Auto-rollback on health check failure."
+
+---
+
+#### Q18: "How do you decide between synchronous REST calls and async Kafka events between services?"
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│       SYNC vs ASYNC: DECISION FRAMEWORK                      │
+│                                                             │
+│  Use SYNC (REST/gRPC) when:                                 │
+│  ✓ Caller NEEDS the response immediately                   │
+│  ✓ Operation is fast (<500ms)                              │
+│  ✓ Strong consistency required                             │
+│  ✓ Simple request-response pattern                         │
+│                                                             │
+│  Examples:                                                  │
+│  • Get product details for page display                    │
+│  • Validate payment card number                            │
+│  • Check user authentication                               │
+│                                                             │
+│  ─────────────────────────────────────────                  │
+│                                                             │
+│  Use ASYNC (Kafka/RabbitMQ) when:                           │
+│  ✓ Caller doesn't need immediate response                  │
+│  ✓ Operation is slow or unreliable                         │
+│  ✓ Need to notify multiple consumers                       │
+│  ✓ Spike handling needed (buffer in queue)                 │
+│  ✓ Eventual consistency is acceptable                      │
+│                                                             │
+│  Examples:                                                  │
+│  • Send order confirmation email                           │
+│  • Update search index after product change                │
+│  • Sync data to analytics warehouse                        │
+│  • Process refund (can take hours)                         │
+│                                                             │
+│  ─────────────────────────────────────────                  │
+│                                                             │
+│  HYBRID (common at Walmart):                                │
+│  • Place order: SYNC (user waits for confirmation)         │
+│  • After order placed: ASYNC events to inventory,          │
+│    payment, notification, analytics                         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+| Factor | Prefer Sync | Prefer Async |
+|--------|:-----------:|:------------:|
+| User waiting for response? | ✅ | ❌ |
+| Downstream might be slow/down? | ❌ | ✅ |
+| Multiple consumers need data? | ❌ | ✅ |
+| Need guaranteed delivery? | ❌ | ✅ |
+| Operation under 200ms? | ✅ | Overkill |
+| Spike/burst traffic? | ❌ (crushes downstream) | ✅ (buffers in queue) |
+
+---
+
+### 📊 Walmart Interview Scoring Guide — What Gets You a "Strong Hire"
+
+| Level | What You Say | Score |
+|-------|-------------|:-----:|
+| Junior | "I'd use a HashMap" | 2/5 |
+| Mid | "HashMap with O(1) average, O(n) worst case due to collisions" | 3/5 |
+| Senior | "HashMap, but for thread-safety ConcurrentHashMap with lock striping. At scale, I'd profile to confirm hash distribution." | 4/5 |
+| Sr. Tech Lead | "ConcurrentHashMap. At Comviva, we had a prod issue where poor hash distribution degraded to O(n). We used JFR to detect it, fixed with custom hashCode, and added a monitoring metric for bucket depth." | **5/5** |
+
+**The pattern:** Code + Complexity + Trade-off + Real Production Story + Prevention = Strong Hire
+
+---
+
+> **🎯 End of WM-4** — For Walmart Sr. Tech Lead: every answer should follow the structure: **Concept → Code → Diagram → Production Experience → What Could Go Wrong → How You'd Prevent It**. This demonstrates the 10+ years of depth they're looking for.
 
